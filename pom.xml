@@ -50,9 +50,9 @@
         <module>sqlserverreader</module>
         <module>postgresqlreader</module>
         <module>oraclereader</module>
-        <module>odpsreader</module>
+        <!--<module>odpsreader</module>-->
         <module>otsreader</module>
-        <module>otsstreamreader</module>
+        <!--<module>otsstreamreader</module>-->
         <module>txtfilereader</module>
         <module>hdfsreader</module>
         <module>streamreader</module>
@@ -66,7 +66,7 @@
         <!-- writer -->
         <module>mysqlwriter</module>
         <module>drdswriter</module>
-        <module>odpswriter</module>
+        <!--<module>odpswriter</module>-->
         <module>txtfilewriter</module>
         <module>ftpwriter</module>
         <module>hdfswriter</module>
@@ -77,7 +77,7 @@
         <module>postgresqlwriter</module>
         <module>osswriter</module>
         <module>mongodbwriter</module>
-        <module>adswriter</module>
+        <!--<module>adswriter</module>-->
         <module>ocswriter</module>
         <module>rdbmswriter</module>
         <module>hbase11xwriter</module>

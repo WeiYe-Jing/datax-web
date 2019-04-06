@@ -19,7 +19,7 @@
             "address": "http://localhost:7001/api",
             "timeout": 10000,
             "reportDataxLog": false,
-            "reportPerfLog": false
+            "reportPerfLog": true
         },
         "transport": {
             "channel": {
@@ -45,7 +45,7 @@
                 "channel": 5
             },
             "trace": {
-                "enable": "false"
+                "enable": "true"
             }
 
         },

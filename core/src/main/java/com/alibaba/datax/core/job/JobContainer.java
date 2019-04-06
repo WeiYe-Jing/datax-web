@@ -467,7 +467,7 @@ public class JobContainer extends AbstractContainer {
         if (this.needChannelNumber < Integer.MAX_VALUE) {
             return;
         }
-
+        // 通过channel调节Job运行速度
         boolean isChannelLimit = (this.configuration.getInt(
                 CoreConstant.DATAX_JOB_SETTING_SPEED_CHANNEL, 0) > 0);
         if (isChannelLimit) {

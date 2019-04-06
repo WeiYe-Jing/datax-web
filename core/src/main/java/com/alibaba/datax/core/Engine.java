@@ -16,6 +16,7 @@ import com.alibaba.datax.core.util.container.CoreConstant;
 import com.alibaba.datax.core.util.container.LoadUtil;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -125,7 +126,7 @@ public class Engine {
         options.addOption("jobid", true, "Job unique id.");
         options.addOption("mode", true, "Job runtime mode.");
 
-        BasicParser parser = new BasicParser();
+        DefaultParser parser = new DefaultParser();
         CommandLine cl = parser.parse(options, args);
 
         String jobPath = cl.getOptionValue("job");

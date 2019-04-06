@@ -218,7 +218,7 @@ if __name__ == "__main__":
         sys.exit(RET_STATE['FAIL'])
 
     startCommand = buildStartCommand(options, args)
-    # print startCommand
+    print startCommand
 
     child_process = subprocess.Popen(startCommand, shell=True)
     register_signal()

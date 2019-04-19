@@ -130,7 +130,7 @@ public class Engine {
 //        CommandLine cl = parser.parse(options, args);
 
         // 指定作业配置json
-        String jobPath = "/Users/huzekang/openSource/DataX/job-sample/oracle2mysql.json";
+        String jobPath = "/Users/huzekang/openSource/DataX/core/src/main/job/oracle2mongodb_indicator.json";
 
         // 如果用户没有明确指定jobid, 则 datax.py 会指定 jobid 默认值为-1
         String jobIdString = "-1";

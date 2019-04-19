@@ -46,17 +46,17 @@
 
         <!-- reader -->
         <module>mysqlreader</module>
-        <module>drdsreader</module>
+        <!--<module>drdsreader</module>-->
         <module>sqlserverreader</module>
         <module>postgresqlreader</module>
         <module>oraclereader</module>
         <!--<module>odpsreader</module>-->
-        <module>otsreader</module>
+        <!--<module>otsreader</module>-->
         <!--<module>otsstreamreader</module>-->
         <module>txtfilereader</module>
         <module>hdfsreader</module>
         <module>streamreader</module>
-        <module>ossreader</module>
+        <!--<module>ossreader</module>-->
         <module>ftpreader</module>
         <module>mongodbreader</module>
         <module>rdbmsreader</module>
@@ -65,20 +65,20 @@
 
         <!-- writer -->
         <module>mysqlwriter</module>
-        <module>drdswriter</module>
+        <!--<module>drdswriter</module>-->
         <!--<module>odpswriter</module>-->
         <module>txtfilewriter</module>
         <module>ftpwriter</module>
         <module>hdfswriter</module>
         <module>streamwriter</module>
-        <module>otswriter</module>
+        <!--<module>otswriter</module>-->
         <module>oraclewriter</module>
         <module>sqlserverwriter</module>
         <module>postgresqlwriter</module>
-        <module>osswriter</module>
+        <!--<module>osswriter</module>-->
         <module>mongodbwriter</module>
         <!--<module>adswriter</module>-->
-        <module>ocswriter</module>
+        <!--<module>ocswriter</module>-->
         <module>rdbmswriter</module>
         <module>hbase11xwriter</module>
         <module>hbase094xwriter</module>

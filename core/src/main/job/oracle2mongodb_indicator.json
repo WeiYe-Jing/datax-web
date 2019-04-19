@@ -1,0 +1,50 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 5
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "oraclereader",
+          "parameter": {
+            "username": "GZFUYI20190301",
+            "password": "yibo123",
+            "column": [
+              "REPORT_NUMBER","REPORT_DATE_SERIAL","EXAM_ITEM_NAME","EXAM_RESULT"
+            ],
+            "connection": [
+              {
+                "table": [
+                  "TB_LIS_INDICATORS"
+                ],
+                "jdbcUrl": [
+                  "jdbc:oracle:thin:@192.168.1.130:1521:gzfy"
+                ]
+              }
+            ]
+          }
+        },
+        "writer": {
+          "name": "mongodbwriter",
+          "parameter": {
+            "address": [
+              "192.168.1.226:27017"
+            ],
+            "userName": "",
+            "userPassword": "",
+            "dbName": "datax_gzfy",
+            "collectionName": "indicator22",
+            "column":   [
+              { "name" : "reportNumber"         , "type" : "string"},
+              { "name" : "reportDateSerial"    , "type" : "string"},
+              { "name" : "examItemName"        , "type" : "string"},
+              { "name" : "examResult"           , "type" : "string"}]
+          }
+        }
+      }
+    ]
+  }
+}

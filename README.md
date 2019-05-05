@@ -1,9 +1,22 @@
 ## preparation
-only  Java环境
+jdk1.8
 
 ## introduction
 - 使用springboot启动datax，不再需要用python启动。
 - 以restful接口启动datax作业
+
+## TODO LIST
+
+* [x] springboot重构项目
+* [x] 通过restful接口调度datax完成抽取数据作业
+* [ ] 通过restful接口传入job配置json生成临时文件，根据文件配置调度datax执行该作业
+* [ ] 实现datax分布式作业
+* [ ] 网页端修改job配置的json
+* [ ] 网页端实时查看抽取日志
+* [ ] 网页端各种插件模板生成
+* [ ] job配置持久化到db
+* [ ] 精简assembly打包结构
+
 
 ## how to run
 ### 1. 在父工程目录下使用maven打包

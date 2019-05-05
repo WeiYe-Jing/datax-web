@@ -5,6 +5,7 @@ import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.writer.mongodbwriter.KeyConstant;
 import com.alibaba.datax.plugin.writer.mongodbwriter.MongoDBWriterErrorCode;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
@@ -40,7 +41,12 @@ public class MongoUtil {
         }
         try {
             MongoCredential credential = MongoCredential.createCredential(userName, database, password.toCharArray());
-            return new MongoClient(parseServerAddress(addressList), Arrays.asList(credential));
+            //当超过这个闲置时间客户端主动关闭连接，下次使用时重新建立连接，这样可以有效避免连接失效的问题
+            MongoClientOptions mongoClientOptions = new MongoClientOptions.Builder()
+                    .maxConnectionIdleTime(1000)
+                    .maxConnectionLifeTime(0)
+                    .build();
+            return new MongoClient(parseServerAddress(addressList), Arrays.asList(credential),mongoClientOptions);
 
         } catch (UnknownHostException e) {
             throw DataXException.asDataXException(MongoDBWriterErrorCode.ILLEGAL_ADDRESS,"不合法的地址");

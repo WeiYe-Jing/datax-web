@@ -1,4 +1,4 @@
-## prepare
+## preparation
 only  Java环境
 
 ## introduction

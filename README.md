@@ -6,7 +6,7 @@ only  Java环境
 - 以restful接口启动datax作业
 
 ## how to run
-###1.   在父工程目录下使用maven打包
+###1. 在父工程目录下使用maven打包
 ```
  mvn -U clean package assembly:assembly -Dmaven.test.skip=true 
 ```
@@ -16,7 +16,7 @@ only  Java环境
 cd  datax/datax/plugin/web
 ```
 
-###3.  运行启动命令
+###3. 运行启动命令
 ```
  java  -Ddatax.home=/Users/huzekang/openSource/DataX/target/datax/datax  -jar datax-web-0.0.1-SNAPSHOT.jar
 ```

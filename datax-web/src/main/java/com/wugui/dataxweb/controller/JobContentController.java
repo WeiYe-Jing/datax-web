@@ -15,7 +15,7 @@ public class JobContentController {
 
     @GetMapping("/startJob")
     public void startJob() {
-        // 指定作业配置json
+        // 指定获取作业配置json的接口，此处用下面mock出来的接口提供
         String jobPath = "http://localhost:8080/mock_stream2stream";
         Engine.startJob(jobPath);
     }

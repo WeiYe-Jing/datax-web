@@ -120,7 +120,7 @@ public class Engine {
         return configuration;
     }
 
-    public static void entry() throws Throwable {
+    public static void entry(String jobPath) throws Throwable {
 //        Options options = new Options();
 //        options.addOption("job", true, "Job config.");
 //        options.addOption("jobid", true, "Job unique id.");
@@ -129,8 +129,6 @@ public class Engine {
 //        DefaultParser parser = new DefaultParser();
 //        CommandLine cl = parser.parse(options, args);
 
-        // 指定作业配置json
-        String jobPath = "/Users/huzekang/openSource/DataX/core/src/main/job/oracle2mongodb_indicator.json";
 
         // 如果用户没有明确指定jobid, 则 datax.py 会指定 jobid 默认值为-1
         String jobIdString = "-1";
@@ -205,7 +203,9 @@ public class Engine {
         //要断点手动去除idea默认加入的参数才开正常运行
         int exitCode = 0;
         try {
-            Engine.entry();
+            // 指定作业配置json
+            String jobPath = "/Users/huzekang/openSource/DataX/core/src/main/job/oracle2mongodb_indicator.json";
+            Engine.entry(jobPath);
         } catch (Throwable e) {
             exitCode = 1;
             LOG.error("\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + ExceptionTracker.trace(e));
@@ -224,9 +224,17 @@ public class Engine {
         System.exit(exitCode);
     }
 
-    public static void startJob() {
+    /**
+    * 测试使用springboot启动作业job
+    *
+    * @author: huzekang
+    * @Date: 2019-05-05
+    */
+
+    public static void startJob(String jobPath) {
         try {
-            Engine.entry();
+
+            Engine.entry(jobPath);
         } catch (Throwable e) {
 
             LOG.error("\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + ExceptionTracker.trace(e));

@@ -44,6 +44,9 @@
         <module>core</module>
         <module>transformer</module>
 
+        <!--springboot-web-->
+        <module>datax-web</module>
+
         <!-- reader -->
         <module>mysqlreader</module>
         <!--<module>drdsreader</module>-->

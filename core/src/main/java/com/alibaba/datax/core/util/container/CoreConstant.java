@@ -151,6 +151,9 @@ public class CoreConstant {
 
 	// ----------------------------- 环境变量 ---------------------------------
 
+	/**
+	 * 通过启动时设置 -Ddatax.home=/Users/huzekang/openSource/DataX/target/datax/datax  获取
+	 */
 	public static String DATAX_HOME = System.getProperty("datax.home");
 
 	public static String DATAX_CONF_PATH = StringUtils.join(new String[] {

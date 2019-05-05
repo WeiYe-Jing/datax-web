@@ -24,6 +24,15 @@
             <outputDirectory>datax</outputDirectory>
         </fileSet>
 
+        <!--将datax-web模块下的target打包到指定目录-->
+        <fileSet>
+            <directory>datax-web/target/datax-web/</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>datax</outputDirectory>
+        </fileSet>
+
         <!-- reader -->
         <fileSet>
             <directory>mysqlreader/target/datax/</directory>

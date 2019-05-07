@@ -1,5 +1,6 @@
 package com.alibaba.datax.core;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.datax.common.element.ColumnCast;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.spi.ErrorCode;
@@ -14,14 +15,14 @@ import com.alibaba.datax.core.util.ExceptionTracker;
 import com.alibaba.datax.core.util.FrameworkErrorCode;
 import com.alibaba.datax.core.util.container.CoreConstant;
 import com.alibaba.datax.core.util.container.LoadUtil;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -231,7 +232,7 @@ public class Engine {
     * @Date: 2019-05-05
     */
 
-    public static void startJob(String jobPath) {
+    public static void testStartJob(String jobPath) {
         try {
 
             Engine.entry(jobPath);
@@ -249,5 +250,45 @@ public class Engine {
 
         }
     }
+
+    //todo 都是用同一个文件，是否需要考虑线程安全问题
+    public static void startJobByJsonStr(String jobJson) {
+        String tmpFilePath = "jobTmp.conf";
+        // 根据json写入到临时本地文件
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(tmpFilePath, "UTF-8");
+            writer.println(jobJson);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+
+        // 使用临时本地文件启动datax作业
+        try {
+             Engine.entry(tmpFilePath);
+        } catch (Throwable e) {
+            LOG.error("\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + ExceptionTracker.trace(e));
+
+            if (e instanceof DataXException) {
+                DataXException tempException = (DataXException) e;
+                ErrorCode errorCode = tempException.getErrorCode();
+                if (errorCode instanceof FrameworkErrorCode) {
+                    FrameworkErrorCode tempErrorCode = (FrameworkErrorCode) errorCode;
+                }
+            }
+
+        }
+
+        //删除临时文件
+        FileUtil.del(new File("jobTmp.conf"));
+    }
+
 
 }

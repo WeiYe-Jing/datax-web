@@ -2,6 +2,8 @@ package com.wugui.dataxweb.controller;
 
 import com.alibaba.datax.core.Engine;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JobContentController {
 
-    @GetMapping("/startJob")
-    public void startJob() {
+    @GetMapping("/testStartJob")
+    public void testStartJob() {
         // 指定获取作业配置json的接口，此处用下面mock出来的接口提供
         String jobPath = "http://localhost:8080/mock_stream2stream";
-        Engine.startJob(jobPath);
+        Engine.testStartJob(jobPath);
     }
 
     @GetMapping("/mock_oracle2mongodb")
@@ -112,6 +114,17 @@ public class JobContentController {
                 "    }\n" +
                 "  }\n" +
                 "}";
+    }
+
+    /**
+     * 通过接口传入json配置启动一个datax作业
+     * @param jobJson
+     * @return
+     */
+    @PostMapping("/runJob")
+    public String runJob(@RequestBody String jobJson) {
+        Engine.startJobByJsonStr(jobJson);
+        return "success";
     }
 
 

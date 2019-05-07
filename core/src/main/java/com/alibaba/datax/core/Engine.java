@@ -253,7 +253,7 @@ public class Engine {
 
     //todo 都是用同一个文件，是否需要考虑线程安全问题
     public static void startJobByJsonStr(String jobJson) {
-        String tmpFilePath = "jobTmp.conf";
+        String tmpFilePath = "jobTmp.conf-"+ System.currentTimeMillis();
         // 根据json写入到临时本地文件
         PrintWriter writer = null;
         try {

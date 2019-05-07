@@ -10,6 +10,7 @@ jdk1.8
 * [x] springboot重构项目
 * [x] 通过restful接口调度datax完成抽取数据作业
 * [x] 通过restful接口传入job配置json生成临时文件，根据文件配置调度datax执行该作业
+* [ ] 集成swagger，方便调试
 * [ ] 实现datax分布式作业
 * [ ] 网页端修改job配置的json
 * [ ] 网页端实时查看抽取日志

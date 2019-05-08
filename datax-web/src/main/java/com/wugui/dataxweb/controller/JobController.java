@@ -1,6 +1,8 @@
 package com.wugui.dataxweb.controller;
 
 import com.alibaba.datax.core.Engine;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @create: 2019-05-05 14:21
  **/
 @RestController
-public class JobContentController {
+@Api(tags = "datax作业接口")
+public class JobController {
 
     @GetMapping("/testStartJob")
     public void testStartJob() {
@@ -77,6 +80,7 @@ public class JobContentController {
     }
 
     @GetMapping("/mock_stream2stream")
+    @ApiOperation("提供stream2stream的配置")
     public String mock2() {
         return "{\n" +
                 "  \"job\": {\n" +
@@ -121,6 +125,7 @@ public class JobContentController {
      * @param jobJson
      * @return
      */
+    @ApiOperation("通过传入json配置启动一个datax作业")
     @PostMapping("/runJob")
     public String runJob(@RequestBody String jobJson) {
         Engine.startJobByJsonStr(jobJson);

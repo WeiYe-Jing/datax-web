@@ -10,13 +10,13 @@ jdk1.8
 * [x] springboot重构项目
 * [x] 通过restful接口调度datax完成抽取数据作业
 * [x] 通过restful接口传入job配置json生成临时文件，根据文件配置调度datax执行该作业
-* [ ] 集成swagger，方便调试
-* [ ] 实现datax分布式作业
-* [ ] 网页端修改job配置的json
-* [ ] 网页端实时查看抽取日志
-* [ ] 网页端各种插件模板生成
-* [ ] job配置持久化到db
+* [x] 集成swagger，方便调试
+* [x] 集成mybatis plus和h2数据库存放应用数据
+* [ ] 网页端修改并持久化job配置的json到数据库
+* [ ] 网页端实时查看抽取日志，类似Jenkins的日志控制台输出功能
+* [ ] 网页端各种读写插件模板生成，可以在页面组装使用
 * [ ] 精简assembly打包结构
+* [ ] 实现datax分布式作业
 
 
 ## how to run

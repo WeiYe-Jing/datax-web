@@ -40,3 +40,22 @@ INSERT INTO `datax_plugin` VALUES (4, 'writer', 'mysqlwriter', NULL, 'myysql写'
 INSERT INTO `datax_plugin` VALUES (5, 'reader', 'oraclereader', NULL, 'oracle读取');
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- ----------------------------
+-- Table structure for datax_job_config
+-- ----------------------------
+create table job_config
+(
+	id int auto_increment
+		primary key,
+	user_id int null,
+	config varchar(5000) null,
+	create_date timestamp null ,
+	create_by int null,
+	update_by int null,
+	update_date timestamp null,
+	status int(1) default 1 null
+)comment 'datax插件信息';
+
+

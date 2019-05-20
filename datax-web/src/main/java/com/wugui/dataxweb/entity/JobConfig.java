@@ -1,5 +1,6 @@
 package com.wugui.dataxweb.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -17,6 +18,7 @@ public class JobConfig {
     private String config;
 
     @TableField(value = "CREATE_DATE")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
     @TableField(value = "CREATE_BY")

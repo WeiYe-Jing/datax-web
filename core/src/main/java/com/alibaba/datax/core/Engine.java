@@ -254,7 +254,7 @@ public class Engine {
     //  todo 都是用同一个文件，是否需要考虑线程安全问题
     //       需要做成异步的，否则前端会一直loading等待完成作业
     public static void startJobByJsonStr(String jobJson) {
-        String tmpFilePath = "jobTmp.conf-"+ System.currentTimeMillis();
+        final String tmpFilePath = "jobTmp-"+System.currentTimeMillis()+".conf";
         // 根据json写入到临时本地文件
         PrintWriter writer = null;
         try {
@@ -287,7 +287,7 @@ public class Engine {
 
         }
         //删除临时文件
-        FileUtil.del(new File("jobTmp.conf"));
+        FileUtil.del(new File(tmpFilePath));
     }
 
 

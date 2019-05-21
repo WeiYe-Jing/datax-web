@@ -3,14 +3,9 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:h2:file:~/H2Data/datax-web;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: true
+    url: jdbc:mysql://192.168.1.150:3306/datax-web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.jdbc.Driver
+
 
 
 mybatis-plus:
@@ -31,7 +26,7 @@ mybatis-plus:
       logic-delete-value: 0
       logic-not-delete-value: 1
       # 数据库类型
-      db-type: h2
+      db-type: mysql
     banner: false
   # mybatis原生配置
   configuration:

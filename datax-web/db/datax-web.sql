@@ -45,17 +45,20 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ----------------------------
 -- Table structure for datax_job_config
 -- ----------------------------
-create table job_config
+create table `datax-web`.job_config
 (
 	id int auto_increment
 		primary key,
 	user_id int null,
-	config varchar(5000) null,
-	create_date timestamp null ,
-	create_by int null,
-	update_by int null,
+	name varchar(255) null comment '作业名',
+	config_json varchar(5000) null,
+	description varchar(255) null comment '作业描述信息',
+	label varchar(255) null comment '标签（读插件、写插件)',
 	update_date timestamp null,
-	status int(1) default 1 null
-)comment 'datax插件信息';
-
+	status int(1) default 1 null,
+	create_by int null,
+	create_date timestamp null,
+	update_by int null
+)
+comment '作业配置表';
 

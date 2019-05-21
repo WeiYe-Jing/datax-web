@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="CONFIG" jdbcType="VARCHAR" property="config" />
+    <result column="config_json" jdbcType="VARCHAR" property="configJson" />
     <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
     <result column="CREATE_BY" jdbcType="INTEGER" property="createBy" />
     <result column="UPDATE_BY" jdbcType="INTEGER" property="updateBy" />

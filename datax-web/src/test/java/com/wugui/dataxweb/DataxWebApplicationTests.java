@@ -18,7 +18,7 @@ public class DataxWebApplicationTests {
     @Test
     public void contextLoads() {
         JobConfig jobConfig = new JobConfig();
-        jobConfig.setConfig("{}");
+        jobConfig.setConfigJson("{}");
         jobConfigMapper.insert(jobConfig);
     }
 

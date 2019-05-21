@@ -1,39 +1,47 @@
 package com.wugui.dataxweb.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
 import lombok.Data;
 
 @Data
-@TableName(value = "JOB_CONFIG")
+@TableName(value = "job_config")
 public class JobConfig {
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @TableField(value = "CONFIG")
-    private String config;
+    @TableField(value = "config_json")
+    private String configJson;
 
-    @TableField(value = "CREATE_DATE")
+    @TableField(value = "description")
+    private String description;
+
+    @TableField(value = "name")
+    private String name;
+
+    @TableField(value = "label")
+    private String label;
+
+
+    @TableField(fill =  FieldFill.INSERT)     //mp自动填充
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
-    @TableField(value = "CREATE_BY")
+    @TableField(value = "create_by")
     private Integer createBy;
 
-    @TableField(value = "UPDATE_BY")
+    @TableField(value = "update_by")
     private Integer updateBy;
 
-    @TableField(value = "UPDATE_DATE")
+    @TableField(fill =  FieldFill.INSERT_UPDATE)  //mp自动填充
     private Date updateDate;
 
-    @TableField(value = "STATUS")
+    @TableField(value = "status")
     private Integer status;
 
-    @TableField(value = "USER_ID")
+    @TableField(value = "user_id")
     private Integer userID;
 }
 

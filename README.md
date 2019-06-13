@@ -3,7 +3,7 @@
 ## preparation
 - Language: Java 8
 - Environment: MacOS, 16G RAM
-- Database: Mysql
+- Database: Mysql5.7
 
 ## introduction
 - 使用springboot启动datax，不再需要用python启动。

@@ -1,11 +1,15 @@
+![Java](https://woolson.gitee.io/npmer-badge/Java-555555-1.8-44cc11-check-ffffff-square-gradient-shadow.svg)
+![springboot](https://woolson.gitee.io/npmer-badge/springboot-555555-2.x-44cc11-check-ffffff-square-gradient-shadow.svg)
 ## preparation
-jdk1.8
+Language: Java 8
+Environment: MacOS, 16G RAM
+Database: Mysql
 
 ## introduction
 - 使用springboot启动datax，不再需要用python启动。
 - 以restful接口启动datax作业
 
-## TODO LIST
+## todo list
 
 * [x] springboot重构项目
 * [x] 通过restful接口调度datax完成抽取数据作业

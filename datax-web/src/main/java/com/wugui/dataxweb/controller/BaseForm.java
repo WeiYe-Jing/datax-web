@@ -153,8 +153,9 @@ public class BaseForm<T> {
      */
     public Page getPlusPagingQueryEntity() {
         Page page = new Page();
-        page.setCurrent(Long.valueOf(StrUtil.toString(this.get("current"))));
-        page.setSize(Long.valueOf(StrUtil.toString(this.getString("size"))));
+        //如果无current，默认返回1000条数据
+        page.setCurrent(Long.valueOf(StrUtil.toString(ObjectUtil.defaultIfNull(this.get("current"), "0"))));
+        page.setSize(Long.valueOf(StrUtil.toString(ObjectUtil.defaultIfNull(this.get("size"), "1000"))));
         if (ObjectUtil.isNotNull(this.get("ifCount"))) {
             page.setSearchCount(BooleanUtil.toBoolean(this.getString("ifCount")));
         } else {

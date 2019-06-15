@@ -24,7 +24,7 @@ import java.util.List;
  * @version v1.0
  */
 @RestController
-@RequestMapping("jobConfig")
+@RequestMapping("api/jobConfig")
 @Api(tags = "作业配置表控制层")
 public class JobConfigController extends ApiController {
     /**

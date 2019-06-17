@@ -1,8 +1,11 @@
 package com.wugui.dataxweb.controller;
 
 import com.alibaba.datax.core.Engine;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.wugui.dataxweb.service.IDataxJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,11 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "datax作业接口")
 public class JobController {
 
+    @Autowired
+    IDataxJobService iDataxJobService;
+
     @GetMapping("/testStartJob")
     public void testStartJob() {
         // 指定获取作业配置json的接口，此处用下面mock出来的接口提供
         String jobPath = "http://localhost:8080/mock_stream2stream";
-        Engine.testStartJob(jobPath);
+        iDataxJobService.startJobByJsonStr(jobPath);
     }
 
     @GetMapping("/mock_oracle2mongodb")
@@ -125,9 +131,9 @@ public class JobController {
      */
     @ApiOperation("通过传入json配置启动一个datax作业")
     @PostMapping("/runJob")
-    public String runJob(@RequestBody String jobJson) {
-        Engine.startJobByJsonStr(jobJson);
-        return "success";
+    public R<String> runJob(@RequestBody String jobJson) {
+        String result = iDataxJobService.startJobByJsonStr(jobJson);
+        return R.ok(result);
     }
 
 

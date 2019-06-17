@@ -2,46 +2,113 @@ package com.wugui.dataxweb.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.util.Date;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 作业配置表实体类(job_config)
+ *
+ * @author zhouhongfa@gz-yibo.com
+ * @version v1.0
+ * @since 2019-06-17
+ */
+
 @Data
-@TableName(value = "job_config")
-public class JobConfig {
-    @TableId(value = "id", type = IdType.AUTO)
+@ApiModel
+@TableName("job_config")
+public class JobConfig extends Model<JobConfig> {
+
+    /**
+     *
+     */
+    @TableId
+    @ApiModelProperty(value = "")
     private Integer id;
 
-    @TableField(value = "config_json")
-    private String configJson;
+    /**
+     *
+     */
+    @ApiModelProperty(value = "")
+    private Integer userId;
 
-    @TableField(value = "description")
-    private String description;
-
-    @TableField(value = "name")
+    /**
+     * 作业名
+     */
+    @ApiModelProperty(value = "作业名")
     private String name;
 
-    @TableField(value = "label")
+    /**
+     * 分组
+     */
+    @ApiModelProperty(value = "分组")
+    private String jobGroup;
+
+    /**
+     *
+     */
+    @ApiModelProperty(value = "")
+    private String configJson;
+
+    /**
+     * 作业描述信息
+     */
+    @ApiModelProperty(value = "作业描述信息")
+    private String description;
+
+    /**
+     * 标签（读插件、写插件)
+     */
+    @ApiModelProperty(value = "标签（读插件、写插件)")
     private String label;
 
-
-    @TableField(fill =  FieldFill.INSERT)     //mp自动填充
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
-
-    @TableField(value = "create_by")
-    private Integer createBy;
-
-    @TableField(value = "update_by")
-    private Integer updateBy;
-
-    @TableField(fill =  FieldFill.INSERT_UPDATE)  //mp自动填充
+    /**
+     *
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JSONField(format = "yyyy/MM/dd")
+    @ApiModelProperty(value = "", hidden = true)
     private Date updateDate;
 
-    @TableField(value = "status")
+    /**
+     *
+     */
+    @TableLogic
+    @ApiModelProperty(value = "", hidden = true)
     private Integer status;
 
-    @TableField(value = "user_id")
-    private Integer userID;
-}
+    /**
+     *
+     */
+    @ApiModelProperty(value = "", hidden = true)
+    private Integer createBy;
 
+    /**
+     *
+     */
+    @TableField(fill = FieldFill.INSERT)
+    @JSONField(format = "yyyy/MM/dd")
+    @ApiModelProperty(value = "", hidden = true)
+    private Date createDate;
+
+    /**
+     *
+     */
+    @ApiModelProperty(value = "", hidden = true)
+    private Integer updateBy;
+
+
+    /**
+     * 获取主键值
+     *
+     * @return 主键值
+     */
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
+    }
+}

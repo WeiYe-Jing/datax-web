@@ -24,6 +24,8 @@
 * [ ] 实现部分写插件支持自动建表功能
 
 
+## 前端项目
+https://github.com/zhouhongfa/datax-vue-admin.git
 ## how to run
 ### 1. 在父工程目录下使用maven打包
 ```
@@ -47,3 +49,7 @@ curl http://localhost:8080/startJob
 ```
 可以看到成功跑完一个datax作业
 ![](https://raw.githubusercontent.com/peter1040080742/picbed/master/20190505162333.png)
+
+### 5. 打开网页端启动作业
+http://localhost:8080/index.html#/datax/job
+![](https://raw.githubusercontent.com/huzekang/picbed/master/20190617120207.png)

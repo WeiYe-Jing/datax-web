@@ -25,7 +25,7 @@
 
 
 ## 前端项目
-https://github.com/zhouhongfa/datax-vue-admin.git
+[github地址](https://github.com/zhouhongfa/datax-vue-admin.git)
 ## how to run
 ### 1. 在父工程目录下使用maven打包
 ```

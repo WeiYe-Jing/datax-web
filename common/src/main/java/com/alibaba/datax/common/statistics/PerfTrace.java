@@ -1,5 +1,6 @@
 package com.alibaba.datax.common.statistics;
 
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.statistics.PerfRecord.PHASE;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.common.util.HostUtils;
@@ -74,6 +75,7 @@ public class PerfTrace {
     public static PerfTrace getInstance() {
         if (instance == null) {
             LOG.error("PerfTrace instance not be init! must have some error! ");
+            EtlJobLogger.log("PerfTrace instance not be init! must have some error! ");
             synchronized (lock) {
                 if (instance == null) {
                     instance = new PerfTrace(false, -1111, -1111, 0, false);
@@ -92,6 +94,7 @@ public class PerfTrace {
             this.instId = jobId;
             this.priority = priority;
             LOG.info(String.format("PerfTrace traceId=%s, isEnable=%s, priority=%s", this.perfTraceId, this.enable, this.priority));
+            EtlJobLogger.log(String.format("PerfTrace traceId=%s, isEnable=%s, priority=%s", this.perfTraceId, this.enable, this.priority));
 
         } catch (Exception e) {
             // do nothing

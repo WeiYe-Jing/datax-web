@@ -6,6 +6,7 @@ package com.alibaba.datax.core.container.util;
 
 import com.alibaba.datax.common.exception.CommonErrorCode;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.spi.Hook;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.util.FrameworkErrorCode;
@@ -42,6 +43,7 @@ public class HookInvoker {
     public void invokeAll() {
         if (!baseDir.exists() || baseDir.isFile()) {
             LOG.info("No hook invoked, because base dir not exists or is a file: " + baseDir.getAbsolutePath());
+            EtlJobLogger.log("No hook invoked, because base dir not exists or is a file: " + baseDir.getAbsolutePath());
             return;
         }
 
@@ -73,10 +75,12 @@ public class HookInvoker {
             } else {
                 Hook hook = hookIt.next();
                 LOG.info("Invoke hook [{}], path: {}", hook.getName(), path);
+                EtlJobLogger.log("Invoke hook [{}], path: {}", hook.getName(), path);
                 hook.invoke(conf, msg);
             }
         } catch (Exception e) {
             LOG.error("Exception when invoke hook", e);
+            EtlJobLogger.log(e);
             throw DataXException.asDataXException(
                     CommonErrorCode.HOOK_INTERNAL_ERROR, "Exception when invoke hook", e);
         } finally {

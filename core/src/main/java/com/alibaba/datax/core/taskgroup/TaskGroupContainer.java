@@ -3,6 +3,7 @@ package com.alibaba.datax.core.taskgroup;
 import com.alibaba.datax.common.constant.PluginType;
 import com.alibaba.datax.common.exception.CommonErrorCode;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.common.statistics.PerfRecord;
@@ -131,7 +132,9 @@ public class TaskGroupContainer extends AbstractContainer {
             LOG.info(String.format(
                     "taskGroupId=[%d] start [%d] channels for [%d] tasks.",
                     this.taskGroupId, channelNumber, taskCountInThisTaskGroup));
-            
+            EtlJobLogger.log(String.format(
+                    "taskGroupId=[%d] start [%d] channels for [%d] tasks.",
+                    this.taskGroupId, channelNumber, taskCountInThisTaskGroup));
             this.containerCommunicator.registerCommunication(taskConfigs);
 
             Map<Integer, Configuration> taskConfigMap = buildTaskConfigMap(taskConfigs); //taskId与task配置
@@ -180,6 +183,8 @@ public class TaskGroupContainer extends AbstractContainer {
                             LOG.info("taskGroup[{}] taskId[{}] is successed, used[{}]ms",
                                     this.taskGroupId, taskId, usedTime);
                             //usedTime*1000*1000 转换成PerfRecord记录的ns，这里主要是简单登记，进行最长任务的打印。因此增加特定静态方法
+                            EtlJobLogger.log("taskGroup[{}] taskId[{}] is successed, used[{}]ms",
+                                    this.taskGroupId, taskId, usedTime);
                             PerfRecord.addPerfRecord(taskGroupId, taskId, PerfRecord.PHASE.TASK_TOTAL,taskStartTime, usedTime * 1000L * 1000L);
                             taskStartTimeMap.remove(taskId);
                             taskConfigMap.remove(taskId);
@@ -222,6 +227,8 @@ public class TaskGroupContainer extends AbstractContainer {
                         }else{
                             LOG.info("taskGroup[{}] taskId[{}] attemptCount[{}] has already shutdown",
                                     this.taskGroupId, taskId, lastExecutor.getAttemptCount());
+                            EtlJobLogger.log("taskGroup[{}] taskId[{}] attemptCount[{}] has already shutdown",
+                                    this.taskGroupId, taskId, lastExecutor.getAttemptCount());
                         }
                     }
                     Configuration taskConfigForRun = taskMaxRetryTimes > 1 ? taskConfig.clone() : taskConfig;
@@ -238,6 +245,8 @@ public class TaskGroupContainer extends AbstractContainer {
                     taskFailedExecutorMap.remove(taskId);
                     LOG.info("taskGroup[{}] taskId[{}] attemptCount[{}] is started",
                             this.taskGroupId, taskId, attemptCount);
+                    EtlJobLogger.log("taskGroup[{}] taskId[{}] attemptCount[{}] is started",
+                            this.taskGroupId, taskId, attemptCount);
                 }
 
                 //4.任务列表为空，executor已结束, 搜集状态为success--->成功
@@ -247,6 +256,7 @@ public class TaskGroupContainer extends AbstractContainer {
                             lastTaskGroupContainerCommunication, taskCountInThisTaskGroup);
 
                     LOG.info("taskGroup[{}] completed it's tasks.", this.taskGroupId);
+                    EtlJobLogger.log("taskGroup[{}] completed it's tasks.", this.taskGroupId);
                     break;
                 }
 
@@ -290,9 +300,11 @@ public class TaskGroupContainer extends AbstractContainer {
                 if (vmInfo != null) {
                     vmInfo.getDelta(false);
                     LOG.info(vmInfo.totalString());
+                    EtlJobLogger.log(vmInfo.totalString());
                 }
 
                 LOG.info(PerfTrace.getInstance().summarizeNoException());
+                EtlJobLogger.log(PerfTrace.getInstance().summarizeNoException());
             }
         }
     }

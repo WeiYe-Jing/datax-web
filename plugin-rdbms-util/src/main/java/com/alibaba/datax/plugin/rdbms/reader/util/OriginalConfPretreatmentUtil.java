@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.rdbms.reader.util;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.common.util.ListUtil;
 import com.alibaba.datax.plugin.rdbms.reader.Constant;
@@ -100,6 +101,7 @@ public final class OriginalConfPretreatmentUtil {
                     i, Key.JDBC_URL), jdbcUrl);
 
             LOG.info("Available jdbcUrl:{}.",jdbcUrl);
+            EtlJobLogger.log("Available jdbcUrl:{}.", jdbcUrl);
 
             if (isTableMode) {
                 // table 方式
@@ -144,6 +146,7 @@ public final class OriginalConfPretreatmentUtil {
                 if (1 == userConfiguredColumns.size()
                         && "*".equals(userConfiguredColumns.get(0))) {
                     LOG.warn("您的配置文件中的列配置存在一定的风险. 因为您未配置读取数据库表的列，当您的表字段个数、类型有变动时，可能影响任务正确性甚至会运行出错。请检查您的配置并作出修改.");
+                    EtlJobLogger.log("您的配置文件中的列配置存在一定的风险. 因为您未配置读取数据库表的列，当您的表字段个数、类型有变动时，可能影响任务正确性甚至会运行出错。请检查您的配置并作出修改.");
                     // 回填其值，需要以 String 的方式转交后续处理
                     originalConfig.set(Key.COLUMN, "*");
                 } else {
@@ -160,6 +163,8 @@ public final class OriginalConfPretreatmentUtil {
                             DATABASE_TYPE, jdbcUrl, username, password,
                             tableName);
                     LOG.info("table:[{}] has columns:[{}].",
+                            tableName, StringUtils.join(allColumns, ","));
+                    EtlJobLogger.log("table:[{}] has columns:[{}].",
                             tableName, StringUtils.join(allColumns, ","));
                     // warn:注意mysql表名区分大小写
                     allColumns = ListUtil.valueToLowerCase(allColumns);
@@ -203,6 +208,7 @@ public final class OriginalConfPretreatmentUtil {
             if (null != userConfiguredColumns
                     && userConfiguredColumns.size() > 0) {
                 LOG.warn("您的配置有误. 由于您读取数据库表采用了querySql的方式, 所以您不需要再配置 column. 如果您不想看到这条提醒，请移除您源头表中配置中的 column.");
+                EtlJobLogger.log("您的配置有误. 由于您读取数据库表采用了querySql的方式, 所以您不需要再配置 column. 如果您不想看到这条提醒，请移除您源头表中配置中的 column.");
                 originalConfig.remove(Key.COLUMN);
             }
 
@@ -210,6 +216,7 @@ public final class OriginalConfPretreatmentUtil {
             String where = originalConfig.getString(Key.WHERE, null);
             if (StringUtils.isNotBlank(where)) {
                 LOG.warn("您的配置有误. 由于您读取数据库表采用了querySql的方式, 所以您不需要再配置 where. 如果您不想看到这条提醒，请移除您源头表中配置中的 where.");
+                EtlJobLogger.log("您的配置有误. 由于您读取数据库表采用了querySql的方式, 所以您不需要再配置 where. 如果您不想看到这条提醒，请移除您源头表中配置中的 where.");
                 originalConfig.remove(Key.WHERE);
             }
 
@@ -217,6 +224,7 @@ public final class OriginalConfPretreatmentUtil {
             String splitPk = originalConfig.getString(Key.SPLIT_PK, null);
             if (StringUtils.isNotBlank(splitPk)) {
                 LOG.warn("您的配置有误. 由于您读取数据库表采用了querySql的方式, 所以您不需要再配置 splitPk. 如果您不想看到这条提醒，请移除您源头表中配置中的 splitPk.");
+                EtlJobLogger.log("您的配置有误. 由于您读取数据库表采用了querySql的方式, 所以您不需要再配置 splitPk. 如果您不想看到这条提醒，请移除您源头表中配置中的 splitPk.");
                 originalConfig.remove(Key.SPLIT_PK);
             }
         }

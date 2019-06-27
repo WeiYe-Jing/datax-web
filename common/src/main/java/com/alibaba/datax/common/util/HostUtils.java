@@ -1,5 +1,6 @@
 package com.alibaba.datax.common.util;
 
+import com.alibaba.datax.common.log.EtlJobLogger;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +41,12 @@ public class HostUtils {
                 }
             } catch (Exception e) {
                 log.warn("get hostname failed {}", e.getMessage());
+                EtlJobLogger.log(e);
             }
         }
         IP = ip;
         HOSTNAME = hostname;
         log.info("IP {} HOSTNAME {}", IP, HOSTNAME);
+        EtlJobLogger.log("IP {} HOSTNAME {}", IP, HOSTNAME);
     }
 }

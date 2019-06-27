@@ -1,6 +1,7 @@
 package com.alibaba.datax.core.transport.channel;
 
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.statistics.communication.Communication;
 import com.alibaba.datax.core.statistics.communication.CommunicationTool;
@@ -57,6 +58,8 @@ public abstract class Channel {
                 CoreConstant.DATAX_CORE_TRANSPORT_CHANNEL_SPEED_RECORD, 10000);
 
         if (capacity <= 0) {
+            EtlJobLogger.log(String.format(
+                    "通道容量[%d]必须大于0.", capacity));
             throw new IllegalArgumentException(String.format(
                     "通道容量[%d]必须大于0.", capacity));
         }

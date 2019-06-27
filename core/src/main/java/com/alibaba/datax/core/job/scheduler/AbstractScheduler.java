@@ -1,6 +1,7 @@
 package com.alibaba.datax.core.job.scheduler;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.statistics.communication.Communication;
 import com.alibaba.datax.core.statistics.communication.CommunicationTool;
@@ -90,6 +91,7 @@ public abstract class AbstractScheduler {
 
                 if (nowJobContainerCommunication.getState() == State.SUCCEEDED) {
                     LOG.info("Scheduler accomplished all tasks.");
+                    EtlJobLogger.log("Scheduler accomplished all tasks.");
                     break;
                 }
 

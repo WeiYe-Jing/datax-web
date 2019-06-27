@@ -1,5 +1,6 @@
 package com.alibaba.datax.plugin.rdbms.reader.util;
 
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.reader.Constant;
 import com.alibaba.datax.plugin.rdbms.reader.Key;
@@ -52,14 +53,17 @@ public class HintUtil {
                     //主库不并发读取
                     if(finalHint.indexOf("parallel") > 0 && DBUtil.isOracleMaster(jdbcUrl, username, password)){
                         LOG.info("master:{} will not use hint:{}", jdbcUrl, finalHint);
+                        EtlJobLogger.log("master:{} will not use hint:{}", jdbcUrl, finalHint);
                     }else{
                         LOG.info("table:{} use hint:{}.", table, finalHint);
+                        EtlJobLogger.log("table:{} use hint:{}.", table, finalHint);
                         return finalHint + column;
                     }
                 }
             }
         } catch (Exception e){
             LOG.warn("match hint exception, will not use hint", e);
+            EtlJobLogger.log(e);
         }
         return column;
     }

@@ -2,12 +2,12 @@ package com.alibaba.datax.core.statistics.plugin.task;
 
 import com.alibaba.datax.common.constant.PluginType;
 import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.statistics.communication.Communication;
-import com.alibaba.datax.core.util.container.CoreConstant;
 import com.alibaba.datax.core.statistics.plugin.task.util.DirtyRecord;
+import com.alibaba.datax.core.util.container.CoreConstant;
 import com.alibaba.fastjson.JSON;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,9 +63,12 @@ public class StdoutPluginCollector extends AbstractTaskPluginCollector {
         int logNum = currentLogNum.getAndIncrement();
         if(logNum==0 && t!=null){
             LOG.error("", t);
+            EtlJobLogger.log(t);
         }
         if (maxLogNum.intValue() < 0 || currentLogNum.intValue() < maxLogNum.intValue()) {
             LOG.error("脏数据: \n"
+                    + this.formatDirty(dirtyRecord, t, errorMessage));
+            EtlJobLogger.log("脏数据: \n"
                     + this.formatDirty(dirtyRecord, t, errorMessage));
         }
 

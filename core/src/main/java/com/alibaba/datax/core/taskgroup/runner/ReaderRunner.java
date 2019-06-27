@@ -1,5 +1,6 @@
 package com.alibaba.datax.core.taskgroup.runner;
 
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.plugin.AbstractTaskPlugin;
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.spi.Reader;
@@ -71,6 +72,7 @@ public class ReaderRunner extends AbstractRunner implements Runnable {
         } catch (Throwable e) {
             LOG.error("Reader runner Received Exceptions:", e);
             super.markFail(e);
+            EtlJobLogger.log(e);
         } finally {
             LOG.debug("task reader starts to do destroy ...");
             PerfRecord desPerfRecord = new PerfRecord(getTaskGroupId(), getTaskId(), PerfRecord.PHASE.READ_TASK_DESTROY);

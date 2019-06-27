@@ -1,5 +1,6 @@
 package com.alibaba.datax.core.statistics.container.communicator.job;
 
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.statistics.communication.Communication;
 import com.alibaba.datax.core.statistics.communication.CommunicationTool;
@@ -48,6 +49,7 @@ public class StandAloneJobContainerCommunicator extends AbstractContainerCommuni
         super.getReporter().reportJobCommunication(super.getJobId(), communication);
 
         LOG.info(CommunicationTool.Stringify.getSnapshot(communication));
+        EtlJobLogger.log(CommunicationTool.Stringify.getSnapshot(communication));
         reportVmInfo();
     }
 

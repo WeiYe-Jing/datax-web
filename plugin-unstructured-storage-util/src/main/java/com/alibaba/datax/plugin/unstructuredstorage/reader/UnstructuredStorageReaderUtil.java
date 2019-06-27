@@ -2,6 +2,7 @@ package com.alibaba.datax.plugin.unstructuredstorage.reader;
 
 import com.alibaba.datax.common.element.*;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.common.util.Configuration;
@@ -9,10 +10,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.csvreader.CsvReader;
-import org.apache.commons.beanutils.BeanUtils;
 import io.airlift.compress.snappy.SnappyCodec;
 import io.airlift.compress.snappy.SnappyFramedInputStream;
-import org.anarres.lzo.*;
+import org.anarres.lzo.LzoDecompressor1x_safe;
+import org.anarres.lzo.LzoInputStream;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
@@ -99,6 +101,8 @@ public class UnstructuredStorageReaderUtil {
 			encoding = Constant.DEFAULT_ENCODING;
 			LOG.warn(String.format("您配置的encoding为[%s], 使用默认值[%s]", encoding,
 					Constant.DEFAULT_ENCODING));
+            EtlJobLogger.log(String.format("您配置的encoding为[%s], 使用默认值[%s]", encoding,
+                    Constant.DEFAULT_ENCODING));
 		}
 
 		List<Configuration> column = readerSliceConfig
@@ -252,6 +256,8 @@ public class UnstructuredStorageReaderUtil {
 		if (null == delimiterInStr) {
 			LOG.warn(String.format("您没有配置列分隔符, 使用默认值[%s]",
 					Constant.DEFAULT_FIELD_DELIMITER));
+            EtlJobLogger.log(String.format("您没有配置列分隔符, 使用默认值[%s]",
+                    Constant.DEFAULT_FIELD_DELIMITER));
 		}
 
 		// warn: default value ',', fieldDelimiter could be \n(lineDelimiter)
@@ -277,6 +283,8 @@ public class UnstructuredStorageReaderUtil {
 				String fetchLine = reader.readLine();
 				LOG.info(String.format("Header line %s has been skiped.",
 						fetchLine));
+                EtlJobLogger.log(String.format("Header line %s has been skiped.",
+                        fetchLine));
 			}
 			csvReader = new CsvReader(reader);
 			csvReader.setDelimiter(fieldDelimiter);
@@ -329,6 +337,8 @@ public class UnstructuredStorageReaderUtil {
 		if (null == delimiterInStr) {
 			LOG.warn(String.format("您没有配置列分隔符, 使用默认值[%s]",
 					Constant.DEFAULT_FIELD_DELIMITER));
+            EtlJobLogger.log(String.format("您没有配置列分隔符, 使用默认值[%s]",
+                    Constant.DEFAULT_FIELD_DELIMITER));
 		}
 		// warn: default value ',', fieldDelimiter could be \n(lineDelimiter)
 		// for no fieldDelimiter
@@ -388,6 +398,7 @@ public class UnstructuredStorageReaderUtil {
 											sourceLine.length, columnIndex + 1,
 											StringUtils.join(sourceLine, ","));
 							LOG.warn(message);
+                            EtlJobLogger.log(message);
 							throw new IndexOutOfBoundsException(message);
 						}
 
@@ -463,6 +474,7 @@ public class UnstructuredStorageReaderUtil {
 							String errorMessage = String.format(
 									"您配置的列类型暂不支持 : [%s]", columnType);
 							LOG.error(errorMessage);
+                            EtlJobLogger.log(errorMessage);
 							throw DataXException
 									.asDataXException(
 											UnstructuredStorageReaderErrorCode.NOT_SUPPORT_TYPE,
@@ -632,6 +644,7 @@ public class UnstructuredStorageReaderUtil {
 				UnstructuredStorageReaderUtil.csvReaderConfigMap = JSON.parseObject(csvReaderConfig, new TypeReference<HashMap<String, Object>>() {});
 			}catch (Exception e) {
 				LOG.info(String.format("WARN!!!!忽略csvReaderConfig配置! 配置错误,值只能为空或者为Map结构,您配置的值为: %s", csvReaderConfig));
+                EtlJobLogger.log(String.format("WARN!!!!忽略csvReaderConfig配置! 配置错误,值只能为空或者为Map结构,您配置的值为: %s", csvReaderConfig));
 			}
 		}
 	}
@@ -685,14 +698,18 @@ public class UnstructuredStorageReaderUtil {
 			try {
 				BeanUtils.populate(csvReader,UnstructuredStorageReaderUtil.csvReaderConfigMap);
 				LOG.info(String.format("csvReaderConfig设置成功,设置后CsvReader:%s", JSON.toJSONString(csvReader)));
+                EtlJobLogger.log(String.format("csvReaderConfig设置成功,设置后CsvReader:%s", JSON.toJSONString(csvReader)));
 			} catch (Exception e) {
 				LOG.info(String.format("WARN!!!!忽略csvReaderConfig配置!通过BeanUtils.populate配置您的csvReaderConfig发生异常,您配置的值为: %s;请检查您的配置!CsvReader使用默认值[%s]",
 						JSON.toJSONString(UnstructuredStorageReaderUtil.csvReaderConfigMap),JSON.toJSONString(csvReader)));
+                EtlJobLogger.log(String.format("WARN!!!!忽略csvReaderConfig配置!通过BeanUtils.populate配置您的csvReaderConfig发生异常,您配置的值为: %s;请检查您的配置!CsvReader使用默认值[%s]",
+                        JSON.toJSONString(UnstructuredStorageReaderUtil.csvReaderConfigMap), JSON.toJSONString(csvReader)));
 			}
 		}else {
 			//默认关闭安全模式, 放开10W字节的限制
 			csvReader.setSafetySwitch(false);
 			LOG.info(String.format("CsvReader使用默认值[%s],csvReaderConfig值为[%s]",JSON.toJSONString(csvReader),JSON.toJSONString(UnstructuredStorageReaderUtil.csvReaderConfigMap)));
+            EtlJobLogger.log(String.format("CsvReader使用默认值[%s],csvReaderConfig值为[%s]", JSON.toJSONString(csvReader), JSON.toJSONString(UnstructuredStorageReaderUtil.csvReaderConfigMap)));
 		}
 	}
 }

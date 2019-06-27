@@ -2,10 +2,10 @@ package com.alibaba.datax.plugin.rdbms.reader;
 
 import com.alibaba.datax.common.element.*;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,6 +126,7 @@ public class ResultSetReadProxy {
 				LOG.debug("read data " + record.toString()
 						+ " occur exception:", e);
 			}
+            EtlJobLogger.log(e);
 
 			//TODO 这里识别为脏数据靠谱吗？
 			taskPluginCollector.collectDirtyRecord(record, e);

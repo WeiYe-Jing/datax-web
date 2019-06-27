@@ -1,6 +1,7 @@
 package com.alibaba.datax.core.util;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.util.container.CoreConstant;
 import org.apache.commons.io.FileUtils;
@@ -55,6 +56,7 @@ public final class ConfigParser {
         }catch (Exception e){
             //吞掉异常，保持log干净。这里message足够。
             LOG.warn(String.format("插件[%s,%s]加载失败，1s后重试... Exception:%s ", readerPluginName, writerPluginName, e.getMessage()));
+            EtlJobLogger.log(String.format("插件[%s,%s]加载失败，1s后重试... Exception:%s ", readerPluginName, writerPluginName, e.getMessage()));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e1) {

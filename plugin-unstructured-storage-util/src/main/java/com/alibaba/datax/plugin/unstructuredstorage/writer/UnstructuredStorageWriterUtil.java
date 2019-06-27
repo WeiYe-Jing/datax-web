@@ -1,18 +1,14 @@
 package com.alibaba.datax.plugin.unstructuredstorage.writer;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
+import com.alibaba.datax.common.element.Column;
+import com.alibaba.datax.common.element.DateColumn;
+import com.alibaba.datax.common.element.Record;
+import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
+import com.alibaba.datax.common.plugin.RecordReceiver;
+import com.alibaba.datax.common.plugin.TaskPluginCollector;
+import com.alibaba.datax.common.util.Configuration;
+import com.google.common.collect.Sets;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
@@ -22,14 +18,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.datax.common.element.Column;
-import com.alibaba.datax.common.element.DateColumn;
-import com.alibaba.datax.common.element.Record;
-import com.alibaba.datax.common.exception.DataXException;
-import com.alibaba.datax.common.plugin.RecordReceiver;
-import com.alibaba.datax.common.plugin.TaskPluginCollector;
-import com.alibaba.datax.common.util.Configuration;
-import com.google.common.collect.Sets;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class UnstructuredStorageWriterUtil {
     private UnstructuredStorageWriterUtil() {
@@ -65,6 +57,8 @@ public class UnstructuredStorageWriterUtil {
         if (StringUtils.isBlank(encoding)) {
             // like "  ", null
             LOG.warn(String.format("您的encoding配置为空, 将使用默认值[%s]",
+                    Constant.DEFAULT_ENCODING));
+            EtlJobLogger.log(String.format("您的encoding配置为空, 将使用默认值[%s]",
                     Constant.DEFAULT_ENCODING));
             writerConfiguration.set(Key.ENCODING, Constant.DEFAULT_ENCODING);
         } else {
@@ -107,6 +101,8 @@ public class UnstructuredStorageWriterUtil {
         if (null == delimiterInStr) {
             LOG.warn(String.format("您没有配置列分隔符, 使用默认值[%s]",
                     Constant.DEFAULT_FIELD_DELIMITER));
+            EtlJobLogger.log(String.format("您没有配置列分隔符, 使用默认值[%s]",
+                    Constant.DEFAULT_FIELD_DELIMITER));
             writerConfiguration.set(Key.FIELD_DELIMITER,
                     Constant.DEFAULT_FIELD_DELIMITER);
         }
@@ -126,6 +122,7 @@ public class UnstructuredStorageWriterUtil {
     public static List<Configuration> split(Configuration writerSliceConfig,
             Set<String> originAllFileExists, int mandatoryNumber) {
         LOG.info("begin do split...");
+        EtlJobLogger.log("begin do split...");
         Set<String> allFileExists = new HashSet<String>();
         allFileExists.addAll(originAllFileExists);
         List<Configuration> writerSplitConfigs = new ArrayList<Configuration>();
@@ -146,9 +143,12 @@ public class UnstructuredStorageWriterUtil {
             splitedTaskConfig.set(Key.FILE_NAME, fullFileName);
             LOG.info(String
                     .format("splited write file name:[%s]", fullFileName));
+            EtlJobLogger.log(String
+                    .format("splited write file name:[%s]", fullFileName));
             writerSplitConfigs.add(splitedTaskConfig);
         }
         LOG.info("end do split.");
+        EtlJobLogger.log("end do split.");
         return writerSplitConfigs;
     }
 
@@ -186,6 +186,8 @@ public class UnstructuredStorageWriterUtil {
         // handle blank encoding
         if (StringUtils.isBlank(encoding)) {
             LOG.warn(String.format("您配置的encoding为[%s], 使用默认值[%s]", encoding,
+                    Constant.DEFAULT_ENCODING));
+            EtlJobLogger.log(String.format("您配置的encoding为[%s], 使用默认值[%s]", encoding,
                     Constant.DEFAULT_ENCODING));
             encoding = Constant.DEFAULT_ENCODING;
         }
@@ -263,6 +265,8 @@ public class UnstructuredStorageWriterUtil {
         }
         if (null == delimiterInStr) {
             LOG.warn(String.format("您没有配置列分隔符, 使用默认值[%s]",
+                    Constant.DEFAULT_FIELD_DELIMITER));
+            EtlJobLogger.log(String.format("您没有配置列分隔符, 使用默认值[%s]",
                     Constant.DEFAULT_FIELD_DELIMITER));
         }
 

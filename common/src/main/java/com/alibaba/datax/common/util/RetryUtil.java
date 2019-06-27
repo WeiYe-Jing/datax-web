@@ -1,5 +1,6 @@
 package com.alibaba.datax.common.util;
 
+import com.alibaba.datax.common.log.EtlJobLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,6 +114,8 @@ public final class RetryUtil {
                     saveException = e;
                     if (i == 0) {
                         LOG.error(String.format("Exception when calling callable, 异常Msg:%s", saveException.getMessage()), saveException);
+                        EtlJobLogger.log(String.format("Exception when calling callable, 异常Msg:%s", saveException.getMessage()));
+                        EtlJobLogger.log(saveException);
                     }
                     
                     if (null != retryExceptionClasss && !retryExceptionClasss.isEmpty()) {
@@ -153,6 +156,8 @@ public final class RetryUtil {
 
                         LOG.error(String.format("Exception when calling callable, 即将尝试执行第%s次重试.本次重试计划等待[%s]ms,实际等待[%s]ms, 异常Msg:[%s]",
                                 i+1, timeToSleep,realTimeSleep, e.getMessage()));
+                        EtlJobLogger.log(String.format("Exception when calling callable, 即将尝试执行第%s次重试.本次重试计划等待[%s]ms,实际等待[%s]ms, 异常Msg:[%s]",
+                                i + 1, timeToSleep, realTimeSleep, e.getMessage()));
 
                     }
                 }
@@ -195,11 +200,13 @@ public final class RetryUtil {
                 return future.get(timeoutMs, TimeUnit.MILLISECONDS);
             } catch (Exception e) {
                 LOG.warn("Try once failed", e);
+                EtlJobLogger.log(e);
                 throw e;
             } finally {
                 if (!future.isDone()) {
                     future.cancel(true);
                     LOG.warn("Try once task not done, cancel it, active count: " + executor.getActiveCount());
+                    EtlJobLogger.log("Try once task not done, cancel it, active count: " + executor.getActiveCount());
                 }
             }
         }

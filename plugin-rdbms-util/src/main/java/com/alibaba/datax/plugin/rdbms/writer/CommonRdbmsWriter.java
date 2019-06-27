@@ -3,6 +3,7 @@ package com.alibaba.datax.plugin.rdbms.writer;
 import com.alibaba.datax.common.element.Column;
 import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.plugin.RecordReceiver;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.common.util.Configuration;
@@ -41,6 +42,8 @@ public class CommonRdbmsWriter {
             OriginalConfPretreatmentUtil.doPretreatment(originalConfig, this.dataBaseType);
 
             LOG.debug("After job init(), originalConfig now is:[\n{}\n]",
+                    originalConfig.toJSON());
+            EtlJobLogger.log("After job init(), originalConfig now is:[\n{}\n]",
                     originalConfig.toJSON());
         }
 
@@ -117,6 +120,8 @@ public class CommonRdbmsWriter {
                             jdbcUrl, username, password);
                     LOG.info("Begin to execute preSqls:[{}]. context info:{}.",
                             StringUtils.join(renderedPreSqls, ";"), jdbcUrl);
+                    EtlJobLogger.log("Begin to execute preSqls:[{}]. context info:{}.",
+                            StringUtils.join(renderedPreSqls, ";"), jdbcUrl);
 
                     WriterUtil.executeSqls(conn, renderedPreSqls, jdbcUrl, dataBaseType);
                     DBUtil.closeDBResources(null, null, conn);
@@ -124,6 +129,8 @@ public class CommonRdbmsWriter {
             }
 
             LOG.debug("After job prepare(), originalConfig now is:[\n{}\n]",
+                    originalConfig.toJSON());
+            EtlJobLogger.log("After job prepare(), originalConfig now is:[\n{}\n]",
                     originalConfig.toJSON());
         }
 
@@ -157,6 +164,9 @@ public class CommonRdbmsWriter {
                             jdbcUrl, username, password);
 
                     LOG.info(
+                            "Begin to execute postSqls:[{}]. context info:{}.",
+                            StringUtils.join(renderedPostSqls, ";"), jdbcUrl);
+                    EtlJobLogger.log(
                             "Begin to execute postSqls:[{}]. context info:{}.",
                             StringUtils.join(renderedPostSqls, ";"), jdbcUrl);
                     WriterUtil.executeSqls(conn, renderedPostSqls, jdbcUrl, dataBaseType);
@@ -217,9 +227,11 @@ public class CommonRdbmsWriter {
                                     DBUtilErrorCode.JDBC_OB10_ADDRESS_ERROR, "JDBC OB10格式错误，请联系askdatax");
                 }
                 LOG.info("this is ob1_0 jdbc url.");
+                EtlJobLogger.log("this is ob1_0 jdbc url.");
                 this.username = ss[1].trim() + ":" + this.username;
                 this.jdbcUrl = ss[2];
                 LOG.info("this is ob1_0 jdbc url. user=" + this.username + " :url=" + this.jdbcUrl);
+                EtlJobLogger.log("this is ob1_0 jdbc url. user=" + this.username + " :url=" + this.jdbcUrl);
             }
 
             this.table = writerSliceConfig.getString(Key.TABLE);
@@ -252,6 +264,8 @@ public class CommonRdbmsWriter {
                     Constant.TABLE_NUMBER_MARK);
             if (tableNumber != 1) {
                 LOG.info("Begin to execute preSqls:[{}]. context info:{}.",
+                        StringUtils.join(this.preSqls, ";"), BASIC_MESSAGE);
+                EtlJobLogger.log("Begin to execute preSqls:[{}]. context info:{}.",
                         StringUtils.join(this.preSqls, ";"), BASIC_MESSAGE);
                 WriterUtil.executeSqls(connection, this.preSqls, BASIC_MESSAGE, dataBaseType);
             }
@@ -334,6 +348,8 @@ public class CommonRdbmsWriter {
 
             LOG.info("Begin to execute postSqls:[{}]. context info:{}.",
                     StringUtils.join(this.postSqls, ";"), BASIC_MESSAGE);
+            EtlJobLogger.log("Begin to execute postSqls:[{}]. context info:{}.",
+                    StringUtils.join(this.postSqls, ";"), BASIC_MESSAGE);
             WriterUtil.executeSqls(connection, this.postSqls, BASIC_MESSAGE, dataBaseType);
             DBUtil.closeDBResources(null, null, connection);
         }
@@ -358,6 +374,7 @@ public class CommonRdbmsWriter {
                 connection.commit();
             } catch (SQLException e) {
                 LOG.warn("回滚此次写入, 采用每次写入一行方式提交. 因为:" + e.getMessage());
+                EtlJobLogger.log("回滚此次写入, 采用每次写入一行方式提交. 因为:" + e.getMessage());
                 connection.rollback();
                 doOneInsert(connection, buffer);
             } catch (Exception e) {
@@ -382,7 +399,7 @@ public class CommonRdbmsWriter {
                         preparedStatement.execute();
                     } catch (SQLException e) {
                         LOG.debug(e.toString());
-
+                        EtlJobLogger.log(e.toString());
                         this.taskPluginCollector.collectDirtyRecord(record, e);
                     } finally {
                         // 最后不要忘了关闭 preparedStatement

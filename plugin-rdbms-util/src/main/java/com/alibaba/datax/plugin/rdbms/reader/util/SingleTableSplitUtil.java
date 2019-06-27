@@ -1,12 +1,12 @@
 package com.alibaba.datax.plugin.rdbms.reader.util;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.reader.Constant;
 import com.alibaba.datax.plugin.rdbms.reader.Key;
 import com.alibaba.datax.plugin.rdbms.util.*;
 import com.alibaba.fastjson.JSON;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -116,6 +116,8 @@ public class SingleTableSplitUtil {
 
         LOG.info("After split(), allQuerySql=[\n{}\n].",
                 StringUtils.join(allQuerySql, "\n"));
+        EtlJobLogger.log("After split(), allQuerySql=[\n{}\n].",
+                StringUtils.join(allQuerySql, "\n"));
 
         tempConfig.set(Key.QUERY_SQL, tempQuerySql);
         pluginParams.add(tempConfig);
@@ -171,6 +173,7 @@ public class SingleTableSplitUtil {
     private static Pair<Object, Object> checkSplitPk(Connection conn, String pkRangeSQL, int fetchSize,  String table,
                                                      String username, Configuration configuration) {
         LOG.info("split pk [sql={}] is running... ", pkRangeSQL);
+        EtlJobLogger.log("split pk [sql={}] is running... ", pkRangeSQL);
         ResultSet rs = null;
         Pair<Object, Object> minMaxPK = null;
         try {
@@ -318,6 +321,7 @@ public class SingleTableSplitUtil {
         Connection conn = DBUtil.getConnection(DATABASE_TYPE, jdbcURL,
                 username, password);
         LOG.info("split pk [sql={}] is running... ", splitSql);
+        EtlJobLogger.log("split pk [sql={}] is running... ", splitSql);
         ResultSet rs = null;
         List<Pair<Object, Integer>> splitedRange = new ArrayList<Pair<Object, Integer>>();
         try {
@@ -347,6 +351,7 @@ public class SingleTableSplitUtil {
             DBUtil.closeDBResources(rs, null, null);
         }
         LOG.debug(JSON.toJSONString(splitedRange));
+        EtlJobLogger.log(JSON.toJSONString(splitedRange));
         List<String> rangeSql = new ArrayList<String>();
         int splitedRangeSize = splitedRange.size();
         // warn: splitedRangeSize may be 0 or 1，切分规则为IS NULL以及 IS NOT NULL

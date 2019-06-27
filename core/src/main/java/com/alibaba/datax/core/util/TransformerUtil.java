@@ -1,6 +1,7 @@
 package com.alibaba.datax.core.util;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.core.transport.transformer.*;
 import com.alibaba.datax.core.util.container.CoreConstant;
@@ -47,6 +48,7 @@ public class TransformerUtil {
          * 延迟load 第三方插件的function，并按需load
          */
         LOG.info(String.format(" user config tranformers [%s], loading...", functionNames));
+        EtlJobLogger.log(String.format(" user config tranformers [%s], loading...", functionNames));
         TransformerRegistry.loadTransformerFromLocalStorage(functionNames);
 
         int i = 0;
@@ -97,6 +99,9 @@ public class TransformerUtil {
             result.add(transformerExecution);
             i++;
             LOG.info(String.format(" %s of transformer init success. name=%s, isNative=%s parameter = %s"
+                    , i, transformerInfo.getTransformer().getTransformerName()
+                    , transformerInfo.isNative(), configuration.getConfiguration("parameter")));
+            EtlJobLogger.log(String.format(" %s of transformer init success. name=%s, isNative=%s parameter = %s"
                     , i, transformerInfo.getTransformer().getTransformerName()
                     , transformerInfo.isNative(), configuration.getConfiguration("parameter")));
         }

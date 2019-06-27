@@ -149,6 +149,8 @@ public class CoreConstant {
     
 	public static final String CURRENT_SERVICE_PASSWORD = "current.service.password";
 
+    public static String LOG_FILE_PATH = "logFilePath";
+
 	// ----------------------------- 环境变量 ---------------------------------
 
 	/**

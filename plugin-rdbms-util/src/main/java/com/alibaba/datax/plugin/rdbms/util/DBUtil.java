@@ -1,13 +1,13 @@
 package com.alibaba.datax.plugin.rdbms.util;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.common.util.RetryUtil;
 import com.alibaba.datax.plugin.rdbms.reader.Key;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
@@ -151,13 +151,16 @@ public final class DBUtil {
                         }
                     } else {
                         LOG.warn("SHOW SLAVE STATUS has no result");
+                        EtlJobLogger.log("SHOW SLAVE STATUS has no result");
                     }
                 }
             } else {
                 LOG.warn("SHOW VARIABLES like 'read_only' has no result");
+                EtlJobLogger.log("SHOW VARIABLES like 'read_only' has no result");
             }
         } catch (Exception e) {
             LOG.warn("checkSlave failed, errorMessage:[{}].", e.getMessage());
+            EtlJobLogger.log("checkSlave failed, errorMessage:[{}].", e.getMessage());
         }
         return false;
     }
@@ -208,6 +211,7 @@ public final class DBUtil {
             }
         } catch (Exception e) {
             LOG.warn("Check the database has the Insert Privilege failed, errorMessage:[{}]", e.getMessage());
+            EtlJobLogger.log("Check the database has the Insert Privilege failed, errorMessage:[{}]", e.getMessage());
         }
         if (tableNames.isEmpty())
             return true;
@@ -231,10 +235,12 @@ public final class DBUtil {
                     if(e.getMessage() != null && e.getMessage().contains("insufficient privileges")) {
                         hasInsertPrivilege = false;
                         LOG.warn("User [" + userName +"] has no 'insert' privilege on table[" + tableName + "], errorMessage:[{}]", e.getMessage());
+                        EtlJobLogger.log("User [" + userName + "] has no 'insert' privilege on table[" + tableName + "], errorMessage:[{}]", e.getMessage());
                     }
                 } else {
                     hasInsertPrivilege = false;
                     LOG.warn("User [" + userName + "] has no 'insert' privilege on table[" + tableName + "], errorMessage:[{}]", e.getMessage());
+                    EtlJobLogger.log("User [" + userName + "] has no 'insert' privilege on table[" + tableName + "], errorMessage:[{}]", e.getMessage());
                 }
             }
         }
@@ -242,6 +248,7 @@ public final class DBUtil {
             connection.close();
         } catch (SQLException e) {
             LOG.warn("connection close failed, " + e.getMessage());
+            EtlJobLogger.log("connection close failed, " + e.getMessage());
         }
         return hasInsertPrivilege;
     }
@@ -260,12 +267,14 @@ public final class DBUtil {
             } catch (Exception e) {
                 hasInsertPrivilege = false;
                 LOG.warn("User [" + userName +"] has no 'delete' privilege on table[" + tableName + "], errorMessage:[{}]", e.getMessage());
+                EtlJobLogger.log("User [" + userName + "] has no 'delete' privilege on table[" + tableName + "], errorMessage:[{}]", e.getMessage());
             }
         }
         try {
             connection.close();
         } catch (SQLException e) {
             LOG.warn("connection close failed, " + e.getMessage());
+            EtlJobLogger.log("connection close failed, " + e.getMessage());
         }
         return hasInsertPrivilege;
     }
@@ -366,9 +375,11 @@ public final class DBUtil {
                                 DBUtilErrorCode.JDBC_OB10_ADDRESS_ERROR, "JDBC OB10格式错误，请联系askdatax");
             }
             LOG.info("this is ob1_0 jdbc url.");
+            EtlJobLogger.log("this is ob1_0 jdbc url.");
             user = ss[1].trim() +":"+user;
             url = ss[2];
             LOG.info("this is ob1_0 jdbc url. user="+user+" :url="+url);
+            EtlJobLogger.log("this is ob1_0 jdbc url. user=" + user + " :url=" + url);
         }
 
         Properties prop = new Properties();
@@ -598,6 +609,8 @@ public final class DBUtil {
         } catch (Exception e) {
             LOG.warn("test connection of [{}] failed, for {}.", url,
                     e.getMessage());
+            EtlJobLogger.log("test connection of [{}] failed, for {}.", url,
+                    e.getMessage());
         } finally {
             DBUtil.closeDBResources(null, connection);
         }
@@ -613,6 +626,7 @@ public final class DBUtil {
                 for (String pre : preSql) {
                     if (doPreCheck(connection, pre) == false) {
                         LOG.warn("doPreCheck failed.");
+                        EtlJobLogger.log("doPreCheck failed.");
                         return false;
                     }
                 }
@@ -620,6 +634,8 @@ public final class DBUtil {
             }
         } catch (Exception e) {
             LOG.warn("test connection of [{}] failed, for {}.", url,
+                    e.getMessage());
+            EtlJobLogger.log("test connection of [{}] failed, for {}.", url,
                     e.getMessage());
         } finally {
             DBUtil.closeDBResources(null, connection);
@@ -675,6 +691,9 @@ public final class DBUtil {
                     LOG.warn(
                             "pre check failed. It should return one result:0, pre:[{}].",
                             pre);
+                    EtlJobLogger.log(
+                            "pre check failed. It should return one result:0, pre:[{}].",
+                            pre);
                     return false;
                 }
 
@@ -687,8 +706,13 @@ public final class DBUtil {
             LOG.warn(
                     "pre check failed. It should return one result:0, pre:[{}].",
                     pre);
+            EtlJobLogger.log(
+                    "pre check failed. It should return one result:0, pre:[{}].",
+                    pre);
         } catch (Exception e) {
             LOG.warn("pre check failed. pre:[{}], errorMessage:[{}].", pre,
+                    e.getMessage());
+            EtlJobLogger.log("pre check failed. pre:[{}], errorMessage:[{}].", pre,
                     e.getMessage());
         } finally {
             DBUtil.closeResultSet(rs);
@@ -740,6 +764,7 @@ public final class DBUtil {
 
         for (String sessionSql : sessions) {
             LOG.info("execute sql:[{}]", sessionSql);
+            EtlJobLogger.log("execute sql:[{}]", sessionSql);
             try {
                 DBUtil.executeSqlWithoutResultSet(stmt, sessionSql);
             } catch (SQLException e) {

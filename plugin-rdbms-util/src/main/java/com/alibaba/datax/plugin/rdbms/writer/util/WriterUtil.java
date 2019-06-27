@@ -1,6 +1,7 @@
 package com.alibaba.datax.plugin.rdbms.writer.util;
 
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.rdbms.util.DBUtil;
 import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public final class WriterUtil {
     private static final Logger LOG = LoggerFactory.getLogger(WriterUtil.class);
@@ -180,6 +183,8 @@ public final class WriterUtil {
         if (null != renderedPreSqls && !renderedPreSqls.isEmpty()) {
             LOG.info("Begin to preCheck preSqls:[{}].",
                     StringUtils.join(renderedPreSqls, ";"));
+            EtlJobLogger.log("Begin to preCheck preSqls:[{}].",
+                    StringUtils.join(renderedPreSqls, ";"));
             for(String sql : renderedPreSqls) {
                 try{
                     DBUtil.sqlValid(sql, type);
@@ -202,6 +207,8 @@ public final class WriterUtil {
         if (null != renderedPostSqls && !renderedPostSqls.isEmpty()) {
 
             LOG.info("Begin to preCheck postSqls:[{}].",
+                    StringUtils.join(renderedPostSqls, ";"));
+            EtlJobLogger.log("Begin to preCheck postSqls:[{}].",
                     StringUtils.join(renderedPostSqls, ";"));
             for(String sql : renderedPostSqls) {
                 try{

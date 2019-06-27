@@ -1,13 +1,8 @@
 package com.alibaba.datax.plugin.rdbms.reader;
 
-import com.alibaba.datax.common.element.BoolColumn;
-import com.alibaba.datax.common.element.BytesColumn;
-import com.alibaba.datax.common.element.DateColumn;
-import com.alibaba.datax.common.element.DoubleColumn;
-import com.alibaba.datax.common.element.LongColumn;
-import com.alibaba.datax.common.element.Record;
-import com.alibaba.datax.common.element.StringColumn;
+import com.alibaba.datax.common.element.*;
 import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.plugin.TaskPluginCollector;
 import com.alibaba.datax.common.statistics.PerfRecord;
@@ -22,7 +17,6 @@ import com.alibaba.datax.plugin.rdbms.util.DBUtilErrorCode;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
 import com.alibaba.datax.plugin.rdbms.util.RdbmsException;
 import com.google.common.collect.Lists;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +49,8 @@ public class CommonRdbmsReader {
             OriginalConfPretreatmentUtil.doPretreatment(originalConfig);
 
             LOG.debug("After job init(), job config now is:[\n{}\n]",
+                    originalConfig.toJSON());
+            EtlJobLogger.log("After job init(), job config now is:[\n{}\n]",
                     originalConfig.toJSON());
         }
 
@@ -158,9 +154,11 @@ public class CommonRdbmsReader {
                                     DBUtilErrorCode.JDBC_OB10_ADDRESS_ERROR, "JDBC OB10格式错误，请联系askdatax");
                 }
                 LOG.info("this is ob1_0 jdbc url.");
+                EtlJobLogger.log("this is ob1_0 jdbc url.");
                 this.username = ss[1].trim() +":"+this.username;
                 this.jdbcUrl = ss[2];
                 LOG.info("this is ob1_0 jdbc url. user=" + this.username + " :url=" + this.jdbcUrl);
+                EtlJobLogger.log("this is ob1_0 jdbc url. user=" + this.username + " :url=" + this.jdbcUrl);
             }
 
             this.mandatoryEncoding = readerSliceConfig.getString(Key.MANDATORY_ENCODING, "");
@@ -178,6 +176,8 @@ public class CommonRdbmsReader {
             PerfTrace.getInstance().addTaskDetails(taskId, table + "," + basicMsg);
 
             LOG.info("Begin to read record by Sql: [{}\n] {}.",
+                    querySql, basicMsg);
+            EtlJobLogger.log("Begin to read record by Sql: [{}\n] {}.",
                     querySql, basicMsg);
             PerfRecord queryPerfRecord = new PerfRecord(taskGroupId,taskId, PerfRecord.PHASE.SQL_QUERY);
             queryPerfRecord.start();
@@ -214,6 +214,8 @@ public class CommonRdbmsReader {
                 allResultPerfRecord.end(rsNextUsedTime);
                 //目前大盘是依赖这个打印，而之前这个Finish read record是包含了sql查询和result next的全部时间
                 LOG.info("Finished read record by Sql: [{}\n] {}.",
+                        querySql, basicMsg);
+                EtlJobLogger.log("Finished read record by Sql: [{}\n] {}.",
                         querySql, basicMsg);
 
             }catch (Exception e) {
@@ -340,6 +342,7 @@ public class CommonRdbmsReader {
                     LOG.debug("read data " + record.toString()
                             + " occur exception:", e);
                 }
+                EtlJobLogger.log(e);
                 //TODO 这里识别为脏数据靠谱吗？
                 taskPluginCollector.collectDirtyRecord(record, e);
                 if (e instanceof DataXException) {

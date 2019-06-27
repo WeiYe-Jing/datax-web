@@ -1,7 +1,7 @@
 package com.wugui.dataxweb.controller;
 
-import com.alibaba.datax.core.Engine;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.wugui.dataxweb.dto.RunJobDto;
 import com.wugui.dataxweb.service.IDataxJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -136,5 +136,17 @@ public class JobController {
         return R.ok(result);
     }
 
+    /**
+     * 通过接口传入 runJobDto 实体启动一个datax作业，并记录日志
+     *
+     * @param runJobDto
+     * @return
+     */
+    @ApiOperation("通过传入 runJobDto 实体启动一个datax作业，并记录日志")
+    @PostMapping("/runJobLog")
+    public R<String> runJobLog(@RequestBody RunJobDto runJobDto) {
+        String result = iDataxJobService.startJobLog(runJobDto);
+        return R.ok(result);
+    }
 
 }

@@ -34,3 +34,7 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
+
+app:
+  #  数据抽取日志文件保存路径
+  etlLogDir: /data/applogs/datax-web/

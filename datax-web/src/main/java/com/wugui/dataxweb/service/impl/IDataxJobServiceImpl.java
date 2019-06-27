@@ -1,14 +1,23 @@
 package com.wugui.dataxweb.service.impl;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.spi.ErrorCode;
 import com.alibaba.datax.core.Engine;
 import com.alibaba.datax.core.util.ExceptionTracker;
 import com.alibaba.datax.core.util.FrameworkErrorCode;
+import com.alibaba.datax.core.util.container.CoreConstant;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.wugui.dataxweb.dto.RunJobDto;
+import com.wugui.dataxweb.entity.JobLog;
 import com.wugui.dataxweb.service.IDataxJobService;
+import com.wugui.dataxweb.service.IJobLogService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -25,10 +34,19 @@ import java.util.concurrent.*;
 @Slf4j
 @Service
 public class IDataxJobServiceImpl implements IDataxJobService {
-    private  ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("datax-job-%d").build();
+    private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("datax-job-%d").build();
 
-    private  ExecutorService jobPool = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
+    private ExecutorService jobPool = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    /**
+     * 日志文件保存目录
+     */
+    @Value("${app.etlLogDir}")
+    private String etlLogDir;
+
+    @Autowired
+    private IJobLogService iJobLogService;
 
 
     @Override
@@ -73,4 +91,23 @@ public class IDataxJobServiceImpl implements IDataxJobService {
         return "success";
     }
 
+
+    @Override
+    public String startJobLog(RunJobDto runJobDto) {
+        //取出 jobJson，并转为json对象
+        JSONObject json = JSONObject.parseObject(runJobDto.getJobJson());
+        //根据jobId和当前时间戳生成日志文件名
+        String logFileName = runJobDto.getJobConfigId().toString().concat("_").concat(StrUtil.toString(System.currentTimeMillis()).concat(".log"));
+        String logFilePath = etlLogDir.concat(logFileName);
+        //记录日志
+        JobLog jobLog = new JobLog();
+        jobLog.setJobId(runJobDto.getJobConfigId());
+        jobLog.setLogFilePath(logFilePath);
+        iJobLogService.save(jobLog);
+        //将路径放进去
+        json.put(CoreConstant.LOG_FILE_PATH, logFilePath);
+
+        //启动任务
+        return startJobByJsonStr(JSON.toJSONString(json));
+    }
 }

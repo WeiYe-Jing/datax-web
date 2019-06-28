@@ -1,5 +1,6 @@
 package com.wugui.dataxweb.controller;
 
+import com.alibaba.datax.common.log.LogResult;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.dataxweb.dto.RunJobDto;
 import com.wugui.dataxweb.service.IDataxJobService;
@@ -126,6 +127,7 @@ public class JobController {
 
     /**
      * 通过接口传入json配置启动一个datax作业
+     *
      * @param jobJson
      * @return
      */
@@ -149,4 +151,15 @@ public class JobController {
         return R.ok(result);
     }
 
+    /**
+     * 根据任务id查询日志
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation("查看任务抽取日志,id为任务id，fromLineNum为读取的行数")
+    @GetMapping("/viewJobLog")
+    public R<LogResult> viewJogLog(Long id, int fromLineNum) {
+        return R.ok(iDataxJobService.viewJogLog(id, fromLineNum));
+    }
 }

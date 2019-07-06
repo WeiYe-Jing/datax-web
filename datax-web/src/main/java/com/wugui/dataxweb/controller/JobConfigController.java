@@ -21,9 +21,10 @@ import java.util.Map;
 
 /**
  * 作业配置表控制器层
+ *
  * @author zhouhongfa@gz-yibo.com
- * @since 2019-06-17
  * @version v1.0
+ * @since 2019-06-17
  */
 @RestController
 @RequestMapping("/api/jobConfig")
@@ -85,6 +86,12 @@ public class JobConfigController extends ApiController {
         //遍历进行字段查询条件组装
         columnQueryMap.forEach((k, v) -> {
             switch (k) {
+                case "name":
+                    queryWrapper.like("name", v);
+                    break;
+                case "jobGroup":
+                    queryWrapper.like(StrUtil.toUnderlineCase("jobGroup"), v);
+                    break;
                 default:
                     queryWrapper.eq(StrUtil.toUnderlineCase(k), v);
             }

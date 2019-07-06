@@ -45,7 +45,7 @@ public class EtlJobLogger {
         if (logFileName != null && logFileName.trim().length() > 0) {
             EtlJobFileAppender.appendLog(logFileName, formatAppendLog);
         } else {
-            logger.info(">>>>>>>>>>> {}", formatAppendLog);
+//            logger.info(">>>>>>>>>>> {}", formatAppendLog);
         }
     }
 

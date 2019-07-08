@@ -34,6 +34,12 @@ public class EtlJobFileAppender {
             return;
         }
         File logFile = new File(logFileName);
+        //getParentFile() 获取上级目录
+        if (!logFile.getParentFile().exists()) {
+            //创建目录
+            logFile.getParentFile().mkdirs();
+        }
+
 
         if (!logFile.exists()) {
             try {

@@ -43,7 +43,7 @@ cd  datax/datax/plugin/web
 ```
 需要配上环境变量-Ddatax.home，此处参照上述配置mvn打包后的目录即可
 
-### 4. 访问测试作业接口
+### 4. 终端访问测试作业接口
 ```
 curl http://localhost:8080/startJob
 ```
@@ -53,3 +53,6 @@ curl http://localhost:8080/startJob
 ### 5. 打开网页端启动作业
 http://localhost:8080/index.html#/datax/job
 ![](https://raw.githubusercontent.com/huzekang/picbed/master/20190617120207.png)
+
+### 6. 在线查看作业日志
+![](https://raw.githubusercontent.com/huzekang/picbed/master/20190708102445.png)

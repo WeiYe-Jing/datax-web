@@ -37,10 +37,19 @@ public interface QueryToolInterface {
     public List<Map<String, Object>> getTables();
 
     /**
-     * 根据表名和类型映射列表获取所有字段
+     * 根据表名获取所有字段
      *
      * @param tableName
      * @return2
      */
     public List<ColumnInfo> getColumns(String tableName);
+
+
+    /**
+     * 根据表名和获取所有字段名称（不包括表名）
+     *
+     * @param tableName
+     * @return2
+     */
+    public List<String> getColumnNames(String tableName);
 }

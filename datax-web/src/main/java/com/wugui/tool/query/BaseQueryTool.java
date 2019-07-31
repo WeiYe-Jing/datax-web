@@ -250,4 +250,29 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         return res;
     }
+
+
+    @Override
+    public List<String> getColumnNames(String tableName) {
+
+        List<String> columns = Lists.newArrayList();
+
+        //获取查询指定表所有字段的sql语句
+        String querySql = sqlBuilder.getSQLQueryFields(tableName);
+        logger.info("querySql: {}", querySql);
+
+        try {
+            //获取所有字段
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(querySql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                columns.add(metaData.getColumnName(i));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return columns;
+    }
 }

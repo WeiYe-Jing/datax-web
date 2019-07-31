@@ -86,6 +86,9 @@ public class JobJdbcDatasourceController extends ApiController {
         //遍历进行字段查询条件组装
         columnQueryMap.forEach((k, v) -> {
             switch (k) {
+                case "datasourceName":
+                    queryWrapper.like(StrUtil.toUnderlineCase(k), v);
+                    break;
                 default:
                     queryWrapper.eq(StrUtil.toUnderlineCase(k), v);
             }

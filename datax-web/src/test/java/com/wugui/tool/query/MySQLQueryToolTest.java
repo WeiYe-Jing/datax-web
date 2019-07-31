@@ -12,37 +12,27 @@ import java.util.Map;
 @Slf4j
 public class MySQLQueryToolTest {
 
-    private BaseQueryTool readQueryTool;
-    private BaseQueryTool writerQueryTool;
-    private JobJdbcDatasource readerDatasource;
-    private JobJdbcDatasource writerDatasource;
+    private BaseQueryTool queryTool;
+    private JobJdbcDatasource jdbcDatasource;
 
     @Before
     public void before() {
         genMysqlDemo();
-        readQueryTool = QueryToolFactory.getByDbType(readerDatasource);
-        writerQueryTool = QueryToolFactory.getByDbType(writerDatasource);
+        queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
     }
 
     private void genMysqlDemo() {
-        readerDatasource = new JobJdbcDatasource();
-        readerDatasource.setDatasourceName("z01_mysql_3306");
-        readerDatasource.setJdbcUsername("root");
-        readerDatasource.setJdbcPassword("root");
-        readerDatasource.setJdbcUrl("jdbc:mysql://z01:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
-        readerDatasource.setJdbcDriverClass("com.mysql.jdbc.Driver");
-
-        writerDatasource = new JobJdbcDatasource();
-        writerDatasource.setDatasourceName("z01_mysql_3306");
-        writerDatasource.setJdbcUsername("root");
-        writerDatasource.setJdbcPassword("root");
-        writerDatasource.setJdbcUrl("jdbc:mysql://z01:3306/datax_web_demo?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
-        writerDatasource.setJdbcDriverClass("com.mysql.jdbc.Driver");
+        jdbcDatasource = new JobJdbcDatasource();
+        jdbcDatasource.setDatasourceName("z01_mysql_3306");
+        jdbcDatasource.setJdbcUsername("root");
+        jdbcDatasource.setJdbcPassword("root");
+        jdbcDatasource.setJdbcUrl("jdbc:mysql://z01:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
+        jdbcDatasource.setJdbcDriverClass("com.mysql.jdbc.Driver");
     }
 
     @Test
     public void getTableInfo() {
-        List<Map<String, Object>> tableInfo = readQueryTool.getTableInfo("datax_plugin");
+        List<Map<String, Object>> tableInfo = queryTool.getTableInfo("datax_plugin");
         tableInfo.forEach(e -> {
             log.info(e.toString());
         });
@@ -50,13 +40,19 @@ public class MySQLQueryToolTest {
 
     @Test
     public void buildTableInfo() {
-        TableInfo tableInfo = readQueryTool.buildTableInfo("datax_plugin");
+        TableInfo tableInfo = queryTool.buildTableInfo("datax_plugin");
         log.info(tableInfo.toString());
     }
 
     @Test
     public void getTables() {
-        List<Map<String, Object>> tables = readQueryTool.getTables();
+        List<Map<String, Object>> tables = queryTool.getTables();
         tables.forEach(e -> log.info(e.toString()));
+    }
+
+    @Test
+    public void getColumns() {
+        List<String> columns = queryTool.getColumnNames("datax_plugin");
+        log.info(columns.toString());
     }
 }

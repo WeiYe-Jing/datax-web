@@ -2,9 +2,11 @@ package com.wugui.tool.datax;
 
 import com.google.common.collect.ImmutableList;
 import com.wugui.dataxweb.entity.JobJdbcDatasource;
+import com.wugui.tool.datax.writer.StreamWriter;
 import com.wugui.tool.util.JSONUtils;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 public class DataxJsonHelperTest {
@@ -32,8 +34,16 @@ public class DataxJsonHelperTest {
     @Test
     public void buildJob() {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-        dataxJsonHelper.initReader(getReaderDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
-        dataxJsonHelper.initWriter(getWriterDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
+
+        //表名
+        List<String> readerTables = ImmutableList.of("datax_plugin");
+        List<String> writerTables = ImmutableList.of("datax_plugin");
+
+        //抽取的字段
+        List<String> columns = ImmutableList.of("id");
+
+        dataxJsonHelper.initReader(getReaderDatasource(), readerTables, columns);
+        dataxJsonHelper.initWriter(getWriterDatasource(), writerTables, columns);
         Map<String, Object> map = dataxJsonHelper.buildJob();
         System.out.println(JSONUtils.formatJson(map));
     }
@@ -68,5 +78,21 @@ public class DataxJsonHelperTest {
         dataxJsonHelper.initWriter(getWriterDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
         Map<String, Object> writer = dataxJsonHelper.buildWriter();
         System.out.println(JSONUtils.formatJson(writer));
+    }
+
+    @Test
+    public void buildJobWithStreamWriter() {
+        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
+        dataxJsonHelper.setWriterPlugin(new StreamWriter());
+        //表名
+        List<String> readerTables = ImmutableList.of("datax_plugin");
+
+        //抽取的字段
+        List<String> columns = ImmutableList.of("id");
+
+        dataxJsonHelper.initReader(getReaderDatasource(), readerTables, columns);
+
+        Map<String, Object> map = dataxJsonHelper.buildJob();
+        System.out.println(JSONUtils.formatJson(map));
     }
 }

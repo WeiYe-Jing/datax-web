@@ -134,4 +134,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
         return writerPlugin.build(dataxPluginPojo);
     }
+
+    public void setWriterPlugin(BaseDataxPlugin writerPlugin) {
+        this.writerPlugin = writerPlugin;
+    }
 }

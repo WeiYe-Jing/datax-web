@@ -1,12 +1,10 @@
 package com.wugui.dataxweb.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.ImmutableList;
 import com.wugui.dataxweb.util.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -162,18 +159,6 @@ public class BaseForm<T> {
             //默认给true
             page.setSearchCount(true);
         }
-
-        //排序字段
-        //需要转为驼峰
-        List<String> ascs = CollUtil.toList(this.getString("ascs").split(","));
-        ImmutableList.Builder finalBuilderAscs = new ImmutableList.Builder();
-        ascs.forEach(e -> finalBuilderAscs.add(StrUtil.replace(e, "([A-Z])", parameters -> "_" + parameters.group().toLowerCase())));
-        page.setAscs(finalBuilderAscs.build());
-
-        ImmutableList.Builder finalBuilderDescs = new ImmutableList.Builder();
-        List<String> descs = CollUtil.toList(this.getString("descs").split(","));
-        descs.forEach(e -> finalBuilderDescs.add(StrUtil.replace(e, "([A-Z])", parameters -> "_" + parameters.group().toLowerCase())));
-        page.setDescs(finalBuilderDescs.build());
         return page;
     }
 

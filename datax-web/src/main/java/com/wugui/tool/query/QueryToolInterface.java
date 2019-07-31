@@ -52,4 +52,12 @@ public interface QueryToolInterface {
      * @return2
      */
     public List<String> getColumnNames(String tableName);
+
+
+    /**
+     * 获取所有可用表名
+     *
+     * @return2
+     */
+    public List<String> getTableNames();
 }

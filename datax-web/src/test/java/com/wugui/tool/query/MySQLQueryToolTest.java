@@ -55,4 +55,10 @@ public class MySQLQueryToolTest {
         List<String> columns = queryTool.getColumnNames("datax_plugin");
         log.info(columns.toString());
     }
+
+    @Test
+    public void getTableNames() {
+        List<String> tableNames = queryTool.getTableNames();
+        tableNames.forEach(System.out::println);
+    }
 }

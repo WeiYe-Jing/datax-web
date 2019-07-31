@@ -275,4 +275,18 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         return columns;
     }
+
+    @Override
+    public List<String> getTableNames() {
+        List<String> res = Lists.newArrayList();
+        List<Map<String, Object>> tables = getTables();
+        //这里只取表名
+        tables.forEach(e -> {
+            //表名，注释
+            List tValues = new ArrayList(e.values());
+            //第一个总是表名
+            res.add((String) tValues.get(0));
+        });
+        return res;
+    }
 }

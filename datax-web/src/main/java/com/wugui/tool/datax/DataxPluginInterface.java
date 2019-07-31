@@ -1,5 +1,7 @@
 package com.wugui.tool.datax;
 
+import com.wugui.tool.pojo.DataxPluginPojo;
+
 import java.util.Map;
 
 /**
@@ -21,9 +23,9 @@ public interface DataxPluginInterface {
     /**
      * 构建
      *
-     * @return
+     * @return dataxPluginPojo
      */
-    Map<String, Object> build();
+    Map<String, Object> build(DataxPluginPojo dataxPluginPojo);
 
     /**
      * 获取示例
@@ -31,4 +33,11 @@ public interface DataxPluginInterface {
      * @return
      */
     Map<String, Object> sample();
+
+    /**
+     * 传递一些额外的参数
+     *
+     * @return extraParams
+     */
+    void extraParams(Map<String, Object> extraParams);
 }

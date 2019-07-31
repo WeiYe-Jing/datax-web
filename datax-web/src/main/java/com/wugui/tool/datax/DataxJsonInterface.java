@@ -14,7 +14,7 @@ public interface DataxJsonInterface {
 
     Map<String, Object> buildJob();
 
-    Map<String, Object> builSetting();
+    Map<String, Object> buildSetting();
 
     Map<String, Object> buildContent();
 

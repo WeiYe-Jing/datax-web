@@ -1,6 +1,5 @@
 package com.wugui.tool.util;
 
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -20,6 +19,6 @@ public class JSONUtils {
      * @return
      */
     public static String formatJson(Object object) {
-        return JSONUtil.formatJsonStr(JSON.toJSONString(object));
+        return JSON.toJSONString(object, true);
     }
 }

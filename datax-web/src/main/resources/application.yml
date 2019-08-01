@@ -1,11 +1,12 @@
+server:
+  port: 8066
 spring:
   #数据源
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://192.168.1.150:3306/datax-web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://z01:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
-
 
 
 mybatis-plus:

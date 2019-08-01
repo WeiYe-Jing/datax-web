@@ -128,13 +128,13 @@ public class JobController {
     /**
      * 通过接口传入json配置启动一个datax作业
      *
-     * @param jobJson
+     * @param runJobDto
      * @return
      */
     @ApiOperation("通过传入json配置启动一个datax作业")
     @PostMapping("/runJob")
-    public R<String> runJob(@RequestBody String jobJson) {
-        String result = iDataxJobService.startJobByJsonStr(jobJson);
+    public R<String> runJob(@RequestBody RunJobDto runJobDto) {
+        String result = iDataxJobService.startJobByJsonStr(runJobDto.getJobJson());
         return R.ok(result);
     }
 

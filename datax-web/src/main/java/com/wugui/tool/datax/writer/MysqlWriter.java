@@ -24,13 +24,7 @@ public class MysqlWriter extends BaseDataxPlugin implements DataxWriterInterface
 
     @Override
     public Map<String, Object> build(DataxPluginPojo dataxPluginPojo) {
-        //获取表信息
-//        TableInfo tableInfo = buildTableInfo(tableName);
-
-        //构建
-//        Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> writerObj = Maps.newLinkedHashMap();
-//
         writerObj.put("name", getName());
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();

@@ -14,10 +14,12 @@ public class DatabaseMetaFactory {
 
     //根据数据库类型返回对应的接口
     public static DatabaseInterface getByDbType(String dbType) {
-        if (JdbcConstants.MYSQL.equals(dbType.toLowerCase()) || JdbcConstants.MYSQL.equals(dbType.toUpperCase())) {
+        if (JdbcConstants.MYSQL.equals(dbType)) {
             return MySQLDatabaseMeta.getInstance();
-        } else if (JdbcConstants.ORACLE.equals(dbType.toLowerCase()) || JdbcConstants.ORACLE.equals(dbType.toUpperCase())) {
+        } else if (JdbcConstants.ORACLE.equals(dbType)) {
             return OracleDatabaseMeta.getInstance();
+        } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
+            return PostgresqlDatabaseMeta.getInstance();
         } else {
             throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
         }

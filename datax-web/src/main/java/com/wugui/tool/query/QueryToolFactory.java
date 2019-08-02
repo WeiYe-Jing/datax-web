@@ -18,10 +18,12 @@ public class QueryToolFactory {
     public static final BaseQueryTool getByDbType(JobJdbcDatasource jobJdbcDatasource) {
         //获取dbType
         String dbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
-        if (JdbcConstants.MYSQL.equals(dbType.toLowerCase()) || JdbcConstants.MYSQL.equals(dbType.toUpperCase())) {
+        if (JdbcConstants.MYSQL.equals(dbType)) {
             return getMySQLQueryToolInstance(jobJdbcDatasource);
-        } else if (JdbcConstants.ORACLE.equals(dbType.toLowerCase()) || JdbcConstants.ORACLE.equals(dbType.toUpperCase())) {
+        } else if (JdbcConstants.ORACLE.equals(dbType)) {
             return getOracleQueryToolInstance(jobJdbcDatasource);
+        } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
+            return getPostgresqlQueryToolInstance(jobJdbcDatasource);
         }
         throw new UnsupportedOperationException("找不到该类型: ".concat(dbType));
     }
@@ -38,6 +40,15 @@ public class QueryToolFactory {
     private static BaseQueryTool getOracleQueryToolInstance(JobJdbcDatasource jobJdbcDatasource) {
         try {
             return new OracleQueryTool(jobJdbcDatasource);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private static BaseQueryTool getPostgresqlQueryToolInstance(JobJdbcDatasource jobJdbcDatasource) {
+        try {
+            return new PostgresqlQueryTool(jobJdbcDatasource);
         } catch (SQLException e) {
             e.printStackTrace();
         }

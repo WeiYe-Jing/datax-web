@@ -1,7 +1,6 @@
 package com.wugui.tool.query;
 
 import com.alibaba.druid.util.JdbcUtils;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.wugui.dataxweb.entity.JobJdbcDatasource;
 
@@ -44,23 +43,4 @@ public class PostgresqlQueryTool extends BaseQueryTool implements QueryToolInter
         return res;
     }
 
-    @Override
-    public List<String> getColumnNames(String tableName) {
-        List<String> res = Lists.newArrayList();
-        //获取sql
-        String sqlQueryTables = sqlBuilder.getSQLQueryColumns();
-        logger.info(sqlQueryTables);
-        //查询
-        try {
-            List<Map<String, Object>> maps = JdbcUtils.executeQuery(connection, sqlQueryTables, ImmutableList.of(tableName));
-//            // 只取value即可
-            maps.forEach((k) -> {
-                String tName = (String) new ArrayList<>(k.values()).get(0);
-                res.add(tName);
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
 }

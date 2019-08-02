@@ -2,7 +2,6 @@ package com.wugui.tool.datax.writer;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.wugui.tool.datax.BaseDataxPlugin;
 import com.wugui.tool.pojo.DataxPluginPojo;
 
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @Version 1.0
  * @since 2019/7/31 19:44
  */
-public class StreamWriter extends BaseDataxPlugin implements DataxWriterInterface {
+public class StreamWriter extends BaseWriterPlugin implements DataxWriterInterface {
 
     @Override
     public String getName() {

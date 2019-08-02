@@ -7,6 +7,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.wugui.dataxweb.entity.JobJdbcDatasource;
 import com.wugui.tool.datax.reader.MysqlReader;
+import com.wugui.tool.datax.reader.OracleReader;
+import com.wugui.tool.datax.reader.PostgresqlReader;
+import com.wugui.tool.datax.reader.SqlServerReader;
 import com.wugui.tool.datax.writer.MysqlWriter;
 import com.wugui.tool.pojo.DataxPluginPojo;
 
@@ -67,6 +70,12 @@ public class DataxJsonHelper implements DataxJsonInterface {
         String readerDbType = JdbcUtils.getDbType(readerDatasource.getJdbcUrl(), readerDatasource.getJdbcDriverClass());
         if (JdbcConstants.MYSQL.equals(readerDbType)) {
             readerPlugin = new MysqlReader();
+        } else if (JdbcConstants.ORACLE.equals(readerDbType)) {
+            readerPlugin = new OracleReader();
+        } else if (JdbcConstants.SQL_SERVER.equals(readerDbType)) {
+            readerPlugin = new SqlServerReader();
+        } else if (JdbcConstants.POSTGRESQL.equals(readerDbType)) {
+            readerPlugin = new PostgresqlReader();
         }
     }
 

@@ -3,19 +3,17 @@ package com.wugui.tool.datax.reader;
 import java.util.Map;
 
 /**
- * mysql reader 构建类
+ * postgresql 构建类
  *
  * @author zhouhongfa@gz-yibo.com
- * @ClassName MysqlReader
- * @Version 1.0
- * @since 2019/7/30 23:07
+ * @version 1.0
+ * @since 2019/8/2
  */
-public class MysqlReader extends BaseReaderPlugin implements DataxReaderInterface {
+public class PostgresqlReader extends BaseReaderPlugin implements DataxReaderInterface {
     @Override
     public String getName() {
-        return "mysqlreader";
+        return "postgresqlreader";
     }
-
 
     @Override
     public Map<String, Object> sample() {

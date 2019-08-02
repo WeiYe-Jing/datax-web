@@ -19,4 +19,5 @@ public abstract class BaseDataxPlugin implements DataxPluginInterface {
     public void extraParams(Map<String, Object> extraParams) {
         this.extraParams = extraParams;
     }
+
 }

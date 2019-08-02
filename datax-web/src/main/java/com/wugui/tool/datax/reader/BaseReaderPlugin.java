@@ -32,11 +32,16 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
         //列表
         parameterObj.put("column", dataxPluginPojo.getColumns());
-//
+
+        //判断是否有where
+        if (extraParams.containsKey("where")) {
+            parameterObj.put("where", extraParams.get("where"));
+        }
+
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
         connectionObj.put("table", dataxPluginPojo.getTables());
-        //where
-//        connectionObj.put("where", "1=1");
+
+//        logger.info(extraParams.toString());
         connectionObj.put("jdbcUrl", ImmutableList.of(jobJdbcDatasource.getJdbcUrl()));
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));

@@ -37,7 +37,7 @@ public interface DataxPluginInterface {
     /**
      * 传递一些额外的参数
      *
-     * @return extraParams
+     * @return setExtraParams
      */
-    void extraParams(Map<String, Object> extraParams);
+    void setExtraParams(Map<String, Object> extraParams);
 }

@@ -65,6 +65,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private BaseDataxPlugin writerPlugin;
 
+    //用于保存额外参数
+    private Map<String, Object> extraParams = Maps.newHashMap();
+
     public void initReader(JobJdbcDatasource readerDatasource, List<String> readerTables, List<String> readerColumns) {
         this.readerTables = readerTables;
         this.readerColumns = readerColumns;
@@ -80,6 +83,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (JdbcConstants.POSTGRESQL.equals(readerDbType)) {
             readerPlugin = new PostgresqlReader();
         }
+        readerPlugin.setExtraParams(extraParams);
     }
 
     public void initWriter(JobJdbcDatasource writerDatasource, List<String> writerTables, List<String> writerColumns) {
@@ -155,5 +159,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     public void setWriterPlugin(BaseDataxPlugin writerPlugin) {
         this.writerPlugin = writerPlugin;
+    }
+
+    public void addWhereParams(String params) {
+        extraParams.put("where", params);
     }
 }

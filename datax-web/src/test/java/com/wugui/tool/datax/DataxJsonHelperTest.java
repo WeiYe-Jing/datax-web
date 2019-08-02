@@ -68,6 +68,7 @@ public class DataxJsonHelperTest {
     public void buildReader() {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
         dataxJsonHelper.initReader(getReaderDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
+//        dataxJsonHelper.addWhereParams("1=1");
         Map<String, Object> reader = dataxJsonHelper.buildReader();
         System.out.println(JSONUtils.formatJson(reader));
     }

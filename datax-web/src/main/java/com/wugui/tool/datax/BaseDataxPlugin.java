@@ -1,5 +1,8 @@
 package com.wugui.tool.datax;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 /**
@@ -12,11 +15,13 @@ import java.util.Map;
  */
 public abstract class BaseDataxPlugin implements DataxPluginInterface {
 
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
     protected Map<String, Object> extraParams;
 
 
     @Override
-    public void extraParams(Map<String, Object> extraParams) {
+    public void setExtraParams(Map<String, Object> extraParams) {
         this.extraParams = extraParams;
     }
 

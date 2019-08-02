@@ -255,15 +255,15 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     public List<String> getColumnNames(String tableName) {
 
         List<String> res = Lists.newArrayList();
-        //获取指定表的所有字段
+        Statement stmt = null;
         try {
             //获取查询指定表所有字段的sql语句
             String querySql = sqlBuilder.getSQLQueryFields(tableName);
             logger.info("querySql: {}", querySql);
 
             //获取所有字段
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(querySql);
+            stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(querySql);
             ResultSetMetaData metaData = resultSet.getMetaData();
 
             int columnCount = metaData.getColumnCount();
@@ -274,7 +274,42 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 //            res.forEach(e -> logger.info(e.toString()));
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            JdbcUtils.close(stmt);
         }
         return res;
     }
+
+    @Override
+    public List<String> getTableNames() {
+        List<String> tables = new ArrayList<String>();
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            //获取sql
+            String sql = getSQLQueryTables();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String tableName = rs.getString(1);
+                tables.add(tableName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(rs);
+            JdbcUtils.close(stmt);
+        }
+        return tables;
+    }
+
+    /**
+     * 不需要其他参数的可不重写
+     *
+     * @return
+     */
+    protected String getSQLQueryTables() {
+        return sqlBuilder.getSQLQueryTables();
+    }
+
 }

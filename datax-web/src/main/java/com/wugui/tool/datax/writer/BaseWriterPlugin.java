@@ -23,7 +23,7 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
         writerObj.put("name", getName());
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-        parameterObj.put("writeMode", "insert");
+//        parameterObj.put("writeMode", "insert");
 
         JobJdbcDatasource jobJdbcDatasource = dataxPluginPojo.getJdbcDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());

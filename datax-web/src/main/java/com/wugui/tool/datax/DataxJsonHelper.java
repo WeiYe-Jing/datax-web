@@ -11,6 +11,7 @@ import com.wugui.tool.datax.reader.OracleReader;
 import com.wugui.tool.datax.reader.PostgresqlReader;
 import com.wugui.tool.datax.reader.SqlServerReader;
 import com.wugui.tool.datax.writer.MysqlWriter;
+import com.wugui.tool.datax.writer.PostgresqllWriter;
 import com.wugui.tool.pojo.DataxPluginPojo;
 
 import java.util.List;
@@ -87,6 +88,12 @@ public class DataxJsonHelper implements DataxJsonInterface {
         String writerDbType = JdbcUtils.getDbType(writerDatasource.getJdbcUrl(), writerDatasource.getJdbcDriverClass());
         if (JdbcConstants.MYSQL.equals(writerDbType)) {
             writerPlugin = new MysqlWriter();
+        } else if (JdbcConstants.ORACLE.equals(writerDbType)) {
+//            writerPlugin = new OracleReader();
+        } else if (JdbcConstants.SQL_SERVER.equals(writerDbType)) {
+//            writerPlugin = new SqlServerReader();
+        } else if (JdbcConstants.POSTGRESQL.equals(writerDbType)) {
+            writerPlugin = new PostgresqllWriter();
         }
     }
 

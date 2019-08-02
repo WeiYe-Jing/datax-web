@@ -20,6 +20,8 @@ public class DatabaseMetaFactory {
             return OracleDatabaseMeta.getInstance();
         } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
             return PostgresqlDatabaseMeta.getInstance();
+        } else if (JdbcConstants.SQL_SERVER.equals(dbType)) {
+            return SqlServerDatabaseMeta.getInstance();
         } else {
             throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
         }

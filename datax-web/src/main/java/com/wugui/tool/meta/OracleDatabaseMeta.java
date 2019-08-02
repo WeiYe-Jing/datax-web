@@ -23,11 +23,6 @@ public class OracleDatabaseMeta extends BaseDatabaseMeta implements DatabaseInte
         return single;
     }
 
-    @Override
-    public String getSQLQueryFields(String tableName) {
-        return "SELECT * FROM " + tableName + " where 1=0";
-    }
-
 
     @Override
     public String getSQLQueryComment(String schemaName, String tableName, String columnName) {
@@ -51,6 +46,16 @@ public class OracleDatabaseMeta extends BaseDatabaseMeta implements DatabaseInte
 
     @Override
     public String getSQLQueryTableNameComment() {
+        return "select table_name,comments from user_tab_comments where table_name = ?";
+    }
+
+    @Override
+    public String getSQLQueryTables(String... args) {
+        return "select table_name from user_tab_comments";
+    }
+
+    @Override
+    public String getSQLQueryColumns(String... args) {
         return "select table_name,comments from user_tab_comments where table_name = ?";
     }
 }

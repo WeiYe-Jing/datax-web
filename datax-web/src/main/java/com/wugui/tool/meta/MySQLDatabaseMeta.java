@@ -24,12 +24,6 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta implements DatabaseInter
     }
 
     @Override
-    public String getSQLQueryFields(String tableName) {
-        return "SELECT * FROM " + tableName + " LIMIT 0";
-    }
-
-
-    @Override
     public String getSQLQueryComment(String schemaName, String tableName, String columnName) {
         return String.format("SELECT COLUMN_COMMENT FROM information_schema.COLUMNS where TABLE_SCHEMA = '%s' and TABLE_NAME = '%s' and COLUMN_NAME = '%s'", schemaName, tableName, columnName);
     }
@@ -37,5 +31,15 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta implements DatabaseInter
     @Override
     public String getSQLQueryPrimaryKey() {
         return "select column_name from information_schema.columns where table_schema=? and table_name=? and column_key = 'PRI'";
+    }
+
+    @Override
+    public String getSQLQueryTables(String... args) {
+        return "select table_name from information_schema.tables where table_schema=?";
+    }
+
+    @Override
+    public String getSQLQueryColumns(String... args) {
+        return "select column_name from information_schema.columns where table_schema=? and table_name=?";
     }
 }

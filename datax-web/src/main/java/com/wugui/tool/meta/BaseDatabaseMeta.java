@@ -12,7 +12,7 @@ public abstract class BaseDatabaseMeta implements DatabaseInterface {
 
     @Override
     public String getSQLQueryFields(String tableName) {
-        return "SELECT * FROM " + tableName;
+        return "SELECT * FROM " + tableName + " where 1=0";
     }
 
     @Override

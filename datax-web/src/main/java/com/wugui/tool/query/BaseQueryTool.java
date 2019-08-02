@@ -152,11 +152,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
     @Override
     public List<Map<String, Object>> getTables() {
-        String sqlQueryTablesNameComments = sqlBuilder.getSQLQueryTablesNameComments();
-        logger.info(sqlQueryTablesNameComments);
+        String sqlQueryTables = sqlBuilder.getSQLQueryTables();
+        logger.info(sqlQueryTables);
         List<Map<String, Object>> res = null;
         try {
-            res = JdbcUtils.executeQuery(connection, sqlQueryTablesNameComments, ImmutableList.of(currentSchema));
+            res = JdbcUtils.executeQuery(connection, sqlQueryTables, ImmutableList.of(currentSchema));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -251,42 +251,30 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return res;
     }
 
-
     @Override
     public List<String> getColumnNames(String tableName) {
 
-        List<String> columns = Lists.newArrayList();
-
-        //获取查询指定表所有字段的sql语句
-        String querySql = sqlBuilder.getSQLQueryFields(tableName);
-        logger.info("querySql: {}", querySql);
-
+        List<String> res = Lists.newArrayList();
+        //获取指定表的所有字段
         try {
+            //获取查询指定表所有字段的sql语句
+            String querySql = sqlBuilder.getSQLQueryFields(tableName);
+            logger.info("querySql: {}", querySql);
+
             //获取所有字段
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(querySql);
             ResultSetMetaData metaData = resultSet.getMetaData();
+
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
-                columns.add(metaData.getColumnName(i));
+                res.add(metaData.getColumnName(i));
             }
+//            logger.info("res: ");
+//            res.forEach(e -> logger.info(e.toString()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return columns;
-    }
-
-    @Override
-    public List<String> getTableNames() {
-        List<String> res = Lists.newArrayList();
-        List<Map<String, Object>> tables = getTables();
-        //这里只取表名
-        tables.forEach(e -> {
-            //表名，注释
-            List tValues = new ArrayList(e.values());
-            //第一个总是表名
-            res.add((String) tValues.get(0));
-        });
         return res;
     }
 }

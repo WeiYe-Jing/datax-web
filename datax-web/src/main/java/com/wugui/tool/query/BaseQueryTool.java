@@ -1,7 +1,6 @@
 package com.wugui.tool.query;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.JdbcUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -11,6 +10,7 @@ import com.wugui.tool.database.DasColumn;
 import com.wugui.tool.database.TableInfo;
 import com.wugui.tool.meta.DatabaseInterface;
 import com.wugui.tool.meta.DatabaseMetaFactory;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,13 +65,13 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      */
     BaseQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
         //这里默认使用 hikari 数据源
-        DruidDataSource dataSource = new DruidDataSource();
+        HikariDataSource dataSource = new HikariDataSource();
         dataSource.setUsername(jobJdbcDatasource.getJdbcUsername());
         dataSource.setPassword(jobJdbcDatasource.getJdbcPassword());
-        dataSource.setUrl(jobJdbcDatasource.getJdbcUrl());
+        dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
         dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
         //设为只读
-        dataSource.setDefaultReadOnly(true);
+        dataSource.setReadOnly(true);
         this.jobJdbcDatasource = jobJdbcDatasource;
         this.datasource = dataSource;
         this.connection = this.datasource.getConnection();

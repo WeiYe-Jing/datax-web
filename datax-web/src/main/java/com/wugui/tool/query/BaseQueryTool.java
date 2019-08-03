@@ -312,4 +312,45 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return sqlBuilder.getSQLQueryTables();
     }
 
+    @Override
+    public List<String> getColumnsByQuerySql(String querySql) {
+
+        List<String> res = Lists.newArrayList();
+        Statement stmt = null;
+        try {
+            String sql = "";
+            //拼装sql语句，在后面加上 where 1=0 即可
+            sql = querySql.concat(" where 1=0");
+            //判断是否已有where，如果是，则加 and 1=0
+            //从最后一个 ) 开始找 where，或者整个语句找
+            if (querySql.indexOf(")") != -1) {
+                if (querySql.substring(querySql.indexOf(")")).contains("where")) {
+                    sql = querySql.concat(" and 1=0");
+                }
+            } else {
+                if (querySql.contains("where")) {
+                    sql = querySql.concat(" and 1=0");
+                }
+            }
+
+            logger.info("querySql: {}", sql);
+
+            //获取所有字段
+            stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                res.add(metaData.getColumnName(i));
+            }
+//            logger.info("res: ");
+//            res.forEach(e -> logger.info(e.toString()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(stmt);
+        }
+        return res;
+    }
 }

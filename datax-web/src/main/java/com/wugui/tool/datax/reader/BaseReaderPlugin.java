@@ -1,5 +1,6 @@
 package com.wugui.tool.datax.reader;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.dataxweb.entity.JobJdbcDatasource;
@@ -30,12 +31,17 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         JobJdbcDatasource jobJdbcDatasource = dataxPluginPojo.getJdbcDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
         parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
-        //列表
-        parameterObj.put("column", dataxPluginPojo.getColumns());
 
-        //判断是否有where
-        if (extraParams.containsKey("where")) {
-            parameterObj.put("where", extraParams.get("where"));
+        //判断是否是 querySql
+        if (StrUtil.isNotBlank(dataxPluginPojo.getQuerySql())) {
+            parameterObj.put("querySql", dataxPluginPojo.getQuerySql());
+        } else {
+            //列表
+            parameterObj.put("column", dataxPluginPojo.getColumns());
+            //判断是否有where
+            if (extraParams.containsKey("where")) {
+                parameterObj.put("where", extraParams.get("where"));
+            }
         }
 
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();

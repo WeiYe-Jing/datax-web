@@ -29,4 +29,12 @@ public interface JdbcDatasourceQueryService {
      */
     List<String> getColumns(Long id, String tableName);
 
+    /**
+     * 根据 sql 语句获取字段
+     *
+     * @param datasourceId
+     * @param querySql
+     * @return
+     */
+    List<String> getColumnsByQuerySql(Long datasourceId, String querySql);
 }

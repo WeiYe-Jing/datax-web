@@ -24,7 +24,7 @@ public class MySQLQueryToolTest {
         jdbcDatasource.setDatasourceName("z01_mysql_3306");
         jdbcDatasource.setJdbcUsername("root");
         jdbcDatasource.setJdbcPassword("root");
-        jdbcDatasource.setJdbcUrl("jdbc:mysql://z01:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
+        jdbcDatasource.setJdbcUrl("jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
         jdbcDatasource.setJdbcDriverClass("com.mysql.jdbc.Driver");
     }
 
@@ -37,6 +37,14 @@ public class MySQLQueryToolTest {
     @Test
     public void getColumnNames() {
         List<String> columns = queryTool.getColumnNames("datax_plugin");
+        log.info(columns.toString());
+    }
+
+    @Test
+    public void getColumnsByQuerySql() {
+        String querySql = "select l.log_file_path, c.name, c.job_group\n" +
+                "from job_log l left join job_config c on c.id = l.job_id where l.status = 1";
+        List<String> columns = queryTool.getColumnsByQuerySql(querySql);
         log.info(columns.toString());
     }
 }

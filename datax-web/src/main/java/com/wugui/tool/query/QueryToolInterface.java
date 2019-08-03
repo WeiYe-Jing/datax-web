@@ -60,4 +60,6 @@ public interface QueryToolInterface {
      * @return2
      */
     public List<String> getTableNames();
+
+    public List<String> getColumnsByQuerySql(String querySql);
 }

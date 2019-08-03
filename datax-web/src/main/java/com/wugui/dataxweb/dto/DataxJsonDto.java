@@ -32,4 +32,6 @@ public class DataxJsonDto implements Serializable {
 
     private String whereParams;
 
+    private String querySql;
+
 }

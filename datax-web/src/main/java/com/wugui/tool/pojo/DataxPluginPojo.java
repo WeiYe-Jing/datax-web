@@ -31,4 +31,8 @@ public class DataxPluginPojo {
      */
     private JobJdbcDatasource jdbcDatasource;
 
+    /**
+     * querySql 属性，如果指定了，则优先于columns参数
+     */
+    private String querySql;
 }

@@ -16,7 +16,7 @@ public class DataxJsonHelperTest {
         readerDatasource.setDatasourceName("z01_mysql_3306");
         readerDatasource.setJdbcUsername("root");
         readerDatasource.setJdbcPassword("root");
-        readerDatasource.setJdbcUrl("jdbc:mysql://z01:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
+        readerDatasource.setJdbcUrl("jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
         readerDatasource.setJdbcDriverClass("com.mysql.jdbc.Driver");
         return readerDatasource;
     }
@@ -69,6 +69,7 @@ public class DataxJsonHelperTest {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
         dataxJsonHelper.initReader(getReaderDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
 //        dataxJsonHelper.addWhereParams("1=1");
+        dataxJsonHelper.setQuerySql("select 1");
         Map<String, Object> reader = dataxJsonHelper.buildReader();
         System.out.println(JSONUtils.formatJson(reader));
     }

@@ -49,4 +49,16 @@ public class JdbcDatasourceQueryServiceImpl implements JdbcDatasourceQueryServic
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
         return queryTool.getColumnNames(tableName);
     }
+
+    @Override
+    public List<String> getColumnsByQuerySql(Long datasourceId, String querySql) {
+        //获取数据源对象
+        JobJdbcDatasource jdbcDatasource = jobJdbcDatasourceService.getById(datasourceId);
+        //queryTool组装
+        if (ObjectUtil.isNull(jdbcDatasource)) {
+            return Lists.newArrayList();
+        }
+        BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
+        return queryTool.getColumnsByQuerySql(querySql);
+    }
 }

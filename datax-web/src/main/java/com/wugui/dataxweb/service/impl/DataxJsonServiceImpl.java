@@ -34,6 +34,8 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         // reader
         JobJdbcDatasource readerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getReaderDatasourceId());
 
+        //querySql
+        dataxJsonHelper.setQuerySql(dataxJsonDto.getQuerySql());
         //where
         if (StrUtil.isNotBlank(dataxJsonDto.getWhereParams())) {
             dataxJsonHelper.addWhereParams(dataxJsonDto.getWhereParams());

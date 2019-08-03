@@ -61,6 +61,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
      */
     private List<String> writerColumns;
 
+    private String querySql;
+
     private BaseDataxPlugin readerPlugin;
 
     private BaseDataxPlugin writerPlugin;
@@ -143,6 +145,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxPluginPojo.setJdbcDatasource(readerDatasource);
         dataxPluginPojo.setTables(readerTables);
         dataxPluginPojo.setColumns(readerColumns);
+        dataxPluginPojo.setQuerySql(querySql);
 
         return readerPlugin.build(dataxPluginPojo);
     }
@@ -163,5 +166,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     public void addWhereParams(String params) {
         extraParams.put("where", params);
+    }
+
+    public void setQuerySql(String querySql) {
+        this.querySql = querySql;
     }
 }

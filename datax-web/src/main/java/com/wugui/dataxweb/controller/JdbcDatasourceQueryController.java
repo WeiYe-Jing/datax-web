@@ -53,4 +53,16 @@ public class JdbcDatasourceQueryController extends ApiController {
         return success(jdbcDatasourceQueryService.getColumns(datasourceId, tableName));
     }
 
+    /**
+     * 根据数据源id和sql语句获取所有字段
+     *
+     * @param datasourceId 数据源id
+     * @param querySql     表名
+     * @return
+     */
+    @GetMapping("/getColumnsByQuerySql")
+    @ApiOperation("根据数据源id和sql语句获取所有字段")
+    public R<List<String>> getColumnsByQuerySql(Long datasourceId, String querySql) {
+        return success(jdbcDatasourceQueryService.getColumnsByQuerySql(datasourceId, querySql));
+    }
 }

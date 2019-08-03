@@ -27,6 +27,7 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         readerObj.put("name", getName());
 //
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
+        Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
         JobJdbcDatasource jobJdbcDatasource = dataxPluginPojo.getJdbcDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
@@ -34,7 +35,7 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
 
         //判断是否是 querySql
         if (StrUtil.isNotBlank(dataxPluginPojo.getQuerySql())) {
-            parameterObj.put("querySql", dataxPluginPojo.getQuerySql());
+            connectionObj.put("querySql", ImmutableList.of(dataxPluginPojo.getQuerySql()));
         } else {
             //列表
             parameterObj.put("column", dataxPluginPojo.getColumns());
@@ -42,10 +43,8 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
             if (extraParams.containsKey("where")) {
                 parameterObj.put("where", extraParams.get("where"));
             }
+            connectionObj.put("table", dataxPluginPojo.getTables());
         }
-
-        Map<String, Object> connectionObj = Maps.newLinkedHashMap();
-        connectionObj.put("table", dataxPluginPojo.getTables());
 
 //        logger.info(extraParams.toString());
         connectionObj.put("jdbcUrl", ImmutableList.of(jobJdbcDatasource.getJdbcUrl()));

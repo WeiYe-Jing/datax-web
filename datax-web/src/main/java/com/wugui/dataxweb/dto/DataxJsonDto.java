@@ -30,5 +30,6 @@ public class DataxJsonDto implements Serializable {
 
     private List<String> writerColumns;
 
+    private String whereParams;
 
 }

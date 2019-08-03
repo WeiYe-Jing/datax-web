@@ -1,5 +1,6 @@
 package com.wugui.dataxweb.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.wugui.dataxweb.dto.DataxJsonDto;
 import com.wugui.dataxweb.entity.JobJdbcDatasource;
@@ -32,6 +33,11 @@ public class DataxJsonServiceImpl implements DataxJsonService {
 
         // reader
         JobJdbcDatasource readerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getReaderDatasourceId());
+
+        //where
+        if (StrUtil.isNotBlank(dataxJsonDto.getWhereParams())) {
+            dataxJsonHelper.addWhereParams(dataxJsonDto.getWhereParams());
+        }
 
         // reader plugin init
         dataxJsonHelper.initReader(readerDatasource, dataxJsonDto.getReaderTables(), dataxJsonDto.getReaderColumns());

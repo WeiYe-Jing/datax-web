@@ -63,6 +63,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private String querySql;
 
+    private String preSql;
+
     private BaseDataxPlugin readerPlugin;
 
     private BaseDataxPlugin writerPlugin;
@@ -156,6 +158,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxPluginPojo.setJdbcDatasource(writerDatasource);
         dataxPluginPojo.setTables(writerTables);
         dataxPluginPojo.setColumns(writerColumns);
+        dataxPluginPojo.setPreSql(preSql);
 
         return writerPlugin.build(dataxPluginPojo);
     }
@@ -170,5 +173,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     public void setQuerySql(String querySql) {
         this.querySql = querySql;
+    }
+
+    public void setPreSql(String preSql) {
+        this.preSql = preSql;
     }
 }

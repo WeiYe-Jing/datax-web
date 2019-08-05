@@ -34,4 +34,5 @@ public class DataxJsonDto implements Serializable {
 
     private String querySql;
 
+    private String preSql;
 }

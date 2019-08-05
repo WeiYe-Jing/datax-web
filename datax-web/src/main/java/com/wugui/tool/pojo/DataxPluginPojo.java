@@ -35,4 +35,9 @@ public class DataxPluginPojo {
      * querySql 属性，如果指定了，则优先于columns参数
      */
     private String querySql;
+
+    /**
+     * preSql 属性
+     */
+    private String preSql;
 }

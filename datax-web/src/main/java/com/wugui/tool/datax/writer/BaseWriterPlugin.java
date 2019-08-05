@@ -31,6 +31,9 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
 
         parameterObj.put("column", dataxPluginPojo.getColumns());
 
+        // preSql
+        parameterObj.put("preSql", ImmutableList.of(dataxPluginPojo.getPreSql()));
+
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
         connectionObj.put("table", dataxPluginPojo.getTables());
 

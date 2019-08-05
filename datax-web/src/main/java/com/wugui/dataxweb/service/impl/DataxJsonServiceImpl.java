@@ -50,6 +50,7 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         } else {
             JobJdbcDatasource writerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getWriterDatasourceId());
             dataxJsonHelper.initWriter(writerDatasource, dataxJsonDto.getWriterTables(), dataxJsonDto.getWriterColumns());
+            dataxJsonHelper.setPreSql(dataxJsonDto.getPreSql());
         }
 
         return JSON.toJSONString(dataxJsonHelper.buildJob());

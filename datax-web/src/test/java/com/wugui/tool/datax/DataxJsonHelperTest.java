@@ -26,7 +26,7 @@ public class DataxJsonHelperTest {
         writerDatasource.setDatasourceName("z01_mysql_3306");
         writerDatasource.setJdbcUsername("root");
         writerDatasource.setJdbcPassword("root");
-        writerDatasource.setJdbcUrl("jdbc:mysql://z01:3306/datax_web_demo?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
+        writerDatasource.setJdbcUrl("jdbc:mysql://localhost:3306/datax_web_demo?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8");
         writerDatasource.setJdbcDriverClass("com.mysql.jdbc.Driver");
         return writerDatasource;
     }
@@ -78,6 +78,7 @@ public class DataxJsonHelperTest {
     public void buildWriter() {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
         dataxJsonHelper.initWriter(getWriterDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
+        dataxJsonHelper.setPreSql("delete from datax_prubin");
         Map<String, Object> writer = dataxJsonHelper.buildWriter();
         System.out.println(JSONUtils.formatJson(writer));
     }

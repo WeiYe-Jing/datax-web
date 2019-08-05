@@ -36,14 +36,15 @@ public class MySQLQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("datax_plugin");
+        List<String> columns = queryTool.getColumnNames("job_config");
+        log.info(columns.toString());
+        columns = queryTool.getColumnNames("job_log");
         log.info(columns.toString());
     }
 
     @Test
     public void getColumnsByQuerySql() {
-        String querySql = "select l.log_file_path, c.name, c.job_group\n" +
-                "from job_log l left join job_config c on c.id = l.job_id where l.status = 1";
+        String querySql = "select l.log_file_path, c.name, c.job_group from job_log l left join job_config c on c.id = l.job_id where l.status = 1";
         List<String> columns = queryTool.getColumnsByQuerySql(querySql);
         log.info(columns.toString());
     }

@@ -80,7 +80,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
                 exec.execute(cmdLine);
                 EtlJobFileAppender.appendLog(logFilePath, stdout.toString());
             } catch (Exception e) {
-                EtlJobFileAppender.appendLog(logFilePath, e.getMessage());
+                EtlJobFileAppender.appendLog(logFilePath, "\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + "DATAX_HOME或者Job数据库配置信息有误");
                 log.error("job 执行异常：{0}", e);
             }
             //  删除临时文件
@@ -94,6 +94,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
         String dataXHome = System.getenv("DATAX_HOME");
         if (StringUtils.isBlank(dataXHome)) {
             log.error("DATAX_HOME 环境变量为NULL");
+            EtlJobFileAppender.appendLog(logFilePath, "DATAX_HOME 环境变量为NULL");
         }
         String osName = System.getProperty("os.name");
         dataXHome = osName.contains("Windows") ? (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) : (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);

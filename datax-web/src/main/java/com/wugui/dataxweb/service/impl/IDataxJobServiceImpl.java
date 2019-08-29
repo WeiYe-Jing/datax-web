@@ -2,14 +2,9 @@ package com.wugui.dataxweb.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.datax.common.exception.DataXException;
+import com.alibaba.datax.common.log.EtlJobFileAppender;
 import com.alibaba.datax.common.log.EtlJobLogger;
 import com.alibaba.datax.common.log.LogResult;
-import com.alibaba.datax.common.spi.ErrorCode;
-import com.alibaba.datax.core.Engine;
-import com.alibaba.datax.core.util.ExceptionTracker;
-import com.alibaba.datax.core.util.FrameworkErrorCode;
-import com.alibaba.datax.core.util.container.CoreConstant;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -19,15 +14,18 @@ import com.wugui.dataxweb.entity.JobLog;
 import com.wugui.dataxweb.service.IDataxJobService;
 import com.wugui.dataxweb.service.IJobLogService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.*;
 
 /**
@@ -43,6 +41,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
     private ExecutorService jobPool = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
 
+    private String logFilePath;
     /**
      * 日志文件保存目录
      */
@@ -57,42 +56,49 @@ public class IDataxJobServiceImpl implements IDataxJobService {
     public String startJobByJsonStr(String jobJson) {
 
         jobPool.submit(() -> {
-
             final String tmpFilePath = "jobTmp-" + System.currentTimeMillis() + ".conf";
             // 根据json写入到临时本地文件
             PrintWriter writer = null;
             try {
                 writer = new PrintWriter(tmpFilePath, "UTF-8");
                 writer.println(jobJson);
-
             } catch (FileNotFoundException | UnsupportedEncodingException e) {
-                e.printStackTrace();
+                log.info("JSON 临时文件写入异常：{0}", e);
             } finally {
                 if (writer != null) {
                     writer.close();
                 }
             }
-
             try {
-                // 使用临时本地文件启动datax作业
-                Engine.entry(tmpFilePath);
-                //  删除临时文件
-                FileUtil.del(new File(tmpFilePath));
-            } catch (Throwable e) {
-                log.error("\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + ExceptionTracker.trace(e));
-
-                if (e instanceof DataXException) {
-                    DataXException tempException = (DataXException) e;
-                    ErrorCode errorCode = tempException.getErrorCode();
-                    if (errorCode instanceof FrameworkErrorCode) {
-                        FrameworkErrorCode tempErrorCode = (FrameworkErrorCode) errorCode;
-                    }
-                }
-
+                ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+                PumpStreamHandler psh = new PumpStreamHandler(stdout);
+                CommandLine cmdLine = new CommandLine("python");
+                cmdLine.addArgument(getDataXPyPath());
+                cmdLine.addArgument(tmpFilePath);
+                DefaultExecutor exec = new DefaultExecutor();
+                exec.setStreamHandler(psh);
+                exec.execute(cmdLine);
+                EtlJobFileAppender.appendLog(logFilePath, stdout.toString());
+            } catch (Exception e) {
+                EtlJobFileAppender.appendLog(logFilePath, e.getMessage());
+                log.error("job 执行异常：{0}", e);
             }
+            //  删除临时文件
+            FileUtil.del(new File(tmpFilePath));
         });
-
         return "success";
+    }
+
+    private String getDataXPyPath() {
+        String dataxPyPath;
+        String dataXHome = System.getenv("DATAX_HOME");
+        if (StringUtils.isBlank(dataXHome)) {
+            log.error("DATAX_HOME 环境变量为NULL");
+        }
+        String osName = System.getProperty("os.name");
+        dataXHome = osName.contains("Windows") ? (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) : (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);
+        dataxPyPath = dataXHome + "datax.py";
+        return dataxPyPath;
     }
 
 
@@ -102,15 +108,12 @@ public class IDataxJobServiceImpl implements IDataxJobService {
         JSONObject json = JSONObject.parseObject(runJobDto.getJobJson());
         //根据jobId和当前时间戳生成日志文件名
         String logFileName = runJobDto.getJobConfigId().toString().concat("_").concat(StrUtil.toString(System.currentTimeMillis()).concat(".log"));
-        String logFilePath = etlLogDir.concat(logFileName);
+        logFilePath = etlLogDir.concat(logFileName);
         //记录日志
         JobLog jobLog = new JobLog();
         jobLog.setJobId(runJobDto.getJobConfigId());
         jobLog.setLogFilePath(logFilePath);
         jobLogService.save(jobLog);
-        //将路径放进去
-        json.put(CoreConstant.LOG_FILE_PATH, logFilePath);
-
         //启动任务
         return startJobByJsonStr(JSON.toJSONString(json));
     }

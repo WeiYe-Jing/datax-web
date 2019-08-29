@@ -33,6 +33,7 @@
         <tddl.version>5.1.22-1</tddl.version>
         <swift-version>1.0.0</swift-version>
 
+
         <project-sourceEncoding>UTF-8</project-sourceEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -41,61 +42,10 @@
 
     <modules>
         <module>common</module>
-        <module>core</module>
-        <module>transformer</module>
 
         <!--springboot-web-->
         <module>datax-web</module>
 
-        <!-- reader -->
-        <module>mysqlreader</module>
-        <!--<module>drdsreader</module>-->
-        <module>sqlserverreader</module>
-        <module>postgresqlreader</module>
-        <module>oraclereader</module>
-        <!--<module>odpsreader</module>-->
-        <!--<module>otsreader</module>-->
-        <!--<module>otsstreamreader</module>-->
-        <!--<module>txtfilereader</module>-->
-        <!--<module>hdfsreader</module>-->
-        <module>streamreader</module>
-        <!--<module>ossreader</module>-->
-        <!--<module>ftpreader</module>-->
-        <module>mongodbreader</module>
-        <module>rdbmsreader</module>
-        <!--<module>hbase11xreader</module>-->
-        <!--<module>hbase094xreader</module>-->
-        <!--<module>opentsdbreader</module>-->
-
-        <!-- writer -->
-        <module>mysqlwriter</module>
-        <!--<module>drdswriter</module>-->
-        <!--<module>odpswriter</module>-->
-        <!--<module>txtfilewriter</module>-->
-        <!--<module>ftpwriter</module>-->
-        <!--<module>hdfswriter</module>-->
-        <module>streamwriter</module>
-        <!--<module>otswriter</module>-->
-        <module>oraclewriter</module>
-        <module>sqlserverwriter</module>
-        <module>postgresqlwriter</module>
-        <!--<module>osswriter</module>-->
-        <module>mongodbwriter</module>
-        <!--<module>adswriter</module>-->
-        <!--<module>ocswriter</module>-->
-        <module>rdbmswriter</module>
-        <!--<module>hbase11xwriter</module>-->
-        <!--<module>hbase094xwriter</module>-->
-        <!--<module>hbase11xsqlwriter</module>-->
-        <!--<module>hbase11xsqlreader</module>-->
-        <!--<module>elasticsearchwriter</module>-->
-        <!--<module>tsdbwriter</module>-->
-
-        <!-- common support module -->
-        <module>plugin-rdbms-util</module>
-        <module>plugin-unstructured-storage-util</module>
-        <!--<module>hbase20xsqlreader</module>-->
-        <!--<module>hbase20xsqlwriter</module>-->
     </modules>
 
     <dependencyManagement>

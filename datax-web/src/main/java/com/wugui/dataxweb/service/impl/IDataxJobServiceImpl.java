@@ -23,9 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.lang.management.ManagementFactory;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.*;
 
 /**

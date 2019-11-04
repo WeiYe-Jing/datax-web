@@ -4,16 +4,12 @@
 - Language: Java 8
 - Environment: MacOS, 16G RAM
 - Database: Mysql5.7
+- Python2
 
-## introduction
-- 使用springboot启动datax，不再需要用python启动。
-- 以restful接口启动datax作业
 
 ## todo list
 
 * [x] springboot重构项目
-* [x] 通过restful接口调度datax完成抽取数据作业
-* [x] 通过restful接口传入job配置json生成临时文件，根据文件配置调度datax执行该作业
 * [x] 集成swagger，方便调试
 * [x] 集成mybatis plus和Mysql数据库存放应用数据
 * [x] 网页端修改并持久化job配置的json到数据库

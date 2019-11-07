@@ -4,7 +4,7 @@
 - Language: Java 8
 - Environment: MacOS, 16G RAM
 - Database: Mysql5.7
-- Python2
+- 建议Python2.7
 
 
 ## todo list
@@ -14,8 +14,8 @@
 * [x] 集成mybatis plus和Mysql数据库存放应用数据
 * [x] 网页端修改并持久化job配置的json到数据库
 * [x] 网页端实时查看抽取日志，类似Jenkins的日志控制台输出功能
+* [x] 实时查看抽取日志BUG功能修复2019-11-07
 * [ ] 网页端各种读写插件模板生成，可以在页面组装使用
-* [ ] 精简assembly打包结构
 * [ ] 实现datax分布式作业
 * [ ] 实现部分写插件支持自动建表功能
 

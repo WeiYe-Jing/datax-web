@@ -13,8 +13,10 @@ import com.wugui.dataxweb.dto.RunJobDto;
 import com.wugui.dataxweb.entity.JobLog;
 import com.wugui.dataxweb.service.IDataxJobService;
 import com.wugui.dataxweb.service.IJobLogService;
+import com.wugui.dataxweb.util.CollectingLogOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang3.StringUtils;
@@ -68,15 +70,16 @@ public class IDataxJobServiceImpl implements IDataxJobService {
                 }
             }
             try {
-                ByteArrayOutputStream stdout = new ByteArrayOutputStream();
-                PumpStreamHandler psh = new PumpStreamHandler(stdout);
                 CommandLine cmdLine = new CommandLine("python");
                 cmdLine.addArgument(getDataXPyPath());
                 cmdLine.addArgument(tmpFilePath);
+
                 DefaultExecutor exec = new DefaultExecutor();
-                exec.setStreamHandler(psh);
-                exec.execute(cmdLine);
-                EtlJobFileAppender.appendLog(logFilePath, stdout.toString());
+                DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+                PumpStreamHandler streamHandler = new PumpStreamHandler(new CollectingLogOutputStream(logFilePath));
+                exec.setStreamHandler(streamHandler);
+                exec.execute(cmdLine, resultHandler);
+                resultHandler.waitFor();
             } catch (Exception e) {
                 EtlJobFileAppender.appendLog(logFilePath, "\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + "DATAX_HOME或者Job数据库配置信息有误");
                 log.error("job 执行异常：{0}", e);

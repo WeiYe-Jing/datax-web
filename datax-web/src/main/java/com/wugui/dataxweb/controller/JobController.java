@@ -1,8 +1,8 @@
 package com.wugui.dataxweb.controller;
 
-import com.alibaba.datax.common.log.LogResult;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.dataxweb.dto.RunJobDto;
+import com.wugui.dataxweb.log.LogResult;
 import com.wugui.dataxweb.service.IDataxJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

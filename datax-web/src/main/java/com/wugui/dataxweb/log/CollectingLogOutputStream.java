@@ -1,6 +1,5 @@
-package com.wugui.dataxweb.util;
+package com.wugui.dataxweb.log;
 
-import com.alibaba.datax.common.log.EtlJobFileAppender;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.LogOutputStream;
 

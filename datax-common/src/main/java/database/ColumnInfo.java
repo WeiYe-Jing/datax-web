@@ -1,29 +1,31 @@
-package com.wugui.tool.database;
+package database;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
- * 表信息
+ * 字段信息
  *
  * @author zhouhongfa@gz-yibo.com
  * @version 1.0
  * @since 2019/7/30
  */
 @Data
-public class TableInfo {
+public class ColumnInfo {
     /**
-     * 表名
+     * 字段名称
      */
     private String name;
-
     /**
      * 注释
      */
     private String comment;
     /**
-     * 所有列
+     * 字段类型
      */
-    private List<ColumnInfo> columns;
+    private String type;
+
+    /**
+     * 是否是主键列
+     */
+    private Boolean ifPrimaryKey;
 }

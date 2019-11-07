@@ -1,7 +1,7 @@
 package com.wugui.dataxweb.service;
 
-import com.alibaba.datax.common.log.LogResult;
 import com.wugui.dataxweb.dto.RunJobDto;
+import com.wugui.dataxweb.log.LogResult;
 
 /**
  * @program: datax-all

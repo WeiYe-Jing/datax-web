@@ -1,4 +1,4 @@
-package com.alibaba.datax.common.log;
+package com.wugui.dataxweb.log;
 
 import cn.hutool.core.date.DateUtil;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import java.util.Date;
  * @version 1.0
  * @since 2019/6/25
  */
+
 public class EtlJobLogger {
     private static Logger logger = LoggerFactory.getLogger("datax-job logger");
 

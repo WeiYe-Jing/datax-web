@@ -1,7 +1,7 @@
 package com.wugui.tool.query;
 
-import com.wugui.tool.database.ColumnInfo;
-import com.wugui.tool.database.TableInfo;
+import database.ColumnInfo;
+import database.TableInfo;
 
 import java.util.List;
 import java.util.Map;

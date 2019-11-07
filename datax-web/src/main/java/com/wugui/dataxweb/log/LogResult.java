@@ -1,4 +1,4 @@
-package com.alibaba.datax.common.log;
+package com.wugui.dataxweb.log;
 
 import java.io.Serializable;
 

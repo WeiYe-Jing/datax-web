@@ -1,4 +1,4 @@
-package com.alibaba.datax.common.log;
+package com.wugui.dataxweb.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

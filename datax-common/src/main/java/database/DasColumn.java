@@ -1,4 +1,4 @@
-package com.wugui.tool.database;
+package database;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

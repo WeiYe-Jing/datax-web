@@ -5,12 +5,12 @@ import com.alibaba.druid.util.JdbcUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.wugui.dataxweb.entity.JobJdbcDatasource;
-import com.wugui.tool.database.ColumnInfo;
-import com.wugui.tool.database.DasColumn;
-import com.wugui.tool.database.TableInfo;
 import com.wugui.tool.meta.DatabaseInterface;
 import com.wugui.tool.meta.DatabaseMetaFactory;
 import com.zaxxer.hikari.HikariDataSource;
+import database.ColumnInfo;
+import database.DasColumn;
+import database.TableInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

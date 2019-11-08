@@ -1,6 +1,7 @@
 package com.wugui.dataxweb.service.impl;
 
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -121,6 +122,8 @@ public class IDataxJobServiceImpl implements IDataxJobService {
 
     @Override
     public Boolean killJob(String pid) {
+        //  删除临时文件
+        //FileUtil.del(new File(tmpFilePath));
         return ProcessUtil.killProcessByPid(pid);
     }
 

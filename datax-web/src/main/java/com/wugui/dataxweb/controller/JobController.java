@@ -27,7 +27,7 @@ public class JobController {
     public void testStartJob() {
         // 指定获取作业配置json的接口，此处用下面mock出来的接口提供
         String jobPath = "http://localhost:8080/mock_stream2stream";
-        iDataxJobService.startJobByJsonStr(jobPath);
+        iDataxJobService.startJobByJsonStr(jobPath,0L);
     }
 
     @GetMapping("/mock_oracle2mongodb")
@@ -134,7 +134,7 @@ public class JobController {
     @ApiOperation("通过传入json配置启动一个datax作业")
     @PostMapping("/runJob")
     public R<String> runJob(@RequestBody RunJobDto runJobDto) {
-        String result = iDataxJobService.startJobByJsonStr(runJobDto.getJobJson());
+        String result = iDataxJobService.startJobByJsonStr(runJobDto.getJobJson(),runJobDto.getJobConfigId());
         return R.ok(result);
     }
 
@@ -149,6 +149,12 @@ public class JobController {
     public R<String> runJobLog(@RequestBody RunJobDto runJobDto) {
         String result = iDataxJobService.startJobLog(runJobDto);
         return R.ok(result);
+    }
+
+    @ApiOperation("通过传入 进程ID 停止该job作业")
+    @GetMapping("/killJob/{pid}")
+    public R<Boolean> killJob(@PathVariable(value ="pid") String pid){
+        return R.ok(iDataxJobService.killJob(pid));
     }
 
     /**

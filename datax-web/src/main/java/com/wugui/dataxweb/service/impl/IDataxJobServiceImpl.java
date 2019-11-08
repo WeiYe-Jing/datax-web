@@ -1,6 +1,6 @@
 package com.wugui.dataxweb.service.impl;
 
-import cn.hutool.core.io.FileUtil;
+
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -8,17 +8,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.wugui.dataxweb.dto.RunJobDto;
 import com.wugui.dataxweb.entity.JobLog;
-import com.wugui.dataxweb.log.CollectingLogOutputStream;
 import com.wugui.dataxweb.log.EtlJobFileAppender;
 import com.wugui.dataxweb.log.EtlJobLogger;
 import com.wugui.dataxweb.log.LogResult;
 import com.wugui.dataxweb.service.IDataxJobService;
 import com.wugui.dataxweb.service.IJobLogService;
+import com.wugui.dataxweb.thread.ExecDataXOutputThread;
+import com.wugui.util.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecuteResultHandler;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,41 +48,28 @@ public class IDataxJobServiceImpl implements IDataxJobService {
     @Autowired
     private IJobLogService jobLogService;
 
-
     @Override
-    public String startJobByJsonStr(String jobJson) {
+    public String startJobByJsonStr(String jobJson, Long jobConfigId) {
 
         jobPool.submit(() -> {
             final String tmpFilePath = "jobTmp-" + System.currentTimeMillis() + ".conf";
             // 根据json写入到临时本地文件
-            PrintWriter writer = null;
-            try {
-                writer = new PrintWriter(tmpFilePath, "UTF-8");
+            try (PrintWriter writer = new PrintWriter(tmpFilePath, "UTF-8")) {
                 writer.println(jobJson);
             } catch (FileNotFoundException | UnsupportedEncodingException e) {
                 log.info("JSON 临时文件写入异常：{0}", e);
-            } finally {
-                if (writer != null) {
-                    writer.close();
-                }
             }
             try {
-                CommandLine cmdLine = new CommandLine("python");
-                cmdLine.addArgument(getDataXPyPath());
-                cmdLine.addArgument(tmpFilePath);
-
-                DefaultExecutor exec = new DefaultExecutor();
-                DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
-                PumpStreamHandler streamHandler = new PumpStreamHandler(new CollectingLogOutputStream(logFilePath));
-                exec.setStreamHandler(streamHandler);
-                exec.execute(cmdLine, resultHandler);
-                resultHandler.waitFor();
+                Process p = Runtime.getRuntime().exec(new String[]{"python", getDataXPyPath(), tmpFilePath});
+                EtlJobFileAppender.appendLog(logFilePath, "\n\nJob:  " + jobConfigId + ",Datax运行进程Id:  " + ProcessUtil.getProcessId(p));
+                ExecDataXOutputThread output=new ExecDataXOutputThread(p.getInputStream(),logFilePath,tmpFilePath);
+                ExecDataXOutputThread error =new ExecDataXOutputThread(p.getErrorStream(),logFilePath,tmpFilePath);
+                output.start();
+                error.start();
             } catch (Exception e) {
                 EtlJobFileAppender.appendLog(logFilePath, "\n\n经DataX智能分析,该任务最可能的错误原因是:\n" + "DATAX_HOME或者Job数据库配置信息有误");
                 log.error("job 执行异常：{0}", e);
             }
-            //  删除临时文件
-            FileUtil.del(new File(tmpFilePath));
         });
         return "success";
     }
@@ -117,7 +101,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
         jobLog.setLogFilePath(logFilePath);
         jobLogService.save(jobLog);
         //启动任务
-        return startJobByJsonStr(JSON.toJSONString(json));
+        return startJobByJsonStr(JSON.toJSONString(json), runJobDto.getJobConfigId());
     }
 
     @Override
@@ -134,4 +118,10 @@ public class IDataxJobServiceImpl implements IDataxJobService {
             return EtlJobLogger.readLog(list.get(0).getLogFilePath(), fromLineNum);
         }
     }
+
+    @Override
+    public Boolean killJob(String pid) {
+        return ProcessUtil.killProcessByPid(pid);
+    }
+
 }

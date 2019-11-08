@@ -6,6 +6,14 @@ import org.apache.commons.exec.LogOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * CollectingLogOutputStream
+ *
+ * @author jingwk
+ * @version 1.0
+ * @since 2019/11/17
+ */
+
 @Slf4j
 public class CollectingLogOutputStream extends LogOutputStream {
 

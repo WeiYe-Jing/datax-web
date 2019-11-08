@@ -39,6 +39,7 @@
         <postgresql.version>42.2.5</postgresql.version>
         <druid.version>1.1.14</druid.version>
         <mysql-connector.version>5.1.47</mysql-connector.version>
+        <jna.version>4.1.0</jna.version>
     </properties>
 
     <modules>
@@ -86,7 +87,6 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback-classic-version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.taobao.tddl</groupId>
                 <artifactId>tddl-client</artifactId>
@@ -173,6 +173,12 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>${jna.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

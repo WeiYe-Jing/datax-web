@@ -8,9 +8,9 @@ import com.wugui.dataxweb.entity.JobJdbcDatasource;
 import com.wugui.tool.meta.DatabaseInterface;
 import com.wugui.tool.meta.DatabaseMetaFactory;
 import com.zaxxer.hikari.HikariDataSource;
-import database.ColumnInfo;
-import database.DasColumn;
-import database.TableInfo;
+import com.wugui.database.ColumnInfo;
+import com.wugui.database.DasColumn;
+import com.wugui.database.TableInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

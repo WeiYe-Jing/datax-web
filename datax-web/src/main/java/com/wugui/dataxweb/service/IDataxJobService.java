@@ -1,6 +1,5 @@
 package com.wugui.dataxweb.service;
 
-import com.wugui.dataxweb.dto.RunJobDto;
 import com.wugui.dataxweb.log.LogResult;
 
 /**
@@ -9,18 +8,28 @@ import com.wugui.dataxweb.log.LogResult;
  * @create: 2019-06-17 11:25
  **/
 public interface IDataxJobService {
+
     /**
-     * 根据json字符串用线程池启动一个datax作业
-     *
+     * 启动datax
      * @param jobJson
-     * @author: huzekang
-     * @Date: 2019-06-17
+     * @param jobId
+     * @return
      */
-    String startJobByJsonStr(String jobJson,Long jobConfigId);
+    String startJob(String jobJson,Long jobId);
 
-    String startJobLog(RunJobDto runJobDto);
-
+    /**
+     * 根据JobId获取最近一次运行日志
+     * @param id
+     * @param fromLineNum
+     * @return
+     */
     LogResult viewJogLog(Long id, int fromLineNum);
 
-    Boolean killJob(String pid);
+    /**
+     * 结束datax进程
+     * @param pid
+     * @param id
+     * @return
+     */
+    Boolean killJob(String pid,Long id);
 }

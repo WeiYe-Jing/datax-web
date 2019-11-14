@@ -43,40 +43,37 @@ public class JobLog extends Model<JobLog> {
     private String logFilePath;
 
     /**
-     *
+     *进程Id
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JSONField(format = "yyyy/MM/dd")
     @ApiModelProperty(value = "", hidden = true)
-    private Date updateDate;
+    private String pid;
 
     /**
-     *
+     *执行-时间
      */
-    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    @JSONField(format = "yyyy/MM/dd")
     @ApiModelProperty(value = "", hidden = true)
-    private Integer status;
+    private Date handleTime;
+
+    /**
+     *执行-状态
+     */
+    @ApiModelProperty(value = "", hidden = true)
+    private Integer handleCode;
+
+
+    /**
+     *执行-日志
+     */
+    @ApiModelProperty(value = "", hidden = true)
+    private String handleMsg;
 
     /**
      *
      */
     @ApiModelProperty(value = "", hidden = true)
     private Integer createBy;
-
-    /**
-     *
-     */
-    @TableField(fill = FieldFill.INSERT)
-    @JSONField(format = "yyyy/MM/dd")
-    @ApiModelProperty(value = "", hidden = true)
-    private Date createDate;
-
-    /**
-     *
-     */
-    @ApiModelProperty(value = "", hidden = true)
-    private Integer updateBy;
-
 
     /**
      * 获取主键值

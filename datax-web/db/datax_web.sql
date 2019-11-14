@@ -105,41 +105,38 @@ CREATE TABLE `job_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `job_id` bigint(20) NOT NULL COMMENT '抽取任务，主键ID',
   `log_file_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志文件路径',
-  `update_date` datetime(0) NULL DEFAULT NULL,
-  `status` int(1) NULL DEFAULT 1,
+  `pid` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务进程ID',
+  `handle_time` datetime(0) NULL DEFAULT NULL COMMENT '执行-时间',
+  `handle_code` int(11) NULL DEFAULT 0 COMMENT '执行-状态',
+  `handle_msg` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '执行-日志',
   `create_by` int(11) NULL DEFAULT NULL,
-  `create_date` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
-  `update_by` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '抽取日志记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 0 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '抽取日志记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of job_log
 -- ----------------------------
-INSERT INTO `job_log` VALUES (1, 1, '/data/applogs/datax-web/1_1561638145701', NULL, 1, NULL, '2019-06-27 08:22:26', NULL);
-INSERT INTO `job_log` VALUES (2, 1, '/data/applogs/datax-web/1_1561638359975.log', NULL, 1, NULL, '2019-06-27 08:26:00', NULL);
-INSERT INTO `job_log` VALUES (3, 1, '/data/applogs/datax-web/1_1561638760584.log', NULL, 1, NULL, '2019-06-27 08:32:41', NULL);
-INSERT INTO `job_log` VALUES (4, 4, '/data/applogs/datax-web/4_1564480870563.log', '2019-07-30 18:01:11', 1, NULL, '2019-07-30 18:01:11', NULL);
-INSERT INTO `job_log` VALUES (5, 3, '/data/applogs/datax-web/3_1564481419699.log', '2019-07-30 18:10:20', 1, NULL, '2019-07-30 18:10:20', NULL);
-INSERT INTO `job_log` VALUES (6, 3, '/data/applogs/datax-web/3_1564485764734.log', '2019-07-30 19:22:45', 1, NULL, '2019-07-30 19:22:45', NULL);
-INSERT INTO `job_log` VALUES (7, 3, '/data/applogs/datax-web/3_1564485918860.log', '2019-07-30 19:25:19', 1, NULL, '2019-07-30 19:25:19', NULL);
-INSERT INTO `job_log` VALUES (8, 3, '/data/applogs/datax-web/3_1564486087223.log', '2019-07-30 19:28:07', 1, NULL, '2019-07-30 19:28:07', NULL);
-INSERT INTO `job_log` VALUES (9, 3, '/data/applogs/datax-web/3_1564486152278.log', '2019-07-30 19:29:12', 1, NULL, '2019-07-30 19:29:12', NULL);
-INSERT INTO `job_log` VALUES (10, 3, '/data/applogs/datax-web/3_1564486351631.log', '2019-07-30 19:32:32', 1, NULL, '2019-07-30 19:32:32', NULL);
-INSERT INTO `job_log` VALUES (11, 3, '/data/applogs/datax-web/3_1564486375214.log', '2019-07-30 19:32:55', 1, NULL, '2019-07-30 19:32:55', NULL);
-INSERT INTO `job_log` VALUES (12, 3, '/data/applogs/datax-web/3_1564486398393.log', '2019-07-30 19:33:18', 1, NULL, '2019-07-30 19:33:18', NULL);
-INSERT INTO `job_log` VALUES (13, 3, '/data/applogs/datax-web/3_1564488007122.log', '2019-07-30 20:00:07', 1, NULL, '2019-07-30 20:00:07', NULL);
-INSERT INTO `job_log` VALUES (14, 3, '/data/applogs/datax-web/3_1564489795800.log', '2019-07-30 20:29:56', 1, NULL, '2019-07-30 20:29:56', NULL);
-INSERT INTO `job_log` VALUES (15, 3, '/data/applogs/datax-web/3_1564490723427.log', '2019-07-30 20:45:23', 1, NULL, '2019-07-30 20:45:23', NULL);
-INSERT INTO `job_log` VALUES (16, 3, '/data/applogs/datax-web/3_1564490843863.log', '2019-07-30 20:47:24', 1, NULL, '2019-07-30 20:47:24', NULL);
-INSERT INTO `job_log` VALUES (17, 3, '/data/applogs/datax-web/3_1564491445033.log', '2019-07-30 20:57:25', 1, NULL, '2019-07-30 20:57:25', NULL);
-INSERT INTO `job_log` VALUES (18, 3, '/data/applogs/datax-web/3_1564491868935.log', '2019-07-30 21:04:29', 1, NULL, '2019-07-30 21:04:29', NULL);
-INSERT INTO `job_log` VALUES (19, 3, '/data/applogs/datax-web/3_1564492047112.log', '2019-07-30 21:07:27', 1, NULL, '2019-07-30 21:07:27', NULL);
-INSERT INTO `job_log` VALUES (20, 3, '/data/applogs/datax-web/3_1564492173290.log', '2019-07-30 21:09:33', 1, NULL, '2019-07-30 21:09:33', NULL);
-INSERT INTO `job_log` VALUES (21, 3, '/data/applogs/datax-web/3_1564492308532.log', '2019-07-30 21:11:49', 1, NULL, '2019-07-30 21:11:49', NULL);
-INSERT INTO `job_log` VALUES (22, 3, '/data/applogs/datax-web/3_1564492378732.log', '2019-07-30 21:12:59', 1, NULL, '2019-07-30 21:12:59', NULL);
-INSERT INTO `job_log` VALUES (23, 3, '/data/applogs/datax-web/3_1564495260737.log', '2019-07-30 22:01:01', 1, NULL, '2019-07-30 22:01:01', NULL);
-INSERT INTO `job_log` VALUES (24, 3, '/data/applogs/datax-web/3_1564574180078.log', '2019-07-31 19:56:20', 1, NULL, '2019-07-31 19:56:20', NULL);
-INSERT INTO `job_log` VALUES (25, 3, '/data/applogs/datax-web/3_1564574319878.log', '2019-07-31 19:58:40', 1, NULL, '2019-07-31 19:58:40', NULL);
+INSERT INTO `job_log` VALUES (12, 4, 'D:\\temp\\logs\\datax-web\\4_1573628574883.log', '88612', '2019-11-13 15:02:55', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (13, 4, 'D:\\temp\\logs\\datax-web\\4_1573628575201.log', '88772', '2019-11-13 15:02:55', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (14, 4, 'D:\\temp\\logs\\datax-web\\4_1573628576097.log', '88984', '2019-11-13 15:02:56', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (15, 4, 'D:\\temp\\logs\\datax-web\\4_1573628589106.log', '89224', '2019-11-13 15:03:09', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (16, 4, 'D:\\temp\\logs\\datax-web\\4_1573628589293.log', '89364', '2019-11-13 15:03:09', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (17, 4, 'D:\\temp\\logs\\datax-web\\4_1573628589509.log', '89520', '2019-11-13 15:03:10', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (18, 4, 'D:\\temp\\logs\\datax-web\\4_1573628589670.log', '89652', '2019-11-13 15:03:10', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (19, 4, 'D:\\temp\\logs\\datax-web\\4_1573628589859.log', '89720', '2019-11-13 15:03:10', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (20, 4, 'D:\\temp\\logs\\datax-web\\4_1573628590201.log', '89832', '2019-11-13 15:03:10', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (21, 4, 'D:\\temp\\logs\\datax-web\\4_1573628590325.log', '89912', '2019-11-13 15:03:10', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (22, 6, 'D:\\temp\\logs\\datax-web\\6_1573630200227.log', '18352', '2019-11-13 15:30:00', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (23, 6, 'D:\\temp\\logs\\datax-web\\6_1573630558990.log', '74672', '2019-11-13 15:35:59', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (24, 6, 'D:\\temp\\logs\\datax-web\\6_1573635226093.log', '93744', '2019-11-13 16:53:46', 0, NULL, NULL);
+INSERT INTO `job_log` VALUES (25, 4, 'D:\\temp\\logs\\datax-web\\4_1573635586309.log', '94472', '2019-11-13 16:59:46', 200, NULL, NULL);
+INSERT INTO `job_log` VALUES (26, 4, 'D:\\temp\\logs\\datax-web\\4_1573635777426.log', '94460', '2019-11-13 17:02:57', 500, NULL, NULL);
+INSERT INTO `job_log` VALUES (27, 3, 'D:\\temp\\logs\\datax-web\\3_1573637050199.log', '97044', '2019-11-13 17:24:10', 200, NULL, NULL);
+INSERT INTO `job_log` VALUES (28, 3, 'D:\\temp\\logs\\datax-web\\3_1573637194736.log', '89716', '2019-11-13 17:26:35', 200, NULL, NULL);
+INSERT INTO `job_log` VALUES (29, 3, 'D:\\temp\\logs\\datax-web\\3_1573638319908.log', '97816', '2019-11-13 17:45:20', 200, NULL, NULL);
+INSERT INTO `job_log` VALUES (30, 3, 'D:\\temp\\logs\\datax-web\\3_1573638524001.log', '97888', '2019-11-13 17:48:44', 200, NULL, NULL);
+INSERT INTO `job_log` VALUES (31, 3, 'D:\\temp\\logs\\datax-web\\3_1573638646217.log', '97884', '2019-11-13 17:50:46', 500, NULL, NULL);
+INSERT INTO `job_log` VALUES (32, 3, 'D:\\temp\\logs\\datax-web\\3_1573638967908.log', '96844', '2019-11-13 17:56:08', 500, NULL, NULL);
+INSERT INTO `job_log` VALUES (33, 3, 'D:\\temp\\logs\\datax-web\\3_1573639056074.log', '92228', '2019-11-13 17:57:36', 500, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

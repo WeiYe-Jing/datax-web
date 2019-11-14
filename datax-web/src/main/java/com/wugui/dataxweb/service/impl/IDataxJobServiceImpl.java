@@ -3,12 +3,10 @@ package com.wugui.dataxweb.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.wugui.dataxweb.dto.RunJobDto;
 import com.wugui.dataxweb.entity.JobLog;
 import com.wugui.dataxweb.log.EtlJobFileAppender;
 import com.wugui.dataxweb.log.EtlJobLogger;
@@ -28,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -39,6 +38,7 @@ import java.util.concurrent.*;
 @Slf4j
 @Service
 public class IDataxJobServiceImpl implements IDataxJobService {
+
     private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("datax-job-%d").build();
 
     private ExecutorService jobPool = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
@@ -58,7 +58,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
     private IJobLogService jobLogService;
 
     @Override
-    public String startJobByJsonStr(String jobJson, Long jobConfigId) {
+    public String startJob(String jobJson, Long jobId) {
 
         jobPool.submit(() -> {
             final String tmpFilePath = "jobTmp-" + System.currentTimeMillis() + ".conf";
@@ -71,11 +71,11 @@ public class IDataxJobServiceImpl implements IDataxJobService {
             try {
                 Process p = Runtime.getRuntime().exec(new String[]{"python", getDataXPyPath(), tmpFilePath});
                 String processId = ProcessUtil.getProcessId(p);
-                log.info("Job:{},Datax运行进程Id:{}", jobConfigId, processId);
-                EtlJobFileAppender.appendLog(logFilePath, "\n\nJob:  " + jobConfigId + ",Datax运行进程Id:  " + processId);
                 jobTmpFiles.put(processId, tmpFilePath);
-                ExecDataXOutputThread output = new ExecDataXOutputThread(p.getInputStream(), logFilePath, tmpFilePath);
-                ExecDataXOutputThread error = new ExecDataXOutputThread(p.getErrorStream(), logFilePath, tmpFilePath);
+                Long id = saveLog(jobId, processId);
+                EtlJobFileAppender.appendLog(logFilePath, "\n\nJob:  " + jobId + ",Datax运行进程Id:  " + processId);
+                ExecDataXOutputThread output = new ExecDataXOutputThread(id, p.getInputStream(), logFilePath, tmpFilePath);
+                ExecDataXOutputThread error = new ExecDataXOutputThread(id, p.getErrorStream(), logFilePath, tmpFilePath);
                 output.start();
                 error.start();
             } catch (Exception e) {
@@ -84,6 +84,21 @@ public class IDataxJobServiceImpl implements IDataxJobService {
             }
         });
         return "success";
+    }
+
+    private Long saveLog(Long jobId, String processId) {
+        //根据jobId和当前时间戳生成日志文件名
+        String logFileName = jobId.toString().concat("_").concat(StrUtil.toString(System.currentTimeMillis()).concat(".log"));
+        logFilePath = etlLogDir.concat(logFileName);
+        //记录日志
+        JobLog jobLog = new JobLog();
+        jobLog.setJobId(jobId);
+        jobLog.setLogFilePath(logFilePath);
+        jobLog.setPid(processId);
+        jobLog.setHandleCode(0);
+        jobLog.setHandleTime(new Date());
+        jobLogService.save(jobLog);
+        return jobLog.getId();
     }
 
     private String getDataXPyPath() {
@@ -101,26 +116,10 @@ public class IDataxJobServiceImpl implements IDataxJobService {
 
 
     @Override
-    public String startJobLog(RunJobDto runJobDto) {
-        //取出 jobJson，并转为json对象
-        JSONObject json = JSONObject.parseObject(runJobDto.getJobJson());
-        //根据jobId和当前时间戳生成日志文件名
-        String logFileName = runJobDto.getJobConfigId().toString().concat("_").concat(StrUtil.toString(System.currentTimeMillis()).concat(".log"));
-        logFilePath = etlLogDir.concat(logFileName);
-        //记录日志
-        JobLog jobLog = new JobLog();
-        jobLog.setJobId(runJobDto.getJobConfigId());
-        jobLog.setLogFilePath(logFilePath);
-        jobLogService.save(jobLog);
-        //启动任务
-        return startJobByJsonStr(JSON.toJSONString(json), runJobDto.getJobConfigId());
-    }
-
-    @Override
     public LogResult viewJogLog(Long id, int fromLineNum) {
         QueryWrapper<JobLog> queryWrapper = new QueryWrapper<>();
         //根据id获取最新的日志文件路径
-        queryWrapper.lambda().eq(JobLog::getJobId, id).orderByDesc(JobLog::getCreateDate);
+        queryWrapper.lambda().eq(JobLog::getJobId, id).orderByDesc(JobLog::getHandleTime);
         List<JobLog> list = jobLogService.list(queryWrapper);
         //取最新的一条记录
         if (list.isEmpty()) {
@@ -132,7 +131,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
     }
 
     @Override
-    public Boolean killJob(String pid) {
+    public Boolean killJob(String pid, Long id) {
         boolean result = ProcessUtil.killProcessByPid(pid);
         //  删除临时文件
         if (!CollectionUtils.isEmpty(jobTmpFiles)) {
@@ -141,6 +140,7 @@ public class IDataxJobServiceImpl implements IDataxJobService {
                 FileUtil.del(new File(pathname));
             }
         }
+        jobLogService.update(null, Wrappers.<JobLog>lambdaUpdate().set(JobLog::getHandleMsg, "job running，killed").set(JobLog::getHandleCode, 500).eq(JobLog::getId, id));
         return result;
     }
 

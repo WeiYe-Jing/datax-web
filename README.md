@@ -51,3 +51,5 @@ http://localhost:8080/index.html#/datax/job
 
 ### 6. 在线查看作业日志
 ![](https://raw.githubusercontent.com/huzekang/picbed/master/20190708102445.png)
+
+### QQ交流群 776939467

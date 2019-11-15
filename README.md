@@ -4,7 +4,7 @@
 - Language: Java 8
 - Environment: MacOS, 16G RAM
 - Database: Mysql5.7
-- 建议Python2.7
+- Python2.7(不支持Python3)
 
 
 ## todo list

@@ -42,9 +42,13 @@ etlLogDir: D:\temp\logs\datax-web\
 
 ### 5. 启动成功后打开页面
 http://localhost:8080/index.html#/datax/job
-![](https://raw.githubusercontent.com/huzekang/picbed/master/20190617120207.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119100901.png)
 
-### 6. 在线查看作业日志
-![](https://raw.githubusercontent.com/huzekang/picbed/master/20190708102445.png)
+### 6. 点击作业配置，创建作业
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119101258.png)
+
+### 7. 完成创建作业之后，点击同步任务，选择任务，点击启动，同时可以点击查看日志，实时获取日志信息
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119101431.png)
+
 
 ### QQ交流群 776939467

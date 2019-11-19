@@ -4,7 +4,7 @@
 - Language: Java 8
 - Environment: MacOS, 16G RAM
 - Database: Mysql5.7
-- Python2.7(支持Python3需要修改替换datax\bin下面的三个python文件，替换文件在doc/datax源码阅读笔记/datax-python3下)
+- Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax源码阅读笔记/datax-python3下)
 
 
 ## todo list

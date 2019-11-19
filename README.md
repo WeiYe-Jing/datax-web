@@ -1,7 +1,7 @@
 ![Java](https://woolson.gitee.io/npmer-badge/Java-555555-1.8-44cc11-check-ffffff-square-gradient-shadow.svg)
-![springboot](https://woolson.gitee.io/npmer-badge/springboot-555555-2.x-44cc11-check-ffffff-square-gradient-shadow.svg)
-![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
 ![](https://img.shields.io/badge/springboot-2.1.4.RELEASE-red.svg)
+![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
+
 ## preparation
 - Language: Java 8
 - Environment: MacOS, 16G RAM

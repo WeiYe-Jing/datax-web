@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Created by xuxueli on 16/7/22.
  */
+
 public class TriggerParam implements Serializable {
     private static final long serialVersionUID = 42L;
 
@@ -24,6 +25,8 @@ public class TriggerParam implements Serializable {
 
     private int broadcastIndex;
     private int broadcastTotal;
+
+    private String jobJson;
 
 
     public int getJobId() {
@@ -122,6 +125,13 @@ public class TriggerParam implements Serializable {
         this.broadcastTotal = broadcastTotal;
     }
 
+    public String getJobJson() {
+        return jobJson;
+    }
+
+    public void setJobJson(String jobJson) {
+        this.jobJson = jobJson;
+    }
 
     @Override
     public String toString() {
@@ -138,6 +148,7 @@ public class TriggerParam implements Serializable {
                 ", glueUpdatetime=" + glueUpdatetime +
                 ", broadcastIndex=" + broadcastIndex +
                 ", broadcastTotal=" + broadcastTotal +
+                ", jobJson=" + jobJson +
                 '}';
     }
 

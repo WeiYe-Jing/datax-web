@@ -123,6 +123,7 @@ public class XxlJobTrigger {
         triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
         triggerParam.setBroadcastIndex(index);
         triggerParam.setBroadcastTotal(total);
+        triggerParam.setJobJson(jobInfo.getJobJson());
 
         // 3、init address
         String address = null;

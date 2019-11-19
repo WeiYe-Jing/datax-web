@@ -10,10 +10,10 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-/*
- * 命令行任务
+/**
+ * DataX任务运行
  *
- * @author xuxueli 2018-09-16 03:48:34
+ * @author jingwk 2019-11-16
  */
 
 @JobHandler(value="commandJobHandler")

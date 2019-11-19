@@ -14,7 +14,7 @@
 * [x] 集成mybatis plus和Mysql数据库存放应用数据
 * [x] 网页端修改并持久化job配置的json到数据库
 * [x] 网页端实时查看抽取日志，类似Jenkins的日志控制台输出功能
-* [x] 实时查看抽取日志BUG功能修复2019-11-07
+* [x] 实时查看抽取日志BUG功能修复
 * [ ] job运行记录展示，页面操作停止datax作业（开发中）
 * [ ] 实现datax分布式作业（开发中）
 * [ ] 实现datax集成定时任务（开发中）
@@ -38,7 +38,7 @@
 etlLogDir: D:\temp\logs\datax-web\
 ```
 
-### 4. Idea启动 datax-admin
+### 4. idea启动 datax-admin
 
 ### 5. 启动成功后打开页面
 http://localhost:8080/index.html#/datax/job

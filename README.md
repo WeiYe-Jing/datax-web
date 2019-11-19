@@ -47,8 +47,10 @@ http://localhost:8080/index.html#/datax/job
 ### 6. 点击作业配置，创建作业
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119101258.png)
 
-### 7. 完成创建作业之后，点击同步任务，选择任务，点击启动，同时可以点击查看日志，实时获取日志信息
+### 7. 完成创建作业之后，点击同步任务，选择任务，点击启动
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119101431.png)
 
+### 7. 可以点击查看日志，实时获取日志信息
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119102551.png)
 
 ### QQ交流群 776939467

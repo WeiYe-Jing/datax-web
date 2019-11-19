@@ -38,14 +38,9 @@
 etlLogDir: D:\temp\logs\datax-web\
 ```
 
-### 4. 终端访问测试作业接口
-```
-curl http://localhost:8080/startJob
-```
-可以看到成功跑完一个datax作业
-![](https://raw.githubusercontent.com/peter1040080742/picbed/master/20190505162333.png)
+### 4. Idea启动 datax-admin
 
-### 5. 打开网页端启动作业
+### 5. 启动成功后打开页面
 http://localhost:8080/index.html#/datax/job
 ![](https://raw.githubusercontent.com/huzekang/picbed/master/20190617120207.png)
 

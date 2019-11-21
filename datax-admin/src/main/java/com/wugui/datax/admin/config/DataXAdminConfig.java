@@ -24,7 +24,7 @@ public class DataXAdminConfig implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         dataXAdminConfig =this;
     }
 

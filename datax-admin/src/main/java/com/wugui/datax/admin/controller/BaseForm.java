@@ -26,7 +26,7 @@ public class BaseForm<T> {
     /**
      * 查询参数对象
      */
-    protected Map<String, Object> values = new LinkedHashMap<String, Object>();
+    protected Map<String, Object> values = new LinkedHashMap<>();
 
     /**
      * 当前页码

@@ -1,8 +1,10 @@
-package com.wugui.datax.admin.util;
+package com.wugui.datatx.core.util;
 
 import com.sun.jna.Platform;
-import lombok.extern.slf4j.Slf4j;
+import com.wugui.datatx.core.thread.JobThread;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,8 +20,9 @@ import java.nio.charset.StandardCharsets;
  * @since 2019/11/09
  */
 
-@Slf4j
 public class ProcessUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(JobThread.class);
 
     public static String getProcessId(Process process) {
         long pid = -1;
@@ -30,7 +33,7 @@ public class ProcessUtil {
                 field.setAccessible(true);
                 pid = Kernel32.INSTANCE.GetProcessId((Long) field.get(process));
             } catch (Exception ex) {
-                log.error("get process id for windows error {0}", ex);
+                logger.error("get process id for windows error {0}", ex);
             }
         } else if (Platform.isLinux() || Platform.isAIX()) {
             try {
@@ -39,7 +42,7 @@ public class ProcessUtil {
                 field.setAccessible(true);
                 pid = (Integer) field.get(process);
             } catch (Throwable e) {
-                log.error("get process id for unix error {0}", e);
+                logger.error("get process id for unix error {0}", e);
             }
         }
         return String.valueOf(pid);
@@ -69,11 +72,11 @@ public class ProcessUtil {
             reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
             String line = null;
             while ((line = reader.readLine()) != null) {
-                log.info("kill pid return info:{}", line);
+                logger.info("kill pid return info:{}", line);
             }
             result = true;
         } catch (Exception e) {
-            log.error("kill pid error {0}", e);
+            logger.error("kill pid error {0}", e);
             result = false;
         } finally {
             if (process != null) {
@@ -83,7 +86,7 @@ public class ProcessUtil {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    log.error("reader close error {0}", e);
+                    logger.error("reader close error {0}", e);
                 }
             }
         }

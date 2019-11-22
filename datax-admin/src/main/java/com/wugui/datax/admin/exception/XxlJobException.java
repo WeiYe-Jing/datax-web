@@ -1,4 +1,4 @@
-package com.wugui.datax.admin.core.exception;
+package com.wugui.datax.admin.exception;
 
 /**
  * @author xuxueli 2019-05-04 23:19:29

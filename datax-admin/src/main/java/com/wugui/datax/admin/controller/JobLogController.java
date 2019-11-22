@@ -1,103 +1,221 @@
 package com.wugui.datax.admin.controller;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.api.ApiController;
-import com.baomidou.mybatisplus.extension.api.R;
-import com.wugui.datax.admin.log.LogResult;
-import com.wugui.datax.admin.service.IJobLogService;
-import com.wugui.datax.admin.util.PageUtils;
-import com.wugui.datax.admin.entity.JobLog;
+import com.wugui.datatx.core.biz.ExecutorBiz;
+import com.wugui.datatx.core.biz.model.LogResult;
+import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datatx.core.util.DateUtil;
+import com.wugui.datax.admin.core.conf.XxlJobScheduler;
+import com.wugui.datax.admin.exception.XxlJobException;
+import com.wugui.datax.admin.entity.XxlJobGroup;
+import com.wugui.datax.admin.entity.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobLog;
+import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
+import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
+import com.wugui.datax.admin.mapper.XxlJobLogMapper;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * ProcessUtil
- *
- * @author jingwk
- * @version 1.0
- * @since 2019/11/10
+ * index controller
+ * @author xuxueli 2015-12-19 16:13:16
  */
-
 @RestController
-@RequestMapping("log")
-@Api(tags = "datax日志接口")
-@Slf4j
-public class JobLogController extends ApiController {
+@RequestMapping("/joblog")
+@Api(tags = "任务运行日志接口")
+public class JobLogController {
+	private static Logger logger = LoggerFactory.getLogger(JobLogController.class);
 
-    @Autowired
-    private IJobLogService iJobLogService;
+	@Resource
+	private XxlJobGroupMapper xxlJobGroupMapper;
+	@Resource
+	public XxlJobInfoMapper xxlJobInfoMapper;
+	@Resource
+	public XxlJobLogMapper xxlJobLogMapper;
 
-    /**
-     * 根据日志路径查看详情
-     *
-     * @param logFilePath
-     * @param fromLineNum
-     * @return
-     */
-    @ApiOperation("查看任务抽取日志,logFilePath为日志路径，fromLineNum为读取的行数")
-    @GetMapping("/view")
-    public R<LogResult> viewJobLog(String logFilePath, int fromLineNum) {
-        return R.ok(iJobLogService.viewJobLog(logFilePath, fromLineNum));
-    }
+	@RequestMapping
+	public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId) {
 
-    /**
-     * 分页查询所有运行数据
-     *
-     * @return 列表
-     */
-    @GetMapping("/list")
-    @ApiOperation("分页查询所有运行数据")
-    @ApiImplicitParams(
-            {@ApiImplicitParam(paramType = "query", dataType = "String", name = "current", value = "当前页", defaultValue = "1", required = true),
-                    @ApiImplicitParam(paramType = "query", dataType = "String", name = "size", value = "一页大小", defaultValue = "10", required = true),
-                    @ApiImplicitParam(paramType = "query", dataType = "Boolean", name = "ifCount", value = "是否查询总数", defaultValue = "true"),
-                    @ApiImplicitParam(paramType = "query", dataType = "String", name = "ascs", value = "升序字段，多个用逗号分隔"),
-                    @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
-            })
-    public R selectAll() {
-        BaseForm<JobLog> baseForm = new BaseForm();
-        return success(this.iJobLogService.page(baseForm.getPlusPagingQueryEntity(), pageQueryWrapperCustom(baseForm.getParameters())));
-    }
+		// 执行器列表
+		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupMapper.findAll();
 
-    /**
-     * 自定义查询组装
-     *
-     * @param map
-     * @return
-     */
-    private QueryWrapper<JobLog> pageQueryWrapperCustom(Map<String, Object> map) {
-        // mybatis plus 分页相关的参数
-        Map<String, Object> pageHelperParams = PageUtils.filterPageParams(map);
-        log.info("分页相关的参数: {}", pageHelperParams);
-        //过滤空值，分页查询相关的参数
-        Map<String, Object> columnQueryMap = PageUtils.filterColumnQueryParams(map);
-        log.info("字段查询条件参数为: {}", columnQueryMap);
-        QueryWrapper<JobLog> queryWrapper = new QueryWrapper<>();
-        //排序 操作
-        pageHelperParams.forEach((k, v) -> {
-            switch (k) {
-                case "ascs":
-                    queryWrapper.orderByAsc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
-                    break;
-                case "descs":
-                    queryWrapper.orderByDesc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
-                    break;
+		// filter group
+		List<XxlJobGroup> jobGroupList = JobInfoController.filterJobGroupByRole(request, jobGroupList_all);
+		if (jobGroupList==null || jobGroupList.size()==0) {
+			throw new XxlJobException(I18nUtil.getString("jobgroup_empty"));
+		}
+
+		model.addAttribute("JobGroupList", jobGroupList);
+
+		// 任务
+		if (jobId > 0) {
+			XxlJobInfo jobInfo = xxlJobInfoMapper.loadById(jobId);
+			if (jobInfo == null) {
+				throw new RuntimeException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"));
+			}
+
+			model.addAttribute("jobInfo", jobInfo);
+
+			// valid permission
+			JobInfoController.validPermission(request, jobInfo.getJobGroup());
+		}
+
+		return "joblog/joblog.index";
+	}
+
+	@RequestMapping(value = "/getJobsByGroup",method = RequestMethod.POST)
+	public ReturnT<List<XxlJobInfo>> getJobsByGroup(int jobGroup){
+		List<XxlJobInfo> list = xxlJobInfoMapper.getJobsByGroup(jobGroup);
+		return new ReturnT<List<XxlJobInfo>>(list);
+	}
+	
+	@GetMapping("/pageList")
+	@ApiOperation("运行日志列表")
+	public Map<String, Object> pageList(HttpServletRequest request,
+                                        @RequestParam(required = false, defaultValue = "0") int start,
+                                        @RequestParam(required = false, defaultValue = "10") int length,
+                                        int jobGroup, int jobId, int logStatus, String filterTime) {
+
+		// valid permission
+		JobInfoController.validPermission(request, jobGroup);	// 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
+		
+		// parse param
+		Date triggerTimeStart = null;
+		Date triggerTimeEnd = null;
+		if (filterTime!=null && filterTime.trim().length()>0) {
+			String[] temp = filterTime.split(" - ");
+			if (temp!=null && temp.length == 2) {
+				triggerTimeStart = DateUtil.parseDateTime(temp[0]);
+				triggerTimeEnd = DateUtil.parseDateTime(temp[1]);
+			}
+		}
+		
+		// page query
+		List<XxlJobLog> list = xxlJobLogMapper.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		int list_count = xxlJobLogMapper.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		
+		// package result
+		Map<String, Object> maps = new HashMap<String, Object>();
+	    maps.put("recordsTotal", list_count);		// 总记录数
+	    maps.put("recordsFiltered", list_count);	// 过滤后的总记录数
+	    maps.put("data", list);  					// 分页列表
+		return maps;
+	}
+
+	@RequestMapping("/logDetailPage")
+	public String logDetailPage(int id, Model model){
+
+		// base check
+		ReturnT<String> logStatue = ReturnT.SUCCESS;
+		XxlJobLog jobLog = xxlJobLogMapper.load(id);
+		if (jobLog == null) {
+            throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
+		}
+
+        model.addAttribute("triggerCode", jobLog.getTriggerCode());
+        model.addAttribute("handleCode", jobLog.getHandleCode());
+        model.addAttribute("executorAddress", jobLog.getExecutorAddress());
+        model.addAttribute("triggerTime", jobLog.getTriggerTime().getTime());
+        model.addAttribute("logId", jobLog.getId());
+		return "joblog/joblog.detail";
+	}
+
+	@RequestMapping(value ="/logDetailCat",method = RequestMethod.GET)
+	@ApiOperation("运行日志详情")
+	public ReturnT<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum){
+		try {
+			ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(executorAddress);
+			ReturnT<LogResult> logResult = executorBiz.log(triggerTime, logId, fromLineNum);
+
+			// is end
+            if (logResult.getContent()!=null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
+                XxlJobLog jobLog = xxlJobLogMapper.load(logId);
+                if (jobLog.getHandleCode() > 0) {
+                    logResult.getContent().setEnd(true);
+                }
             }
-        });
-        //遍历进行字段查询条件组装
-        columnQueryMap.forEach((k, v) -> {
-            queryWrapper.eq(StrUtil.toUnderlineCase(k), v);
-        });
-        return queryWrapper;
-    }
+			return logResult;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new ReturnT<LogResult>(ReturnT.FAIL_CODE, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value="/logKill",method = RequestMethod.POST)
+	@ApiOperation("kill任务")
+	public ReturnT<String> logKill(int id){
+		// base check
+		XxlJobLog log = xxlJobLogMapper.load(id);
+		XxlJobInfo jobInfo = xxlJobInfoMapper.loadById(log.getJobId());
+		if (jobInfo==null) {
+			return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+		}
+		if (ReturnT.SUCCESS_CODE != log.getTriggerCode()) {
+			return new ReturnT<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
+		}
+
+		// request of kill
+		ReturnT<String> runResult = null;
+		try {
+			ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
+			runResult = executorBiz.kill(jobInfo.getId());
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			runResult = new ReturnT<String>(500, e.getMessage());
+		}
+
+		if (ReturnT.SUCCESS_CODE == runResult.getCode()) {
+			log.setHandleCode(ReturnT.FAIL_CODE);
+			log.setHandleMsg( I18nUtil.getString("joblog_kill_log_byman")+":" + (runResult.getMsg()!=null?runResult.getMsg():""));
+			log.setHandleTime(new Date());
+			xxlJobLogMapper.updateHandleInfo(log);
+			return new ReturnT<String>(runResult.getMsg());
+		} else {
+			return new ReturnT<String>(500, runResult.getMsg());
+		}
+	}
+
+	@RequestMapping(value = "/clearLog",method = RequestMethod.POST)
+	@ApiOperation("清理日志")
+	public ReturnT<String> clearLog(int jobGroup, int jobId, int type){
+
+		Date clearBeforeTime = null;
+		int clearBeforeNum = 0;
+		if (type == 1) {
+			clearBeforeTime = DateUtil.addMonths(new Date(), -1);	// 清理一个月之前日志数据
+		} else if (type == 2) {
+			clearBeforeTime = DateUtil.addMonths(new Date(), -3);	// 清理三个月之前日志数据
+		} else if (type == 3) {
+			clearBeforeTime = DateUtil.addMonths(new Date(), -6);	// 清理六个月之前日志数据
+		} else if (type == 4) {
+			clearBeforeTime = DateUtil.addYears(new Date(), -1);	// 清理一年之前日志数据
+		} else if (type == 5) {
+			clearBeforeNum = 1000;		// 清理一千条以前日志数据
+		} else if (type == 6) {
+			clearBeforeNum = 10000;		// 清理一万条以前日志数据
+		} else if (type == 7) {
+			clearBeforeNum = 30000;		// 清理三万条以前日志数据
+		} else if (type == 8) {
+			clearBeforeNum = 100000;	// 清理十万条以前日志数据
+		} else if (type == 9) {
+			clearBeforeNum = 0;			// 清理所有日志数据
+		} else {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
+		}
+
+		xxlJobLogMapper.clearLog(jobGroup, jobId, clearBeforeTime, clearBeforeNum);
+		return ReturnT.SUCCESS;
+	}
+
 }

@@ -1,7 +1,6 @@
 package com.wugui.datax.admin.controller;
 
 import com.wugui.datatx.core.biz.AdminBiz;
-import com.wugui.datax.admin.annotation.PermissionLimit;
 import com.wugui.datax.admin.core.conf.XxlJobScheduler;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ public class JobApiController implements InitializingBean {
     }
 
     @RequestMapping(AdminBiz.MAPPING)
-    @PermissionLimit(limit=false)
     public void api(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         XxlJobScheduler.invokeAdminService(request, response);
     }

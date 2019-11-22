@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.XxlJobLogMapper">
 	
-	<resultMap id="XxlJobLog" type="com.wugui.datax.admin.core.model.XxlJobLog" >
+	<resultMap id="XxlJobLog" type="com.wugui.datax.admin.entity.XxlJobLog" >
 		<result column="id" property="id" />
 
 		<result column="job_group" property="jobGroup" />
@@ -24,6 +24,8 @@
 	    <result column="handle_msg" property="handleMsg" />
 
 		<result column="alarm_status" property="alarmStatus" />
+
+		<result column="pid" property="pid" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -41,7 +43,8 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
-		t.alarm_status
+		t.alarm_status,
+		t.pid
 	</sql>
 	
 	<select id="pageList" resultMap="XxlJobLog">
@@ -117,7 +120,7 @@
 	</select>
 
 	
-	<insert id="save" parameterType="com.wugui.datax.admin.core.model.XxlJobLog" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="save" parameterType="com.wugui.datax.admin.entity.XxlJobLog" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO xxl_job_log (
 			`job_group`,
 			`job_id`,

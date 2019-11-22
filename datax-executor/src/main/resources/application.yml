@@ -1,0 +1,29 @@
+# web port
+server:
+  port: 8081
+
+# log config
+logging:
+  config: classpath:logback.xml
+
+
+### datax admin address list, such as "http://address" or "http://address01,http://address02"
+xxl:
+  job:
+    admin:
+      ### xxl-job executor address
+      addresses: http://127.0.0.1:8080
+    executor:
+      appname: datax-executor
+      ip:
+      port: 9999
+      ### xxl-job log path
+      logpath: /data/applogs/xxl-job/jobhandler
+      ### xxl-job log retention days
+      logretentiondays: -1
+    ### xxl-job, access token
+    accessToken:
+
+datax:
+  executor:
+    jsonpath: D:\\temp\\datax\\json\\

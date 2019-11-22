@@ -31,7 +31,7 @@ public class ExecutorBizImplTest {
         // init executor
         xxlJobExecutor = new XxlJobExecutor();
         xxlJobExecutor.setAdminAddresses(null);
-        xxlJobExecutor.setAppName("xxl-job-executor-sample");
+        xxlJobExecutor.setAppName("datax-executor");
         xxlJobExecutor.setIp(null);
         xxlJobExecutor.setPort(9999);
         xxlJobExecutor.setAccessToken(null);

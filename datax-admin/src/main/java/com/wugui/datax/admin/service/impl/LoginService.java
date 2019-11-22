@@ -1,12 +1,16 @@
 package com.wugui.datax.admin.service.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.admin.core.model.XxlJobUser;
+import com.wugui.datax.admin.entity.JwtUser;
+import com.wugui.datax.admin.entity.XxlJobUser;
 import com.wugui.datax.admin.core.util.CookieUtil;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.core.util.JacksonUtil;
 import com.wugui.datax.admin.mapper.XxlJobUserMapper;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -18,7 +22,7 @@ import java.math.BigInteger;
  * @author xuxueli 2019-05-04 22:13:264
  */
 @Configuration
-public class LoginService {
+public class LoginService implements UserDetailsService {
 
     public static final String LOGIN_IDENTITY_KEY = "XXL_JOB_LOGIN_IDENTITY";
 
@@ -104,4 +108,9 @@ public class LoginService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        XxlJobUser user = xxlJobUserMapper.loadByUserName(s);
+        return new JwtUser(user);
+    }
 }

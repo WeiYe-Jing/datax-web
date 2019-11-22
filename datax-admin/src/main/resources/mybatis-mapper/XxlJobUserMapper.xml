@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.XxlJobUserMapper">
 
-	<resultMap id="XxlJobUser" type="com.wugui.datax.admin.core.model.XxlJobUser" >
+	<resultMap id="XxlJobUser" type="com.wugui.datax.admin.entity.XxlJobUser" >
 		<result column="id" property="id" />
 		<result column="username" property="username" />
 	    <result column="password" property="password" />
@@ -53,7 +53,7 @@
 		WHERE t.username = #{username}
 	</select>
 
-	<insert id="save" parameterType="com.wugui.datax.admin.core.model.XxlJobUser" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="save" parameterType="com.wugui.datax.admin.entity.XxlJobUser" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO xxl_job_user (
 			username,
 			password,
@@ -67,7 +67,7 @@
 		);
 	</insert>
 
-	<update id="update" parameterType="com.wugui.datax.admin.core.model.XxlJobUser" >
+	<update id="update" parameterType="com.wugui.datax.admin.entity.XxlJobUser" >
 		UPDATE xxl_job_user
 		SET
 			<if test="password != null and password != ''">

@@ -5,8 +5,8 @@ import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
-import com.wugui.datax.admin.core.model.XxlJobInfo;
-import com.wugui.datax.admin.core.model.XxlJobLog;
+import com.wugui.datax.admin.entity.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobLog;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
@@ -53,6 +53,11 @@ public class AdminBizImpl implements AdminBiz {
         return ReturnT.SUCCESS;
     }
 
+    /**
+     * 根据执行结果更新log信息
+     * @param handleCallbackParam
+     * @return
+     */
     private ReturnT<String> callback(HandleCallbackParam handleCallbackParam) {
         // valid log item
         XxlJobLog log = xxlJobLogMapper.load(handleCallbackParam.getLogId());

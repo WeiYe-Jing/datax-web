@@ -2,7 +2,7 @@ package com.wugui.datax.admin.core.thread;
 
 import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
 import com.wugui.datax.admin.core.cron.CronExpression;
-import com.wugui.datax.admin.core.model.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class JobScheduleHelper {
                         conn = XxlJobAdminConfig.getAdminConfig().getDataSource().getConnection();
                         connAutoCommit = conn.getAutoCommit();
                         conn.setAutoCommit(false);
-
+                        //lock
                         preparedStatement = conn.prepareStatement(  "select * from xxl_job_lock where lock_name = 'schedule_lock' for update" );
                         preparedStatement.execute();
 

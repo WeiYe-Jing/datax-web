@@ -2,7 +2,13 @@
 ![](https://img.shields.io/badge/springboot-2.1.4.RELEASE-red.svg)
 ![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
 
+## 前言
+
+DataX阿里的开源的时候并未提供任何可视化界面，我们在使用的过程中，需要将Json配置文件放到Datax的job路径下，随着业务的增加，配置文件不方便管理和迁移并且每次执行都需要记录命令。
+目前DataX只支持单机版，多节点之间的协作不能控制，我们希望存在一款有友好的可视化界面，支持定时任务,支持分布式的数据同步利器，这也是该项目的目标。
+
 ## preparation
+
 - Language: Java 8
 - Environment: MacOS, Windows,Linux
 - Database: Mysql5.7
@@ -25,8 +31,11 @@
 
 
 ## 前端项目
+
 [github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
+
 ## how to run
+
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包，配置环境变量
 ```
  DATAX_HOME=G:\learndemo\springboot-datax\datax\bin
@@ -52,7 +61,7 @@ http://localhost:8080/index.html#/datax/job
 ### 7. 完成创建作业之后，点击同步任务，选择任务，点击启动
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119101431.png)
 
-### 7. 可以点击查看日志，实时获取日志信息
+### 8. 可以点击查看日志，实时获取日志信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119102551.png)
 
 ### QQ交流群 776939467

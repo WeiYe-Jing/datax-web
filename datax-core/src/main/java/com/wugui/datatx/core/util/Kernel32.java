@@ -1,4 +1,4 @@
-package com.wugui.datax.admin.util;
+package com.wugui.datatx.core.util;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;

@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.mapper;
 
-import com.wugui.datax.admin.core.model.XxlJobLog;
+import com.wugui.datax.admin.entity.XxlJobLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

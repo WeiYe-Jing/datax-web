@@ -4,10 +4,10 @@ package com.wugui.datax.admin.controller;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
-import com.wugui.datax.admin.core.exception.XxlJobException;
-import com.wugui.datax.admin.core.model.XxlJobGroup;
-import com.wugui.datax.admin.core.model.XxlJobInfo;
-import com.wugui.datax.admin.core.model.XxlJobUser;
+import com.wugui.datax.admin.exception.XxlJobException;
+import com.wugui.datax.admin.entity.XxlJobGroup;
+import com.wugui.datax.admin.entity.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobUser;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
@@ -15,6 +15,8 @@ import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
 import com.wugui.datax.admin.service.XxlJobService;
 import com.wugui.datax.admin.service.impl.LoginService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +32,17 @@ import java.util.Map;
  *
  * @author xuxueli 2015-12-19 16:13:16
  */
+@Api(tags = "任务配置接口")
 @RestController
 @RequestMapping("/jobinfo")
 public class JobInfoController {
 
     @Resource
-    private XxlJobGroupMapper xxlJobGroupDao;
+    private XxlJobGroupMapper xxlJobGroupMapper;
     @Resource
     private XxlJobService xxlJobService;
 
-    @RequestMapping
+    @RequestMapping(method = RequestMethod.POST)
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
 
         // 枚举-字典
@@ -48,7 +51,7 @@ public class JobInfoController {
         model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategyEnum.values());    // 阻塞处理策略-字典
 
         // 执行器列表
-        List<XxlJobGroup> jobGroupList_all = xxlJobGroupDao.findAll();
+        List<XxlJobGroup> jobGroupList_all = xxlJobGroupMapper.findAll();
 
         // filter group
         List<XxlJobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
@@ -66,7 +69,7 @@ public class JobInfoController {
         List<XxlJobGroup> jobGroupList = new ArrayList<>();
         if (jobGroupList_all != null && jobGroupList_all.size() > 0) {
             XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-            if (loginUser.getRole() == 1) {
+            if ("1".equals(loginUser.getRole())) {
                 jobGroupList = jobGroupList_all;
             } else {
                 List<String> groupIdStrs = new ArrayList<>();
@@ -90,8 +93,8 @@ public class JobInfoController {
         }
     }
 
-    @RequestMapping("/pageList")
-    @ResponseBody
+    @GetMapping("/pageList")
+    @ApiOperation("任务列表")
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
@@ -100,43 +103,42 @@ public class JobInfoController {
     }
 
     @PostMapping("/add")
+    @ApiOperation("添加任务")
     public ReturnT<String> add(@RequestBody XxlJobInfo jobInfo) {
         return xxlJobService.add(jobInfo);
     }
 
-    @RequestMapping("/update")
-    @ResponseBody
-    public ReturnT<String> update(XxlJobInfo jobInfo) {
+    @PostMapping("/update")
+    @ApiOperation("更新任务")
+    public ReturnT<String> update(@RequestBody XxlJobInfo jobInfo) {
         return xxlJobService.update(jobInfo);
     }
 
-    @RequestMapping("/remove")
-    @ResponseBody
+    @RequestMapping(value = "/remove",method = RequestMethod.POST)
+    @ApiOperation("移除任务")
     public ReturnT<String> remove(int id) {
         return xxlJobService.remove(id);
     }
 
-    @RequestMapping("/stop")
-    @ResponseBody
+    @RequestMapping(value = "/stop",method = RequestMethod.POST)
+    @ApiOperation("停止任务")
     public ReturnT<String> pause(int id) {
         return xxlJobService.stop(id);
     }
 
-    @RequestMapping("/start")
-    @ResponseBody
+    @RequestMapping(value = "/start",method = RequestMethod.POST)
+    @ApiOperation("开启任务")
     public ReturnT<String> start(int id) {
         return xxlJobService.start(id);
     }
 
-    @RequestMapping("/trigger")
-    @ResponseBody
-    //@PermissionLimit(limit = false)
+    @RequestMapping(value = "/trigger",method = RequestMethod.POST)
+    @ApiOperation("触发任务")
     public ReturnT<String> triggerJob(int id, String executorParam) {
         // force cover job param
         if (executorParam == null) {
             executorParam = "";
         }
-
         JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam);
         return ReturnT.SUCCESS;
     }

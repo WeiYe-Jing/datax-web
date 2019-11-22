@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.mapper;
 
-import com.wugui.datax.admin.core.model.XxlJobRegistry;
+import com.wugui.datax.admin.entity.XxlJobRegistry;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

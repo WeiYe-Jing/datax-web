@@ -29,5 +29,9 @@ public class GlueJobHandler extends IJobHandler {
 		return jobHandler.execute(param);
 	}
 
+	@Override
+	public ReturnT<String> executeDataX(String jobJson) throws Exception {
+		return null;
+	}
 }
 

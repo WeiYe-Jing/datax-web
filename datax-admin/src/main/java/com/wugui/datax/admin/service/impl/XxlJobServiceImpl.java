@@ -5,8 +5,8 @@ import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
-import com.wugui.datax.admin.core.model.XxlJobGroup;
-import com.wugui.datax.admin.core.model.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobGroup;
+import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
@@ -276,7 +276,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 	}
 
 	@Override
-	public Map<String, Object> dashboardInfo() {
+	public ReturnT<Map<String, Object>> dashboardInfo() {
 
 		int jobInfoCount = xxlJobInfoMapper.findAllCount();
 		int jobLogCount = xxlJobLogMapper.triggerCountByHandleCode(-1);
@@ -301,7 +301,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 		dashboardMap.put("jobLogCount", jobLogCount);
 		dashboardMap.put("jobLogSuccessCount", jobLogSuccessCount);
 		dashboardMap.put("executorCount", executorCount);
-		return dashboardMap;
+		return new ReturnT<Map<String, Object>>(dashboardMap);
 	}
 
 	private static final String TRIGGER_CHART_DATA_CACHE = "trigger_chart_data_cache";

@@ -2,9 +2,9 @@ package com.wugui.datax.admin.core.thread;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
-import com.wugui.datax.admin.core.model.XxlJobGroup;
-import com.wugui.datax.admin.core.model.XxlJobInfo;
-import com.wugui.datax.admin.core.model.XxlJobLog;
+import com.wugui.datax.admin.entity.XxlJobGroup;
+import com.wugui.datax.admin.entity.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobLog;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import org.slf4j.Logger;

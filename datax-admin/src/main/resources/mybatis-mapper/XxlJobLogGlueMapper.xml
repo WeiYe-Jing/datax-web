@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.XxlJobLogGlueMapper">
 	
-	<resultMap id="XxlJobLogGlue" type="com.wugui.datax.admin.core.model.XxlJobLogGlue" >
+	<resultMap id="XxlJobLogGlue" type="com.wugui.datax.admin.entity.XxlJobLogGlue" >
 		<result column="id" property="id" />
 	    <result column="job_id" property="jobId" />
 		<result column="glue_type" property="glueType" />
@@ -23,7 +23,7 @@
 		t.update_time
 	</sql>
 	
-	<insert id="save" parameterType="com.wugui.datax.admin.core.model.XxlJobLogGlue" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="save" parameterType="com.wugui.datax.admin.entity.XxlJobLogGlue" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO xxl_job_logglue (
 			`job_id`,
 			`glue_type`,

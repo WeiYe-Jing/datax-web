@@ -1,5 +1,6 @@
-package com.wugui.datax.admin.core.model;
+package com.wugui.datax.admin.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.util.StringUtils;
 
 /**
@@ -8,10 +9,14 @@ import org.springframework.util.StringUtils;
 public class XxlJobUser {
 	
 	private int id;
-	private String username;		// 账号
-	private String password;		// 密码
-	private int role;				// 角色：0-普通用户、1-管理员
-	private String permission;	// 权限：执行器ID列表，多个逗号分割
+	@ApiModelProperty("账号")
+	private String username;
+	@ApiModelProperty("密码")
+	private String password;
+	@ApiModelProperty("角色：0-普通用户、1-管理员")
+	private String role;
+	@ApiModelProperty("权限：执行器ID列表，多个逗号分割")
+	private String permission;
 
 	public int getId() {
 		return id;
@@ -37,11 +42,11 @@ public class XxlJobUser {
 		this.password = password;
 	}
 
-	public int getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(int role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
@@ -55,7 +60,7 @@ public class XxlJobUser {
 
 	// plugin
 	public boolean validPermission(int jobGroup){
-		if (this.role == 1) {
+		if ("1".equals(this.role)) {
 			return true;
 		} else {
 			if (StringUtils.hasText(this.permission)) {

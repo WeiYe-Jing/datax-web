@@ -2,8 +2,8 @@ package com.wugui.datax.admin.core.thread;
 
 import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
-import com.wugui.datax.admin.core.model.XxlJobGroup;
-import com.wugui.datax.admin.core.model.XxlJobRegistry;
+import com.wugui.datax.admin.entity.XxlJobGroup;
+import com.wugui.datax.admin.entity.XxlJobRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

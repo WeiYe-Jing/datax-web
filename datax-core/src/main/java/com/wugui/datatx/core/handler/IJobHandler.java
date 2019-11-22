@@ -29,6 +29,16 @@ public abstract class IJobHandler {
 
 
 	/**
+	 * execute handler, invoked when executor receives a scheduling request
+	 *
+	 * @param jobJson
+	 * @param jobJson
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract ReturnT<String> executeDataX(String jobJson) throws Exception;
+
+	/**
 	 * init handler, invoked when JobThread init
 	 */
 	public void init() {

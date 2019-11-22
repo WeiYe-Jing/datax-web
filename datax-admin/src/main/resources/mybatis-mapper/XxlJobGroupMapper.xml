@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.XxlJobGroupMapper">
 
-	<resultMap id="XxlJobGroup" type="com.wugui.datax.admin.core.model.XxlJobGroup" >
+	<resultMap id="XxlJobGroup" type="com.wugui.datax.admin.entity.XxlJobGroup" >
 		<result column="id" property="id" />
 	    <result column="app_name" property="appName" />
 	    <result column="title" property="title" />
@@ -34,12 +34,12 @@
 		ORDER BY t.order ASC
 	</select>
 
-	<insert id="save" parameterType="com.wugui.datax.admin.core.model.XxlJobGroup" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="save" parameterType="com.wugui.datax.admin.entity.XxlJobGroup" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO xxl_job_group ( `app_name`, `title`, `order`, `address_type`, `address_list`)
 		values ( #{appName}, #{title}, #{order}, #{addressType}, #{addressList});
 	</insert>
 
-	<update id="update" parameterType="com.wugui.datax.admin.core.model.XxlJobGroup" >
+	<update id="update" parameterType="com.wugui.datax.admin.entity.XxlJobGroup" >
 		UPDATE xxl_job_group
 		SET `app_name` = #{appName},
 			`title` = #{title},

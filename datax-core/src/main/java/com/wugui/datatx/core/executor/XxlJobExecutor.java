@@ -80,7 +80,7 @@ public class XxlJobExecutor  {
         // init TriggerCallbackThread
         TriggerCallbackThread.getInstance().start();
 
-        // init executor-server
+        // init executor-server 执行器初始化rpc
         port = port>0?port: NetUtil.findAvailablePort(9999);
         ip = (ip!=null&&ip.trim().length()>0)?ip: IpUtil.getIp();
         initRpcProvider(ip, port, appName, accessToken);

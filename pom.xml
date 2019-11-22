@@ -40,10 +40,15 @@
 
         <mybatisplus.version>3.0.7.1</mybatisplus.version>
         <swagger.version>2.9.2</swagger.version>
+        <swagger-models.version>1.5.21</swagger-models.version>
 
         <spring.version>4.3.24.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
         <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
+
+        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+
+        <jjwt.version>0.9.0</jjwt.version>
     </properties>
 
     <modules>

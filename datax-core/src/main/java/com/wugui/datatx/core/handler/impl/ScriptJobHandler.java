@@ -89,4 +89,9 @@ public class ScriptJobHandler extends IJobHandler {
 
     }
 
+    @Override
+    public ReturnT<String> executeDataX(String jobJson) throws Exception {
+        return null;
+    }
+
 }

@@ -2,7 +2,7 @@ package com.wugui.datax.admin.service;
 
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.admin.core.model.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobInfo;
 
 import java.util.Date;
 import java.util.Map;
@@ -72,7 +72,7 @@ public interface XxlJobService {
 	 *
 	 * @return
 	 */
-	public Map<String, Object> dashboardInfo();
+	public ReturnT<Map<String, Object>> dashboardInfo();
 
 	/**
 	 * chart info

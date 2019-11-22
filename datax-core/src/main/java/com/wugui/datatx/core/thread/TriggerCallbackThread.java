@@ -163,6 +163,10 @@ public class TriggerCallbackThread {
         // callback, will retry if error
         for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
             try {
+                // 这里的adminBiz 调用的callback方法，因为是通过NetComClientProxy 这个factoryBean创建的代理对象，
+                // 在getObject方法中，最终是没有调用的目标类方法的invoke的。  只是将目标类的方法名，参数，类名，等信息发送给调度中心了
+                // 发送的地址调度中心的接口地址是 ：“调度中心IP/api” 这个接口 。 这个是在执行器启动的时候初始化设置好的。
+                // 调度中心的API接口拿到请求之后，通过参数里面的类名，方法，参数，反射出来一个对象，然后invoke， 最终将结果写入数据库
                 ReturnT<String> callbackResult = adminBiz.callback(callbackParamList);
                 if (callbackResult!=null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
                     callbackLog(callbackParamList, "<br>----------- xxl-job job callback finish.");

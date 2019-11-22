@@ -5,7 +5,7 @@ import com.wugui.datatx.core.biz.model.LogResult;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
-import com.wugui.datatx.core.executor.XxlJobExecutor;
+import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.xxl.rpc.remoting.invoker.call.CallType;
 import com.xxl.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
@@ -22,14 +22,14 @@ import java.util.concurrent.TimeUnit;
 
 public class ExecutorBizImplTest {
 
-    public XxlJobExecutor xxlJobExecutor = null;
+    public JobExecutor xxlJobExecutor = null;
     public ExecutorBiz executorBiz = null;
 
     @Before
     public void before() throws Exception {
 
         // init executor
-        xxlJobExecutor = new XxlJobExecutor();
+        xxlJobExecutor = new JobExecutor();
         xxlJobExecutor.setAdminAddresses(null);
         xxlJobExecutor.setAppName("xxl-job-executor-sample");
         xxlJobExecutor.setIp(null);

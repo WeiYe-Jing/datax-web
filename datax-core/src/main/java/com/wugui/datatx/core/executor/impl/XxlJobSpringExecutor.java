@@ -1,6 +1,6 @@
 package com.wugui.datatx.core.executor.impl;
 
-import com.wugui.datatx.core.executor.XxlJobExecutor;
+import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.glue.GlueFactory;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author xuxueli 2018-11-01 09:24:52
  */
-public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationContextAware {
+public class XxlJobSpringExecutor extends JobExecutor implements ApplicationContextAware {
 
 
     @Override

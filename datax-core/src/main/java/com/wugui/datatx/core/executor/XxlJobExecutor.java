@@ -4,7 +4,7 @@ import com.wugui.datatx.core.biz.AdminBiz;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.impl.ExecutorBizImpl;
 import com.wugui.datatx.core.handler.IJobHandler;
-import com.wugui.datatx.core.log.XxlJobFileAppender;
+import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.thread.ExecutorRegistryThread;
 import com.wugui.datatx.core.thread.JobLogFileCleanThread;
 import com.wugui.datatx.core.thread.JobThread;
@@ -74,7 +74,7 @@ public class XxlJobExecutor {
     public void start() throws Exception {
 
         // init logpath
-        XxlJobFileAppender.initLogPath(logPath);
+        JobFileAppender.initLogPath(logPath);
 
         // init invoker, admin-client
         initAdminBizList(adminAddresses, accessToken);

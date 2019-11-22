@@ -3,7 +3,7 @@ package com.wugui.datatx.core.handler.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
-import com.wugui.datatx.core.log.XxlJobLogger;
+import com.wugui.datatx.core.log.JobLogger;
 
 
 /**
@@ -25,7 +25,7 @@ public class GlueJobHandler extends IJobHandler {
 
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
-		XxlJobLogger.log("----------- glue.version:"+ glueUpdatetime +" -----------");
+		JobLogger.log("----------- glue.version:"+ glueUpdatetime +" -----------");
 		return jobHandler.execute(param);
 	}
 

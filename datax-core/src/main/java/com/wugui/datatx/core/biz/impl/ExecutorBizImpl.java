@@ -11,7 +11,7 @@ import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.impl.GlueJobHandler;
 import com.wugui.datatx.core.handler.impl.ScriptJobHandler;
-import com.wugui.datatx.core.log.XxlJobFileAppender;
+import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.thread.JobThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +59,8 @@ public class ExecutorBizImpl implements ExecutorBiz {
     @Override
     public ReturnT<LogResult> log(long logDateTim, long logId, int fromLineNum) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logDateTim), logId);
-        LogResult logResult = XxlJobFileAppender.readLog(logFileName, fromLineNum);
+        String logFileName = JobFileAppender.mkLogFileName(new Date(logDateTim), logId);
+        LogResult logResult = JobFileAppender.read(logFileName, fromLineNum);
         return new ReturnT<>(logResult);
     }
 

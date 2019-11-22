@@ -3,7 +3,7 @@ package com.wugui.datax.executor.service.jobhandler;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
-import com.wugui.datatx.core.log.XxlJobLogger;
+import com.wugui.datatx.core.log.JobLogger;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedInputStream;
@@ -35,14 +35,14 @@ public class CommandJobHandler extends IJobHandler {
             // command log
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                XxlJobLogger.log(line);
+                JobLogger.log(line);
             }
 
             // command exit
             process.waitFor();
             exitValue = process.exitValue();
         } catch (Exception e) {
-            XxlJobLogger.log(e);
+            JobLogger.log(e);
         } finally {
             if (bufferedReader != null) {
                 bufferedReader.close();

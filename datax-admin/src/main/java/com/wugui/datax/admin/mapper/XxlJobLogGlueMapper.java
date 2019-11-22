@@ -8,17 +8,18 @@ import java.util.List;
 
 /**
  * job log for glue
+ *
  * @author xuxueli 2016-5-19 18:04:56
  */
 @Mapper
 public interface XxlJobLogGlueMapper {
-	
-	public int save(XxlJobLogGlue xxlJobLogGlue);
-	
-	public List<XxlJobLogGlue> findByJobId(@Param("jobId") int jobId);
 
-	public int removeOld(@Param("jobId") int jobId, @Param("limit") int limit);
+    int save(XxlJobLogGlue xxlJobLogGlue);
 
-	public int deleteByJobId(@Param("jobId") int jobId);
-	
+    List<XxlJobLogGlue> findByJobId(@Param("jobId") int jobId);
+
+    int removeOld(@Param("jobId") int jobId, @Param("limit") int limit);
+
+    int deleteByJobId(@Param("jobId") int jobId);
+
 }

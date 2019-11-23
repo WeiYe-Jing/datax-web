@@ -102,7 +102,7 @@ public class BaseForm<T> {
      */
     public Object get(String name) {
         if (values == null) {
-            values = new LinkedHashMap<String, Object>();
+            values = new LinkedHashMap<>();
             return null;
         }
         return this.values.get(name);
@@ -167,11 +167,11 @@ public class BaseForm<T> {
      */
     public void parsePagingQueryParams() {
         // 排序字段解析
-        String orderby = StrUtil.toString(this.get("orderby")).trim();
+        String orderBy = StrUtil.toString(this.get("orderby")).trim();
         String sortName = StrUtil.toString(this.get("sort")).trim();
         String sortOrder = StrUtil.toString(this.get("order")).trim().toLowerCase();
 
-        if (StrUtil.isEmpty(orderby) && !StrUtil.isEmpty(sortName)) {
+        if (StrUtil.isEmpty(orderBy) && !StrUtil.isEmpty(sortName)) {
             if (!sortOrder.equals("asc") && !sortOrder.equals("desc")) {
                 sortOrder = "asc";
             }

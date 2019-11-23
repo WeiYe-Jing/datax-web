@@ -1,6 +1,6 @@
 package com.wugui.datatx.core.util;
 
-import com.wugui.datatx.core.log.XxlJobLogger;
+import com.wugui.datatx.core.log.JobLogger;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -80,14 +80,14 @@ public class ScriptUtil {
             int exitValue = exec.execute(commandline);  // exit code: 0=success, 1=error
             return exitValue;
         } catch (Exception e) {
-            XxlJobLogger.log(e);
+            JobLogger.log(e);
             return -1;
         } finally {
             if (fileOutputStream != null) {
                 try {
                     fileOutputStream.close();
                 } catch (IOException e) {
-                    XxlJobLogger.log(e);
+                    JobLogger.log(e);
                 }
 
             }

@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
-import com.wugui.datatx.core.log.XxlJobLogger;
+import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.util.ProcessUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,23 +39,23 @@ public class CommandJobHandler extends IJobHandler {
             // command process
             Process process = Runtime.getRuntime().exec(new String[]{"python", getDataXPyPath(), tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
-            XxlJobLogger.log("------------------DataX运行进程Id: " + processId);
+            JobLogger.log("------------------DataX运行进程Id: " + processId);
             InputStreamReader input = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(input);
             while ((line = bufferedReader.readLine()) != null) {
-                XxlJobLogger.log(line);
+                JobLogger.log(line);
             }
 
             InputStreamReader error = new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(error);
             while ((line = bufferedReader.readLine()) != null) {
-                XxlJobLogger.log(line);
+                JobLogger.log(line);
             }
             // command exit
             process.waitFor();
             exitValue = process.exitValue();
         } catch (Exception e) {
-            XxlJobLogger.log(e);
+            JobLogger.log(e);
         } finally {
             if (bufferedReader != null) {
                 bufferedReader.close();
@@ -83,7 +83,7 @@ public class CommandJobHandler extends IJobHandler {
         try (PrintWriter writer = new PrintWriter(tmpFilePath, "UTF-8")) {
             writer.println(jobJson);
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            XxlJobLogger.log("JSON 临时文件写入异常：" + e.getMessage());
+            JobLogger.log("JSON 临时文件写入异常：" + e.getMessage());
         }
         return tmpFilePath;
     }
@@ -93,7 +93,7 @@ public class CommandJobHandler extends IJobHandler {
         String dataxPyPath;
         String dataXHome = System.getenv("DATAX_HOME");
         if (StringUtils.isBlank(dataXHome)) {
-            XxlJobLogger.log("DATAX_HOME 环境变量为NULL");
+            JobLogger.log("DATAX_HOME 环境变量为NULL");
         }
         String osName = System.getProperty("os.name");
         dataXHome = osName.contains("Windows") ? (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) : (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);

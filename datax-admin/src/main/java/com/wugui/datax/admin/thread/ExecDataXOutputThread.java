@@ -38,7 +38,7 @@ public class ExecDataXOutputThread extends Thread {
         try {
             InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(isr);
-            String line = null;
+            String line;
             int handleCode = HandleCodeEnum.SUCCESS.getValue();
             while ((line = br.readLine()) != null) {
                 EtlJobFileAppender.appendLog(logFilePath, line);

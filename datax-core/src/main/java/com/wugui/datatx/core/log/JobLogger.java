@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by xuxueli on 17/4/28.
  */
-public class XxlJobLogger {
+public class JobLogger {
     private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
 
     /**
@@ -37,10 +37,9 @@ public class XxlJobLogger {
             .append(appendLog!=null?appendLog:"");
         String formatAppendLog = stringBuffer.toString();
 
-        // appendlog
-        String logFileName = XxlJobFileAppender.contextHolder.get();
+        String logFileName = JobFileAppender.cxtHolder.get();
         if (logFileName!=null && logFileName.trim().length()>0) {
-            XxlJobFileAppender.appendLog(logFileName, formatAppendLog);
+            JobFileAppender.appendLog(logFileName, formatAppendLog);
         } else {
             logger.info(">>>>>>>>>>> {}", formatAppendLog);
         }

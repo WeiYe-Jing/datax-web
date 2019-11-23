@@ -3,8 +3,8 @@ package com.wugui.datatx.core.handler.impl;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.wugui.datatx.core.handler.IJobHandler;
-import com.wugui.datatx.core.log.XxlJobFileAppender;
-import com.wugui.datatx.core.log.XxlJobLogger;
+import com.wugui.datatx.core.log.JobFileAppender;
+import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.util.ScriptUtil;
 import com.wugui.datatx.core.util.ShardingUtil;
 
@@ -27,7 +27,7 @@ public class ScriptJobHandler extends IJobHandler {
         this.glueType = glueType;
 
         // clean old script file
-        File glueSrcPath = new File(XxlJobFileAppender.getGlueSrcPath());
+        File glueSrcPath = new File(JobFileAppender.getGlueSrcPath());
         if (glueSrcPath.exists()) {
             File[] glueSrcFileList = glueSrcPath.listFiles();
             if (glueSrcFileList!=null && glueSrcFileList.length>0) {
@@ -56,7 +56,7 @@ public class ScriptJobHandler extends IJobHandler {
         String cmd = glueType.getCmd();
 
         // make script file
-        String scriptFileName = XxlJobFileAppender.getGlueSrcPath()
+        String scriptFileName = JobFileAppender.getGlueSrcPath()
                 .concat(File.separator)
                 .concat(String.valueOf(jobId))
                 .concat("_")
@@ -68,7 +68,7 @@ public class ScriptJobHandler extends IJobHandler {
         }
 
         // log file
-        String logFileName = XxlJobFileAppender.contextHolder.get();
+        String logFileName = JobFileAppender.contextHolder.get();
 
         // script params：0=param、1=分片序号、2=分片总数
         ShardingUtil.ShardingVO shardingVO = ShardingUtil.getShardingVo();
@@ -78,7 +78,7 @@ public class ScriptJobHandler extends IJobHandler {
         scriptParams[2] = String.valueOf(shardingVO.getTotal());
 
         // invoke
-        XxlJobLogger.log("----------- script file:"+ scriptFileName +" -----------");
+        JobLogger.log("----------- script file:"+ scriptFileName +" -----------");
         int exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName, scriptParams);
 
         if (exitValue == 0) {

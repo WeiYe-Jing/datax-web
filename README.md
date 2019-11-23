@@ -2,12 +2,12 @@
 ![](https://img.shields.io/badge/springboot-2.1.4.RELEASE-red.svg)
 ![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
 
-## 前言
+## DataX-Web
 
 DataX阿里的开源的时候并未提供任何可视化界面，我们在使用的过程中，需要将Json配置文件放到Datax的job路径下，随着业务的增加，配置文件不方便管理和迁移并且每次执行都需要记录命令。
 目前DataX只支持单机版，多节点之间的协作不能控制，我们希望存在一款有友好的可视化界面，支持定时任务,支持分布式的数据同步利器，这也是该项目的目标。
 
-## preparation
+## System Requirements
 
 - Language: Java 8
 - Environment: MacOS, Windows,Linux
@@ -15,7 +15,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax源码阅读笔记/datax-python3下)
 
 
-## todo list
+## Todo list
 
 * [x] springboot重构项目
 * [x] 集成swagger，方便调试
@@ -30,11 +30,11 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 * [ ] 实现部分写插件支持自动建表功能
 
 
-## 前端项目
+## UI
 
-[github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
+[前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
 
-## how to run
+## Quick Start
 
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包，配置环境变量
 ```
@@ -63,5 +63,7 @@ http://localhost:8080/index.html#/datax/job
 
 ### 8. 可以点击查看日志，实时获取日志信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/20191119102551.png)
+
+## Contact us
 
 ### QQ交流群 776939467

@@ -20,6 +20,7 @@ public class ScriptJobHandler extends IJobHandler {
     private String gluesource;
     private GlueTypeEnum glueType;
 
+
     public ScriptJobHandler(int jobId, long glueUpdatetime, String gluesource, GlueTypeEnum glueType){
         this.jobId = jobId;
         this.glueUpdatetime = glueUpdatetime;
@@ -68,7 +69,7 @@ public class ScriptJobHandler extends IJobHandler {
         }
 
         // log file
-        String logFileName = JobFileAppender.contextHolder.get();
+        String logFileName = JobFileAppender.cxtHolder.get();
 
         // script params：0=param、1=分片序号、2=分片总数
         ShardingUtil.ShardingVO shardingVO = ShardingUtil.getShardingVo();

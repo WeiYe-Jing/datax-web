@@ -15,7 +15,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax源码阅读笔记/datax-python3下)
 
 
-## Todo list
+## TODO
 
 * [x] springboot重构项目
 * [x] 集成swagger，方便调试

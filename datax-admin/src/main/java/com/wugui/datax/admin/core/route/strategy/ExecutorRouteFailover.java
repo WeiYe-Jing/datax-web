@@ -3,8 +3,8 @@ package com.wugui.datax.admin.core.route.strategy;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
-import com.wugui.datax.admin.core.conf.XxlJobScheduler;
 import com.wugui.datax.admin.core.route.ExecutorRouter;
+import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
 import com.wugui.datax.admin.core.util.I18nUtil;
 
 import java.util.List;

@@ -75,13 +75,14 @@ public class FileUtil {
 
     }
 
-    public static byte[] read(File file) {
-        Long len = file.length();
-        byte[] cxt = new byte[len.intValue()];
+    public static byte[] readFileContent(File file) {
+        Long filelength = file.length();
+        byte[] filecontent = new byte[filelength.intValue()];
+
         FileInputStream in = null;
         try {
             in = new FileInputStream(file);
-            in.read(cxt);
+            in.read(filecontent);
             in.close();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -94,7 +95,7 @@ public class FileUtil {
                 }
             }
         }
-        return cxt;
+        return filecontent;
     }
 
 

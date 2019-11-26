@@ -1,10 +1,12 @@
 package com.wugui.datatx.core.executor.impl;
 
-import com.wugui.datatx.core.executor.JobExecutor;
+import com.wugui.datatx.core.executor.XxlJobExecutor;
 import com.wugui.datatx.core.glue.GlueFactory;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -15,11 +17,12 @@ import java.util.Map;
  *
  * @author xuxueli 2018-11-01 09:24:52
  */
-public class XxlJobSpringExecutor extends JobExecutor implements ApplicationContextAware {
+public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationContextAware, InitializingBean, DisposableBean {
 
 
+    // start
     @Override
-    public void start() throws Exception {
+    public void afterPropertiesSet() throws Exception {
 
         // init JobHandler Repository
         initJobHandlerRepository(applicationContext);
@@ -31,6 +34,13 @@ public class XxlJobSpringExecutor extends JobExecutor implements ApplicationCont
         // super start
         super.start();
     }
+
+    // destroy
+    @Override
+    public void destroy() {
+        super.destroy();
+    }
+
 
     private void initJobHandlerRepository(ApplicationContext applicationContext){
         if (applicationContext == null) {
@@ -46,7 +56,7 @@ public class XxlJobSpringExecutor extends JobExecutor implements ApplicationCont
                     String name = serviceBean.getClass().getAnnotation(JobHandler.class).value();
                     IJobHandler handler = (IJobHandler) serviceBean;
                     if (loadJobHandler(name) != null) {
-                        throw new RuntimeException("xxl-job jobhandler naming conflicts.");
+                        throw new RuntimeException("xxl-job jobhandler["+ name +"] naming conflicts.");
                     }
                     registJobHandler(name, handler);
                 }
@@ -58,7 +68,7 @@ public class XxlJobSpringExecutor extends JobExecutor implements ApplicationCont
     private static ApplicationContext applicationContext;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        XxlJobSpringExecutor.applicationContext = applicationContext;
+        this.applicationContext = applicationContext;
     }
     public static ApplicationContext getApplicationContext() {
         return applicationContext;

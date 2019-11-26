@@ -2,15 +2,18 @@ package com.wugui.datax.admin.controller;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
+import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.entity.XxlJobLogGlue;
-import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
 import com.wugui.datax.admin.mapper.XxlJobLogGlueMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +59,7 @@ public class JobCodeController {
 	
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	@ApiOperation("保存任务状态")
-	public ReturnT<String> save(int id, String glueSource, String glueRemark) {
+	public ReturnT<String> save(Model model, int id, String glueSource, String glueRemark) {
 		// valid
 		if (glueRemark==null) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")) );
@@ -68,11 +71,13 @@ public class JobCodeController {
 		if (exists_jobInfo == null) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
 		}
-		
+
 		// update new code
 		exists_jobInfo.setGlueSource(glueSource);
 		exists_jobInfo.setGlueRemark(glueRemark);
 		exists_jobInfo.setGlueUpdatetime(new Date());
+
+		exists_jobInfo.setUpdateTime(new Date());
 		xxlJobInfoMapper.update(exists_jobInfo);
 
 		// log old code
@@ -81,6 +86,9 @@ public class JobCodeController {
 		xxlJobLogGlue.setGlueType(exists_jobInfo.getGlueType());
 		xxlJobLogGlue.setGlueSource(glueSource);
 		xxlJobLogGlue.setGlueRemark(glueRemark);
+
+		xxlJobLogGlue.setAddTime(new Date());
+		xxlJobLogGlue.setUpdateTime(new Date());
 		xxlJobLogGlueMapper.save(xxlJobLogGlue);
 
 		// remove code backup more than 30

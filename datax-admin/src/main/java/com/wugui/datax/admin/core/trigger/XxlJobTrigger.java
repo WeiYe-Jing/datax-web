@@ -5,12 +5,12 @@ import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
-import com.wugui.datax.admin.core.conf.XxlJobScheduler;
+import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
+import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
+import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.XxlJobGroup;
 import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.entity.XxlJobLog;
-import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
-import com.wugui.datax.admin.core.util.I18nUtil;
 import com.xxl.rpc.util.IpUtil;
 import com.xxl.rpc.util.ThrowableUtil;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class XxlJobTrigger {
 
     /**
      * trigger job
-     * cron 触发
+     *
      * @param jobId
      * @param triggerType
      * @param failRetryCount
@@ -86,7 +86,6 @@ public class XxlJobTrigger {
     }
 
     /**
-     * 执行触发
      * @param group                     job group, registry list may be empty
      * @param jobInfo
      * @param finalFailRetryCount
@@ -117,7 +116,7 @@ public class XxlJobTrigger {
         triggerParam.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
         triggerParam.setExecutorTimeout(jobInfo.getExecutorTimeout());
         triggerParam.setLogId(jobLog.getId());
-        triggerParam.setLogDateTim(jobLog.getTriggerTime().getTime());
+        triggerParam.setLogDateTime(jobLog.getTriggerTime().getTime());
         triggerParam.setGlueType(jobInfo.getGlueType());
         triggerParam.setGlueSource(jobInfo.getGlueSource());
         triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
@@ -195,7 +194,6 @@ public class XxlJobTrigger {
         ReturnT<String> runResult = null;
         try {
             ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
-            //executor-client调用。。
             runResult = executorBiz.run(triggerParam);
         } catch (Exception e) {
             logger.error(">>>>>>>>>>> xxl-job trigger error, please check if the executor[{}] is running.", address, e);

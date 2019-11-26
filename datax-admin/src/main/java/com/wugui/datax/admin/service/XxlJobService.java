@@ -72,7 +72,7 @@ public interface XxlJobService {
 	 *
 	 * @return
 	 */
-	public ReturnT<Map<String, Object>> dashboardInfo();
+	public Map<String, Object> dashboardInfo();
 
 	/**
 	 * chart info

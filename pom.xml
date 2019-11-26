@@ -6,27 +6,32 @@
     <groupId>com.wugui</groupId>
     <artifactId>datax-all</artifactId>
     <version>1.0.0</version>
-    <name>datax-all</name>
+    <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>datax-admin</module>
+        <module>datax-core</module>
+        <module>datax-executor</module>
+    </modules>
 
     <properties>
-        <project-sourceEncoding>UTF-8</project-sourceEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.test.skip>true</maven.test.skip>
 
         <commons-lang3-version>3.3.2</commons-lang3-version>
         <fastjson-version>1.2.62</fastjson-version>
         <guava-version>28.1-jre</guava-version>
 
         <!--slf4j 1.7.10 和 logback-classic 1.0.13 是好基友 -->
-        <slf4j-api-version>1.7.10</slf4j-api-version>
+        <slf4j-api.version>1.7.28</slf4j-api.version>
         <logback-classic-version>1.2.2</logback-classic-version>
         <commons-io-version>2.4</commons-io-version>
-        <junit-version>4.11</junit-version>
+        <junit.version>4.12</junit.version>
         <hutool.version>4.5.1</hutool.version>
 
         <postgresql.version>42.2.5</postgresql.version>
@@ -35,14 +40,14 @@
         <jna.version>4.1.0</jna.version>
 
         <commons-exec.version>1.3</commons-exec.version>
-        <xxl-rpc.version>1.4.1</xxl-rpc.version>
+        <xxl-rpc.version>1.5.0</xxl-rpc.version>
         <groovy.version>2.5.8</groovy.version>
 
         <mybatisplus.version>3.0.7.1</mybatisplus.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-models.version>1.5.21</swagger-models.version>
 
-        <spring.version>4.3.24.RELEASE</spring.version>
+        <spring.version>4.3.25.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
         <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
 
@@ -51,11 +56,12 @@
         <jjwt.version>0.9.0</jjwt.version>
     </properties>
 
-    <modules>
-        <module>datax-admin</module>
-        <module>datax-core</module>
-        <module>datax-executor</module>
-    </modules>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License version 3</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
+        </license>
+    </licenses>
 
 </project>

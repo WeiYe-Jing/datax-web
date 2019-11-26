@@ -4,12 +4,12 @@ import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.LogResult;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
-import com.wugui.datax.admin.core.conf.XxlJobScheduler;
-import com.wugui.datax.admin.exception.XxlJobException;
+import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
+import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.XxlJobGroup;
 import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.entity.XxlJobLog;
-import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.exception.XxlJobException;
 import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
 import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
 import com.wugui.datax.admin.mapper.XxlJobLogMapper;
@@ -83,33 +83,33 @@ public class JobLogController {
 	@GetMapping("/pageList")
 	@ApiOperation("运行日志列表")
 	public Map<String, Object> pageList(HttpServletRequest request,
-                                        @RequestParam(required = false, defaultValue = "0") int start,
-                                        @RequestParam(required = false, defaultValue = "10") int length,
-                                        int jobGroup, int jobId, int logStatus, String filterTime) {
+										@RequestParam(required = false, defaultValue = "0") int start,
+										@RequestParam(required = false, defaultValue = "10") int length,
+										int jobGroup, int jobId, int logStatus, String filterTime) {
 
 		// valid permission
 		JobInfoController.validPermission(request, jobGroup);	// 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
-		
+
 		// parse param
 		Date triggerTimeStart = null;
 		Date triggerTimeEnd = null;
 		if (filterTime!=null && filterTime.trim().length()>0) {
 			String[] temp = filterTime.split(" - ");
-			if (temp!=null && temp.length == 2) {
+			if (temp.length == 2) {
 				triggerTimeStart = DateUtil.parseDateTime(temp[0]);
 				triggerTimeEnd = DateUtil.parseDateTime(temp[1]);
 			}
 		}
-		
+
 		// page query
 		List<XxlJobLog> list = xxlJobLogMapper.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
 		int list_count = xxlJobLogMapper.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-		
+
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
-	    maps.put("recordsTotal", list_count);		// 总记录数
-	    maps.put("recordsFiltered", list_count);	// 过滤后的总记录数
-	    maps.put("data", list);  					// 分页列表
+		maps.put("recordsTotal", list_count);		// 总记录数
+		maps.put("recordsFiltered", list_count);	// 过滤后的总记录数
+		maps.put("data", list);  					// 分页列表
 		return maps;
 	}
 
@@ -139,12 +139,13 @@ public class JobLogController {
 			ReturnT<LogResult> logResult = executorBiz.log(triggerTime, logId, fromLineNum);
 
 			// is end
-            if (logResult.getContent()!=null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
-                XxlJobLog jobLog = xxlJobLogMapper.load(logId);
-                if (jobLog.getHandleCode() > 0) {
-                    logResult.getContent().setEnd(true);
-                }
-            }
+			if (logResult.getContent()!=null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
+				XxlJobLog jobLog = xxlJobLogMapper.load(logId);
+				if (jobLog.getHandleCode() > 0) {
+					logResult.getContent().setEnd(true);
+				}
+			}
+
 			return logResult;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -214,8 +215,16 @@ public class JobLogController {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
 		}
 
-		xxlJobLogMapper.clearLog(jobGroup, jobId, clearBeforeTime, clearBeforeNum);
+		List<Long> logIds = null;
+		do {
+			logIds = xxlJobLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
+			if (logIds!=null && logIds.size()>0) {
+				xxlJobLogMapper.clearLog(logIds);
+			}
+		} while (logIds!=null && logIds.size()>0);
+
 		return ReturnT.SUCCESS;
 	}
+
 
 }

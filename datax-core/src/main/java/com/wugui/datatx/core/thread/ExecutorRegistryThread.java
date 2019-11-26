@@ -4,7 +4,7 @@ import com.wugui.datatx.core.biz.AdminBiz;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.RegistryConfig;
-import com.wugui.datatx.core.executor.JobExecutor;
+import com.wugui.datatx.core.executor.XxlJobExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class ExecutorRegistryThread {
             logger.warn(">>>>>>>>>>> xxl-job, executor registry config fail, appName is null.");
             return;
         }
-        if (JobExecutor.getAdminBizList() == null) {
+        if (XxlJobExecutor.getAdminBizList() == null) {
             logger.warn(">>>>>>>>>>> xxl-job, executor registry config fail, adminAddresses is null.");
             return;
         }
@@ -41,7 +41,7 @@ public class ExecutorRegistryThread {
             while (!toStop) {
                 try {
                     RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address);
-                    for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
+                    for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
                         try {
                             ReturnT<String> registryResult = adminBiz.registry(registryParam);
                             if (registryResult!=null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
@@ -77,7 +77,7 @@ public class ExecutorRegistryThread {
             // registry remove
             try {
                 RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address);
-                for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
+                for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
                     try {
                         ReturnT<String> registryResult = adminBiz.registryRemove(registryParam);
                         if (registryResult!=null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {

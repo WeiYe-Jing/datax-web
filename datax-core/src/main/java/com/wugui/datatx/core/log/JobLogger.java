@@ -37,7 +37,8 @@ public class JobLogger {
             .append(appendLog!=null?appendLog:"");
         String formatAppendLog = stringBuffer.toString();
 
-        String logFileName = JobFileAppender.cxtHolder.get();
+        // appendlog
+        String logFileName = JobFileAppender.contextHolder.get();
         if (logFileName!=null && logFileName.trim().length()>0) {
             JobFileAppender.appendLog(logFileName, formatAppendLog);
         } else {
@@ -51,7 +52,7 @@ public class JobLogger {
      * @param appendLogPattern  like "aaa {} bbb {} ccc"
      * @param appendLogArguments    like "111, true"
      */
-    public static void log(String appendLogPattern, Object... appendLogArguments) {
+    public static void log(String appendLogPattern, Object ... appendLogArguments) {
 
     	FormattingTuple ft = MessageFormatter.arrayFormat(appendLogPattern, appendLogArguments);
         String appendLog = ft.getMessage();

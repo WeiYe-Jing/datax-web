@@ -1,15 +1,16 @@
 package com.wugui.datax.admin.service.impl;
 
 import com.wugui.datatx.core.biz.AdminBiz;
+
 import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
-import com.wugui.datax.admin.entity.XxlJobInfo;
-import com.wugui.datax.admin.entity.XxlJobLog;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.entity.XxlJobInfo;
+import com.wugui.datax.admin.entity.XxlJobLog;
 import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
 import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
 import com.wugui.datax.admin.mapper.XxlJobLogMapper;
@@ -17,17 +18,16 @@ import com.wugui.datax.admin.mapper.XxlJobRegistryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * @author xuxueli 2017-07-27 21:54:20
  */
-
 @Service
 public class AdminBizImpl implements AdminBiz {
     private static Logger logger = LoggerFactory.getLogger(AdminBizImpl.class);
@@ -53,11 +53,6 @@ public class AdminBizImpl implements AdminBiz {
         return ReturnT.SUCCESS;
     }
 
-    /**
-     * 根据执行结果更新log信息
-     * @param handleCallbackParam
-     * @return
-     */
     private ReturnT<String> callback(HandleCallbackParam handleCallbackParam) {
         // valid log item
         XxlJobLog log = xxlJobLogMapper.load(handleCallbackParam.getLogId());
@@ -133,9 +128,17 @@ public class AdminBizImpl implements AdminBiz {
 
     @Override
     public ReturnT<String> registry(RegistryParam registryParam) {
-        int ret = xxlJobRegistryMapper.registryUpdate(registryParam.getRegistGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
+
+        // valid
+        if (!StringUtils.hasText(registryParam.getRegistryGroup())
+                || !StringUtils.hasText(registryParam.getRegistryKey())
+                || !StringUtils.hasText(registryParam.getRegistryValue())) {
+            return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
+        }
+
+        int ret = xxlJobRegistryMapper.registryUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
         if (ret < 1) {
-            xxlJobRegistryMapper.registrySave(registryParam.getRegistGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
+            xxlJobRegistryMapper.registrySave(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
 
             // fresh
             freshGroupRegistryInfo(registryParam);
@@ -145,7 +148,15 @@ public class AdminBizImpl implements AdminBiz {
 
     @Override
     public ReturnT<String> registryRemove(RegistryParam registryParam) {
-        int ret = xxlJobRegistryMapper.registryDelete(registryParam.getRegistGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
+
+        // valid
+        if (!StringUtils.hasText(registryParam.getRegistryGroup())
+                || !StringUtils.hasText(registryParam.getRegistryKey())
+                || !StringUtils.hasText(registryParam.getRegistryValue())) {
+            return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
+        }
+
+        int ret = xxlJobRegistryMapper.registryDelete(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
         if (ret > 0) {
 
             // fresh

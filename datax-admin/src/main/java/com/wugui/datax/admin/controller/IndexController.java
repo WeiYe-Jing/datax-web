@@ -33,7 +33,7 @@ public class IndexController {
 	@GetMapping("/")
 	@ApiOperation("监控图")
 	public ReturnT<Map<String, Object>> index() {
-		return xxlJobService.dashboardInfo();
+		return new ReturnT<>(xxlJobService.dashboardInfo());
 	}
 
     @RequestMapping(value = "/chartInfo",method  = RequestMethod.POST)

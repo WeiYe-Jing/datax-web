@@ -1,16 +1,13 @@
-
 package com.wugui.datatx.core.handler.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 
-
 /**
  * glue job handler
  * @author xuxueli 2016-5-19 21:05:45
  */
-
 public class GlueJobHandler extends IJobHandler {
 
 	private long glueUpdatetime;
@@ -34,4 +31,3 @@ public class GlueJobHandler extends IJobHandler {
 		return null;
 	}
 }
-

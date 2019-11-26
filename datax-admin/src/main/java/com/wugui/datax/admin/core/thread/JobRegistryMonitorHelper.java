@@ -7,10 +7,7 @@ import com.wugui.datax.admin.entity.XxlJobRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,14 +33,14 @@ public class JobRegistryMonitorHelper {
 					if (groupList!=null && !groupList.isEmpty()) {
 
 						// remove dead address (admin/executor)
-						List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findDead(RegistryConfig.DEAD_TIMEOUT);
+						List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
 						if (ids!=null && ids.size()>0) {
 							XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().removeDead(ids);
 						}
 
 						// fresh online address (admin/executor)
 						HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
-						List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findAll(RegistryConfig.DEAD_TIMEOUT);
+						List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
 						if (list != null) {
 							for (XxlJobRegistry item: list) {
 								if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {

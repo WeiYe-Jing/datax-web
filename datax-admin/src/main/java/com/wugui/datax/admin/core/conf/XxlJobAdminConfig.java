@@ -1,10 +1,8 @@
 package com.wugui.datax.admin.core.conf;
 
-import com.wugui.datatx.core.biz.AdminBiz;
-import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
-import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
-import com.wugui.datax.admin.mapper.XxlJobLogMapper;
-import com.wugui.datax.admin.mapper.XxlJobRegistryMapper;
+import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
+import com.wugui.datax.admin.mapper.*;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,17 +16,35 @@ import javax.sql.DataSource;
  *
  * @author xuxueli 2017-04-28
  */
+
 @Component
-public class XxlJobAdminConfig implements InitializingBean {
+public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
+
     private static XxlJobAdminConfig adminConfig = null;
     public static XxlJobAdminConfig getAdminConfig() {
         return adminConfig;
     }
 
+
+    // ---------------------- XxlJobScheduler ----------------------
+
+    private XxlJobScheduler xxlJobScheduler;
+
     @Override
-    public void afterPropertiesSet() {
+    public void afterPropertiesSet() throws Exception {
         adminConfig = this;
+
+        xxlJobScheduler = new XxlJobScheduler();
+        xxlJobScheduler.init();
     }
+
+    @Override
+    public void destroy() throws Exception {
+        xxlJobScheduler.destroy();
+    }
+
+
+    // ---------------------- XxlJobScheduler ----------------------
 
     // conf
     @Value("${xxl.job.i18n}")
@@ -39,6 +55,15 @@ public class XxlJobAdminConfig implements InitializingBean {
 
     @Value("${spring.mail.username}")
     private String emailUserName;
+
+    @Value("${xxl.job.triggerpool.fast.max}")
+    private int triggerPoolFastMax;
+
+    @Value("${xxl.job.triggerpool.slow.max}")
+    private int triggerPoolSlowMax;
+
+    @Value("${xxl.job.logretentiondays}")
+    private int logretentiondays;
 
     // dao, service
 
@@ -51,7 +76,7 @@ public class XxlJobAdminConfig implements InitializingBean {
     @Resource
     private XxlJobGroupMapper xxlJobGroupMapper;
     @Resource
-    private AdminBiz adminBiz;
+    private XxlJobLogReportMapper xxlJobLogReportMapper;
     @Resource
     private JavaMailSender mailSender;
     @Resource
@@ -70,6 +95,27 @@ public class XxlJobAdminConfig implements InitializingBean {
         return emailUserName;
     }
 
+    public int getTriggerPoolFastMax() {
+        if (triggerPoolFastMax < 200) {
+            return 200;
+        }
+        return triggerPoolFastMax;
+    }
+
+    public int getTriggerPoolSlowMax() {
+        if (triggerPoolSlowMax < 100) {
+            return 100;
+        }
+        return triggerPoolSlowMax;
+    }
+
+    public int getLogretentiondays() {
+        if (logretentiondays < 7) {
+            return -1;  // Limit greater than or equal to 7, otherwise close
+        }
+        return logretentiondays;
+    }
+
     public XxlJobLogMapper getXxlJobLogMapper() {
         return xxlJobLogMapper;
     }
@@ -86,8 +132,8 @@ public class XxlJobAdminConfig implements InitializingBean {
         return xxlJobGroupMapper;
     }
 
-    public AdminBiz getAdminBiz() {
-        return adminBiz;
+    public XxlJobLogReportMapper getXxlJobLogReportMapper() {
+        return xxlJobLogReportMapper;
     }
 
     public JavaMailSender getMailSender() {

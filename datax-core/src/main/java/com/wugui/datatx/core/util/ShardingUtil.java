@@ -6,7 +6,7 @@ package com.wugui.datatx.core.util;
  */
 public class ShardingUtil {
 
-    private static InheritableThreadLocal<ShardingVO> cxtHolder = new InheritableThreadLocal<>();
+    private static InheritableThreadLocal<ShardingVO> contextHolder = new InheritableThreadLocal<ShardingVO>();
 
     public static class ShardingVO {
 
@@ -36,11 +36,11 @@ public class ShardingUtil {
     }
 
     public static void setShardingVo(ShardingVO shardingVo){
-        cxtHolder.set(shardingVo);
+        contextHolder.set(shardingVo);
     }
 
     public static ShardingVO getShardingVo(){
-        return cxtHolder.get();
+        return contextHolder.get();
     }
 
 }

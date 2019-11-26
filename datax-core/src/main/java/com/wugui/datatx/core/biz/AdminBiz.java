@@ -1,6 +1,5 @@
 package com.wugui.datatx.core.biz;
 
-
 import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
@@ -12,8 +11,6 @@ import java.util.List;
  */
 public interface AdminBiz {
 
-    public static final String MAPPING = "/api";
-
 
     // ---------------------- callback ----------------------
 
@@ -23,8 +20,7 @@ public interface AdminBiz {
      * @param callbackParamList
      * @return
      */
-
-    ReturnT<String> callback(List<HandleCallbackParam> callbackParamList);
+    public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList);
 
 
     // ---------------------- registry ----------------------
@@ -35,8 +31,7 @@ public interface AdminBiz {
      * @param registryParam
      * @return
      */
-
-    ReturnT<String> registry(RegistryParam registryParam);
+    public ReturnT<String> registry(RegistryParam registryParam);
 
     /**
      * registry remove
@@ -44,7 +39,6 @@ public interface AdminBiz {
      * @param registryParam
      * @return
      */
-
-    ReturnT<String> registryRemove(RegistryParam registryParam);
+    public ReturnT<String> registryRemove(RegistryParam registryParam);
 
 }

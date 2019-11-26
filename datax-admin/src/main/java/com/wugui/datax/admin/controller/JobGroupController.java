@@ -2,9 +2,9 @@ package com.wugui.datax.admin.controller;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.RegistryConfig;
+import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.XxlJobGroup;
 import com.wugui.datax.admin.entity.XxlJobRegistry;
-import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
 import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
 import com.wugui.datax.admin.mapper.XxlJobRegistryMapper;
@@ -14,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * job group controller
@@ -47,7 +44,7 @@ public class JobGroupController {
 
 	@PostMapping("/save")
 	@ApiOperation("新建执行器")
-	public ReturnT<String> save(@RequestBody XxlJobGroup xxlJobGroup){
+	public ReturnT<String> save(XxlJobGroup xxlJobGroup){
 
 		// valid
 		if (xxlJobGroup.getAppName()==null || xxlJobGroup.getAppName().trim().length()==0) {
@@ -77,7 +74,7 @@ public class JobGroupController {
 
 	@RequestMapping("/update")
 	@ApiOperation("更新执行器")
-	public ReturnT<String> update(@RequestBody XxlJobGroup xxlJobGroup){
+	public ReturnT<String> update(XxlJobGroup xxlJobGroup){
 		// valid
 		if (xxlJobGroup.getAppName()==null || xxlJobGroup.getAppName().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );
@@ -120,7 +117,7 @@ public class JobGroupController {
 
 	private List<String> findRegistryByAppName(String appNameParam){
 		HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
-		List<XxlJobRegistry> list = xxlJobRegistryMapper.findAll(RegistryConfig.DEAD_TIMEOUT);
+		List<XxlJobRegistry> list = xxlJobRegistryMapper.findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
 		if (list != null) {
 			for (XxlJobRegistry item: list) {
 				if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {

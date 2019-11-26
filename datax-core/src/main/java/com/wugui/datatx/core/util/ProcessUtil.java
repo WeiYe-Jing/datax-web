@@ -1,6 +1,7 @@
 package com.wugui.datatx.core.util;
 
 import com.sun.jna.Platform;
+import com.wugui.datatx.core.util.Kernel32;
 import com.wugui.datatx.core.thread.JobThread;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

@@ -113,7 +113,7 @@ public class XxlJobExecutor  {
         if (adminAddresses!=null && adminAddresses.trim().length()>0) {
             for (String address: adminAddresses.trim().split(",")) {
                 if (address!=null && address.trim().length()>0) {
-
+                    //实例化AdminBizClient
                     AdminBiz adminBiz = new AdminBizClient(address.trim(), accessToken);
 
                     if (adminBizList == null) {

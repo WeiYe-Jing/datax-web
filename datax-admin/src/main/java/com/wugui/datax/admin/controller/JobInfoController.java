@@ -34,7 +34,7 @@ import java.util.*;
  */
 @Api(tags = "任务配置接口")
 @RestController
-@RequestMapping("/jobinfo")
+@RequestMapping("/api")
 public class JobInfoController {
 
     @Resource
@@ -95,11 +95,9 @@ public class JobInfoController {
 
     @GetMapping("/pageList")
     @ApiOperation("任务列表")
-    public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
-                                        @RequestParam(required = false, defaultValue = "10") int length,
-                                        int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+    public Map<String, Object> pageList() {
 
-        return xxlJobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+        return xxlJobService.pageList(0, 10, 1, -1, null, null, null);
     }
 
     @PostMapping("/add")

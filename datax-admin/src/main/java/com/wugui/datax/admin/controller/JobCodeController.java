@@ -21,8 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * job code controller
- * @author xuxueli 2015-12-19 16:13:16
+ * Created by jingwk on 2019/11/17
  */
 @RestController
 @RequestMapping("/jobcode")

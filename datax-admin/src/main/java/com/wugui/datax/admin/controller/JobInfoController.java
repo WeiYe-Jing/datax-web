@@ -95,9 +95,11 @@ public class JobInfoController {
 
     @GetMapping("/pageList")
     @ApiOperation("任务列表")
-    public Map<String, Object> pageList() {
+    public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int start,
+                                        @RequestParam(required = false, defaultValue = "10") int length,
+                                        int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
-        return xxlJobService.pageList(0, 10, 1, -1, null, null, null);
+        return new ReturnT<>(xxlJobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author));
     }
 
     @PostMapping("/add")

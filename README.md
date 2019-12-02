@@ -41,7 +41,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
  DATAX_HOME=G:\learndemo\springboot-datax\datax\bin
 ```
 
-### 2. 执行datax-web/db下面的sql文件并修改application.yml数据库配置信息
+### 2. 执行doc/db下面的sql文件并修改application.yml数据库配置信息
 
 ### 3. application.yml配置数据抽取日志文件保存路径
                           

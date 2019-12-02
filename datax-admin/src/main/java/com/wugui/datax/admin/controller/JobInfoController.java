@@ -10,6 +10,7 @@ import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.dto.TriggerJobDto;
 import com.wugui.datax.admin.entity.XxlJobGroup;
 import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.entity.XxlJobUser;
@@ -34,7 +35,7 @@ import java.util.*;
  */
 @Api(tags = "任务配置接口")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/job")
 public class JobInfoController {
 
     @Resource
@@ -132,14 +133,15 @@ public class JobInfoController {
         return xxlJobService.start(id);
     }
 
-    @RequestMapping(value = "/trigger",method = RequestMethod.POST)
+    @PostMapping(value = "/trigger")
     @ApiOperation("触发任务")
-    public ReturnT<String> triggerJob(int id, String executorParam) {
+    public ReturnT<String> triggerJob(@RequestBody TriggerJobDto dto) {
         // force cover job param
+        String executorParam=dto.getExecutorParam();
         if (executorParam == null) {
             executorParam = "";
         }
-        JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam);
+        JobTriggerPoolHelper.trigger(dto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam);
         return ReturnT.SUCCESS;
     }
 

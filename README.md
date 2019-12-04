@@ -38,7 +38,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包，配置环境变量
 ```
- DATAX_HOME=G:\learndemo\springboot-datax\datax\bin
+ DATAX_HOME=F:\tools\datax\bin
 ```
 
 ### 2. 执行doc/db下面的sql文件并修改application.yml数据库配置信息

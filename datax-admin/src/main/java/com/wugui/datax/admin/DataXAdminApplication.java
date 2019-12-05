@@ -22,7 +22,7 @@ public class DataXAdminApplication {
         String envContext = env.getProperty("server.contextPath");
         String port = envPort == null ? "8080" : envPort;
         String context = envContext == null ? "" : envContext;
-        String path = port + "" + context + "/swagger-ui.html";
+        String path = port + "" + context + "/doc.html";
         logger.info(
                 "Access URLs:\n----------------------------------------------------------\n\t"
                         + "Local: \t\thttp://127.0.0.1:{}\n\t"

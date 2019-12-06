@@ -9,21 +9,21 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Created by echisan on 2018/6/23
+ * Created by jingwk on 2019/12/01
  */
 public class JwtTokenUtils {
 
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    private static final String SECRET = "jwtsecretdemo";
-    private static final String ISS = "echisan";
+    private static final String SECRET = "datax_admin";
+    private static final String ISS = "jingwk";
 
     // 角色的key
     private static final String ROLE_CLAIMS = "rol";
 
-    // 过期时间是3600秒，既是1个小时
-    private static final long EXPIRATION = 3600L;
+    // 过期时间是3600秒，既是24个小时
+    private static final long EXPIRATION = 86400L;
 
     // 选择了记住我之后的过期时间为7天
     private static final long EXPIRATION_REMEMBER = 604800L;

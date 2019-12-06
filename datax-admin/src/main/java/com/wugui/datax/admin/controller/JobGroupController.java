@@ -20,7 +20,7 @@ import java.util.*;
  * Created by jingwk on 2019/11/17
  */
 @RestController
-@RequestMapping("/jobgroup")
+@RequestMapping("/api/jobGroup")
 @Api(tags = "执行器管理接口")
 public class JobGroupController {
 
@@ -31,19 +31,15 @@ public class JobGroupController {
 	@Resource
 	private XxlJobRegistryMapper xxlJobRegistryMapper;
 
-	@RequestMapping
-	public String index(Model model) {
-
+	@GetMapping("/list")
+	public ReturnT<List<XxlJobGroup>> getExecutorList() {
 		// job group (executor)
-		List<XxlJobGroup> list = xxlJobGroupMapper.findAll();
-
-		model.addAttribute("list", list);
-		return "jobgroup/jobgroup.index";
+		return new ReturnT<>(xxlJobGroupMapper.findAll());
 	}
 
 	@PostMapping("/save")
 	@ApiOperation("新建执行器")
-	public ReturnT<String> save(XxlJobGroup xxlJobGroup){
+	public ReturnT<String> save(@RequestBody XxlJobGroup xxlJobGroup){
 
 		// valid
 		if (xxlJobGroup.getAppName()==null || xxlJobGroup.getAppName().trim().length()==0) {
@@ -71,9 +67,9 @@ public class JobGroupController {
 		return (ret>0)?ReturnT.SUCCESS:ReturnT.FAIL;
 	}
 
-	@RequestMapping("/update")
+	@PostMapping("/update")
 	@ApiOperation("更新执行器")
-	public ReturnT<String> update(XxlJobGroup xxlJobGroup){
+	public ReturnT<String> update(@RequestBody XxlJobGroup xxlJobGroup){
 		// valid
 		if (xxlJobGroup.getAppName()==null || xxlJobGroup.getAppName().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );

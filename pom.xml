@@ -13,6 +13,8 @@
         <module>datax-admin</module>
         <module>datax-core</module>
         <module>datax-executor</module>
+        <module>datax-rpc</module>
+        <module>datax-registry</module>
     </modules>
 
     <properties>
@@ -40,7 +42,6 @@
         <jna.version>4.1.0</jna.version>
 
         <commons-exec.version>1.3</commons-exec.version>
-        <xxl-rpc.version>1.5.0</xxl-rpc.version>
         <groovy.version>2.5.8</groovy.version>
 
         <mybatisplus.version>3.0.7.1</mybatisplus.version>
@@ -54,6 +55,9 @@
         <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
 
         <jjwt.version>0.9.0</jjwt.version>
+
+        <netty.version>4.1.43.Final</netty.version>
+        <hessian.version>4.0.63</hessian.version>
     </properties>
 
 

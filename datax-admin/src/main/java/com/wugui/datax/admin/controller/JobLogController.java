@@ -31,7 +31,7 @@ import java.util.Map;
  * Created by jingwk on 2019/11/17
  */
 @RestController
-@RequestMapping("/joblog")
+@RequestMapping("/api/log")
 @Api(tags = "任务运行日志接口")
 public class JobLogController {
 	private static Logger logger = LoggerFactory.getLogger(JobLogController.class);
@@ -49,13 +49,7 @@ public class JobLogController {
 		// 执行器列表
 		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupMapper.findAll();
 
-		// filter group
-		List<XxlJobGroup> jobGroupList = JobInfoController.filterJobGroupByRole(request, jobGroupList_all);
-		if (jobGroupList==null || jobGroupList.size()==0) {
-			throw new XxlJobException(I18nUtil.getString("jobgroup_empty"));
-		}
-
-		model.addAttribute("JobGroupList", jobGroupList);
+		model.addAttribute("JobGroupList", jobGroupList_all);
 
 		// 任务
 		if (jobId > 0) {
@@ -81,13 +75,13 @@ public class JobLogController {
 	
 	@GetMapping("/pageList")
 	@ApiOperation("运行日志列表")
-	public Map<String, Object> pageList(HttpServletRequest request,
-										@RequestParam(required = false, defaultValue = "0") int start,
-										@RequestParam(required = false, defaultValue = "10") int length,
+	public ReturnT<Map<String, Object>> pageList(
+										@RequestParam(required = false, defaultValue = "0") int current,
+										@RequestParam(required = false, defaultValue = "10") int size,
 										int jobGroup, int jobId, int logStatus, String filterTime) {
 
 		// valid permission
-		JobInfoController.validPermission(request, jobGroup);	// 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
+		//JobInfoController.validPermission(request, jobGroup);	// 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
 
 		// parse param
 		Date triggerTimeStart = null;
@@ -101,33 +95,15 @@ public class JobLogController {
 		}
 
 		// page query
-		List<XxlJobLog> list = xxlJobLogMapper.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-		int list_count = xxlJobLogMapper.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		List<XxlJobLog> list = xxlJobLogMapper.pageList((current-1)*size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		int list_count = xxlJobLogMapper.pageListCount((current-1)*size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
 
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
 		maps.put("recordsTotal", list_count);		// 总记录数
 		maps.put("recordsFiltered", list_count);	// 过滤后的总记录数
 		maps.put("data", list);  					// 分页列表
-		return maps;
-	}
-
-	@RequestMapping("/logDetailPage")
-	public String logDetailPage(int id, Model model){
-
-		// base check
-		ReturnT<String> logStatue = ReturnT.SUCCESS;
-		XxlJobLog jobLog = xxlJobLogMapper.load(id);
-		if (jobLog == null) {
-            throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
-		}
-
-        model.addAttribute("triggerCode", jobLog.getTriggerCode());
-        model.addAttribute("handleCode", jobLog.getHandleCode());
-        model.addAttribute("executorAddress", jobLog.getExecutorAddress());
-        model.addAttribute("triggerTime", jobLog.getTriggerTime().getTime());
-        model.addAttribute("logId", jobLog.getId());
-		return "joblog/joblog.detail";
+		return new ReturnT<>(maps);
 	}
 
 	@RequestMapping(value ="/logDetailCat",method = RequestMethod.GET)

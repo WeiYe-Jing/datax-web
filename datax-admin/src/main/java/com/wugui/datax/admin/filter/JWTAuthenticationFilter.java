@@ -1,6 +1,8 @@
 package com.wugui.datax.admin.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.entity.LoginUser;
 import com.wugui.datax.admin.util.JwtTokenUtils;
@@ -16,8 +18,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by jingwk on 2019/11/17
@@ -29,7 +34,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        super.setFilterProcessesUrl("/auth/login");
+        super.setFilterProcessesUrl("/api/auth/login");
     }
 
     @Override
@@ -58,7 +63,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws IOException, ServletException {
 
         JwtUser jwtUser = (JwtUser) authResult.getPrincipal();
-        System.out.println("jwtUser:" + jwtUser.toString());
         boolean isRemember = rememberMe.get() == 1;
 
         String role = "";
@@ -68,11 +72,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         String token = JwtTokenUtils.createToken(jwtUser.getUsername(), role, isRemember);
-//        String token = JwtTokenUtils.createToken(jwtUser.getUsername(), false);
         // 返回创建成功的token
         // 但是这里创建的token只是单纯的token
         // 按照jwt的规定，最后请求的时候应该是 `Bearer token`
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
+        response.setCharacterEncoding("UTF-8");
+        Map<String, Object> maps = new HashMap<String, Object>();
+        maps.put("data", JwtTokenUtils.TOKEN_PREFIX + token);
+        response.getWriter().write(JSON.toJSON(new ReturnT<>(maps)).toString());
     }
 
     @Override

@@ -11,8 +11,8 @@ import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.XxlJobGroup;
 import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.entity.XxlJobLog;
-import com.xxl.rpc.util.IpUtil;
-import com.xxl.rpc.util.ThrowableUtil;
+import com.wugui.datax.rpc.util.IpUtil;
+import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

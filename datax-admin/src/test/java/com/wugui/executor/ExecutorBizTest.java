@@ -5,12 +5,12 @@ import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
-import com.xxl.rpc.remoting.invoker.XxlRpcInvokerFactory;
-import com.xxl.rpc.remoting.invoker.call.CallType;
-import com.xxl.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
-import com.xxl.rpc.remoting.invoker.route.LoadBalance;
-import com.xxl.rpc.remoting.net.impl.netty_http.client.NettyHttpClient;
-import com.xxl.rpc.serialize.impl.HessianSerializer;
+import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
+import com.wugui.datax.rpc.remoting.invoker.call.CallType;
+import com.wugui.datax.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
+import com.wugui.datax.rpc.remoting.invoker.route.LoadBalance;
+import com.wugui.datax.rpc.remoting.net.impl.netty_http.client.NettyHttpClient;
+import com.wugui.datax.rpc.serialize.impl.HessianSerializer;
 
 /**
  * executor-api client, test

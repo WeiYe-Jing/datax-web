@@ -17,9 +17,9 @@
 
         <!-- xxl-rpc-core -->
         <dependency>
-            <groupId>com.xuxueli</groupId>
-            <artifactId>xxl-rpc-core</artifactId>
-            <version>${xxl-rpc.version}</version>
+            <groupId>com.wugui</groupId>
+            <artifactId>datax-rpc</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- groovy-all -->
         <dependency>

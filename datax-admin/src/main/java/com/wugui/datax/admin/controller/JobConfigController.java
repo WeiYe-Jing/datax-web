@@ -50,7 +50,7 @@ public class JobConfigController extends ApiController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "ascs", value = "升序字段，多个用逗号分隔"),
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
             })
-    public R<IPage<JobConfig>> selectAll() {
+    public R<IPage<JobConfig>> selectAllByPage() {
         BaseForm<JobConfig> baseForm = new BaseForm();
         return success(this.jobConfigService.page(baseForm.getPlusPagingQueryEntity(), pageQueryWrapperCustom(baseForm.getParameters())));
     }
@@ -98,6 +98,19 @@ public class JobConfigController extends ApiController {
         });
 
         return queryWrapper;
+    }
+
+    /**
+     * 通过主键查询单条数据
+     *
+     * @return 所有数据
+     */
+    @ApiOperation("获取所有数据")
+    @GetMapping("/all")
+    public R<List<JobConfig>> selectAll() {
+        QueryWrapper<JobConfig> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select(JobConfig.class,config->!config.getColumn().equals("config_json"));
+        return success(this.jobConfigService.list(queryWrapper));
     }
 
 

@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -33,6 +34,7 @@ public class XxlJobLog {
 	private int executorFailRetryCount;
 	
 	// trigger info
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty("调度-时间")
 	private Date triggerTime;
 	@ApiModelProperty("调度-结果")
@@ -41,6 +43,7 @@ public class XxlJobLog {
 	private String triggerMsg;
 	
 	// handle info
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@ApiModelProperty("执行-时间")
 	private Date handleTime;
 	@ApiModelProperty("执行-状态")

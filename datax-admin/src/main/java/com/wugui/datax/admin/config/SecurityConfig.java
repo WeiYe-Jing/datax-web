@@ -44,11 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.DELETE, "/user/**").hasRole("ADMIN")
-                // 测试用资源，需要验证了的用户才能访问
-                .antMatchers("/user/**").authenticated()
-                // 其他都放行了
+                .antMatchers("/api/user/**").hasRole("ADMIN")
+                .antMatchers("/api/auth/login").permitAll()
                 .anyRequest().permitAll()
+                // 需要验证了的用户才能访问
+                //.anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

@@ -3,6 +3,7 @@ package com.wugui.datax.admin.filter;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.entity.LoginUser;
 import com.wugui.datax.admin.util.JwtTokenUtils;
@@ -84,6 +85,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response.getWriter().write("authentication failed, reason: " + failed.getMessage());
+        Map<String, Object> maps = new HashMap<String, Object>();
+        maps.put("data", "");
+        maps.put("msg", I18nUtil.getString("login_param_unvalid"));
+        maps.put("code", ReturnT.FAIL_CODE);
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(JSON.toJSON(maps).toString());
     }
 }

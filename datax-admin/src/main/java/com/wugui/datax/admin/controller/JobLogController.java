@@ -6,10 +6,8 @@ import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.entity.XxlJobGroup;
 import com.wugui.datax.admin.entity.XxlJobInfo;
 import com.wugui.datax.admin.entity.XxlJobLog;
-import com.wugui.datax.admin.exception.XxlJobException;
 import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
 import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
 import com.wugui.datax.admin.mapper.XxlJobLogMapper;
@@ -17,11 +15,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,30 +38,6 @@ public class JobLogController {
 	public XxlJobInfoMapper xxlJobInfoMapper;
 	@Resource
 	public XxlJobLogMapper xxlJobLogMapper;
-
-	@RequestMapping
-	public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId) {
-
-		// 执行器列表
-		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupMapper.findAll();
-
-		model.addAttribute("JobGroupList", jobGroupList_all);
-
-		// 任务
-		if (jobId > 0) {
-			XxlJobInfo jobInfo = xxlJobInfoMapper.loadById(jobId);
-			if (jobInfo == null) {
-				throw new RuntimeException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"));
-			}
-
-			model.addAttribute("jobInfo", jobInfo);
-
-			// valid permission
-			JobInfoController.validPermission(request, jobInfo.getJobGroup());
-		}
-
-		return "joblog/joblog.index";
-	}
 
 	@RequestMapping(value = "/getJobsByGroup",method = RequestMethod.POST)
 	public ReturnT<List<XxlJobInfo>> getJobsByGroup(int jobGroup){

@@ -33,28 +33,6 @@ public class JobCodeController {
 	@Resource
 	private XxlJobLogGlueMapper xxlJobLogGlueMapper;
 
-	@GetMapping
-	public String index(HttpServletRequest request, Model model, int jobId) {
-		XxlJobInfo jobInfo = xxlJobInfoMapper.loadById(jobId);
-		List<XxlJobLogGlue> jobLogGlues = xxlJobLogGlueMapper.findByJobId(jobId);
-
-		if (jobInfo == null) {
-			throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
-		}
-		if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
-			throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
-		}
-
-		// valid permission
-		JobInfoController.validPermission(request, jobInfo.getJobGroup());
-
-		// Glue类型-字典
-		model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());
-
-		model.addAttribute("jobInfo", jobInfo);
-		model.addAttribute("jobLogGlues", jobLogGlues);
-		return "jobcode/jobcode.index";
-	}
 	
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	@ApiOperation("保存任务状态")

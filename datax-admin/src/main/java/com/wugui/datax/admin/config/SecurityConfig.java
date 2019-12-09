@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/user/**").hasRole("ADMIN")
+                .antMatchers("/api/user/register").hasRole("ADMIN")
                 .antMatchers("/api/auth/login").permitAll()
                 .anyRequest().permitAll()
                 // 需要验证了的用户才能访问
@@ -62,7 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedMethod("*");
+        config.applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

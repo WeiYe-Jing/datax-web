@@ -2,11 +2,11 @@ package com.wugui.datax.admin.service.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.entity.JwtUser;
-import com.wugui.datax.admin.entity.XxlJobUser;
+import com.wugui.datax.admin.entity.JobUser;
 import com.wugui.datax.admin.core.util.CookieUtil;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.core.util.JacksonUtil;
-import com.wugui.datax.admin.mapper.XxlJobUserMapper;
+import com.wugui.datax.admin.mapper.JobUserMapper;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,19 +27,19 @@ public class LoginService implements UserDetailsService {
     public static final String LOGIN_IDENTITY_KEY = "XXL_JOB_LOGIN_IDENTITY";
 
     @Resource
-    private XxlJobUserMapper xxlJobUserMapper;
+    private JobUserMapper jobUserMapper;
 
 
-    private String makeToken(XxlJobUser xxlJobUser){
+    private String makeToken(JobUser xxlJobUser){
         String tokenJson = JacksonUtil.writeValueAsString(xxlJobUser);
         String tokenHex = new BigInteger(tokenJson.getBytes()).toString(16);
         return tokenHex;
     }
-    private XxlJobUser parseToken(String tokenHex){
-        XxlJobUser xxlJobUser = null;
+    private JobUser parseToken(String tokenHex){
+        JobUser xxlJobUser = null;
         if (tokenHex != null) {
             String tokenJson = new String(new BigInteger(tokenHex, 16).toByteArray());      // username_password(md5)
-            xxlJobUser = JacksonUtil.readValue(tokenJson, XxlJobUser.class);
+            xxlJobUser = JacksonUtil.readValue(tokenJson, JobUser.class);
         }
         return xxlJobUser;
     }
@@ -53,7 +53,7 @@ public class LoginService implements UserDetailsService {
         }
 
         // valid passowrd
-        XxlJobUser xxlJobUser = xxlJobUserMapper.loadByUserName(username);
+        JobUser xxlJobUser = jobUserMapper.loadByUserName(username);
         if (xxlJobUser == null) {
             return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
         }
@@ -86,17 +86,17 @@ public class LoginService implements UserDetailsService {
      * @param request
      * @return
      */
-    public XxlJobUser ifLogin(HttpServletRequest request, HttpServletResponse response){
+    public JobUser ifLogin(HttpServletRequest request, HttpServletResponse response){
         String cookieToken = CookieUtil.getValue(request, LOGIN_IDENTITY_KEY);
         if (cookieToken != null) {
-            XxlJobUser cookieUser = null;
+            JobUser cookieUser = null;
             try {
                 cookieUser = parseToken(cookieToken);
             } catch (Exception e) {
                 logout(request, response);
             }
             if (cookieUser != null) {
-                XxlJobUser dbUser = xxlJobUserMapper.loadByUserName(cookieUser.getUsername());
+                JobUser dbUser = jobUserMapper.loadByUserName(cookieUser.getUsername());
                 if (dbUser != null) {
                     if (cookieUser.getPassword().equals(dbUser.getPassword())) {
                         return dbUser;
@@ -110,7 +110,7 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        XxlJobUser user = xxlJobUserMapper.loadByUserName(s);
+        JobUser user = jobUserMapper.loadByUserName(s);
         return new JwtUser(user);
     }
 }

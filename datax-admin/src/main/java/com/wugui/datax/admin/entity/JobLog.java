@@ -1,87 +1,61 @@
 package com.wugui.datax.admin.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 抽取日志记录表实体类(job_log)
- *
- * @author zhouhongfa@gz-yibo.com
- * @version v1.0
- * @since 2019-06-27
+ * xxl-job log, used to track trigger process
+ * @author jingwk  2019-11-17 22:08:11
  */
-
 @Data
-@ApiModel
-@TableName("job_log")
-public class JobLog extends Model<JobLog> {
+public class JobLog {
 
-    /**
-     *
-     */
-    @TableId
-    @ApiModelProperty(value = "")
-    private Long id;
+	private long id;
+	
+	// job info
+	@ApiModelProperty("执行器主键ID")
+	private int jobGroup;
+	@ApiModelProperty("任务，主键ID")
+	private int jobId;
 
-    /**
-     * 抽取任务，主键ID
-     */
-    @ApiModelProperty(value = "抽取任务，主键ID")
-    private Long jobId;
+	// execute info
+	@ApiModelProperty("执行器地址，本次执行的地址")
+	private String executorAddress;
+	@ApiModelProperty("执行器任务handler")
+	private String executorHandler;
+	@ApiModelProperty("执行器任务参数")
+	private String executorParam;
+	@ApiModelProperty("执行器任务分片参数，格式如 1/2")
+	private String executorShardingParam;
+	@ApiModelProperty("失败重试次数")
+	private int executorFailRetryCount;
+	
+	// trigger info
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	@ApiModelProperty("调度-时间")
+	private Date triggerTime;
+	@ApiModelProperty("调度-结果")
+	private int triggerCode;
+	@ApiModelProperty("调度-日志")
+	private String triggerMsg;
+	
+	// handle info
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	@ApiModelProperty("执行-时间")
+	private Date handleTime;
+	@ApiModelProperty("执行-状态")
+	private int handleCode;
+	@ApiModelProperty("执行-日志")
+	private String handleMsg;
 
-    /**
-     * 日志文件路径
-     */
-    @ApiModelProperty(value = "日志文件路径")
-    private String logFilePath;
+	// alarm info
+	@ApiModelProperty("告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败")
+	private int alarmStatus;
 
-    /**
-     *进程Id
-     */
-    @ApiModelProperty(value = "", hidden = true)
-    private String pid;
+	@ApiModelProperty("DataX进程Id")
+	private String processId;
 
-    /**
-     *执行-时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    @JSONField(format = "yyyy/MM/dd")
-    @ApiModelProperty(value = "", hidden = true)
-    private Date handleTime;
-
-    /**
-     *执行-状态
-     */
-    @ApiModelProperty(value = "", hidden = true)
-    private Integer handleCode;
-
-
-    /**
-     *执行-日志
-     */
-    @ApiModelProperty(value = "", hidden = true)
-    private String handleMsg;
-
-    /**
-     *
-     */
-    @ApiModelProperty(value = "", hidden = true)
-    private Integer createBy;
-
-    /**
-     * 获取主键值
-     *
-     * @return 主键值
-     */
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 }

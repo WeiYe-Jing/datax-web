@@ -4,13 +4,12 @@ import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.LogResult;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
-import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
+import com.wugui.datax.admin.core.scheduler.JobScheduler;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.entity.XxlJobInfo;
-import com.wugui.datax.admin.entity.XxlJobLog;
-import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
-import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
-import com.wugui.datax.admin.mapper.XxlJobLogMapper;
+import com.wugui.datax.admin.entity.JobInfo;
+import com.wugui.datax.admin.entity.JobLog;
+import com.wugui.datax.admin.mapper.JobInfoMapper;
+import com.wugui.datax.admin.mapper.JobLogMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -33,17 +32,9 @@ public class JobLogController {
 	private static Logger logger = LoggerFactory.getLogger(JobLogController.class);
 
 	@Resource
-	private XxlJobGroupMapper xxlJobGroupMapper;
+	public JobInfoMapper jobInfoMapper;
 	@Resource
-	public XxlJobInfoMapper xxlJobInfoMapper;
-	@Resource
-	public XxlJobLogMapper xxlJobLogMapper;
-
-	@RequestMapping(value = "/getJobsByGroup",method = RequestMethod.POST)
-	public ReturnT<List<XxlJobInfo>> getJobsByGroup(int jobGroup){
-		List<XxlJobInfo> list = xxlJobInfoMapper.getJobsByGroup(jobGroup);
-		return new ReturnT<List<XxlJobInfo>>(list);
-	}
+	public JobLogMapper jobLogMapper;
 	
 	@GetMapping("/pageList")
 	@ApiOperation("运行日志列表")
@@ -67,8 +58,8 @@ public class JobLogController {
 		}
 
 		// page query
-		List<XxlJobLog> list = xxlJobLogMapper.pageList((current-1)*size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-		int list_count = xxlJobLogMapper.pageListCount((current-1)*size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		List<JobLog> list = jobLogMapper.pageList((current-1)*size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		int list_count = jobLogMapper.pageListCount((current-1)*size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
 
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
@@ -82,12 +73,12 @@ public class JobLogController {
 	@ApiOperation("运行日志详情")
 	public ReturnT<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum){
 		try {
-			ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(executorAddress);
+			ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(executorAddress);
 			ReturnT<LogResult> logResult = executorBiz.log(triggerTime, logId, fromLineNum);
 
 			// is end
 			if (logResult.getContent()!=null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
-				XxlJobLog jobLog = xxlJobLogMapper.load(logId);
+				JobLog jobLog = jobLogMapper.load(logId);
 				if (jobLog.getHandleCode() > 0) {
 					logResult.getContent().setEnd(true);
 				}
@@ -104,8 +95,8 @@ public class JobLogController {
 	@ApiOperation("kill任务")
 	public ReturnT<String> logKill(int id){
 		// base check
-		XxlJobLog log = xxlJobLogMapper.load(id);
-		XxlJobInfo jobInfo = xxlJobInfoMapper.loadById(log.getJobId());
+		JobLog log = jobLogMapper.load(id);
+		JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
 		if (jobInfo==null) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
 		}
@@ -116,7 +107,7 @@ public class JobLogController {
 		// request of kill
 		ReturnT<String> runResult = null;
 		try {
-			ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
+			ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(log.getExecutorAddress());
 			runResult = executorBiz.kill(jobInfo.getId());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -127,7 +118,7 @@ public class JobLogController {
 			log.setHandleCode(ReturnT.FAIL_CODE);
 			log.setHandleMsg( I18nUtil.getString("joblog_kill_log_byman")+":" + (runResult.getMsg()!=null?runResult.getMsg():""));
 			log.setHandleTime(new Date());
-			xxlJobLogMapper.updateHandleInfo(log);
+			jobLogMapper.updateHandleInfo(log);
 			return new ReturnT<String>(runResult.getMsg());
 		} else {
 			return new ReturnT<String>(500, runResult.getMsg());
@@ -164,9 +155,9 @@ public class JobLogController {
 
 		List<Long> logIds = null;
 		do {
-			logIds = xxlJobLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
+			logIds = jobLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
 			if (logIds!=null && logIds.size()>0) {
-				xxlJobLogMapper.clearLog(logIds);
+				jobLogMapper.clearLog(logIds);
 			}
 		} while (logIds!=null && logIds.size()>0);
 

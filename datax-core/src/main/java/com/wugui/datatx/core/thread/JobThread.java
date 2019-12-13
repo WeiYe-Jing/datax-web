@@ -3,7 +3,7 @@ package com.wugui.datatx.core.thread;
 import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
-import com.wugui.datatx.core.executor.XxlJobExecutor;
+import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.log.JobLogger;
@@ -105,39 +105,39 @@ public class JobThread extends Thread{
 			running = false;
 			idleTimes++;
 
-            TriggerParam triggerParam = null;
+            TriggerParam tgParam = null;
             ReturnT<String> executeResult = null;
             try {
 				// to check toStop signal, we need cycle, so wo cannot use queue.take(), instand of poll(timeout)
-				triggerParam = triggerQueue.poll(3L, TimeUnit.SECONDS);
-				if (triggerParam!=null) {
+				tgParam = triggerQueue.poll(3L, TimeUnit.SECONDS);
+				if (tgParam!=null) {
 					running = true;
 					idleTimes = 0;
-					triggerLogIdSet.remove(triggerParam.getLogId());
+					triggerLogIdSet.remove(tgParam.getLogId());
 
 					// log filename, like "logPath/yyyy-MM-dd/9999.log"
-					String logFileName = JobFileAppender.makeLogFileName(new Date(triggerParam.getLogDateTime()), triggerParam.getLogId());
+					String logFileName = JobFileAppender.makeLogFileName(new Date(tgParam.getLogDateTime()), tgParam.getLogId());
 					JobFileAppender.contextHolder.set(logFileName);
-					ShardingUtil.setShardingVo(new ShardingUtil.ShardingVO(triggerParam.getBroadcastIndex(), triggerParam.getBroadcastTotal()));
+					ShardingUtil.setShardingVo(new ShardingUtil.ShardingVO(tgParam.getBroadcastIndex(), tgParam.getBroadcastTotal()));
 
 					// execute
-					JobLogger.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:" + triggerParam.getExecutorParams());
+					JobLogger.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:" + tgParam.getExecutorParams());
 
-					if (triggerParam.getExecutorTimeout() > 0) {
+					if (tgParam.getExecutorTimeout() > 0) {
 						// limit timeout
 						Thread futureThread = null;
 						try {
-							final TriggerParam triggerParamTmp = triggerParam;
+							final TriggerParam tgParamT = tgParam;
 							FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(new Callable<ReturnT<String>>() {
 								@Override
 								public ReturnT<String> call() throws Exception {
-									return handler.executeDataX(triggerParamTmp.getJobJson());
+									return handler.executeDataX(tgParamT.getJobJson(),tgParamT.getLogId(),tgParamT.getExecutorParams(),tgParamT.getLogDateTime());
 								}
 							});
 							futureThread = new Thread(futureTask);
 							futureThread.start();
 
-							executeResult = futureTask.get(triggerParam.getExecutorTimeout(), TimeUnit.SECONDS);
+							executeResult = futureTask.get(tgParam.getExecutorTimeout(), TimeUnit.SECONDS);
 						} catch (TimeoutException e) {
 
 							JobLogger.log("<br>----------- xxl-job job execute timeout");
@@ -149,7 +149,7 @@ public class JobThread extends Thread{
 						}
 					} else {
 						// just execute
-						executeResult = handler.executeDataX(triggerParam.getJobJson());
+						executeResult = handler.executeDataX(tgParam.getJobJson(),tgParam.getLogId(),tgParam.getExecutorParams(),tgParam.getLogDateTime());
 					}
 
 					if (executeResult == null) {
@@ -166,7 +166,7 @@ public class JobThread extends Thread{
 				} else {
 					if (idleTimes > 30) {
 						if(triggerQueue.size() == 0) {	// avoid concurrent trigger causes jobId-lost
-							XxlJobExecutor.removeJobThread(jobId, "excutor idel times over limit.");
+							JobExecutor.removeJobThread(jobId, "excutor idel times over limit.");
 						}
 					}
 				}
@@ -182,15 +182,15 @@ public class JobThread extends Thread{
 
 				JobLogger.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- xxl-job job execute end(error) -----------");
 			} finally {
-                if(triggerParam != null) {
+                if(tgParam != null) {
                     // callback handler info
                     if (!toStop) {
                         // commonm
-                        TriggerCallbackThread.pushCallBack(new HandleCallbackParam(triggerParam.getLogId(), triggerParam.getLogDateTime(), executeResult));
+                        TriggerCallbackThread.pushCallBack(new HandleCallbackParam(tgParam.getLogId(), tgParam.getLogDateTime(), executeResult));
                     } else {
                         // is killed
                         ReturnT<String> stopResult = new ReturnT<String>(ReturnT.FAIL_CODE, stopReason + " [job running, killed]");
-                        TriggerCallbackThread.pushCallBack(new HandleCallbackParam(triggerParam.getLogId(), triggerParam.getLogDateTime(), stopResult));
+                        TriggerCallbackThread.pushCallBack(new HandleCallbackParam(tgParam.getLogId(), tgParam.getLogDateTime(), stopResult));
                     }
                 }
             }

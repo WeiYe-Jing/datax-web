@@ -1,12 +1,12 @@
 package com.wugui.datax.admin.core.thread;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
+import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.entity.XxlJobGroup;
-import com.wugui.datax.admin.entity.XxlJobInfo;
-import com.wugui.datax.admin.entity.XxlJobLog;
+import com.wugui.datax.admin.entity.JobGroup;
+import com.wugui.datax.admin.entity.JobInfo;
+import com.wugui.datax.admin.entity.JobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -46,24 +46,24 @@ public class JobFailMonitorHelper {
 				while (!toStop) {
 					try {
 
-						List<Long> failLogIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogMapper().findFailJobLogIds(1000);
+						List<Long> failLogIds = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().findFailJobLogIds(1000);
 						if (failLogIds!=null && !failLogIds.isEmpty()) {
 							for (long failLogId: failLogIds) {
 
 								// lock log
-								int lockRet = XxlJobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateAlarmStatus(failLogId, 0, -1);
+								int lockRet = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateAlarmStatus(failLogId, 0, -1);
 								if (lockRet < 1) {
 									continue;
 								}
-								XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogMapper().load(failLogId);
-								XxlJobInfo info = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoMapper().loadById(log.getJobId());
+								JobLog log = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().load(failLogId);
+								JobInfo info = JobAdminConfig.getAdminConfig().getXxlJobInfoMapper().loadById(log.getJobId());
 
 								// 1、fail retry monitor
 								if (log.getExecutorFailRetryCount() > 0) {
 									JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount()-1), log.getExecutorShardingParam(), log.getExecutorParam());
 									String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>"+ I18nUtil.getString("jobconf_trigger_type_retry") +"<<<<<<<<<<< </span><br>";
 									log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
-									XxlJobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateTriggerInfo(log);
+									JobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateTriggerInfo(log);
 								}
 
 								// 2、fail alarm monitor
@@ -81,7 +81,7 @@ public class JobFailMonitorHelper {
 									newAlarmStatus = 1;
 								}
 
-								XxlJobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateAlarmStatus(failLogId, -1, newAlarmStatus);
+								JobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateAlarmStatus(failLogId, -1, newAlarmStatus);
 							}
 						}
 
@@ -152,7 +152,7 @@ public class JobFailMonitorHelper {
 	 *
 	 * @param jobLog
 	 */
-	private boolean failAlarm(XxlJobInfo info, XxlJobLog jobLog){
+	private boolean failAlarm(JobInfo info, JobLog jobLog){
 		boolean alarmResult = true;
 
 		// send monitor email
@@ -168,7 +168,7 @@ public class JobFailMonitorHelper {
 			}
 
 			// email info
-			XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupMapper().load(Integer.valueOf(info.getJobGroup()));
+			JobGroup group = JobAdminConfig.getAdminConfig().getXxlJobGroupMapper().load(Integer.valueOf(info.getJobGroup()));
 			String personal = I18nUtil.getString("admin_name_full");
 			String title = I18nUtil.getString("jobconf_monitor");
 			String content = MessageFormat.format(mailBodyTemplate,
@@ -182,15 +182,15 @@ public class JobFailMonitorHelper {
 
 				// make mail
 				try {
-					MimeMessage mimeMessage = XxlJobAdminConfig.getAdminConfig().getMailSender().createMimeMessage();
+					MimeMessage mimeMessage = JobAdminConfig.getAdminConfig().getMailSender().createMimeMessage();
 
 					MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-					helper.setFrom(XxlJobAdminConfig.getAdminConfig().getEmailUserName(), personal);
+					helper.setFrom(JobAdminConfig.getAdminConfig().getEmailUserName(), personal);
 					helper.setTo(email);
 					helper.setSubject(title);
 					helper.setText(content, true);
 
-					XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
+					JobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
 				} catch (Exception e) {
 					logger.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 

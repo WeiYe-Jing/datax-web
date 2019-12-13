@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.dto.DataxJsonDto;
 import com.wugui.datax.admin.service.DataxJsonService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class DataxJsonController extends ApiController {
     private DataxJsonService dataxJsonService;
 
     @PostMapping("/buildJson")
+    @ApiOperation("JSON构建")
     public R<String> buildJobJson(@RequestBody DataxJsonDto dataxJsonDto) {
         return success(dataxJsonService.buildJobJson(dataxJsonDto));
     }

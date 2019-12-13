@@ -1,6 +1,7 @@
 package com.wugui.datatx.core.biz;
 
 import com.wugui.datatx.core.biz.model.HandleCallbackParam;
+import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 
@@ -22,6 +23,12 @@ public interface AdminBiz {
      */
     public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList);
 
+    /**
+     * processCallback
+     * @param processCallbackParamList
+     * @return
+     */
+    public ReturnT<String> processCallback(List<HandleProcessCallbackParam> processCallbackParamList);
 
     // ---------------------- registry ----------------------
 

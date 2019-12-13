@@ -4,7 +4,7 @@ import com.wugui.datatx.core.biz.AdminBiz;
 import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.RegistryConfig;
-import com.wugui.datatx.core.executor.XxlJobExecutor;
+import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.util.FileUtil;
@@ -47,7 +47,7 @@ public class TriggerCallbackThread {
     public void start() {
 
         // valid
-        if (XxlJobExecutor.getAdminBizList() == null) {
+        if (JobExecutor.getAdminBizList() == null) {
             logger.warn(">>>>>>>>>>> xxl-job, executor callback config fail, adminAddresses is null.");
             return;
         }
@@ -155,7 +155,7 @@ public class TriggerCallbackThread {
     private void doCallback(List<HandleCallbackParam> callbackParamList){
         boolean callbackRet = false;
         // callback, will retry if error
-        for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
+        for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
             try {
                 ReturnT<String> callbackResult = adminBiz.callback(callbackParamList);
                 if (callbackResult!=null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
@@ -198,7 +198,7 @@ public class TriggerCallbackThread {
         }
 
         // append file
-        byte[] callbackParamList_bytes = XxlJobExecutor.getSerializer().serialize(callbackParamList);
+        byte[] callbackParamList_bytes = JobExecutor.getSerializer().serialize(callbackParamList);
 
         File callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis())));
         if (callbackLogFile.exists()) {
@@ -229,7 +229,7 @@ public class TriggerCallbackThread {
         // load and clear file, retry
         for (File callbaclLogFile: callbackLogPath.listFiles()) {
             byte[] callbackParamList_bytes = FileUtil.readFileContent(callbaclLogFile);
-            List<HandleCallbackParam> callbackParamList = (List<HandleCallbackParam>) XxlJobExecutor.getSerializer().deserialize(callbackParamList_bytes, HandleCallbackParam.class);
+            List<HandleCallbackParam> callbackParamList = (List<HandleCallbackParam>) JobExecutor.getSerializer().deserialize(callbackParamList_bytes, HandleCallbackParam.class);
 
             callbaclLogFile.delete();
             doCallback(callbackParamList);

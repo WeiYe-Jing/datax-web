@@ -36,7 +36,7 @@ public abstract class IJobHandler {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract ReturnT<String> executeDataX(String jobJson) throws Exception;
+	public abstract ReturnT<String> executeDataX(String jobJson,long logId,String executorParams,long logDateTime) throws Exception;
 
 	/**
 	 * init handler, invoked when JobThread init

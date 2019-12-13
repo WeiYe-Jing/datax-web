@@ -1,8 +1,8 @@
 package com.wugui.datax.admin.core.thread;
 
-import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
+import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
-import com.wugui.datax.admin.core.trigger.XxlJobTrigger;
+import com.wugui.datax.admin.core.trigger.JobTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class JobTriggerPoolHelper {
     public void start(){
         fastTriggerPool = new ThreadPoolExecutor(
                 10,
-                XxlJobAdminConfig.getAdminConfig().getTriggerPoolFastMax(),
+                JobAdminConfig.getAdminConfig().getTriggerPoolFastMax(),
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(1000),
@@ -40,7 +40,7 @@ public class JobTriggerPoolHelper {
 
         slowTriggerPool = new ThreadPoolExecutor(
                 10,
-                XxlJobAdminConfig.getAdminConfig().getTriggerPoolSlowMax(),
+                JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax(),
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(2000),
@@ -85,7 +85,7 @@ public class JobTriggerPoolHelper {
 
             try {
                 // do trigger
-                XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam);
+                JobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             } finally {

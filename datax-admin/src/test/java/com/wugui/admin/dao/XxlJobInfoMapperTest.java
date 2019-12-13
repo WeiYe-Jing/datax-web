@@ -1,7 +1,7 @@
 package com.wugui.admin.dao;
 
-import com.wugui.datax.admin.entity.XxlJobInfo;
-import com.wugui.datax.admin.mapper.XxlJobInfoMapper;
+import com.wugui.datax.admin.entity.JobInfo;
+import com.wugui.datax.admin.mapper.JobInfoMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,22 +16,22 @@ import java.util.List;
 public class XxlJobInfoMapperTest {
 	
 	@Resource
-	private XxlJobInfoMapper xxlJobInfoMapper;
+	private JobInfoMapper xxlJobInfoMapper;
 	
 	@Test
 	public void pageList(){
-		List<XxlJobInfo> list = xxlJobInfoMapper.pageList(0, 20, 0, -1, null, null, null);
+		List<JobInfo> list = xxlJobInfoMapper.pageList(0, 20, 0, -1, null, null, null);
 		int list_count = xxlJobInfoMapper.pageListCount(0, 20, 0, -1, null, null, null);
 		
 		System.out.println(list);
 		System.out.println(list_count);
 
-		List<XxlJobInfo> list2 = xxlJobInfoMapper.getJobsByGroup(1);
+		List<JobInfo> list2 = xxlJobInfoMapper.getJobsByGroup(1);
 	}
 	
 	@Test
 	public void save_load(){
-		XxlJobInfo info = new XxlJobInfo();
+		JobInfo info = new JobInfo();
 		info.setJobGroup(1);
 		info.setJobCron("jobCron");
 		info.setJobDesc("desc");
@@ -52,7 +52,7 @@ public class XxlJobInfoMapperTest {
 
 		int count = xxlJobInfoMapper.save(info);
 
-		XxlJobInfo info2 = xxlJobInfoMapper.loadById(info.getId());
+		JobInfo info2 = xxlJobInfoMapper.loadById(info.getId());
 		info2.setJobCron("jobCron2");
 		info2.setJobDesc("desc2");
 		info2.setAuthor("setAuthor2");
@@ -72,7 +72,7 @@ public class XxlJobInfoMapperTest {
 
 		xxlJobInfoMapper.delete(info2.getId());
 
-		List<XxlJobInfo> list2 = xxlJobInfoMapper.getJobsByGroup(1);
+		List<JobInfo> list2 = xxlJobInfoMapper.getJobsByGroup(1);
 
 		int ret3 = xxlJobInfoMapper.findAllCount();
 

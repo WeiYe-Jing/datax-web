@@ -1,7 +1,7 @@
 package com.wugui.admin.dao;
 
-import com.wugui.datax.admin.entity.XxlJobLogGlue;
-import com.wugui.datax.admin.mapper.XxlJobLogGlueMapper;
+import com.wugui.datax.admin.entity.JobLogGlue;
+import com.wugui.datax.admin.mapper.JobLogGlueMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,11 +16,11 @@ import java.util.List;
 public class XxlJobLogGlueMapperTest {
 
     @Resource
-    private XxlJobLogGlueMapper xxlJobLogGlueMapper;
+    private JobLogGlueMapper xxlJobLogGlueMapper;
 
     @Test
     public void test(){
-        XxlJobLogGlue logGlue = new XxlJobLogGlue();
+        JobLogGlue logGlue = new JobLogGlue();
         logGlue.setJobId(1);
         logGlue.setGlueType("1");
         logGlue.setGlueSource("1");
@@ -30,7 +30,7 @@ public class XxlJobLogGlueMapperTest {
         logGlue.setUpdateTime(new Date());
         int ret = xxlJobLogGlueMapper.save(logGlue);
 
-        List<XxlJobLogGlue> list = xxlJobLogGlueMapper.findByJobId(1);
+        List<JobLogGlue> list = xxlJobLogGlueMapper.findByJobId(1);
 
         int ret2 = xxlJobLogGlueMapper.removeOld(1, 1);
 

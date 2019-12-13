@@ -1,7 +1,7 @@
 package com.wugui.admin.dao;
 
-import com.wugui.datax.admin.entity.XxlJobRegistry;
-import com.wugui.datax.admin.mapper.XxlJobRegistryMapper;
+import com.wugui.datax.admin.entity.JobRegistry;
+import com.wugui.datax.admin.mapper.JobRegistryMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ import java.util.List;
 public class XxlJobRegistryMapperTest {
 
     @Resource
-    private XxlJobRegistryMapper xxlJobRegistryMapper;
+    private JobRegistryMapper xxlJobRegistryMapper;
 
     @Test
     public void test(){
@@ -26,7 +26,7 @@ public class XxlJobRegistryMapperTest {
             ret = xxlJobRegistryMapper.registrySave("g1", "k1", "v1", new Date());
         }
 
-        List<XxlJobRegistry> list = xxlJobRegistryMapper.findAll(1, new Date());
+        List<JobRegistry> list = xxlJobRegistryMapper.findAll(1, new Date());
 
         int ret2 = xxlJobRegistryMapper.removeDead(Arrays.asList(1));
     }

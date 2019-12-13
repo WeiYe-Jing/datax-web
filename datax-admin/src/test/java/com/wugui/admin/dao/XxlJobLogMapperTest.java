@@ -1,7 +1,7 @@
 package com.wugui.admin.dao;
 
-import com.wugui.datax.admin.entity.XxlJobLog;
-import com.wugui.datax.admin.mapper.XxlJobLogMapper;
+import com.wugui.datax.admin.entity.JobLog;
+import com.wugui.datax.admin.mapper.JobLogMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,19 +16,19 @@ import java.util.List;
 public class XxlJobLogMapperTest {
 
     @Resource
-    private XxlJobLogMapper xxlJobLogMapper;
+    private JobLogMapper xxlJobLogMapper;
 
     @Test
     public void test(){
-        List<XxlJobLog> list = xxlJobLogMapper.pageList(0, 10, 1, 1, null, null, 1);
+        List<JobLog> list = xxlJobLogMapper.pageList(0, 10, 1, 1, null, null, 1);
         int list_count = xxlJobLogMapper.pageListCount(0, 10, 1, 1, null, null, 1);
 
-        XxlJobLog log = new XxlJobLog();
+        JobLog log = new JobLog();
         log.setJobGroup(1);
         log.setJobId(1);
 
         long ret1 = xxlJobLogMapper.save(log);
-        XxlJobLog dto = xxlJobLogMapper.load(log.getId());
+        JobLog dto = xxlJobLogMapper.load(log.getId());
 
         log.setTriggerTime(new Date());
         log.setTriggerCode(1);

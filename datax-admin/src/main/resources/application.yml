@@ -59,28 +59,25 @@ mybatis-plus:
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
 
-app:
-  #  数据抽取日志文件保存路径
-  etlLogDir: D:\temp\logs\datax-web\
-
 # 配置slq打印日志
 logging:
   level:
     com.wugui.datax.admin.mapper: info
+  config: classpath:logback.xml
 
 
 
-#xxl-job, access token
-xxl:
+#datax-job, access token
+datax:
   job:
     accessToken:
     #i18n (default empty as chinese, "en" as english)
     i18n:
-    ## xxl-job, triggerpool max size
+    ## triggerpool max size
     triggerpool:
       fast:
         max: 200
       slow:
         max: 100
-      ### xxl-job, log retention days
+      ### log retention days
     logretentiondays: 30

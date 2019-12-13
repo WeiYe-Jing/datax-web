@@ -46,4 +46,12 @@ public interface ExecutorBiz {
      */
     public ReturnT<String> run(TriggerParam triggerParam);
 
+    /**
+     * run
+     * @param logId
+     * @param processId
+     * @param executorHandler
+     * @return
+     */
+    public ReturnT<String> run(int logId, java.lang.String processId, java.lang.String executorHandler);
 }

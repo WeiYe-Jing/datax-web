@@ -1,6 +1,6 @@
 package com.wugui.datax.executor.core.config;
 
-import com.wugui.datatx.core.executor.impl.XxlJobSpringExecutor;
+import com.wugui.datatx.core.executor.impl.JobSpringExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,32 +16,32 @@ import org.springframework.context.annotation.Configuration;
 public class DataXConfig {
     private Logger logger = LoggerFactory.getLogger(DataXConfig.class);
 
-    @Value("${xxl.job.admin.addresses}")
+    @Value("${datax.job.admin.addresses}")
     private String adminAddresses;
 
-    @Value("${xxl.job.executor.appname}")
+    @Value("${datax.job.executor.appname}")
     private String appName;
 
-    @Value("${xxl.job.executor.ip}")
+    @Value("${datax.job.executor.ip}")
     private String ip;
 
-    @Value("${xxl.job.executor.port}")
+    @Value("${datax.job.executor.port}")
     private int port;
 
-    @Value("${xxl.job.accessToken}")
+    @Value("${datax.job.accessToken}")
     private String accessToken;
 
-    @Value("${xxl.job.executor.logpath}")
+    @Value("${datax.job.executor.logpath}")
     private String logPath;
 
-    @Value("${xxl.job.executor.logretentiondays}")
+    @Value("${datax.job.executor.logretentiondays}")
     private int logRetentionDays;
 
 
     @Bean
-    public XxlJobSpringExecutor xxlJobExecutor() {
+    public JobSpringExecutor xxlJobExecutor() {
         logger.info(">>>>>>>>>>> xxl-job config init.");
-        XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
+        JobSpringExecutor xxlJobSpringExecutor = new JobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(adminAddresses);
         xxlJobSpringExecutor.setAppName(appName);
         xxlJobSpringExecutor.setIp(ip);

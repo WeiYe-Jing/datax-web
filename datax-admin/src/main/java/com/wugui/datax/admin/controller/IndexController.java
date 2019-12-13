@@ -1,8 +1,7 @@
 package com.wugui.datax.admin.controller;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.admin.service.XxlJobService;
-import com.wugui.datax.admin.service.impl.LoginService;
+import com.wugui.datax.admin.service.JobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -22,41 +19,25 @@ import java.util.Map;
  */
 @RestController
 @Api(tags = "首页接口")
+@RequestMapping("/api")
 public class IndexController {
 
 	@Resource
-	private XxlJobService xxlJobService;
-	@Resource
-	private LoginService loginService;
+	private JobService jobService;
 
 
-	@GetMapping("/")
+	@GetMapping("/index")
 	@ApiOperation("监控图")
 	public ReturnT<Map<String, Object>> index() {
-		return new ReturnT<>(xxlJobService.dashboardInfo());
+		return new ReturnT<>(jobService.dashboardInfo());
 	}
 
     @RequestMapping(value = "/chartInfo",method  = RequestMethod.POST)
 	@ApiOperation("图表信息")
 	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-        ReturnT<Map<String, Object>> chartInfo = xxlJobService.chartInfo(startDate, endDate);
+        ReturnT<Map<String, Object>> chartInfo = jobService.chartInfo(startDate, endDate);
         return chartInfo;
     }
-
-	
-	@RequestMapping(value="login", method= RequestMethod.POST)
-	@ApiOperation("登录")
-	public ReturnT<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName, String password, String ifRemember){
-		boolean ifRem = (ifRemember!=null && ifRemember.trim().length()>0 && "on".equals(ifRemember))?true:false;
-		return loginService.login(request, response, userName, password, ifRem);
-	}
-	
-	@RequestMapping(value="logout", method= RequestMethod.POST)
-	@ApiOperation("退出")
-	public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response){
-		return loginService.logout(request, response);
-	}
-
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

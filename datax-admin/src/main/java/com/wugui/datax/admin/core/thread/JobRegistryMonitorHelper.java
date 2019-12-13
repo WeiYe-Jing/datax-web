@@ -1,9 +1,9 @@
 package com.wugui.datax.admin.core.thread;
 
 import com.wugui.datatx.core.enums.RegistryConfig;
-import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
-import com.wugui.datax.admin.entity.XxlJobGroup;
-import com.wugui.datax.admin.entity.XxlJobRegistry;
+import com.wugui.datax.admin.core.conf.JobAdminConfig;
+import com.wugui.datax.admin.entity.JobGroup;
+import com.wugui.datax.admin.entity.JobRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,20 +29,20 @@ public class JobRegistryMonitorHelper {
 			while (!toStop) {
 				try {
 					// auto registry group
-					List<XxlJobGroup> groupList = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupMapper().findByAddressType(0);
+					List<JobGroup> groupList = JobAdminConfig.getAdminConfig().getXxlJobGroupMapper().findByAddressType(0);
 					if (groupList!=null && !groupList.isEmpty()) {
 
 						// remove dead address (admin/executor)
-						List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
+						List<Integer> ids = JobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
 						if (ids!=null && ids.size()>0) {
-							XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().removeDead(ids);
+							JobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().removeDead(ids);
 						}
 
 						// fresh online address (admin/executor)
 						HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
-						List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
+						List<JobRegistry> list = JobAdminConfig.getAdminConfig().getXxlJobRegistryMapper().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
 						if (list != null) {
-							for (XxlJobRegistry item: list) {
+							for (JobRegistry item: list) {
 								if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
 									String appName = item.getRegistryKey();
 									List<String> registryList = appAddressMap.get(appName);
@@ -59,7 +59,7 @@ public class JobRegistryMonitorHelper {
 						}
 
 						// fresh group address
-						for (XxlJobGroup group: groupList) {
+						for (JobGroup group: groupList) {
 							List<String> registryList = appAddressMap.get(group.getAppName());
 							String addressListStr = null;
 							if (registryList!=null && !registryList.isEmpty()) {
@@ -71,7 +71,7 @@ public class JobRegistryMonitorHelper {
 								addressListStr = addressListStr.substring(0, addressListStr.length()-1);
 							}
 							group.setAddressList(addressListStr);
-							XxlJobAdminConfig.getAdminConfig().getXxlJobGroupMapper().update(group);
+							JobAdminConfig.getAdminConfig().getXxlJobGroupMapper().update(group);
 						}
 					}
 				} catch (Exception e) {

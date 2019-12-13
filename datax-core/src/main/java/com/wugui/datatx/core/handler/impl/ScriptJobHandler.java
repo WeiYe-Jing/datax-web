@@ -90,7 +90,7 @@ public class ScriptJobHandler extends IJobHandler {
     }
 
     @Override
-    public ReturnT<String> executeDataX(String jobJson) throws Exception {
+    public ReturnT<String> executeDataX(String jobJson, long logId, String executorParams, long logDateTime) throws Exception {
         return null;
     }
 

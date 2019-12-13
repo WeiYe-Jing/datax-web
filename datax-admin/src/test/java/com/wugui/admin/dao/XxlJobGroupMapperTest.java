@@ -1,7 +1,7 @@
 package com.wugui.admin.dao;
 
-import com.wugui.datax.admin.entity.XxlJobGroup;
-import com.wugui.datax.admin.mapper.XxlJobGroupMapper;
+import com.wugui.datax.admin.entity.JobGroup;
+import com.wugui.datax.admin.mapper.JobGroupMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,15 +15,15 @@ import java.util.List;
 public class XxlJobGroupMapperTest {
 
     @Resource
-    private XxlJobGroupMapper xxlJobGroupMapper;
+    private JobGroupMapper xxlJobGroupMapper;
 
     @Test
     public void test(){
-        List<XxlJobGroup> list = xxlJobGroupMapper.findAll();
+        List<JobGroup> list = xxlJobGroupMapper.findAll();
 
-        List<XxlJobGroup> list2 = xxlJobGroupMapper.findByAddressType(0);
+        List<JobGroup> list2 = xxlJobGroupMapper.findByAddressType(0);
 
-        XxlJobGroup group = new XxlJobGroup();
+        JobGroup group = new JobGroup();
         group.setAppName("setAppName");
         group.setTitle("setTitle");
         group.setOrder(1);
@@ -32,7 +32,7 @@ public class XxlJobGroupMapperTest {
 
         int ret = xxlJobGroupMapper.save(group);
 
-        XxlJobGroup group2 = xxlJobGroupMapper.load(group.getId());
+        JobGroup group2 = xxlJobGroupMapper.load(group.getId());
         group2.setAppName("setAppName2");
         group2.setTitle("setTitle2");
         group2.setOrder(2);

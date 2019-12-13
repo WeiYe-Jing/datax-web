@@ -1,10 +1,12 @@
 package com.wugui.datax.executor.service.jobhandler;
 
 import cn.hutool.core.io.FileUtil;
+import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
+import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +29,7 @@ public class CommandJobHandler extends IJobHandler {
     private String jsonpath;
 
     @Override
-    public ReturnT<String> executeDataX(String jobJson) throws Exception {
+    public ReturnT<String> executeDataX(String jobJson,long logId,String executorParams,long logDateTime) throws Exception {
 
         int exitValue = -1;
         BufferedReader bufferedReader = null;
@@ -37,9 +39,11 @@ public class CommandJobHandler extends IJobHandler {
         tmpFilePath = generateTemJsonFile(jobJson);
         try {
             // command process
-            Process process = Runtime.getRuntime().exec(new String[]{"python", getDataXPyPath(), tmpFilePath});
+            Process process = Runtime.getRuntime().exec(new String[]{"python",executorParams, getDataXPyPath(), tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
+            //更新任务进程Id
+            ProcessCallbackThread.pushCallBack(new HandleProcessCallbackParam(logId,logDateTime,processId));
             InputStreamReader input = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(input);
             while ((line = bufferedReader.readLine()) != null) {

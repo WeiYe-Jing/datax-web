@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.controller;
 
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
@@ -8,9 +9,9 @@ import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.TriggerJobDto;
-import com.wugui.datax.admin.entity.XxlJobInfo;
-import com.wugui.datax.admin.entity.XxlJobUser;
-import com.wugui.datax.admin.service.XxlJobService;
+import com.wugui.datax.admin.entity.JobInfo;
+import com.wugui.datax.admin.entity.JobUser;
+import com.wugui.datax.admin.service.JobService;
 import com.wugui.datax.admin.service.impl.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,11 +36,11 @@ import java.util.Map;
 public class JobInfoController {
 
     @Resource
-    private XxlJobService xxlJobService;
+    private JobService xxlJobService;
 
 
     public static void validPermission(HttpServletRequest request, int jobGroup) {
-        XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
             throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
         }
@@ -56,13 +57,13 @@ public class JobInfoController {
 
     @PostMapping("/add")
     @ApiOperation("添加任务")
-    public ReturnT<String> add(@RequestBody XxlJobInfo jobInfo) {
+    public ReturnT<String> add(@RequestBody JobInfo jobInfo) {
         return xxlJobService.add(jobInfo);
     }
 
     @PostMapping("/update")
     @ApiOperation("更新任务")
-    public ReturnT<String> update(@RequestBody XxlJobInfo jobInfo) {
+    public ReturnT<String> update(@RequestBody JobInfo jobInfo) {
         return xxlJobService.update(jobInfo);
     }
 
@@ -97,6 +98,7 @@ public class JobInfoController {
     }
 
     @GetMapping("/nextTriggerTime")
+    @ApiOperation("获取近5次触发时间")
     public ReturnT<List<String>> nextTriggerTime(String cron) {
         List<String> result = new ArrayList<>();
         try {
@@ -114,5 +116,11 @@ public class JobInfoController {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         return new ReturnT<>(result);
+    }
+
+    @ApiOperation("通过传入 进程ID 停止该job作业")
+    @GetMapping("/killJob/{pid}/{id}")
+    public R<Boolean> killJob(@PathVariable(value ="pid") String pid, @PathVariable(value = "id") Long id){
+        return R.ok(xxlJobService.killJob(pid,id));
     }
 }

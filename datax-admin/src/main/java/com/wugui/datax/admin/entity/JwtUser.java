@@ -21,7 +21,7 @@ public class JwtUser implements UserDetails {
     }
 
     // 写一个能直接使用user创建jwtUser的构造器
-    public JwtUser(XxlJobUser user) {
+    public JwtUser(JobUser user) {
         id = user.getId();
         username = user.getUsername();
         password = user.getPassword();

@@ -4,7 +4,7 @@ import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datax.admin.core.route.ExecutorRouter;
-import com.wugui.datax.admin.core.scheduler.XxlJobScheduler;
+import com.wugui.datax.admin.core.scheduler.JobScheduler;
 import com.wugui.datax.admin.core.util.I18nUtil;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class ExecutorRouteBusyover extends ExecutorRouter {
             // beat
             ReturnT<String> idleBeatResult = null;
             try {
-                ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
+                ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(address);
                 idleBeatResult = executorBiz.idleBeat(triggerParam.getJobId());
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);

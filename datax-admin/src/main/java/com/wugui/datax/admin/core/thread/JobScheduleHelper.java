@@ -1,9 +1,9 @@
 package com.wugui.datax.admin.core.thread;
 
-import com.wugui.datax.admin.core.conf.XxlJobAdminConfig;
+import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
-import com.wugui.datax.admin.entity.XxlJobInfo;
+import com.wugui.datax.admin.entity.JobInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +51,7 @@ public class JobScheduleHelper {
                 logger.info(">>>>>>>>> init xxl-job admin scheduler success.");
 
                 // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)
-                int preReadCount = (XxlJobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + XxlJobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
+                int preReadCount = (JobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
 
                 while (!scheduleThreadToStop) {
 
@@ -65,21 +65,21 @@ public class JobScheduleHelper {
                     boolean preReadSuc = true;
                     try {
 
-                        conn = XxlJobAdminConfig.getAdminConfig().getDataSource().getConnection();
+                        conn = JobAdminConfig.getAdminConfig().getDataSource().getConnection();
                         connAutoCommit = conn.getAutoCommit();
                         conn.setAutoCommit(false);
 
-                        preparedStatement = conn.prepareStatement(  "select * from xxl_job_lock where lock_name = 'schedule_lock' for update" );
+                        preparedStatement = conn.prepareStatement(  "select * from job_lock where lock_name = 'schedule_lock' for update" );
                         preparedStatement.execute();
 
                         // tx start
 
                         // 1、pre read
                         long nowTime = System.currentTimeMillis();
-                        List<XxlJobInfo> scheduleList = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoMapper().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
+                        List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getXxlJobInfoMapper().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
                         if (scheduleList!=null && scheduleList.size()>0) {
                             // 2、push time-ring
-                            for (XxlJobInfo jobInfo: scheduleList) {
+                            for (JobInfo jobInfo: scheduleList) {
 
                                 // time-ring jump
                                 if (nowTime > jobInfo.getTriggerNextTime() + PRE_READ_MS) {
@@ -130,8 +130,8 @@ public class JobScheduleHelper {
                             }
 
                             // 3、update trigger info
-                            for (XxlJobInfo jobInfo: scheduleList) {
-                                XxlJobAdminConfig.getAdminConfig().getXxlJobInfoMapper().scheduleUpdate(jobInfo);
+                            for (JobInfo jobInfo: scheduleList) {
+                                JobAdminConfig.getAdminConfig().getXxlJobInfoMapper().scheduleUpdate(jobInfo);
                             }
 
                         } else {
@@ -266,7 +266,7 @@ public class JobScheduleHelper {
         ringThread.start();
     }
 
-    private void refreshNextValidTime(XxlJobInfo jobInfo, Date fromTime) throws ParseException {
+    private void refreshNextValidTime(JobInfo jobInfo, Date fromTime) throws ParseException {
         Date nextValidTime = new CronExpression(jobInfo.getJobCron()).getNextValidTimeAfter(fromTime);
         if (nextValidTime != null) {
             jobInfo.setTriggerLastTime(jobInfo.getTriggerNextTime());

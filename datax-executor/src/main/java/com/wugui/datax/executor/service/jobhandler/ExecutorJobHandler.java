@@ -3,6 +3,7 @@ package com.wugui.datax.executor.service.jobhandler;
 import cn.hutool.core.io.FileUtil;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
@@ -21,29 +22,32 @@ import java.nio.charset.StandardCharsets;
  * @author jingwk 2019-11-16
  */
 
-@JobHandler(value = "commandJobHandler")
+@JobHandler(value = "executorJobHandler")
 @Component
-public class CommandJobHandler extends IJobHandler {
+public class ExecutorJobHandler extends IJobHandler {
 
     @Value("${datax.executor.jsonpath}")
     private String jsonpath;
 
+
+
     @Override
-    public ReturnT<String> executeDataX(String jobJson,long logId,String executorParams,long logDateTime) throws Exception {
+    public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
 
         int exitValue = -1;
         BufferedReader bufferedReader = null;
         String tmpFilePath = null;
         String line = null;
         //生成Json临时文件
-        tmpFilePath = generateTemJsonFile(jobJson);
+        tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
             // command process
-            Process process = Runtime.getRuntime().exec(new String[]{"python",executorParams, getDataXPyPath(), tmpFilePath});
+            Process process = Runtime.getRuntime().exec(new String[]{"python",tgParam.getExecutorParams(), getDataXPyPath(), tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
+            jobTmpFiles.put(processId, tmpFilePath);
             //更新任务进程Id
-            ProcessCallbackThread.pushCallBack(new HandleProcessCallbackParam(logId,logDateTime,processId));
+            ProcessCallbackThread.pushCallBack(new HandleProcessCallbackParam(tgParam.getLogId(),tgParam.getLogDateTime(),processId));
             InputStreamReader input = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(input);
             while ((line = bufferedReader.readLine()) != null) {
@@ -73,7 +77,7 @@ public class CommandJobHandler extends IJobHandler {
         if (exitValue == 0) {
             return IJobHandler.SUCCESS;
         } else {
-            return new ReturnT<String>(IJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
+            return new ReturnT<>(IJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
         }
     }
 
@@ -103,10 +107,5 @@ public class CommandJobHandler extends IJobHandler {
         dataXHome = osName.contains("Windows") ? (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) : (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);
         dataxPyPath = dataXHome + "datax.py";
         return dataxPyPath;
-    }
-
-    @Override
-    public ReturnT<String> execute(String param) throws Exception {
-        return null;
     }
 }

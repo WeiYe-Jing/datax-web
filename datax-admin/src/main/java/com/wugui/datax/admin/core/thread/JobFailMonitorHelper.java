@@ -46,24 +46,24 @@ public class JobFailMonitorHelper {
 				while (!toStop) {
 					try {
 
-						List<Long> failLogIds = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().findFailJobLogIds(1000);
+						List<Long> failLogIds = JobAdminConfig.getAdminConfig().getJobLogMapper().findFailJobLogIds(1000);
 						if (failLogIds!=null && !failLogIds.isEmpty()) {
 							for (long failLogId: failLogIds) {
 
 								// lock log
-								int lockRet = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateAlarmStatus(failLogId, 0, -1);
+								int lockRet = JobAdminConfig.getAdminConfig().getJobLogMapper().updateAlarmStatus(failLogId, 0, -1);
 								if (lockRet < 1) {
 									continue;
 								}
-								JobLog log = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().load(failLogId);
-								JobInfo info = JobAdminConfig.getAdminConfig().getXxlJobInfoMapper().loadById(log.getJobId());
+								JobLog log = JobAdminConfig.getAdminConfig().getJobLogMapper().load(failLogId);
+								JobInfo info = JobAdminConfig.getAdminConfig().getJobInfoMapper().loadById(log.getJobId());
 
 								// 1、fail retry monitor
 								if (log.getExecutorFailRetryCount() > 0) {
 									JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount()-1), log.getExecutorShardingParam(), log.getExecutorParam());
 									String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>"+ I18nUtil.getString("jobconf_trigger_type_retry") +"<<<<<<<<<<< </span><br>";
 									log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
-									JobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateTriggerInfo(log);
+									JobAdminConfig.getAdminConfig().getJobLogMapper().updateTriggerInfo(log);
 								}
 
 								// 2、fail alarm monitor
@@ -81,7 +81,7 @@ public class JobFailMonitorHelper {
 									newAlarmStatus = 1;
 								}
 
-								JobAdminConfig.getAdminConfig().getXxlJobLogMapper().updateAlarmStatus(failLogId, -1, newAlarmStatus);
+								JobAdminConfig.getAdminConfig().getJobLogMapper().updateAlarmStatus(failLogId, -1, newAlarmStatus);
 							}
 						}
 
@@ -168,7 +168,7 @@ public class JobFailMonitorHelper {
 			}
 
 			// email info
-			JobGroup group = JobAdminConfig.getAdminConfig().getXxlJobGroupMapper().load(Integer.valueOf(info.getJobGroup()));
+			JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupMapper().load(Integer.valueOf(info.getJobGroup()));
 			String personal = I18nUtil.getString("admin_name_full");
 			String title = I18nUtil.getString("jobconf_monitor");
 			String content = MessageFormat.format(mailBodyTemplate,

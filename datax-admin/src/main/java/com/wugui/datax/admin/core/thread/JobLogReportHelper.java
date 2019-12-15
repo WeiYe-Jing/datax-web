@@ -68,7 +68,7 @@ public class JobLogReportHelper {
                             xxlJobLogReport.setSucCount(0);
                             xxlJobLogReport.setFailCount(0);
 
-                            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().findLogReport(todayFrom, todayTo);
+                            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getJobLogMapper().findLogReport(todayFrom, todayTo);
                             if (triggerCountMap!=null && triggerCountMap.size()>0) {
                                 int triggerDayCount = triggerCountMap.containsKey("triggerDayCount")? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCount"))):0;
                                 int triggerDayCountRunning = triggerCountMap.containsKey("triggerDayCountRunning")? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCountRunning"))):0;
@@ -81,9 +81,9 @@ public class JobLogReportHelper {
                             }
 
                             // do refresh
-                            int ret = JobAdminConfig.getAdminConfig().getXxlJobLogReportMapper().update(xxlJobLogReport);
+                            int ret = JobAdminConfig.getAdminConfig().getJobLogReportMapper().update(xxlJobLogReport);
                             if (ret < 1) {
-                                JobAdminConfig.getAdminConfig().getXxlJobLogReportMapper().save(xxlJobLogReport);
+                                JobAdminConfig.getAdminConfig().getJobLogReportMapper().save(xxlJobLogReport);
                             }
                         }
 
@@ -109,9 +109,9 @@ public class JobLogReportHelper {
                         // clean expired log
                         List<Long> logIds = null;
                         do {
-                            logIds = JobAdminConfig.getAdminConfig().getXxlJobLogMapper().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
+                            logIds = JobAdminConfig.getAdminConfig().getJobLogMapper().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
                             if (logIds!=null && logIds.size()>0) {
-                                JobAdminConfig.getAdminConfig().getXxlJobLogMapper().clearLog(logIds);
+                                JobAdminConfig.getAdminConfig().getJobLogMapper().clearLog(logIds);
                             }
                         } while (logIds!=null && logIds.size()>0);
 

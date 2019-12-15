@@ -5,7 +5,7 @@ import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datatx.core.util.XxlJobRemotingUtil;
+import com.wugui.datatx.core.util.JobRemotingUtil;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.util.JacksonUtil;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +40,7 @@ public class JobApiController {
         // valid
         if (JobAdminConfig.getAdminConfig().getAccessToken()!=null
                 && JobAdminConfig.getAdminConfig().getAccessToken().trim().length()>0
-                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
+                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 
@@ -68,7 +68,7 @@ public class JobApiController {
         // valid
         if (JobAdminConfig.getAdminConfig().getAccessToken()!=null
                 && JobAdminConfig.getAdminConfig().getAccessToken().trim().length()>0
-                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
+                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 
@@ -98,7 +98,7 @@ public class JobApiController {
         // valid
         if (JobAdminConfig.getAdminConfig().getAccessToken()!=null
                 && JobAdminConfig.getAdminConfig().getAccessToken().trim().length()>0
-                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
+                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 
@@ -126,7 +126,7 @@ public class JobApiController {
         // valid
         if (JobAdminConfig.getAdminConfig().getAccessToken()!=null
                 && JobAdminConfig.getAdminConfig().getAccessToken().trim().length()>0
-                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
+                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_RPC_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 

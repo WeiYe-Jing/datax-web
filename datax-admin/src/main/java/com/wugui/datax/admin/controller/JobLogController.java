@@ -4,6 +4,7 @@ import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.LogResult;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
+import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.scheduler.JobScheduler;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobInfo;
@@ -14,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -164,5 +166,9 @@ public class JobLogController {
 		return ReturnT.SUCCESS;
 	}
 
-
+	@ApiOperation("停止该job作业")
+	@PostMapping("/killJob")
+	public ReturnT<String> killJob(@RequestBody JobLog log){
+		return KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(),log.getProcessId());
+	}
 }

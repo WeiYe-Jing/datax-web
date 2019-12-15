@@ -1,6 +1,7 @@
 package com.wugui.datatx.core.handler.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 
@@ -21,13 +22,8 @@ public class GlueJobHandler extends IJobHandler {
 	}
 
 	@Override
-	public ReturnT<String> execute(String param) throws Exception {
+	public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
 		JobLogger.log("----------- glue.version:"+ glueUpdatetime +" -----------");
-		return jobHandler.execute(param);
-	}
-
-	@Override
-	public ReturnT<String> executeDataX(String jobJson, long logId, String executorParams, long logDateTime) throws Exception {
-		return null;
+		return jobHandler.executeDataX(tgParam);
 	}
 }

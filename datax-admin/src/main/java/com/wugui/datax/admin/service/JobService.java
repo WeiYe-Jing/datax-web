@@ -82,13 +82,4 @@ public interface JobService {
 	 * @return
 	 */
 	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate);
-
-
-	/**
-	 * 结束datax进程
-	 * @param pid
-	 * @param id
-	 * @return
-	 */
-	public Boolean killJob(String pid,Long id);
 }

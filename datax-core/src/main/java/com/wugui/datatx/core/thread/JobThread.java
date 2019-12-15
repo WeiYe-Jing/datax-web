@@ -128,12 +128,7 @@ public class JobThread extends Thread{
 						Thread futureThread = null;
 						try {
 							final TriggerParam tgParamT = tgParam;
-							FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(new Callable<ReturnT<String>>() {
-								@Override
-								public ReturnT<String> call() throws Exception {
-									return handler.executeDataX(tgParamT.getJobJson(),tgParamT.getLogId(),tgParamT.getExecutorParams(),tgParamT.getLogDateTime());
-								}
-							});
+							FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(() -> handler.executeDataX(tgParamT));
 							futureThread = new Thread(futureTask);
 							futureThread.start();
 
@@ -149,7 +144,7 @@ public class JobThread extends Thread{
 						}
 					} else {
 						// just execute
-						executeResult = handler.executeDataX(tgParam.getJobJson(),tgParam.getLogId(),tgParam.getExecutorParams(),tgParam.getLogDateTime());
+						executeResult = handler.executeDataX(tgParam);
 					}
 
 					if (executeResult == null) {

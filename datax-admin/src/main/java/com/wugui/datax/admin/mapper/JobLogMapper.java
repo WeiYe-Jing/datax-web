@@ -33,11 +33,11 @@ public interface JobLogMapper {
 
 	public JobLog load(@Param("id") long id);
 
-	public long save(JobLog xxlJobLog);
+	public long save(JobLog jobLog);
 
-	public int updateTriggerInfo(JobLog xxlJobLog);
+	public int updateTriggerInfo(JobLog jobLog);
 
-	public int updateHandleInfo(JobLog xxlJobLog);
+	public int updateHandleInfo(JobLog jobLog);
 
 	public int updateProcessId(@Param("id") long id,
 							   @Param("processId") String processId);

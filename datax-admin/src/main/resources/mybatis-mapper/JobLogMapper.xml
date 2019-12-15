@@ -34,6 +34,7 @@
 		t.job_id,
 		t.executor_address,
 		t.executor_handler,
+		t.kill_job_handler,
 		t.executor_param,
 		t.executor_sharding_param,
 		t.executor_fail_retry_count,

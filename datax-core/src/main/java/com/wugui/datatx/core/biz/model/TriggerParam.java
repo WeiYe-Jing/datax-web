@@ -27,6 +27,8 @@ public class TriggerParam implements Serializable{
 
     private String jobJson;
 
+    private String processId;
+
 
     public int getJobId() {
         return jobId;
@@ -130,6 +132,14 @@ public class TriggerParam implements Serializable{
 
     public void setJobJson(String jobJson) {
         this.jobJson = jobJson;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.wugui.datatx.core.handler.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.log.JobFileAppender;
@@ -45,9 +46,9 @@ public class ScriptJobHandler extends IJobHandler {
         return glueUpdatetime;
     }
 
-    @Override
-    public ReturnT<String> execute(String param) throws Exception {
 
+    @Override
+    public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
         if (!glueType.isScript()) {
             return new ReturnT<String>(IJobHandler.FAIL.getCode(), "glueType["+ glueType +"] invalid.");
         }
@@ -73,7 +74,7 @@ public class ScriptJobHandler extends IJobHandler {
         // script params：0=param、1=分片序号、2=分片总数
         ShardingUtil.ShardingVO shardingVO = ShardingUtil.getShardingVo();
         String[] scriptParams = new String[3];
-        scriptParams[0] = param;
+        scriptParams[0] = tgParam.getExecutorParams();
         scriptParams[1] = String.valueOf(shardingVO.getIndex());
         scriptParams[2] = String.valueOf(shardingVO.getTotal());
 
@@ -86,12 +87,6 @@ public class ScriptJobHandler extends IJobHandler {
         } else {
             return new ReturnT<String>(IJobHandler.FAIL.getCode(), "script exit value("+exitValue+") is failed");
         }
-
-    }
-
-    @Override
-    public ReturnT<String> executeDataX(String jobJson, long logId, String executorParams, long logDateTime) throws Exception {
-        return null;
     }
 
 }

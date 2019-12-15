@@ -103,6 +103,9 @@ public class JobExecutor {
         // destory TriggerCallbackThread
         TriggerCallbackThread.getInstance().toStop();
 
+        // destory ProcessCallbackThread
+        ProcessCallbackThread.getInstance().toStop();
+
     }
 
 

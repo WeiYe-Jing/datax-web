@@ -1,12 +1,10 @@
 package com.wugui.datax.admin.service.impl;
 
-import cn.hutool.core.io.FileUtil;
 import com.google.common.collect.Maps;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.wugui.datatx.core.util.DateUtil;
-import com.wugui.datatx.core.util.ProcessUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
@@ -19,10 +17,8 @@ import com.wugui.datax.admin.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -33,15 +29,15 @@ import java.util.concurrent.ConcurrentMap;
  * @author xuxueli 2016-5-28 15:30:33
  */
 @Service
-public class XxlJobServiceImpl implements JobService {
-	private static Logger logger = LoggerFactory.getLogger(XxlJobServiceImpl.class);
+public class JobServiceImpl implements JobService {
+	private static Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
 
 	@Resource
 	private JobGroupMapper jobGroupMapper;
 	@Resource
 	private JobInfoMapper jobInfoMapper;
 	@Resource
-	public JobLogMapper jobLogMapper;
+	private JobLogMapper jobLogMapper;
 	@Resource
 	private JobLogGlueMapper jobLogGlueMapper;
 	@Resource
@@ -378,23 +374,6 @@ public class XxlJobServiceImpl implements JobService {
 		result.put("triggerCountFailTotal", triggerCountFailTotal);
 
 		return new ReturnT<Map<String, Object>>(result);
-	}
-
-	@Override
-	public Boolean killJob(String pid, Long id) {
-
-		//String processId = ProcessUtil.getProcessId(p);
-		//jobTmpFiles.put(processId, tmpFilePath);
-		boolean result = ProcessUtil.killProcessByPid(pid);
-		//  删除临时文件
-		if (!CollectionUtils.isEmpty(jobTmpFiles)) {
-			String pathname = jobTmpFiles.get(pid);
-			if (pathname != null) {
-				FileUtil.del(new File(pathname));
-			}
-		}
-		//TODO 更新状态
-		return result;
 	}
 
 }

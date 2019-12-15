@@ -1,7 +1,6 @@
 package com.wugui.datax.admin.controller;
 
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
@@ -116,11 +115,5 @@ public class JobInfoController {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         return new ReturnT<>(result);
-    }
-
-    @ApiOperation("通过传入 进程ID 停止该job作业")
-    @GetMapping("/killJob/{pid}/{id}")
-    public R<Boolean> killJob(@PathVariable(value ="pid") String pid, @PathVariable(value = "id") Long id){
-        return R.ok(xxlJobService.killJob(pid,id));
     }
 }

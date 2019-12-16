@@ -325,8 +325,7 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
-	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-
+	public ReturnT<Map<String, Object>> chartInfo() {
 		// process
 		List<String> triggerDayList = new ArrayList<String>();
 		List<Integer> triggerDayCountRunningList = new ArrayList<Integer>();
@@ -336,7 +335,7 @@ public class JobServiceImpl implements JobService {
 		int triggerCountSucTotal = 0;
 		int triggerCountFailTotal = 0;
 
-		List<JobLogReport> logReportList = jobLogReportMapper.queryLogReport(startDate, endDate);
+		List<JobLogReport> logReportList = jobLogReportMapper.queryLogReport(DateUtil.addDays(new Date(),-7), new Date());
 
 		if (logReportList!=null && logReportList.size()>0) {
 			for (JobLogReport item: logReportList) {

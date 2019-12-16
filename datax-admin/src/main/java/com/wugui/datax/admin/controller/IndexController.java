@@ -34,8 +34,8 @@ public class IndexController {
 
     @RequestMapping(value = "/chartInfo",method  = RequestMethod.POST)
 	@ApiOperation("图表信息")
-	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-        ReturnT<Map<String, Object>> chartInfo = jobService.chartInfo(startDate, endDate);
+	public ReturnT<Map<String, Object>> chartInfo() {
+        ReturnT<Map<String, Object>> chartInfo = jobService.chartInfo();
         return chartInfo;
     }
 

@@ -9,7 +9,6 @@ import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,8 @@ public class ExecutorJobHandler extends IJobHandler {
     @Value("${datax.executor.jsonpath}")
     private String jsonpath;
 
-
+    @Value("${datax.pypath}")
+    private String dataXPyPath;
 
     @Override
     public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
@@ -42,7 +42,7 @@ public class ExecutorJobHandler extends IJobHandler {
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
             // command process
-            Process process = Runtime.getRuntime().exec(new String[]{"python",tgParam.getExecutorParams(), getDataXPyPath(), tmpFilePath});
+            Process process = Runtime.getRuntime().exec(new String[]{"python",tgParam.getExecutorParams(), dataXPyPath, tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
             jobTmpFiles.put(processId, tmpFilePath);
@@ -94,18 +94,5 @@ public class ExecutorJobHandler extends IJobHandler {
             JobLogger.log("JSON 临时文件写入异常：" + e.getMessage());
         }
         return tmpFilePath;
-    }
-
-
-    private String getDataXPyPath() {
-        String dataxPyPath;
-        String dataXHome = System.getenv("DATAX_HOME");
-        if (StringUtils.isBlank(dataXHome)) {
-            JobLogger.log("DATAX_HOME 环境变量为NULL");
-        }
-        String osName = System.getProperty("os.name");
-        dataXHome = osName.contains("Windows") ? (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) : (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);
-        dataxPyPath = dataXHome + "datax.py";
-        return dataxPyPath;
     }
 }

@@ -4,7 +4,6 @@ package com.wugui.datax.admin.service;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.entity.JobInfo;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -76,10 +75,7 @@ public interface JobService {
 
 	/**
 	 * chart info
-	 *
-	 * @param startDate
-	 * @param endDate
 	 * @return
 	 */
-	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate);
+	public ReturnT<Map<String, Object>> chartInfo();
 }

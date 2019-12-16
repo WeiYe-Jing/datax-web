@@ -26,7 +26,7 @@ public class KillJob {
         triggerParam.setJobId(-1);
         triggerParam.setExecutorHandler("killJobHandler");
         triggerParam.setProcessId(processId);
-        triggerParam.setLogId(logId);
+        //triggerParam.setLogId(logId);
         triggerParam.setGlueType(GlueTypeEnum.BEAN.getDesc());
         triggerParam.setExecutorBlockStrategy(ExecutorBlockStrategyEnum.SERIAL_EXECUTION.getTitle());
         triggerParam.setLogDateTime(triggerTime.getTime());

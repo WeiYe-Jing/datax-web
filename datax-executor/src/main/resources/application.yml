@@ -26,3 +26,5 @@ datax:
 
   executor:
     jsonpath: D:\\temp\\executor\\json\\
+
+  pypath: F:\tools\datax\bin\datax.py

@@ -48,7 +48,7 @@ public class JobScheduleHelper {
                         logger.error(e.getMessage(), e);
                     }
                 }
-                logger.info(">>>>>>>>> init xxl-job admin scheduler success.");
+                logger.info(">>>>>>>>> init datax-web admin scheduler success.");
 
                 // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)
                 int preReadCount = (JobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
@@ -84,7 +84,7 @@ public class JobScheduleHelper {
                                 // time-ring jump
                                 if (nowTime > jobInfo.getTriggerNextTime() + PRE_READ_MS) {
                                     // 2.1、trigger-expire > 5s：pass && make next-trigger-time
-                                    logger.warn(">>>>>>>>>>> xxl-job, schedule misfire, jobId = " + jobInfo.getId());
+                                    logger.warn(">>>>>>>>>>> datax-web, schedule misfire, jobId = " + jobInfo.getId());
 
                                     // fresh next
                                     refreshNextValidTime(jobInfo, new Date());
@@ -94,7 +94,7 @@ public class JobScheduleHelper {
 
                                     // 1、trigger
                                     JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null);
-                                    logger.debug(">>>>>>>>>>> xxl-job, schedule push trigger : jobId = " + jobInfo.getId() );
+                                    logger.debug(">>>>>>>>>>> datax-web, schedule push trigger : jobId = " + jobInfo.getId() );
 
                                     // 2、fresh next
                                     refreshNextValidTime(jobInfo, new Date());
@@ -143,7 +143,7 @@ public class JobScheduleHelper {
 
                     } catch (Exception e) {
                         if (!scheduleThreadToStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, JobScheduleHelper#scheduleThread error:{}", e);
+                            logger.error(">>>>>>>>>>> datax-web, JobScheduleHelper#scheduleThread error:{}", e);
                         }
                     } finally {
 
@@ -200,11 +200,11 @@ public class JobScheduleHelper {
 
                 }
 
-                logger.info(">>>>>>>>>>> xxl-job, JobScheduleHelper#scheduleThread stop");
+                logger.info(">>>>>>>>>>> datax-web, JobScheduleHelper#scheduleThread stop");
             }
         });
         scheduleThread.setDaemon(true);
-        scheduleThread.setName("xxl-job, admin JobScheduleHelper#scheduleThread");
+        scheduleThread.setName("datax-web, admin JobScheduleHelper#scheduleThread");
         scheduleThread.start();
 
 
@@ -234,7 +234,7 @@ public class JobScheduleHelper {
                     }
 
                     // ring trigger
-                    logger.debug(">>>>>>>>>>> xxl-job, time-ring beat : " + nowSecond + " = " + Arrays.asList(ringItemData) );
+                    logger.debug(">>>>>>>>>>> datax-web, time-ring beat : " + nowSecond + " = " + Arrays.asList(ringItemData) );
                     if (ringItemData.size() > 0) {
                         // do trigger
                         for (int jobId: ringItemData) {
@@ -246,7 +246,7 @@ public class JobScheduleHelper {
                     }
                 } catch (Exception e) {
                     if (!ringThreadToStop) {
-                        logger.error(">>>>>>>>>>> xxl-job, JobScheduleHelper#ringThread error:{}", e);
+                        logger.error(">>>>>>>>>>> datax-web, JobScheduleHelper#ringThread error:{}", e);
                     }
                 }
 
@@ -259,10 +259,10 @@ public class JobScheduleHelper {
                     }
                 }
             }
-            logger.info(">>>>>>>>>>> xxl-job, JobScheduleHelper#ringThread stop");
+            logger.info(">>>>>>>>>>> datax-web, JobScheduleHelper#ringThread stop");
         });
         ringThread.setDaemon(true);
-        ringThread.setName("xxl-job, admin JobScheduleHelper#ringThread");
+        ringThread.setName("datax-web, admin JobScheduleHelper#ringThread");
         ringThread.start();
     }
 
@@ -287,7 +287,7 @@ public class JobScheduleHelper {
         }
         ringItemData.add(jobId);
 
-        logger.debug(">>>>>>>>>>> xxl-job, schedule push time-ring : " + ringSecond + " = " + Arrays.asList(ringItemData) );
+        logger.debug(">>>>>>>>>>> datax-web, schedule push time-ring : " + ringSecond + " = " + Arrays.asList(ringItemData) );
     }
 
     public void toStop(){
@@ -345,7 +345,7 @@ public class JobScheduleHelper {
             }
         }
 
-        logger.info(">>>>>>>>>>> xxl-job, JobScheduleHelper stop");
+        logger.info(">>>>>>>>>>> datax-web, JobScheduleHelper stop");
     }
 
 }

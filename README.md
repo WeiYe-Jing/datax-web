@@ -77,8 +77,9 @@ http://localhost:8080/index.html#/dashboard
 ### 11. admin可以创建用户，编辑用户信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
 
-### 12.配置执行器(使用开源项目xxl-job)
+### 12.执行器(使用开源项目xxl-job)
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
+注意：执行器启动成功后会自动注册，一般不需要手动配置
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;
 #### 执行器属性说明

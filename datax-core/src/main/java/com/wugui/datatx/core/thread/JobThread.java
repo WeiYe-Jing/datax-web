@@ -121,7 +121,7 @@ public class JobThread extends Thread{
 					ShardingUtil.setShardingVo(new ShardingUtil.ShardingVO(tgParam.getBroadcastIndex(), tgParam.getBroadcastTotal()));
 
 					// execute
-					JobLogger.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:" + tgParam.getExecutorParams());
+					JobLogger.log("<br>----------- datax-web job execute start -----------<br>----------- Param:" + tgParam.getExecutorParams());
 
 					if (tgParam.getExecutorTimeout() > 0) {
 						// limit timeout
@@ -135,7 +135,7 @@ public class JobThread extends Thread{
 							executeResult = futureTask.get(tgParam.getExecutorTimeout(), TimeUnit.SECONDS);
 						} catch (TimeoutException e) {
 
-							JobLogger.log("<br>----------- xxl-job job execute timeout");
+							JobLogger.log("<br>----------- datax-web job execute timeout");
 							JobLogger.log(e);
 
 							executeResult = new ReturnT<String>(IJobHandler.FAIL_TIMEOUT.getCode(), "job execute timeout ");
@@ -156,7 +156,7 @@ public class JobThread extends Thread{
 										:executeResult.getMsg());
 						executeResult.setContent(null);	// limit obj size
 					}
-					JobLogger.log("<br>----------- xxl-job job execute end(finish) -----------<br>----------- ReturnT:" + executeResult);
+					JobLogger.log("<br>----------- datax-web job execute end(finish) -----------<br>----------- ReturnT:" + executeResult);
 
 				} else {
 					if (idleTimes > 30) {
@@ -175,7 +175,7 @@ public class JobThread extends Thread{
 				String errorMsg = stringWriter.toString();
 				executeResult = new ReturnT<String>(ReturnT.FAIL_CODE, errorMsg);
 
-				JobLogger.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- xxl-job job execute end(error) -----------");
+				JobLogger.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- datax-web job execute end(error) -----------");
 			} finally {
                 if(tgParam != null) {
                     // callback handler info
@@ -208,6 +208,6 @@ public class JobThread extends Thread{
 			logger.error(e.getMessage(), e);
 		}
 
-		logger.info(">>>>>>>>>>> xxl-job JobThread stoped, hashCode:{}", Thread.currentThread());
+		logger.info(">>>>>>>>>>> datax-web JobThread stoped, hashCode:{}", Thread.currentThread());
 	}
 }

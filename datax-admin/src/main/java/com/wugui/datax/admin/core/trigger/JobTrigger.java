@@ -106,7 +106,7 @@ public class JobTrigger {
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
         JobAdminConfig.getAdminConfig().getJobLogMapper().save(jobLog);
-        logger.debug(">>>>>>>>>>> xxl-job trigger start, jobId:{}", jobLog.getId());
+        logger.debug(">>>>>>>>>>> datax-web trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
         TriggerParam triggerParam = new TriggerParam();
@@ -181,7 +181,7 @@ public class JobTrigger {
         jobLog.setTriggerMsg(triggerMsgSb.toString());
         JobAdminConfig.getAdminConfig().getJobLogMapper().updateTriggerInfo(jobLog);
 
-        logger.debug(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());
+        logger.debug(">>>>>>>>>>> datax-web trigger end, jobId:{}", jobLog.getId());
     }
 
     /**
@@ -196,7 +196,7 @@ public class JobTrigger {
             ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(address);
             runResult = executorBiz.run(triggerParam);
         } catch (Exception e) {
-            logger.error(">>>>>>>>>>> xxl-job trigger error, please check if the executor[{}] is running.", address, e);
+            logger.error(">>>>>>>>>>> datax-web trigger error, please check if the executor[{}] is running.", address, e);
             runResult = new ReturnT<String>(ReturnT.FAIL_CODE, ThrowableUtil.toString(e));
         }
 

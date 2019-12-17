@@ -34,7 +34,7 @@ public class JobTriggerPoolHelper {
                 new ThreadFactory() {
                     @Override
                     public Thread newThread(Runnable r) {
-                        return new Thread(r, "xxl-job, admin JobTriggerPoolHelper-fastTriggerPool-" + r.hashCode());
+                        return new Thread(r, "datax-web, admin JobTriggerPoolHelper-fastTriggerPool-" + r.hashCode());
                     }
                 });
 
@@ -47,7 +47,7 @@ public class JobTriggerPoolHelper {
                 new ThreadFactory() {
                     @Override
                     public Thread newThread(Runnable r) {
-                        return new Thread(r, "xxl-job, admin JobTriggerPoolHelper-slowTriggerPool-" + r.hashCode());
+                        return new Thread(r, "datax-web, admin JobTriggerPoolHelper-slowTriggerPool-" + r.hashCode());
                     }
                 });
     }
@@ -57,7 +57,7 @@ public class JobTriggerPoolHelper {
         //triggerPool.shutdown();
         fastTriggerPool.shutdownNow();
         slowTriggerPool.shutdownNow();
-        logger.info(">>>>>>>>> xxl-job trigger thread pool shutdown success.");
+        logger.info(">>>>>>>>> datax-web trigger thread pool shutdown success.");
     }
 
 

@@ -11,7 +11,7 @@ logging:
 datax:
   job:
     admin:
-      ### xxl-job executor address
+      ### datax-web executor address
       addresses: http://127.0.0.1:8080
     executor:
       appname: datax-executor

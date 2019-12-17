@@ -7,7 +7,7 @@ import com.wugui.datax.admin.entity.JobInfo;
 import java.util.Map;
 
 /**
- * core job action for xxl-job
+ * core job action for datax-web
  * 
  * @author xuxueli 2016-5-28 15:30:33
  */

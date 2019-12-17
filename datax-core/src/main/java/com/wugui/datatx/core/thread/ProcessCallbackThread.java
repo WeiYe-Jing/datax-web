@@ -35,7 +35,7 @@ public class ProcessCallbackThread {
     private LinkedBlockingQueue<HandleProcessCallbackParam> callBackQueue = new LinkedBlockingQueue<HandleProcessCallbackParam>();
     public static void pushCallBack(HandleProcessCallbackParam callback){
         getInstance().callBackQueue.add(callback);
-        logger.debug(">>>>>>>>>>> xxl-job, push process callback request, logId:{}", callback.getLogId());
+        logger.debug(">>>>>>>>>>> datax-web, push process callback request, logId:{}", callback.getLogId());
     }
 
     /**
@@ -48,7 +48,7 @@ public class ProcessCallbackThread {
 
         // valid
         if (JobExecutor.getAdminBizList() == null) {
-            logger.warn(">>>>>>>>>>> xxl-job, executor callback config fail, adminAddresses is null.");
+            logger.warn(">>>>>>>>>>> datax-web, executor callback config fail, adminAddresses is null.");
             return;
         }
 
@@ -88,11 +88,11 @@ public class ProcessCallbackThread {
                     logger.error(e.getMessage(), e);
                 }
             }
-            logger.info(">>>>>>>>>>> xxl-job, executor callback thread destory.");
+            logger.info(">>>>>>>>>>> datax-web, executor callback thread destory.");
 
         });
         processCallbackThread.setDaemon(true);
-        processCallbackThread.setName("xxl-job, executor TriggerCallbackThread");
+        processCallbackThread.setName("datax-web, executor TriggerCallbackThread");
         processCallbackThread.start();
 
 
@@ -115,7 +115,7 @@ public class ProcessCallbackThread {
                     }
                 }
             }
-            logger.info(">>>>>>>>>>> xxl-job, executor retry callback thread destory.");
+            logger.info(">>>>>>>>>>> datax-web, executor retry callback thread destory.");
         });
         processRetryCallbackThread.setDaemon(true);
         processRetryCallbackThread.start();
@@ -156,14 +156,14 @@ public class ProcessCallbackThread {
             try {
                 ReturnT<String> callbackResult = adminBiz.processCallback(callbackParamList);
                 if (callbackResult!=null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
-                    callbackLog(callbackParamList, "<br>----------- xxl-job job callback finish.");
+                    callbackLog(callbackParamList, "<br>----------- datax-web job callback finish.");
                     callbackRet = true;
                     break;
                 } else {
-                    callbackLog(callbackParamList, "<br>----------- xxl-job job callback fail, callbackResult:" + callbackResult);
+                    callbackLog(callbackParamList, "<br>----------- datax-web job callback fail, callbackResult:" + callbackResult);
                 }
             } catch (Exception e) {
-                callbackLog(callbackParamList, "<br>----------- xxl-job job callback error, errorMsg:" + e.getMessage());
+                callbackLog(callbackParamList, "<br>----------- datax-web job callback error, errorMsg:" + e.getMessage());
             }
         }
         if (!callbackRet) {
@@ -186,7 +186,7 @@ public class ProcessCallbackThread {
     // ---------------------- fail-callback file ----------------------
 
     private static String failCallbackFilePath = JobFileAppender.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
-    private static String failCallbackFileName = failCallbackFilePath.concat("xxl-job-callback-{x}").concat(".log");
+    private static String failCallbackFileName = failCallbackFilePath.concat("datax-web-callback-{x}").concat(".log");
 
     private void appendFailCallbackFile(List<HandleProcessCallbackParam> handleProcessCallbackParams){
         // valid

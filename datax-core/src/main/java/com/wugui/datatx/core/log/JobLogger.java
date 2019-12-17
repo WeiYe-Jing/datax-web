@@ -14,7 +14,7 @@ import java.util.Date;
  * Created by xuxueli on 17/4/28.
  */
 public class JobLogger {
-    private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
+    private static Logger logger = LoggerFactory.getLogger("datax-web logger");
 
     /**
      * append log

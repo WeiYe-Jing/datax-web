@@ -8,7 +8,7 @@ spring:
     url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 
-  # xxl-job email
+  # datax-web email
   mail:
     host: smtp.qq.com
     port: 25

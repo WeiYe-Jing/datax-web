@@ -39,18 +39,18 @@ public class DataXConfig {
 
 
     @Bean
-    public JobSpringExecutor xxlJobExecutor() {
-        logger.info(">>>>>>>>>>> xxl-job config init.");
-        JobSpringExecutor xxlJobSpringExecutor = new JobSpringExecutor();
-        xxlJobSpringExecutor.setAdminAddresses(adminAddresses);
-        xxlJobSpringExecutor.setAppName(appName);
-        xxlJobSpringExecutor.setIp(ip);
-        xxlJobSpringExecutor.setPort(port);
-        xxlJobSpringExecutor.setAccessToken(accessToken);
-        xxlJobSpringExecutor.setLogPath(logPath);
-        xxlJobSpringExecutor.setLogRetentionDays(logRetentionDays);
+    public JobSpringExecutor JobExecutor() {
+        logger.info(">>>>>>>>>>> datax-web config init.");
+        JobSpringExecutor jobSpringExecutor = new JobSpringExecutor();
+        jobSpringExecutor.setAdminAddresses(adminAddresses);
+        jobSpringExecutor.setAppName(appName);
+        jobSpringExecutor.setIp(ip);
+        jobSpringExecutor.setPort(port);
+        jobSpringExecutor.setAccessToken(accessToken);
+        jobSpringExecutor.setLogPath(logPath);
+        jobSpringExecutor.setLogRetentionDays(logRetentionDays);
 
-        return xxlJobSpringExecutor;
+        return jobSpringExecutor;
     }
 
     /**

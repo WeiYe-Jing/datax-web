@@ -87,7 +87,7 @@ public class JobFailMonitorHelper {
 
 					} catch (Exception e) {
 						if (!toStop) {
-							logger.error(">>>>>>>>>>> xxl-job, job fail monitor thread error:{}", e);
+							logger.error(">>>>>>>>>>> datax-web, job fail monitor thread error:{}", e);
 						}
 					}
 
@@ -101,12 +101,12 @@ public class JobFailMonitorHelper {
 
                 }
 
-				logger.info(">>>>>>>>>>> xxl-job, job fail monitor thread stop");
+				logger.info(">>>>>>>>>>> datax-web, job fail monitor thread stop");
 
 			}
 		});
 		monitorThread.setDaemon(true);
-		monitorThread.setName("xxl-job, admin JobFailMonitorHelper");
+		monitorThread.setName("datax-web, admin JobFailMonitorHelper");
 		monitorThread.start();
 	}
 
@@ -192,7 +192,7 @@ public class JobFailMonitorHelper {
 
 					JobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
 				} catch (Exception e) {
-					logger.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+					logger.error(">>>>>>>>>>> datax-web, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 
 					alarmResult = false;
 				}

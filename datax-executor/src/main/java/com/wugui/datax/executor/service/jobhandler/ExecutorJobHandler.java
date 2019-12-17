@@ -42,7 +42,7 @@ public class ExecutorJobHandler extends IJobHandler {
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
             // command process
-            Process process = Runtime.getRuntime().exec(new String[]{"python",tgParam.getExecutorParams(), dataXPyPath, tmpFilePath});
+            Process process = Runtime.getRuntime().exec(new String[]{"python",dataXPyPath, tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
             jobTmpFiles.put(processId, tmpFilePath);

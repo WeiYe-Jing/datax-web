@@ -89,7 +89,7 @@ public class JobLogReportHelper {
 
                     } catch (Exception e) {
                         if (!toStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, job log report thread error:{}", e);
+                            logger.error(">>>>>>>>>>> datax-web, job log report thread error:{}", e);
                         }
                     }
 
@@ -129,12 +129,12 @@ public class JobLogReportHelper {
 
                 }
 
-                logger.info(">>>>>>>>>>> xxl-job, job log report thread stop");
+                logger.info(">>>>>>>>>>> datax-web, job log report thread stop");
 
             }
         });
         logrThread.setDaemon(true);
-        logrThread.setName("xxl-job, admin JobLogReportHelper");
+        logrThread.setName("datax-web, admin JobLogReportHelper");
         logrThread.start();
     }
 

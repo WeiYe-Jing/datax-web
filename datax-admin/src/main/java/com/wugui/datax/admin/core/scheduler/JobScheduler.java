@@ -43,7 +43,7 @@ public class JobScheduler {
         // start-schedule
         JobScheduleHelper.getInstance().start();
 
-        logger.info(">>>>>>>>> init xxl-job admin success.");
+        logger.info(">>>>>>>>> init datax-web admin success.");
     }
 
     

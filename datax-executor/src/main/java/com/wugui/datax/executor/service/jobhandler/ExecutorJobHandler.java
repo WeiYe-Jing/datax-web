@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * DataX任务运行
@@ -41,8 +43,17 @@ public class ExecutorJobHandler extends IJobHandler {
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
+            Map<String,String> params=new HashMap<>();
+            params.put("-j","-Xms2G -Xmx2G");
+            //params.put("--jvm","-Xms2G"+"\" \""+"-Xmx2G");
+            String doc="";
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                doc=entry.getKey()+"\""+entry.getValue()+"\"";
+                //doc=entry.getKey()+"\" \""+"\""+entry.getValue()+"\"";
+            }
             // command process
-            Process process = Runtime.getRuntime().exec(new String[]{"python",dataXPyPath, tmpFilePath});
+            System.out.println(doc);
+            Process process = Runtime.getRuntime().exec(new String[]{"python",dataXPyPath,doc.replaceAll(" ", "\" \""), tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
             jobTmpFiles.put(processId, tmpFilePath);

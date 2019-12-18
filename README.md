@@ -49,43 +49,16 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - 2、datax.job.executor.logpath(数据抽取日志文件保存路径)
 - 3、datax.executor.jsonpath(datax json临时文件保存路径)
 - 4、datax.pypath(datax/bin/datax.py)阿里DataX启动文件地址
-                     
-### 5. idea启动 datax-admin，datax-executor
 
-### 6. 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
-http://localhost:8080/index.html#/dashboard
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
-
-### 7. 构建JSON脚本
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
-
-### 8. 创建任务
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_job.png)
-
-- 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
-    - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
-    - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
-    - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
-
-### 9. 任务列表
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
-
-### 10. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
-
-### 11. admin可以创建用户，编辑用户信息
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
-
-### 12.执行器(使用开源项目xxl-job)
+### 5.执行器配置(使用开源项目xxl-job)
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
-注意：执行器启动成功后会自动注册，一般不需要手动配置
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;
 #### 执行器属性说明
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_executor.png)
 ```
-1、AppName: 是每个执行器集群的唯一标示AppName, 执行器会周期性以AppName为对象进行自动注册。可通过该配置自动发现注册成功的执行器, 供任务调度时使用;
+1、AppName: （与datax-executor中application.yml的datax.job.executor.appname保持一致）
+   每个执行器集群的唯一标示AppName, 执行器会周期性以AppName为对象进行自动注册。可通过该配置自动发现注册成功的执行器, 供任务调度时使用;
 2、名称: 执行器的名称, 因为AppName限制字母数字等组成,可读性不强, 名称为了提高执行器的可读性;
 3、排序: 执行器的排序, 系统中需要执行器的地方,如任务新增, 将会按照该排序读取可用的执行器列表;
 4、注册方式：调度中心获取执行器地址的方式；
@@ -93,6 +66,34 @@ http://localhost:8080/index.html#/dashboard
     手动录入：人工手动录入执行器的地址信息，多地址逗号分隔，供调度中心使用；
 5、机器地址："注册方式"为"手动录入"时有效，支持人工维护执行器的地址信息；
 ```
+                     
+### 6. idea启动 datax-admin，datax-executor
+
+### 7. 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
+http://localhost:8080/index.html#/dashboard
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
+
+### 8. 构建JSON脚本
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
+
+### 9. 创建任务
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_job.png)
+
+- 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
+    - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
+    - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
+    - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
+
+### 10. 任务列表
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
+
+### 11. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
+
+### 12. admin可以创建用户，编辑用户信息
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
+
 ## Linux部署说明
 Quick Start操作完前四步之后
 - 5、执行mvn package -Dmaven.test.skip=true 

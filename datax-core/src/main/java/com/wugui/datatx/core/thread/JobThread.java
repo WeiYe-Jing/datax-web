@@ -183,6 +183,7 @@ public class JobThread extends Thread {
 
                 JobLogger.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- datax-web job execute end(error) -----------");
             } finally {
+                // 终止操作暂不监控状态
                 if (tgParam != null && tgParam.getJobId() != -1) {
                     // callback handler info
                     if (!toStop) {

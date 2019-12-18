@@ -43,8 +43,9 @@ public class ExecutorJobHandler extends IJobHandler {
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
-            Map<String,String> params=new HashMap<>();
+            Map<String,String> params=tgParam.getCommandParams();
             params.put("-j","-Xms2G -Xmx2G");
+            params.put("-p","-Dcreate_time='%s'");
             //params.put("--jvm","-Xms2G"+"\" \""+"-Xmx2G");
             String doc="";
             for (Map.Entry<String, String> entry : params.entrySet()) {

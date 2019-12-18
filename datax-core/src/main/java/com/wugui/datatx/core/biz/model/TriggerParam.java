@@ -2,6 +2,7 @@ package com.wugui.datatx.core.biz.model;
 
 import java.io.Serializable;
 
+
 /**
  * Created by xuxueli on 16/7/22.
  */
@@ -28,6 +29,8 @@ public class TriggerParam implements Serializable{
     private String jobJson;
 
     private String processId;
+
+    private IncrementalParam incrementalParam;
 
 
     public int getJobId() {
@@ -140,6 +143,14 @@ public class TriggerParam implements Serializable{
 
     public void setProcessId(String processId) {
         this.processId = processId;
+    }
+
+    public IncrementalParam getIncrementalParam() {
+        return incrementalParam;
+    }
+
+    public void setIncrementalParam(IncrementalParam incrementalParam) {
+        this.incrementalParam = incrementalParam;
     }
 
     @Override

@@ -185,6 +185,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
         </plugins>
     </build>

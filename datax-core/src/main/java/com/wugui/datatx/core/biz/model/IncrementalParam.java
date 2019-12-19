@@ -1,8 +1,6 @@
 package com.wugui.datatx.core.biz.model;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by jingwk on 2019/12/18.
@@ -11,31 +9,31 @@ public class IncrementalParam implements Serializable {
 
     private static final long serialVersionUID = 42L;
 
-    private Map<String,String> commandParams;
-    private long idParam;
-    private Date dateParam;
+    private String replaceParam;
+    private String jvmParam;
+    private int timeOffset;
 
-    public Map<String, String> getCommandParams() {
-        return commandParams;
+    public String getReplaceParam() {
+        return replaceParam;
     }
 
-    public void setCommandParams(Map<String, String> commandParams) {
-        this.commandParams = commandParams;
+    public void setReplaceParam(String replaceParam) {
+        this.replaceParam = replaceParam;
     }
 
-    public long getIdParam() {
-        return idParam;
+    public String getJvmParam() {
+        return jvmParam;
     }
 
-    public void setIdParam(long idParam) {
-        this.idParam = idParam;
+    public void setJvmParam(String jvmParam) {
+        this.jvmParam = jvmParam;
     }
 
-    public Date getDateParam() {
-        return dateParam;
+    public int getTimeOffset() {
+        return timeOffset;
     }
 
-    public void setDateParam(Date dateParam) {
-        this.dateParam = dateParam;
+    public void setTimeOffset(int timeOffset) {
+        this.timeOffset = timeOffset;
     }
 }

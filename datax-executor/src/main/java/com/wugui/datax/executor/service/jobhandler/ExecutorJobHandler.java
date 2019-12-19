@@ -1,7 +1,9 @@
 package com.wugui.datax.executor.service.jobhandler;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
+import com.wugui.datatx.core.biz.model.IncrementalParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.handler.IJobHandler;
@@ -11,10 +13,10 @@ import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -42,24 +44,43 @@ public class ExecutorJobHandler extends IJobHandler {
         String line = null;
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
+        String doc = "";
         try {
-            Map<String,String> params=tgParam.getCommandParams();
-            params.put("-j","-Xms2G -Xmx2G");
-            params.put("-p","-Dcreate_time='%s'");
-            //params.put("--jvm","-Xms2G"+"\" \""+"-Xmx2G");
-            String doc="";
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                doc=entry.getKey()+"\""+entry.getValue()+"\"";
-                //doc=entry.getKey()+"\" \""+"\""+entry.getValue()+"\"";
+            if(tgParam.getJvmParam() !=null) {
+                tgParam.getJvmParam();
             }
+            if (tgParam.getReplaceParam() != null) {
+                DateUtil.offsetHour(tgParam.getTriggerTime(), tgParam.getTimeOffset()).getTime() / 1000;
+            }
+            IncrementalParam incrParam = tgParam.getIncrementalParam();
+
+            if (incrParam != null && !CollectionUtils.isEmpty(incrParam.getCommandParams())) {
+                for (Map.Entry<String, String> entry : incrParam.getCommandParams().entrySet()) {
+                    if (DataxOption.PARAMS_CM.equals(entry.getKey())) {
+                        if (incrParam.getParam() > 0) {
+                            doc = entry.getKey() + "\"" + String.format(entry.getValue(), incrParam.getParam()) + "\"";
+                        }
+                    }
+                }
+            }
+
+//            Map<String, String> params = new HashMap<>();
+//            params.put("-j", "-Xms2G -Xmx2G");
+//            params.put("-p", "-DoperationDate='%s'");
+//            incrParam.setCommandParams(params);
+//
+//            tgParam.setIncrementalParam(incrParam);
+            //params.put("--jvm","-Xms2G"+"\" \""+"-Xmx2G");
+            //doc=entry.getKey()+"\" \""+"\""+entry.getValue()+"\"";
+
             // command process
             System.out.println(doc);
-            Process process = Runtime.getRuntime().exec(new String[]{"python",dataXPyPath,doc.replaceAll(" ", "\" \""), tmpFilePath});
+            Process process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE), tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
             jobTmpFiles.put(processId, tmpFilePath);
             //更新任务进程Id
-            ProcessCallbackThread.pushCallBack(new HandleProcessCallbackParam(tgParam.getLogId(),tgParam.getLogDateTime(),processId));
+            ProcessCallbackThread.pushCallBack(new HandleProcessCallbackParam(tgParam.getLogId(), tgParam.getLogDateTime(), processId));
             InputStreamReader input = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(input);
             while ((line = bufferedReader.readLine()) != null) {

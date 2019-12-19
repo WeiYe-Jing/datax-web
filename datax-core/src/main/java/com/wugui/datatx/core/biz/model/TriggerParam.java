@@ -1,6 +1,7 @@
 package com.wugui.datatx.core.biz.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -27,10 +28,12 @@ public class TriggerParam implements Serializable{
     private int broadcastTotal;
 
     private String jobJson;
-
     private String processId;
 
-    private IncrementalParam incrementalParam;
+    private String replaceParam;
+    private String jvmParam;
+    private int timeOffset;
+    private Date triggerTime;
 
 
     public int getJobId() {
@@ -145,12 +148,36 @@ public class TriggerParam implements Serializable{
         this.processId = processId;
     }
 
-    public IncrementalParam getIncrementalParam() {
-        return incrementalParam;
+    public String getReplaceParam() {
+        return replaceParam;
     }
 
-    public void setIncrementalParam(IncrementalParam incrementalParam) {
-        this.incrementalParam = incrementalParam;
+    public void setReplaceParam(String replaceParam) {
+        this.replaceParam = replaceParam;
+    }
+
+    public String getJvmParam() {
+        return jvmParam;
+    }
+
+    public void setJvmParam(String jvmParam) {
+        this.jvmParam = jvmParam;
+    }
+
+    public int getTimeOffset() {
+        return timeOffset;
+    }
+
+    public void setTimeOffset(int timeOffset) {
+        this.timeOffset = timeOffset;
+    }
+
+    public Date getTriggerTime() {
+        return triggerTime;
+    }
+
+    public void setTriggerTime(Date triggerTime) {
+        this.triggerTime = triggerTime;
     }
 
     @Override
@@ -169,6 +196,11 @@ public class TriggerParam implements Serializable{
                 ", broadcastIndex=" + broadcastIndex +
                 ", broadcastTotal=" + broadcastTotal +
                 ", jobJson=" + jobJson +
+                ", processId=" + processId +
+                ", replaceParam=" + replaceParam +
+                ", jvmParam=" + jvmParam +
+                ", timeOffset=" + timeOffset +
+                ", triggerTime=" + triggerTime +
                 '}';
     }
 

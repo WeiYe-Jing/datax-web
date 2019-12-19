@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.entity;
 
+import com.wugui.datatx.core.biz.model.IncrementalParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -79,5 +80,14 @@ public class JobInfo {
 
 	@ApiModelProperty("datax运行json")
 	private String jobJson;
+
+	@ApiModelProperty("脚本动态参数")
+	private String replaceParam;
+
+	@ApiModelProperty("jvm参数")
+	private String jvmParam;
+
+	@ApiModelProperty("时间偏移量")
+	private int timeOffset;
 
 }

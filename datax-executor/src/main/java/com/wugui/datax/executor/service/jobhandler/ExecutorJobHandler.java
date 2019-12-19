@@ -47,12 +47,14 @@ public class ExecutorJobHandler extends IJobHandler {
         String doc = "";
         try {
             if(tgParam.getJvmParam() !=null) {
-                tgParam.getJvmParam();
+                doc +=DataxOption.JVM_CM + "\"" + tgParam.getJvmParam() + "\"";
             }
             if (tgParam.getReplaceParam() != null) {
-                DateUtil.offsetHour(tgParam.getTriggerTime(), tgParam.getTimeOffset()).getTime() / 1000;
+                long timeParam=(tgParam.getTriggerTime()-tgParam.getTimeOffset()*1000) / 1000;
+                doc += DataxOption.PARAMS_CM + "\"" + String.format(tgParam.getReplaceParam(), timeParam) +
+                        String.format(tgParam.getReplaceParam(), tgParam.getTriggerTime())+"\"";
             }
-            IncrementalParam incrParam = tgParam.getIncrementalParam();
+            /*IncrementalParam incrParam = tgParam.getIncrementalParam();
 
             if (incrParam != null && !CollectionUtils.isEmpty(incrParam.getCommandParams())) {
                 for (Map.Entry<String, String> entry : incrParam.getCommandParams().entrySet()) {
@@ -62,7 +64,7 @@ public class ExecutorJobHandler extends IJobHandler {
                         }
                     }
                 }
-            }
+            }*/
 
 //            Map<String, String> params = new HashMap<>();
 //            params.put("-j", "-Xms2G -Xmx2G");

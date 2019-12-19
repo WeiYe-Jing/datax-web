@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.entity;
 
-import com.wugui.datatx.core.biz.model.IncrementalParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

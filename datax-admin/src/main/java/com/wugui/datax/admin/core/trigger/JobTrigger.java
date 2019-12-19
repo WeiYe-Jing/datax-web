@@ -127,7 +127,7 @@ public class JobTrigger {
         triggerParam.setJvmParam(jobInfo.getJvmParam());
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         triggerParam.setTimeOffset(jobInfo.getTimeOffset());
-
+        triggerParam.setTriggerTime(jobInfo.getTriggerLastTime());
         // 3、init address
         String address = null;
         ReturnT<String> routeAddressResult = null;

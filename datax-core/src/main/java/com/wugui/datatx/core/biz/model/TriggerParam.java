@@ -33,7 +33,7 @@ public class TriggerParam implements Serializable{
     private String replaceParam;
     private String jvmParam;
     private int timeOffset;
-    private Date triggerTime;
+    private long triggerTime;
 
 
     public int getJobId() {
@@ -172,11 +172,11 @@ public class TriggerParam implements Serializable{
         this.timeOffset = timeOffset;
     }
 
-    public Date getTriggerTime() {
+    public long getTriggerTime() {
         return triggerTime;
     }
 
-    public void setTriggerTime(Date triggerTime) {
+    public void setTriggerTime(long triggerTime) {
         this.triggerTime = triggerTime;
     }
 

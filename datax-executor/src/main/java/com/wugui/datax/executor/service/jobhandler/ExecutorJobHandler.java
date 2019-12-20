@@ -1,9 +1,7 @@
 package com.wugui.datax.executor.service.jobhandler;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
-import com.wugui.datatx.core.biz.model.IncrementalParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.handler.IJobHandler;
@@ -13,11 +11,9 @@ import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 /**
  * DataX任务运行
@@ -40,8 +36,8 @@ public class ExecutorJobHandler extends IJobHandler {
 
         int exitValue = -1;
         BufferedReader bufferedReader = null;
-        String tmpFilePath = null;
-        String line = null;
+        String tmpFilePath;
+        String line;
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         String doc = "";
@@ -51,8 +47,7 @@ public class ExecutorJobHandler extends IJobHandler {
             }
             if (tgParam.getReplaceParam() != null) {
                 long timeParam=(tgParam.getTriggerTime()-tgParam.getTimeOffset()*1000) / 1000;
-                doc += DataxOption.PARAMS_CM + "\"" + String.format(tgParam.getReplaceParam(), timeParam) +
-                        String.format(tgParam.getReplaceParam(), tgParam.getTriggerTime())+"\"";
+                doc += DataxOption.PARAMS_CM + "\"" + String.format(tgParam.getReplaceParam(), timeParam, tgParam.getTriggerTime())+"\"";
             }
             /*IncrementalParam incrParam = tgParam.getIncrementalParam();
 

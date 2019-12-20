@@ -40,38 +40,9 @@ public class ExecutorJobHandler extends IJobHandler {
         String line;
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
-        String doc = "";
         try {
-            if(tgParam.getJvmParam() !=null) {
-                doc +=DataxOption.JVM_CM + "\"" + tgParam.getJvmParam() + "\"";
-            }
-            if (tgParam.getReplaceParam() != null) {
-                long timeParam=(tgParam.getTriggerTime()-tgParam.getTimeOffset()*1000) / 1000;
-                doc += DataxOption.PARAMS_CM + "\"" + String.format(tgParam.getReplaceParam(), timeParam, tgParam.getTriggerTime())+"\"";
-            }
-            /*IncrementalParam incrParam = tgParam.getIncrementalParam();
-
-            if (incrParam != null && !CollectionUtils.isEmpty(incrParam.getCommandParams())) {
-                for (Map.Entry<String, String> entry : incrParam.getCommandParams().entrySet()) {
-                    if (DataxOption.PARAMS_CM.equals(entry.getKey())) {
-                        if (incrParam.getParam() > 0) {
-                            doc = entry.getKey() + "\"" + String.format(entry.getValue(), incrParam.getParam()) + "\"";
-                        }
-                    }
-                }
-            }*/
-
-//            Map<String, String> params = new HashMap<>();
-//            params.put("-j", "-Xms2G -Xmx2G");
-//            params.put("-p", "-DoperationDate='%s'");
-//            incrParam.setCommandParams(params);
-//
-//            tgParam.setIncrementalParam(incrParam);
-            //params.put("--jvm","-Xms2G"+"\" \""+"-Xmx2G");
-            //doc=entry.getKey()+"\" \""+"\""+entry.getValue()+"\"";
-
+            String doc = buildStartCommand(tgParam.getJvmParam(),tgParam.getTriggerTime(),tgParam.getReplaceParam(),tgParam.getTimeOffset());
             // command process
-            System.out.println(doc);
             Process process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE), tmpFilePath});
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
@@ -83,7 +54,6 @@ public class ExecutorJobHandler extends IJobHandler {
             while ((line = bufferedReader.readLine()) != null) {
                 JobLogger.log(line);
             }
-
             InputStreamReader error = new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(error);
             while ((line = bufferedReader.readLine()) != null) {
@@ -103,7 +73,6 @@ public class ExecutorJobHandler extends IJobHandler {
                 FileUtil.del(new File(tmpFilePath));
             }
         }
-
         if (exitValue == 0) {
             return IJobHandler.SUCCESS;
         } else {
@@ -111,11 +80,23 @@ public class ExecutorJobHandler extends IJobHandler {
         }
     }
 
+    private String buildStartCommand(String jvmParam, long triggerTime, String replaceParam, int timeOffset) {
+        StringBuilder doc = new StringBuilder();
+        if (jvmParam != null) {
+            doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
+        }
+        long tgSecondTime = triggerTime / 1000;
+        if (replaceParam != null && triggerTime > 0) {
+            long lastTime = (tgSecondTime + timeOffset * 3600);
+            if (doc.indexOf(DataxOption.JVM_CM) != -1) doc.append(DataxOption.SPLIT_SPACE);
+            doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime)).append(DataxOption.TRANSFORM_QUOTES);
+        }
+        return doc.toString();
+    }
+
     private String generateTemJsonFile(String jobJson) {
         String tmpFilePath;
-        if (!FileUtil.exist(jsonpath)) {
-            FileUtil.mkdir(jsonpath);
-        }
+        if (!FileUtil.exist(jsonpath)) FileUtil.mkdir(jsonpath);
         tmpFilePath = jsonpath + "jobTmp-" + System.currentTimeMillis() + ".conf";
         // 根据json写入到临时本地文件
         try (PrintWriter writer = new PrintWriter(tmpFilePath, "UTF-8")) {

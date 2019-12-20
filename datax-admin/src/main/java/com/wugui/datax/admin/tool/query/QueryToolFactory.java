@@ -3,6 +3,8 @@ package com.wugui.datax.admin.tool.query;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.util.DataBaseType;
+import com.wugui.datax.admin.util.RdbmsException;
 
 import java.sql.SQLException;
 
@@ -30,39 +32,39 @@ public class QueryToolFactory {
         throw new UnsupportedOperationException("找不到该类型: ".concat(dbType));
     }
 
-    private static BaseQueryTool getMySQLQueryToolInstance(JobJdbcDatasource codeJdbcDatasource) {
+    private static BaseQueryTool getMySQLQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
         try {
-            return new MySQLQueryTool(codeJdbcDatasource);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return new MySQLQueryTool(jdbcDatasource);
+        } catch (Exception e) {
+            throw RdbmsException.asConnException(DataBaseType.MySql,
+                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
-        throw new UnsupportedOperationException();
     }
 
-    private static BaseQueryTool getOracleQueryToolInstance(JobJdbcDatasource jobJdbcDatasource) {
+    private static BaseQueryTool getOracleQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
         try {
-            return new OracleQueryTool(jobJdbcDatasource);
+            return new OracleQueryTool(jdbcDatasource);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw RdbmsException.asConnException(DataBaseType.Oracle,
+                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
-        throw new UnsupportedOperationException();
     }
 
-    private static BaseQueryTool getPostgresqlQueryToolInstance(JobJdbcDatasource jobJdbcDatasource) {
+    private static BaseQueryTool getPostgresqlQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
         try {
-            return new PostgresqlQueryTool(jobJdbcDatasource);
+            return new PostgresqlQueryTool(jdbcDatasource);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw RdbmsException.asConnException(DataBaseType.PostgreSQL,
+                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
-        throw new UnsupportedOperationException();
     }
 
-    private static BaseQueryTool getSqlserverQueryToolInstance(JobJdbcDatasource jobJdbcDatasource) {
+    private static BaseQueryTool getSqlserverQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
         try {
-            return new SqlServerQueryTool(jobJdbcDatasource);
+            return new SqlServerQueryTool(jdbcDatasource);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw RdbmsException.asConnException(DataBaseType.SQLServer,
+                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
-        throw new UnsupportedOperationException();
     }
 }

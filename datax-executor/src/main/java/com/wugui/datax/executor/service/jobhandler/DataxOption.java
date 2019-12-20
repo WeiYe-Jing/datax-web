@@ -9,7 +9,9 @@ public class DataxOption {
 
     public static final String SPLIT_SPACE = " ";
 
-    public static final String TRANSFORM_SPLIT_SPACE="\" \"";
+    public static final String TRANSFORM_SPLIT_SPACE = "\" \"";
+
+    public static final String TRANSFORM_QUOTES = "\"";
 
     public static final String JVM_CM = "-j";
 

@@ -43,8 +43,6 @@ public class JobServiceImpl implements JobService {
 	@Resource
 	private JobLogReportMapper jobLogReportMapper;
 
-	private String logFilePath;
-
 	private final static ConcurrentMap<String, String> jobTmpFiles = Maps.newConcurrentMap();
 	
 	@Override
@@ -230,7 +228,9 @@ public class JobServiceImpl implements JobService {
 		exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
 		exists_jobInfo.setTriggerNextTime(nextTriggerTime);
 		exists_jobInfo.setJobJson(jobInfo.getJobJson());
-
+		exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
+		exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
+		exists_jobInfo.setTimeOffset(jobInfo.getTimeOffset());
 		exists_jobInfo.setUpdateTime(new Date());
         jobInfoMapper.update(exists_jobInfo);
 

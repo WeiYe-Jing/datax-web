@@ -9,6 +9,7 @@ import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -82,11 +83,11 @@ public class ExecutorJobHandler extends IJobHandler {
 
     private String buildStartCommand(String jvmParam, long triggerTime, String replaceParam, int timeOffset) {
         StringBuilder doc = new StringBuilder();
-        if (jvmParam != null) {
+        if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
         }
         long tgSecondTime = triggerTime / 1000;
-        if (replaceParam != null && triggerTime > 0) {
+        if (StringUtils.isNotBlank(replaceParam) && triggerTime > 0) {
             long lastTime = (tgSecondTime + timeOffset * 3600);
             if (doc.indexOf(DataxOption.JVM_CM) != -1) doc.append(DataxOption.SPLIT_SPACE);
             doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime)).append(DataxOption.TRANSFORM_QUOTES);

@@ -70,6 +70,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         dataSource.setPassword(jobJdbcDatasource.getJdbcPassword());
         dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
         dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
+        dataSource.setMaximumPoolSize(20);
         //设为只读
         dataSource.setReadOnly(true);
         this.jobJdbcDatasource = jobJdbcDatasource;

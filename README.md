@@ -102,6 +102,15 @@ Quick Start操作完前四步之后
 ## UI
 [前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
 
+## TODO List
+- 修复前端页面自适应问题
+- 修复添加任务时json转换失败的问题
+- 1、指定增量字段，自动获取每次的数据区间。
+- 2、从源表到目标端表的自动创建
+- 3、数据源连接测试功能
+- 4、任务批量导入功能
+- 5、页面配置datax启动参数
+
 ## Contact us
 
 ### QQ交流群 776939467

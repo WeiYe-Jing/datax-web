@@ -10,7 +10,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 ## System Requirements
 
 - Language: Java 8<br>
-  Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax源码阅读笔记/datax-python3下)
+  Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax-web/datax-python3下)
 - Environment: MacOS, Windows,Linux
 - Database: Mysql5.7
 
@@ -48,7 +48,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - 1、datax.job.admin.addresses(调度中心地址，多个以逗号分隔)
 - 2、datax.job.executor.logpath(数据抽取日志文件保存路径)
 - 3、datax.executor.jsonpath(datax json临时文件保存路径)
-- 4、datax.pypath(datax/bin/datax.py)阿里DataX启动文件地址
+- 4、datax.pypath(datax/bin/datax.py)注意：是第一步中DataX打包好的，DataX启动文件的地址
 
 ### 5.执行器配置(使用开源项目xxl-job)
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
@@ -83,7 +83,8 @@ http://localhost:8080/index.html#/dashboard
     - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
     - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
     - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
-
+- ![增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md
+)
 ### 10. 任务列表
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
 
@@ -102,14 +103,17 @@ Quick Start操作完前四步之后
 ## UI
 [前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
 
-## TODO List
+## 完成功能
 - 修复前端页面自适应问题
 - 修复添加任务时json转换失败的问题
-- 1、指定增量字段，自动获取每次的数据区间。
-- 2、从源表到目标端表的自动创建
-- 3、数据源连接测试功能
-- 4、任务批量导入功能
-- 5、页面配置datax启动参数
+- 修复构建json时数据库连接增加问题
+- 1、指定增量字段，自动获取每次的数据区间
+- 2、页面配置datax启动参数
+- 3、数据源连接错误提醒功能
+## TODO List
+- 1、从源表到目标端表的自动创建
+- 2、任务批量导入功能
+
 
 ## Contact us
 

@@ -4,12 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.druid.util.JdbcUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.zaxxer.hikari.HikariDataSource;
 import groovy.util.logging.Slf4j;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
     protected static final Logger logger = LoggerFactory.getLogger(BaseQueryTool.class);
 
-    protected static ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
+    public static final Map<String, Connection> CREATED_CONNECTIONS = Maps.newConcurrentMap();
     /**
      * 用于获取查询语句
      */
@@ -45,16 +46,9 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     protected Connection connection;
 
     /**
-     * 当前数据库类型
-     */
-    protected String currentDbType;
-
-    /**
      * 当前数据库名
      */
     protected String currentSchema;
-
-    protected JobJdbcDatasource jobJdbcDatasource;
 
     /**
      * 构造方法
@@ -62,9 +56,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * @param jobJdbcDatasource
      */
     BaseQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
-
-        Connection connection = connectionThreadLocal.get();
-        if(null==connection){
+        if(!CREATED_CONNECTIONS.containsKey(jobJdbcDatasource.getDatasourceName())){
             //这里默认使用 hikari 数据源
             HikariDataSource dataSource = new HikariDataSource();
             dataSource.setUsername(jobJdbcDatasource.getJdbcUsername());
@@ -72,36 +64,25 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
             dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
             dataSource.setMaximumPoolSize(1);
+            dataSource.setMaxLifetime(45000);
+            dataSource.setIdleTimeout(35000);
+            dataSource.setMinimumIdle(0);
+            dataSource.setConnectionTimeout(30000);
             //设为只读
             dataSource.setReadOnly(true);
-            this.jobJdbcDatasource = jobJdbcDatasource;
             this.datasource = dataSource;
             this.connection = this.datasource.getConnection();
-            connectionThreadLocal.set(this.connection);
-
         }else{
-            this.connection=connection;
+            this.connection =CREATED_CONNECTIONS.get(jobJdbcDatasource.getDatasourceName());
         }
-        currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
+        String currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
         sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
-        currentSchema = getSchema();
-    }
-
-    public static void closeConnection() {
-        Connection connection = connectionThreadLocal.get();
-        if(null != connection){
-            try {
-                connection.close();
-                connectionThreadLocal.remove();
-            } catch (SQLException e) {
-                logger.error("[JDBC Exception] --> "
-                        + "Failed to close the HikariConnection, the exceprion message is:" + e.getMessage());
-            }
-        }
+        currentSchema = getSchema(jobJdbcDatasource.getJdbcUsername());
+        CREATED_CONNECTIONS.put(jobJdbcDatasource.getDatasourceName(),this.connection);
     }
 
     //根据connection获取schema
-    private String getSchema() {
+    private String getSchema(String jdbcUsername) {
         String res = null;
         try {
             res = connection.getCatalog();
@@ -117,7 +98,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         // 如果res是null，则将用户名当作 schema
         if (StrUtil.isBlank(res)) {
-            res = jobJdbcDatasource.getJdbcUsername().toUpperCase();
+            res = jdbcUsername.toUpperCase();
         }
         return res;
     }
@@ -266,7 +247,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         List<String> res = Lists.newArrayList();
         String sqlQueryPrimaryKey = sqlBuilder.getSQLQueryPrimaryKey();
         try {
-            List<Map<String, Object>> pkColumns = JdbcUtils.executeQuery(datasource, sqlQueryPrimaryKey, ImmutableList.of(currentSchema, tableName));
+            List<Map<String, Object>> pkColumns = JdbcUtils.executeQuery(connection, sqlQueryPrimaryKey, ImmutableList.of(currentSchema, tableName));
             //返回主键名称即可
             pkColumns.forEach(e -> res.add((String) new ArrayList<>(e.values()).get(0)));
         } catch (SQLException e) {

@@ -35,9 +35,7 @@ public class JdbcDatasourceQueryServiceImpl implements JdbcDatasourceQueryServic
             return Lists.newArrayList();
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
-        List<String> tables=queryTool.getTableNames();
-        BaseQueryTool.closeConnection();
-        return tables;
+        return queryTool.getTableNames();
     }
 
     @Override
@@ -49,9 +47,7 @@ public class JdbcDatasourceQueryServiceImpl implements JdbcDatasourceQueryServic
             return Lists.newArrayList();
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
-        List<String> columnNames=queryTool.getColumnNames(tableName);
-        BaseQueryTool.closeConnection();
-        return columnNames;
+        return queryTool.getColumnNames(tableName);
     }
 
     @Override
@@ -63,8 +59,6 @@ public class JdbcDatasourceQueryServiceImpl implements JdbcDatasourceQueryServic
             return Lists.newArrayList();
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
-        List<String> columns=queryTool.getColumnsByQuerySql(querySql);
-        BaseQueryTool.closeConnection();
-        return columns;
+        return queryTool.getColumnsByQuerySql(querySql);
     }
 }

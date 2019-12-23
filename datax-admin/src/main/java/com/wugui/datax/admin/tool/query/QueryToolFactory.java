@@ -3,7 +3,6 @@ package com.wugui.datax.admin.tool.query;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
-import com.wugui.datax.admin.util.DataBaseType;
 import com.wugui.datax.admin.util.RdbmsException;
 
 import java.sql.SQLException;
@@ -36,7 +35,7 @@ public class QueryToolFactory {
         try {
             return new MySQLQueryTool(jdbcDatasource);
         } catch (Exception e) {
-            throw RdbmsException.asConnException(DataBaseType.MySql,
+            throw RdbmsException.asConnException(JdbcConstants.MYSQL,
                     e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
     }
@@ -45,7 +44,7 @@ public class QueryToolFactory {
         try {
             return new OracleQueryTool(jdbcDatasource);
         } catch (SQLException e) {
-            throw RdbmsException.asConnException(DataBaseType.Oracle,
+            throw RdbmsException.asConnException(JdbcConstants.ORACLE,
                     e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
     }
@@ -54,7 +53,7 @@ public class QueryToolFactory {
         try {
             return new PostgresqlQueryTool(jdbcDatasource);
         } catch (SQLException e) {
-            throw RdbmsException.asConnException(DataBaseType.PostgreSQL,
+            throw RdbmsException.asConnException(JdbcConstants.POSTGRESQL,
                     e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
     }
@@ -63,7 +62,7 @@ public class QueryToolFactory {
         try {
             return new SqlServerQueryTool(jdbcDatasource);
         } catch (SQLException e) {
-            throw RdbmsException.asConnException(DataBaseType.SQLServer,
+            throw RdbmsException.asConnException(JdbcConstants.SQL_SERVER,
                     e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
         }
     }

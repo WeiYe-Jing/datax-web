@@ -41,7 +41,6 @@
         <mysql-connector.version>5.1.47</mysql-connector.version>
         <jna.version>4.1.0</jna.version>
 
-        <commons-exec.version>1.3</commons-exec.version>
         <groovy.version>2.5.8</groovy.version>
 
         <mybatisplus.version>3.0.7.1</mybatisplus.version>

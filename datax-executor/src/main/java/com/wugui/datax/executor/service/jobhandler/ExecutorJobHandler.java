@@ -42,9 +42,15 @@ public class ExecutorJobHandler extends IJobHandler {
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
-            String doc = buildStartCommand(tgParam.getJvmParam(),tgParam.getTriggerTime(),tgParam.getReplaceParam(),tgParam.getTimeOffset());
+            String doc = buildStartCommand(tgParam.getJvmParam(), tgParam.getTriggerTime(), tgParam.getReplaceParam(), tgParam.getTimeOffset());
             // command process
-            Process process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE), tmpFilePath});
+            //"--loglevel=debug"
+            Process process = null;
+            if (StringUtils.isNotBlank(doc)) {
+                process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE), tmpFilePath});
+            } else {
+                process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, tmpFilePath});
+            }
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
             jobTmpFiles.put(processId, tmpFilePath);

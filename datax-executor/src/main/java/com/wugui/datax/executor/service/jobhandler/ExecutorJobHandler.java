@@ -1,6 +1,7 @@
 package com.wugui.datax.executor.service.jobhandler;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
@@ -104,7 +105,7 @@ public class ExecutorJobHandler extends IJobHandler {
     private String generateTemJsonFile(String jobJson) {
         String tmpFilePath;
         if (!FileUtil.exist(jsonpath)) FileUtil.mkdir(jsonpath);
-        tmpFilePath = jsonpath + "jobTmp-" + System.currentTimeMillis() + ".conf";
+        tmpFilePath = jsonpath + "jobTmp-" + IdUtil.simpleUUID() + ".conf";
         // 根据json写入到临时本地文件
         try (PrintWriter writer = new PrintWriter(tmpFilePath, "UTF-8")) {
             writer.println(jobJson);

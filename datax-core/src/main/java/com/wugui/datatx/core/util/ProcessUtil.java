@@ -1,7 +1,7 @@
 package com.wugui.datatx.core.util;
 
 import com.sun.jna.Platform;
-import com.wugui.datatx.core.util.Kernel32;
+import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.JobThread;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class ProcessUtil {
         if (Platform.isWindows()) {
             command = "cmd.exe /c taskkill /PID " + pid + " /F /T ";
         } else if (Platform.isLinux() || Platform.isAIX()) {
-            command = "kill -9 " + pid;
+            command = "kill " + pid;
         }
         try {
             //杀掉进程
@@ -73,7 +73,7 @@ public class ProcessUtil {
             reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
             String line = null;
             while ((line = reader.readLine()) != null) {
-                logger.info("kill pid return info:{}", line);
+                JobLogger.log(line);
             }
             result = true;
         } catch (Exception e) {

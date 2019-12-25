@@ -8,8 +8,9 @@ spring:
     url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 
-    ## 最小空闲连接数量
+
     hikari:
+      ## 最小空闲连接数量
       minimum-idle: 5
       ## 空闲连接存活最大时间，默认600000（10分钟）
       idle-timeout: 180000

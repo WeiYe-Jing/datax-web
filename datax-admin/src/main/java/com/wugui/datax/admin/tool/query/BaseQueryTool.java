@@ -12,7 +12,6 @@ import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.zaxxer.hikari.HikariDataSource;
-import groovy.util.logging.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,6 @@ import java.util.Map;
  * @Version 1.0
  * @since 2019/7/18 9:22
  */
-@Slf4j
 public abstract class BaseQueryTool implements QueryToolInterface {
 
     protected static final Logger logger = LoggerFactory.getLogger(BaseQueryTool.class);
@@ -39,16 +37,15 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     /**
      * 用于获取查询语句
      */
-    protected DatabaseInterface sqlBuilder;
+    private DatabaseInterface sqlBuilder;
 
-    protected DataSource datasource;
+    private DataSource datasource;
 
-    protected Connection connection;
-
+    private Connection connection;
     /**
      * 当前数据库名
      */
-    protected String currentSchema;
+    private String currentSchema;
 
     /**
      * 构造方法
@@ -68,6 +65,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             dataSource.setIdleTimeout(35000);
             dataSource.setMinimumIdle(0);
             dataSource.setConnectionTimeout(30000);
+            dataSource.setConnectionTestQuery("SELECT 1");
             //设为只读
             dataSource.setReadOnly(true);
             this.datasource = dataSource;

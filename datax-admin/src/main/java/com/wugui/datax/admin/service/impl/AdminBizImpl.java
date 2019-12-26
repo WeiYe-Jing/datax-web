@@ -79,6 +79,7 @@ public class AdminBizImpl implements AdminBiz {
         String callbackMsg = null;
         if (IJobHandler.SUCCESS.getCode() == handleCallbackParam.getExecuteResult().getCode()) {
             JobInfo xxlJobInfo = jobInfoMapper.loadById(log.getJobId());
+            jobInfoMapper.incrementTimeUpdate(log.getJobId(),log.getTriggerTime());
             if (xxlJobInfo != null && xxlJobInfo.getChildJobId() != null && xxlJobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 

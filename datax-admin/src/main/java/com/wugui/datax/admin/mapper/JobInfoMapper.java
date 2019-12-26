@@ -4,6 +4,7 @@ import com.wugui.datax.admin.entity.JobInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -44,6 +45,8 @@ public interface JobInfoMapper {
 	public List<JobInfo> scheduleJobQuery(@Param("maxNextTime") long maxNextTime, @Param("pagesize") int pagesize);
 
 	public int scheduleUpdate(JobInfo xxlJobInfo);
+
+	public int incrementTimeUpdate(@Param("id") int id, @Param("incStartTime") Date incStartTime);
 
 
 }

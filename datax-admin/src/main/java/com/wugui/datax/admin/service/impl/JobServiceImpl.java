@@ -70,6 +70,9 @@ public class JobServiceImpl implements JobService {
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
 		}
+		if (jobInfo.getJobJson().trim().length()<=2) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobjson")) );
+		}
 		if (jobInfo.getJobDesc()==null || jobInfo.getJobDesc().trim().length()==0) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
 		}
@@ -147,6 +150,9 @@ public class JobServiceImpl implements JobService {
 		// valid
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
+		}
+		if (jobInfo.getJobJson().trim().length()<=2) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobjson")) );
 		}
 		if (jobInfo.getJobDesc()==null || jobInfo.getJobDesc().trim().length()==0) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
@@ -230,7 +236,7 @@ public class JobServiceImpl implements JobService {
 		exists_jobInfo.setJobJson(jobInfo.getJobJson());
 		exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
 		exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
-		exists_jobInfo.setTimeOffset(jobInfo.getTimeOffset());
+		exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());
 		exists_jobInfo.setUpdateTime(new Date());
         jobInfoMapper.update(exists_jobInfo);
 

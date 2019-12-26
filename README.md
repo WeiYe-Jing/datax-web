@@ -83,7 +83,7 @@ http://localhost:8080/index.html#/dashboard
     - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
     - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
     - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
-- ![增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md
+[增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md
 )
 ### 10. 任务列表
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)

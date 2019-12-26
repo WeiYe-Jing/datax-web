@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 /**
  * DataX任务运行
@@ -43,7 +44,8 @@ public class ExecutorJobHandler extends IJobHandler {
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
-            String doc = buildStartCommand(tgParam.getJvmParam(), tgParam.getTriggerTime(), tgParam.getReplaceParam(), tgParam.getTimeOffset());
+            String doc = buildStartCommand(tgParam.getJvmParam(), tgParam.getTriggerTime(), tgParam.getReplaceParam(), tgParam.getStartTime());
+            JobLogger.log("------------------命令参数: " + doc);
             // command process
             //"--loglevel=debug"
             Process process = null;
@@ -88,14 +90,14 @@ public class ExecutorJobHandler extends IJobHandler {
         }
     }
 
-    private String buildStartCommand(String jvmParam, long triggerTime, String replaceParam, int timeOffset) {
+    private String buildStartCommand(String jvmParam, long triggerTime, String replaceParam, Date startTime) {
         StringBuilder doc = new StringBuilder();
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
         }
         long tgSecondTime = triggerTime / 1000;
-        if (StringUtils.isNotBlank(replaceParam) && triggerTime > 0) {
-            long lastTime = (tgSecondTime + timeOffset * 3600);
+        if (StringUtils.isNotBlank(replaceParam) && triggerTime > 0 && startTime != null) {
+            long lastTime = startTime.getTime() / 1000;
             if (doc.indexOf(DataxOption.JVM_CM) != -1) doc.append(DataxOption.SPLIT_SPACE);
             doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime)).append(DataxOption.TRANSFORM_QUOTES);
         }

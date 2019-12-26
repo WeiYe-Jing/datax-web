@@ -32,7 +32,7 @@ public class TriggerParam implements Serializable{
 
     private String replaceParam;
     private String jvmParam;
-    private int timeOffset;
+    private Date startTime;
     private long triggerTime;
 
 
@@ -164,12 +164,12 @@ public class TriggerParam implements Serializable{
         this.jvmParam = jvmParam;
     }
 
-    public int getTimeOffset() {
-        return timeOffset;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setTimeOffset(int timeOffset) {
-        this.timeOffset = timeOffset;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public long getTriggerTime() {
@@ -199,7 +199,7 @@ public class TriggerParam implements Serializable{
                 ", processId=" + processId +
                 ", replaceParam=" + replaceParam +
                 ", jvmParam=" + jvmParam +
-                ", timeOffset=" + timeOffset +
+                ", startTime=" + startTime +
                 ", triggerTime=" + triggerTime +
                 '}';
     }

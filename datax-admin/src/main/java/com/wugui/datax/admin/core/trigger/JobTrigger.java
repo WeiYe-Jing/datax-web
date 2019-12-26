@@ -1,8 +1,6 @@
 package com.wugui.datax.admin.core.trigger;
 
-import cn.hutool.core.date.DateUtil;
 import com.wugui.datatx.core.biz.ExecutorBiz;
-import com.wugui.datatx.core.biz.model.IncrementalParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
@@ -126,7 +124,7 @@ public class JobTrigger {
         triggerParam.setJobJson(jobInfo.getJobJson());
         triggerParam.setJvmParam(jobInfo.getJvmParam());
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
-        triggerParam.setTimeOffset(jobInfo.getTimeOffset());
+        triggerParam.setStartTime(jobInfo.getIncStartTime());
         triggerParam.setTriggerTime(jobInfo.getTriggerLastTime());
         // 3、init address
         String address = null;

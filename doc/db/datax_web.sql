@@ -245,4 +245,10 @@ ALTER TABLE `datax_web`.`job_info`
 ADD COLUMN `replace_param` VARCHAR(100) NULL DEFAULT NULL COMMENT '动态参数' AFTER `job_json`,
 ADD COLUMN `jvm_param` VARCHAR(200) NULL DEFAULT NULL COMMENT 'jvm参数' AFTER `replace_param`,
 ADD COLUMN `time_offset` INT(11) NULL DEFAULT '0'COMMENT '时间偏移量'  AFTER `jvm_param`;
+/**
+增量改版脚本更新
+ */
+ALTER TABLE `datax_web`.`job_info` DROP COLUMN `time_offset`;
+ALTER TABLE `datax_web`.`job_info`
+ADD COLUMN `inc_start_time` DATETIME NULL DEFAULT NULL COMMENT '增量初始时间' AFTER `jvm_param`;
 

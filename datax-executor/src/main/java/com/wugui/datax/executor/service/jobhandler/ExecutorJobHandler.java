@@ -15,8 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * DataX任务运行
@@ -38,9 +39,9 @@ public class ExecutorJobHandler extends IJobHandler {
     public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
 
         int exitValue = -1;
-        BufferedReader bufferedReader = null;
+        Thread inputThread = null;
+        Thread errThread = null;
         String tmpFilePath;
-        String line;
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(tgParam.getJobJson());
         try {
@@ -48,35 +49,50 @@ public class ExecutorJobHandler extends IJobHandler {
             JobLogger.log("------------------命令参数: " + doc);
             // command process
             //"--loglevel=debug"
-            Process process = null;
-            if (StringUtils.isNotBlank(doc)) {
-                process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE), tmpFilePath});
-            } else {
-                process = Runtime.getRuntime().exec(new String[]{"python", dataXPyPath, tmpFilePath});
+            List<String> cmdarray = new ArrayList<>();
+            cmdarray.add("python");
+            cmdarray.add(dataXPyPath);
+            if(StringUtils.isNotBlank(doc)){
+                cmdarray.add(doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE));
             }
+            cmdarray.add(tmpFilePath);
+            String[] cmdarrayFinal = cmdarray.toArray(new String[cmdarray.size()]);
+            final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
             String processId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX运行进程Id: " + processId);
             jobTmpFiles.put(processId, tmpFilePath);
             //更新任务进程Id
             ProcessCallbackThread.pushCallBack(new HandleProcessCallbackParam(tgParam.getLogId(), tgParam.getLogDateTime(), processId));
-            InputStreamReader input = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(input);
-            while ((line = bufferedReader.readLine()) != null) {
-                JobLogger.log(line);
-            }
-            InputStreamReader error = new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(error);
-            while ((line = bufferedReader.readLine()) != null) {
-                JobLogger.log(line);
-            }
-            // command exit
-            process.waitFor();
-            exitValue = process.exitValue();
+            // log-thread
+            inputThread = new Thread(() -> {
+                try {
+                    reader(new BufferedInputStream(process.getInputStream()));
+                } catch (IOException e) {
+                    JobLogger.log(e);
+                }
+            });
+            errThread = new Thread(() -> {
+                try {
+                    reader(new BufferedInputStream(process.getErrorStream()));
+                } catch (IOException e) {
+                    JobLogger.log(e);
+                }
+            });
+            inputThread.start();
+            errThread.start();
+            // process-wait
+            exitValue = process.waitFor();      // exit code: 0=success, 1=error
+            // log-thread join
+            inputThread.join();
+            errThread.join();
         } catch (Exception e) {
             JobLogger.log(e);
         } finally {
-            if (bufferedReader != null) {
-                bufferedReader.close();
+            if (inputThread != null && inputThread.isAlive()) {
+                inputThread.interrupt();
+            }
+            if (errThread != null && errThread.isAlive()) {
+                errThread.interrupt();
             }
             //  删除临时文件
             if (FileUtil.exist(tmpFilePath)) {
@@ -87,6 +103,28 @@ public class ExecutorJobHandler extends IJobHandler {
             return IJobHandler.SUCCESS;
         } else {
             return new ReturnT<>(IJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
+        }
+    }
+
+    /**
+     * 数据流reader（Input自动关闭，Output不处理）
+     *
+     * @param inputStream
+     * @throws IOException
+     */
+    private static void reader(InputStream inputStream) throws IOException {
+        try {
+            BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                JobLogger.log(line);
+            }
+            reader.close();
+            inputStream = null;
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
         }
     }
 

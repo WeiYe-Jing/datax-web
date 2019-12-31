@@ -90,13 +90,13 @@ public class ExecutorJobHandler extends IJobHandler {
         }
     }
 
-    private String buildStartCommand(String jvmParam, long triggerTime, String replaceParam, Date startTime) {
+    private String buildStartCommand(String jvmParam, Date triggerTime, String replaceParam, Date startTime) {
         StringBuilder doc = new StringBuilder();
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
         }
-        long tgSecondTime = triggerTime / 1000;
-        if (StringUtils.isNotBlank(replaceParam) && triggerTime > 0 && startTime != null) {
+        long tgSecondTime = triggerTime.getTime() / 1000;
+        if (StringUtils.isNotBlank(replaceParam)) {
             long lastTime = startTime.getTime() / 1000;
             if (doc.indexOf(DataxOption.JVM_CM) != -1) doc.append(DataxOption.SPLIT_SPACE);
             doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime)).append(DataxOption.TRANSFORM_QUOTES);

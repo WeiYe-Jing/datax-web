@@ -16,6 +16,7 @@ import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -99,7 +100,10 @@ public class JobTrigger {
         String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
         // 1、save log-id
-        Date triggerTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MILLISECOND,0);
+        Date triggerTime = calendar.getTime();
         JobLog jobLog = new JobLog();
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
@@ -125,7 +129,7 @@ public class JobTrigger {
         triggerParam.setJvmParam(jobInfo.getJvmParam());
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         triggerParam.setStartTime(jobInfo.getIncStartTime());
-        triggerParam.setTriggerTime(jobInfo.getTriggerLastTime());
+        triggerParam.setTriggerTime(triggerTime);
         // 3、init address
         String address = null;
         ReturnT<String> routeAddressResult = null;

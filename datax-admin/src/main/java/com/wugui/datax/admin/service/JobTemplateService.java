@@ -29,7 +29,7 @@ public interface JobTemplateService {
 	/**
 	 * add job
 	 *
-	 * @param jobInfo
+	 * @param jobTemplate
 	 * @return
 	 */
 	public ReturnT<String> add(JobTemplate jobTemplate);
@@ -37,7 +37,7 @@ public interface JobTemplateService {
 	/**
 	 * update job
 	 *
-	 * @param jobInfo
+	 * @param jobTemplate
 	 * @return
 	 */
 	public ReturnT<String> update(JobTemplate jobTemplate);

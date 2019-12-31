@@ -70,9 +70,6 @@ public class JobTemplateServiceImpl implements JobTemplateService {
 		if (!CronExpression.isValidExpression(jobTemplate.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
 		}
-		if (jobTemplate.getJobJson().trim().length()<=2) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobjson")) );
-		}
 		if (jobTemplate.getJobDesc()==null || jobTemplate.getJobDesc().trim().length()==0) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
 		}
@@ -150,9 +147,6 @@ public class JobTemplateServiceImpl implements JobTemplateService {
 		// valid
 		if (!CronExpression.isValidExpression(jobTemplate.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
-		}
-		if (jobTemplate.getJobJson().trim().length()<=2) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobjson")) );
 		}
 		if (jobTemplate.getJobDesc()==null || jobTemplate.getJobDesc().trim().length()==0) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );

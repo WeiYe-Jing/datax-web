@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.service.IJobJdbcDatasourceService;
-import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.util.PageUtils;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import io.swagger.annotations.Api;
@@ -132,7 +132,7 @@ public class JobJdbcDatasourceController extends ApiController {
     @PutMapping
     @ApiOperation("修改数据")
     public R<Boolean> update(@RequestBody JobJdbcDatasource entity) {
-        BaseQueryTool.CREATED_CONNECTIONS.remove(entity.getDatasourceName());
+        LocalCacheUtil.remove(entity.getDatasourceName());
         return success(this.jobJdbcDatasourceService.updateById(entity));
     }
 

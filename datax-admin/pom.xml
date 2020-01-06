@@ -170,23 +170,6 @@
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-jdbc -->
-        <dependency>
-            <groupId>org.apache.hive</groupId>
-            <artifactId>hive-jdbc</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-common</artifactId>
-            <version>2.8.3</version>
-        </dependency>
-
     </dependencies>
 
     <build>

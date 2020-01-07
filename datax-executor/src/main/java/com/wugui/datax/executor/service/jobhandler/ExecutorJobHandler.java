@@ -10,6 +10,7 @@ import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
+import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,10 @@ import java.util.List;
 @JobHandler(value = "executorJobHandler")
 @Component
 public class ExecutorJobHandler extends IJobHandler {
+
+    private static final String DEFAULT_JSON = "jsons";
+
+    private static final String DEFAULT_DATAX_PY = "bin/datax.py";
 
     @Value("${datax.executor.jsonpath}")
     private String jsonpath;
@@ -51,8 +56,10 @@ public class ExecutorJobHandler extends IJobHandler {
             //"--loglevel=debug"
             List<String> cmdarray = new ArrayList<>();
             cmdarray.add("python");
+            String dataXHomePath = SystemUtils.getDataXHomePath();
+            if (StringUtils.isNotEmpty(dataXHomePath)) dataXPyPath = dataXHomePath + DEFAULT_DATAX_PY;
             cmdarray.add(dataXPyPath);
-            if(StringUtils.isNotBlank(doc)){
+            if (StringUtils.isNotBlank(doc)) {
                 cmdarray.add(doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE));
             }
             cmdarray.add(tmpFilePath);
@@ -114,7 +121,7 @@ public class ExecutorJobHandler extends IJobHandler {
      */
     private static void reader(InputStream inputStream) throws IOException {
         try {
-            BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while ((line = reader.readLine()) != null) {
                 JobLogger.log(line);
@@ -144,6 +151,8 @@ public class ExecutorJobHandler extends IJobHandler {
 
     private String generateTemJsonFile(String jobJson) {
         String tmpFilePath;
+        String dataXHomePath = SystemUtils.getDataXHomePath();
+        if (StringUtils.isNotEmpty(dataXHomePath)) jsonpath = dataXHomePath + DEFAULT_JSON;
         if (!FileUtil.exist(jsonpath)) FileUtil.mkdir(jsonpath);
         tmpFilePath = jsonpath + "jobTmp-" + IdUtil.simpleUUID() + ".conf";
         // 根据json写入到临时本地文件

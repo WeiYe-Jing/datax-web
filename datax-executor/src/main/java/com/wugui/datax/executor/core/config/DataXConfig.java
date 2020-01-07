@@ -1,6 +1,8 @@
 package com.wugui.datax.executor.core.config;
 
 import com.wugui.datatx.core.executor.impl.JobSpringExecutor;
+import com.wugui.datax.executor.util.SystemUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DataXConfig {
     private Logger logger = LoggerFactory.getLogger(DataXConfig.class);
+
+    private static final String DEFAULT_LOG_PATH = "log/executor/jobhandler";
 
     @Value("${datax.job.admin.addresses}")
     private String adminAddresses;
@@ -47,6 +51,8 @@ public class DataXConfig {
         jobSpringExecutor.setIp(ip);
         jobSpringExecutor.setPort(port);
         jobSpringExecutor.setAccessToken(accessToken);
+        String dataXHomePath = SystemUtils.getDataXHomePath();
+        if (StringUtils.isNotEmpty(dataXHomePath)) logPath = dataXHomePath + DEFAULT_LOG_PATH;
         jobSpringExecutor.setLogPath(logPath);
         jobSpringExecutor.setLogRetentionDays(logRetentionDays);
 

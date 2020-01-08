@@ -1,5 +1,6 @@
 package com.wugui.datatx.core.executor.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.glue.GlueFactory;
 import com.wugui.datatx.core.handler.IJobHandler;
@@ -42,7 +43,7 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
     }
 
 
-    private void initJobHandlerRepository(ApplicationContext applicationContext){
+    private void initJobHandlerRepository(ApplicationContext applicationContext) {
         if (applicationContext == null) {
             return;
         }
@@ -50,13 +51,13 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
         // init job handler action
         Map<String, Object> serviceBeanMap = applicationContext.getBeansWithAnnotation(JobHandler.class);
 
-        if (serviceBeanMap!=null && serviceBeanMap.size()>0) {
+        if (CollectionUtil.isNotEmpty(serviceBeanMap)) {
             for (Object serviceBean : serviceBeanMap.values()) {
-                if (serviceBean instanceof IJobHandler){
+                if (serviceBean instanceof IJobHandler) {
                     String name = serviceBean.getClass().getAnnotation(JobHandler.class).value();
                     IJobHandler handler = (IJobHandler) serviceBean;
                     if (loadJobHandler(name) != null) {
-                        throw new RuntimeException("datax-web jobhandler["+ name +"] naming conflicts.");
+                        throw new RuntimeException("datax-web jobhandler[" + name + "] naming conflicts.");
                     }
                     registJobHandler(name, handler);
                 }
@@ -66,10 +67,12 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
 
     // ---------------------- applicationContext ----------------------
     private static ApplicationContext applicationContext;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
     }

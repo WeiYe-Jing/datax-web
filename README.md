@@ -101,7 +101,8 @@ http://localhost:8080/index.html#/dashboard
 Quick Start操作完前四步之后
 - 5、执行mvn package -Dmaven.test.skip=true 
 - 6、分别将datax-admin、datax-executor模块target下datax-admin-1.0.0.jar、datax-executor-1.0.0.jar放到对应服务器
-- 7、分别执行java命令启动项目 nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
+- 7、分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
+- 启动命令demo:nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
 ## UI
 [前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
 

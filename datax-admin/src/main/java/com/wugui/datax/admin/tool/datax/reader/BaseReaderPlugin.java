@@ -1,11 +1,13 @@
 package com.wugui.datax.admin.tool.datax.reader;
 
 import cn.hutool.core.util.StrUtil;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
-import com.wugui.datax.admin.tool.pojo.DataxPluginPojo;
+import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -19,8 +21,9 @@ import java.util.Map;
  */
 public abstract class BaseReaderPlugin extends BaseDataxPlugin {
 
+
     @Override
-    public Map<String, Object> build(DataxPluginPojo dataxPluginPojo) {
+    public Map<String, Object> build(DataxRdbmsPojo plugin) {
         //构建
         Map<String, Object> readerObj = Maps.newLinkedHashMap();
 
@@ -29,24 +32,22 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
-        JobJdbcDatasource jobJdbcDatasource = dataxPluginPojo.getJdbcDatasource();
+        JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
         parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
 
         //判断是否是 querySql
-        if (StrUtil.isNotBlank(dataxPluginPojo.getQuerySql())) {
-            connectionObj.put("querySql", ImmutableList.of(dataxPluginPojo.getQuerySql()));
+        if (StrUtil.isNotBlank(plugin.getQuerySql())) {
+            connectionObj.put("querySql", ImmutableList.of(plugin.getQuerySql()));
         } else {
-            //列表
-            parameterObj.put("column", dataxPluginPojo.getColumns());
+            parameterObj.put("column", plugin.getRdbmsColumns());
             //判断是否有where
-            if (extraParams.containsKey("where")) {
-                parameterObj.put("where", extraParams.get("where"));
+            if (StringUtils.isNotBlank(plugin.getWhereParam())) {
+                parameterObj.put("where", plugin.getWhereParam());
             }
-            connectionObj.put("table", dataxPluginPojo.getTables());
+            connectionObj.put("table", plugin.getTables());
         }
-
-//        logger.info(extraParams.toString());
+        parameterObj.put("splitPk",plugin.getSplitPk());
         connectionObj.put("jdbcUrl", ImmutableList.of(jobJdbcDatasource.getJdbcUrl()));
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));
@@ -54,5 +55,10 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         readerObj.put("parameter", parameterObj);
 
         return readerObj;
+    }
+
+    @Override
+    public Map<String, Object> buildHive(DataxHivePojo dataxHivePojo) {
+        return null;
     }
 }

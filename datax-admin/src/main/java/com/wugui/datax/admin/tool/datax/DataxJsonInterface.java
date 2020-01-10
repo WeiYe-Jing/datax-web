@@ -20,5 +20,9 @@ public interface DataxJsonInterface {
 
     Map<String, Object> buildReader();
 
+    Map<String, Object> buildHiveReader();
+
+    Map<String, Object> buildHiveWriter();
+
     Map<String, Object> buildWriter();
 }

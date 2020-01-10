@@ -114,7 +114,7 @@ CREATE TABLE `job_jdbc_datasource`  (
   `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `comments` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'jdbc数据源配置' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'jdbc数据源配置' ROW_FORMAT = Dynamic;
 
 
 -- ----------------------------
@@ -284,3 +284,9 @@ CREATE TABLE `job_template`  (
   `inc_start_time` datetime(0) NULL DEFAULT NULL COMMENT '增量初始时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+/**
+添加数据源字段
+ */
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ADD COLUMN `datasource` VARCHAR(45) NOT NULL COMMENT '数据源' AFTER `datasource_name`;

@@ -37,6 +37,12 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
     private String datasourceName;
 
     /**
+     * 数据源
+     */
+    @ApiModelProperty(value = "数据源")
+    private String datasource;
+
+    /**
      * 数据源分组
      */
     @ApiModelProperty(value = "数据源分组")

@@ -147,4 +147,15 @@ public class JobJdbcDatasourceController extends ApiController {
     public R<Boolean> delete(@RequestParam("idList") List<Long> idList) {
         return success(this.jobJdbcDatasourceService.removeByIds(idList));
     }
+
+    /**
+     * 测试数据源
+     * @param jobJdbcDatasource
+     * @return
+     */
+    @PostMapping("/test")
+    @ApiOperation("测试数据")
+    public R<Boolean> dataSourceTest (@RequestBody JobJdbcDatasource jobJdbcDatasource) {
+        return success(jobJdbcDatasourceService.dataSourceTest(jobJdbcDatasource));
+    }
 }

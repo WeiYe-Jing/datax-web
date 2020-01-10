@@ -20,5 +20,16 @@ public final class Constant {
     public static final String ORACLE_SQL = "invalid identifier";
 
 
-
+    public static final String SPLIT_COMMA = ",";
+    public static final String SPLIT_COLON = ";";
+    public static final String SPLIT_POINT = ".";
+    public static final String SPLIT_SCOLON=":";
+    public static final String SPLIT_HYPHEN = "-";
+    public static final String SPLIT_DIVIDE = "/";
+    public static final String SPLIT_STAR = "*";
+    public static final String SPLIT_QUESTION = "?";
+    public static final String EQUAL = "=";
+    public static final String SPLIT_AMPERSAND = "&";
+    public static final String AND = "AND";
+    public static final String SPACE = " ";
 }

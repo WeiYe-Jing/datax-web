@@ -2,9 +2,9 @@ package com.wugui.datax.admin.tool.datax;
 
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
-import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;

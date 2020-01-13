@@ -28,7 +28,7 @@ public class SystemUtils {
         if (StringUtils.isNotEmpty(DATAX_HOME)) return DATAX_HOME;
         String dataXHome = System.getenv("DATAX_HOME");
         if (StringUtils.isBlank(dataXHome)) {
-            LOGGER.warn("DATAX_HOME 环境变量为NULL");
+            //LOGGER.warn("DATAX_HOME 环境变量为NULL");
             return null;
         }
         DATAX_HOME =  System.getProperty("os.name").contains("Windows") ?

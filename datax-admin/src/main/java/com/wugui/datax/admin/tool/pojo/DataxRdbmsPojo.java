@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * 用于传参，构建json
  *
- * @author zhouhongfa@gz-yibo.com
- * @ClassName DataxPluginPojo
- * @Version 1.0
- * @since 2019/7/31 9:26
+ * @author jingwk
+ * @ClassName DataxRdbmsPojo
+ * @Version 2.0
+ * @since 2020/01/11 15:19
  */
 @Data
-public class DataxPluginPojo {
+public class DataxRdbmsPojo {
 
     /**
      * 表名
@@ -24,7 +24,7 @@ public class DataxPluginPojo {
     /**
      * 列名
      */
-    private List<String> columns;
+    private List<String> rdbmsColumns;
 
     /**
      * 数据源信息
@@ -40,4 +40,14 @@ public class DataxPluginPojo {
      * preSql 属性
      */
     private String preSql;
+
+    /**
+     * 切分主键
+     */
+    private String splitPk;
+
+    /**
+     * where
+     */
+    private String whereParam;
 }

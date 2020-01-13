@@ -36,9 +36,9 @@ public class MySQLQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("job_config");
+        List<String> columns = queryTool.getColumnNames("job_config",jdbcDatasource.getJdbcDriverClass());
         log.info(columns.toString());
-        columns = queryTool.getColumnNames("job_log");
+        columns = queryTool.getColumnNames("job_log",jdbcDatasource.getJdbcDriverClass());
         log.info(columns.toString());
     }
 

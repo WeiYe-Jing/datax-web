@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * 构建json dto
  *
- * @author zhouhongfa@gz-yibo.com
+ * @author jingwk
  * @ClassName DataxJsonDto
- * @Version 1.0
- * @since 2019/8/1 17:15
+ * @Version 2.0
+ * @since 2020/01/11 17:15
  */
 @Data
 public class DataxJsonDto implements Serializable {
@@ -22,17 +22,17 @@ public class DataxJsonDto implements Serializable {
 
     private List<String> readerColumns;
 
-    private Boolean ifStreamWriter;
-
     private Long writerDatasourceId;
 
     private List<String> writerTables;
 
     private List<String> writerColumns;
 
-    private String whereParams;
+    private HiveReaderDto hiveReader;
 
-    private String querySql;
+    private HiveWriterDto hiveWriter;
 
-    private String preSql;
+    private RdbmsReaderDto rdbmsReader;
+
+    private RdbmsWriterDto rdbmsWriter;
 }

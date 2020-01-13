@@ -34,7 +34,7 @@ public class PostgresqlQueryToolTest {
 
     @Test
     public void getTableColumns() {
-        List<String> tableNames = queryTool.getColumnNames("BD_EMR_TYPE");
+        List<String> tableNames = queryTool.getColumnNames("BD_EMR_TYPE",jdbcDatasource.getJdbcDriverClass());
         tableNames.forEach(System.out::println);
     }
 

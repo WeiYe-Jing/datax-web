@@ -37,16 +37,16 @@ public class Swagger2Config {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.wugui.datax.admin.controller"))
                 .paths(PathSelectors.any())
-                .build().securityContexts(Lists.newArrayList(securityContext(),securityContext1())).securitySchemes(Lists.<SecurityScheme>newArrayList(apiKey(),apiKey1()));
+                .build().securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(apiKey()));
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("datax-web RESTful APIs")
+                .title("DataX Web RESTful APIs")
                 .description("DataX可视化")
                 //.termsOfServiceUrl("http://www.test.com/")
                 .contact(new Contact("jingwk", "", "1058304821@qq.com"))
-                .version("1.0")
+                .version("2.0")
                 .build();
     }
 
@@ -54,19 +54,9 @@ public class Swagger2Config {
         return new ApiKey("BearerToken", "Authorization", "header");
     }
 
-    private ApiKey apiKey1() {
-        return new ApiKey("BearerToken1", "Authorization-x", "header");
-    }
-
     private SecurityContext securityContext() {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("/.*"))
-                .build();
-    }
-    private SecurityContext securityContext1() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth1())
                 .forPaths(PathSelectors.regex("/.*"))
                 .build();
     }
@@ -77,10 +67,5 @@ public class Swagger2Config {
         authorizationScopes[0] = authorizationScope;
         return Lists.newArrayList(new SecurityReference("BearerToken", authorizationScopes));
     }
-    List<SecurityReference> defaultAuth1() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Lists.newArrayList(new SecurityReference("BearerToken1", authorizationScopes));
-    }
+
 }

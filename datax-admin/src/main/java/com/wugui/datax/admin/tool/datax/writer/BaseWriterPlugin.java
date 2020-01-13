@@ -1,10 +1,11 @@
 package com.wugui.datax.admin.tool.datax.writer;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
-import com.wugui.datax.admin.tool.pojo.DataxPluginPojo;
+import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 
 import java.util.Map;
 
@@ -18,31 +19,31 @@ import java.util.Map;
  */
 public abstract class BaseWriterPlugin extends BaseDataxPlugin {
     @Override
-    public Map<String, Object> build(DataxPluginPojo dataxPluginPojo) {
+    public Map<String, Object> build(DataxRdbmsPojo plugin) {
         Map<String, Object> writerObj = Maps.newLinkedHashMap();
         writerObj.put("name", getName());
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
 //        parameterObj.put("writeMode", "insert");
-
-        JobJdbcDatasource jobJdbcDatasource = dataxPluginPojo.getJdbcDatasource();
+        JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
         parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
-
-        parameterObj.put("column", dataxPluginPojo.getColumns());
-
+        parameterObj.put("column", plugin.getRdbmsColumns());
         // preSql
-        parameterObj.put("preSql", ImmutableList.of(dataxPluginPojo.getPreSql()));
+        parameterObj.put("preSql", ImmutableList.of(plugin.getPreSql()));
 
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
-        connectionObj.put("table", dataxPluginPojo.getTables());
-
+        connectionObj.put("table", plugin.getTables());
         connectionObj.put("jdbcUrl", jobJdbcDatasource.getJdbcUrl());
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));
-
         writerObj.put("parameter", parameterObj);
 
         return writerObj;
+    }
+
+    @Override
+    public Map<String, Object> buildHive(DataxHivePojo dataxHivePojo) {
+        return null;
     }
 }

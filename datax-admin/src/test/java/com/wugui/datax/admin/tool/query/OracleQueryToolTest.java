@@ -36,7 +36,7 @@ public class OracleQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("EMP");
+        List<String> columns = queryTool.getColumnNames("EMP",jdbcDatasource.getJdbcDriverClass());
         log.info(columns.toString());
     }
 }

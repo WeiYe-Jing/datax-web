@@ -49,7 +49,7 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - 2、datax.job.executor.logpath(数据抽取日志文件保存路径)
 - 3、datax.executor.jsonpath(datax json临时文件保存路径)
 - 4、datax.pypath(datax/bin/datax.py)注意：是第一步中DataX打包好的，DataX启动文件的地址
-
+如果系统配置DataX环境变量（DATAX_HOME），2、3、4步可省略，log文件和临时json存放在环境变量路径下。
 ### 5.执行器配置(使用开源项目xxl-job)
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
@@ -101,7 +101,8 @@ http://localhost:8080/index.html#/dashboard
 Quick Start操作完前四步之后
 - 5、执行mvn package -Dmaven.test.skip=true 
 - 6、分别将datax-admin、datax-executor模块target下datax-admin-1.0.0.jar、datax-executor-1.0.0.jar放到对应服务器
-- 7、分别执行java命令启动项目 nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
+- 7、分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
+- 8、启动命令demo：nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
 ## UI
 [前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
 
@@ -116,6 +117,12 @@ Quick Start操作完前四步之后
 - 3、数据源连接错误提醒功能
 - 4、任务模板创建
 - 5、构建JSON之后选择任务模板创建任务
+- 6、jdbc添加hive数据源支持
+- 7、json构建模块代码重构
+- 8、json构建支持hive
+- 9、添加数据源测试功能
+- 10、优先通过环境变量获取DataX文件目录
+- 11、字段映射优化
 ## TODO List
 - 1、从源表到目标端表的自动创建
 - 2、任务批量导入功能

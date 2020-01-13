@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.tool.query;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -11,6 +12,7 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
+import com.wugui.datax.admin.util.Constant;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,8 +64,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             dataSource.setMaximumPoolSize(1);
             dataSource.setMinimumIdle(0);
             dataSource.setConnectionTimeout(30000);
-            //设为只读
-            dataSource.setReadOnly(true);
             this.datasource = dataSource;
             this.connection = this.datasource.getConnection();
         } else {
@@ -251,7 +251,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnNames(String tableName) {
+    public List<String> getColumnNames(String tableName, String driverClass) {
 
         List<String> res = Lists.newArrayList();
         Statement stmt = null;
@@ -268,7 +268,17 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
-                res.add(metaData.getColumnName(i));
+                String columnName = metaData.getColumnName(i);
+                if (JdbcConstants.HIVE_DRIVER.equals(driverClass)) {
+                    if (columnName.contains(Constant.SPLIT_POINT)) {
+                        res.add(columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                    } else {
+                        res.add(columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                    }
+                } else {
+                    res.add(columnName);
+                }
+
             }
         } catch (SQLException e) {
             logger.error("[getColumnNames Exception] --> "
@@ -302,6 +312,19 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             JdbcUtils.close(stmt);
         }
         return tables;
+    }
+
+    public Boolean dataSourceTest() {
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            if (metaData.getDatabaseProductName().length() > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            logger.error("[dataSourceTest Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        }
+        return false;
     }
 
     /**

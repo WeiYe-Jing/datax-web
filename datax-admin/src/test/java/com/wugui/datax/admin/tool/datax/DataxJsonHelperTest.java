@@ -1,13 +1,6 @@
 package com.wugui.datax.admin.tool.datax;
 
-import com.google.common.collect.ImmutableList;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
-import com.wugui.datax.admin.tool.datax.writer.StreamWriter;
-import com.wugui.datax.admin.util.JSONUtils;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.Map;
 
 public class DataxJsonHelperTest {
 
@@ -31,71 +24,4 @@ public class DataxJsonHelperTest {
         return writerDatasource;
     }
 
-    @Test
-    public void buildJob() {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-
-        //表名
-        List<String> readerTables = ImmutableList.of("datax_plugin");
-        List<String> writerTables = ImmutableList.of("datax_plugin");
-
-        //抽取的字段
-        List<String> columns = ImmutableList.of("id");
-
-        dataxJsonHelper.initReader(getReaderDatasource(), readerTables, columns);
-        dataxJsonHelper.initWriter(getWriterDatasource(), writerTables, columns);
-        Map<String, Object> map = dataxJsonHelper.buildJob();
-        System.out.println(JSONUtils.formatJson(map));
-    }
-
-    @Test
-    public void builSetting() {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-        Map<String, Object> map = dataxJsonHelper.buildSetting();
-        System.out.println(JSONUtils.formatJson(map));
-    }
-
-    @Test
-    public void buildContent() {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-        dataxJsonHelper.initReader(getReaderDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
-        dataxJsonHelper.initWriter(getWriterDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
-        Map<String, Object> map = dataxJsonHelper.buildContent();
-        System.out.println(JSONUtils.formatJson(map));
-    }
-
-    @Test
-    public void buildReader() {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-        dataxJsonHelper.initReader(getReaderDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
-//        dataxJsonHelper.addWhereParams("1=1");
-        dataxJsonHelper.setQuerySql("select 1");
-        Map<String, Object> reader = dataxJsonHelper.buildReader();
-        System.out.println(JSONUtils.formatJson(reader));
-    }
-
-    @Test
-    public void buildWriter() {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-        dataxJsonHelper.initWriter(getWriterDatasource(), ImmutableList.of("datax_plugin"), ImmutableList.of("id"));
-        dataxJsonHelper.setPreSql("delete from datax_prubin");
-        Map<String, Object> writer = dataxJsonHelper.buildWriter();
-        System.out.println(JSONUtils.formatJson(writer));
-    }
-
-    @Test
-    public void buildJobWithStreamWriter() {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
-        dataxJsonHelper.setWriterPlugin(new StreamWriter());
-        //表名
-        List<String> readerTables = ImmutableList.of("datax_plugin");
-
-        //抽取的字段
-        List<String> columns = ImmutableList.of("id");
-
-        dataxJsonHelper.initReader(getReaderDatasource(), readerTables, columns);
-
-        Map<String, Object> map = dataxJsonHelper.buildJob();
-        System.out.println(JSONUtils.formatJson(map));
-    }
 }

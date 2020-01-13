@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.tool.datax;
 
-import com.wugui.datax.admin.tool.pojo.DataxPluginPojo;
+import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 
 import java.util.Map;
 
@@ -25,7 +26,15 @@ public interface DataxPluginInterface {
      *
      * @return dataxPluginPojo
      */
-    Map<String, Object> build(DataxPluginPojo dataxPluginPojo);
+    Map<String, Object> build(DataxRdbmsPojo dataxPluginPojo);
+
+
+    /**
+     *
+     * @param dataxHivePojo
+     * @return
+     */
+    Map<String, Object> buildHive(DataxHivePojo dataxHivePojo);
 
     /**
      * 获取示例
@@ -33,11 +42,4 @@ public interface DataxPluginInterface {
      * @return
      */
     Map<String, Object> sample();
-
-    /**
-     * 传递一些额外的参数
-     *
-     * @return setExtraParams
-     */
-    void setExtraParams(Map<String, Object> extraParams);
 }

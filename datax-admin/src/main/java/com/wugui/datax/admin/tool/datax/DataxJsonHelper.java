@@ -179,13 +179,13 @@ public class DataxJsonHelper implements DataxJsonInterface {
     public Map<String, Object> buildHiveReader() {
         DataxHivePojo dataxHivePojo = new DataxHivePojo();
         dataxHivePojo.setJdbcDatasource(readerDatasource);
-        List<Map<String, String>> columns = Lists.newArrayList();
-        readerColumns.forEach(c -> {
-            Map<String, String> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constant.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constant.SPLIT_SCOLON)[1]);
+        List<Map<String, Object>> columns = Lists.newArrayList();
+        for(int i=0;i<readerColumns.size();i++){
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("index", i);
+            column.put("type", readerColumns.get(i).split(Constant.SPLIT_SCOLON)[1]);
             columns.add(column);
-        });
+        }
         dataxHivePojo.setColumns(columns);
         dataxHivePojo.setReaderDefaultFS(hiveReaderDto.getReaderDefaultFS());
         dataxHivePojo.setReaderFieldDelimiter(hiveReaderDto.getReaderFieldDelimiter());
@@ -208,9 +208,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
     public Map<String, Object> buildHiveWriter() {
         DataxHivePojo dataxHivePojo = new DataxHivePojo();
         dataxHivePojo.setJdbcDatasource(writerDatasource);
-        List<Map<String, String>> columns = Lists.newArrayList();
+        List<Map<String, Object>> columns = Lists.newArrayList();
         writerColumns.forEach(c -> {
-            Map<String, String> column = Maps.newLinkedHashMap();
+            Map<String, Object> column = Maps.newLinkedHashMap();
             column.put("name", c.split(Constant.SPLIT_SCOLON)[0]);
             column.put("type", c.split(Constant.SPLIT_SCOLON)[1]);
             columns.add(column);

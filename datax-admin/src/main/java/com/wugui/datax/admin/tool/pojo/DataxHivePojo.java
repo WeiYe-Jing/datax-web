@@ -20,7 +20,7 @@ public class DataxHivePojo {
     /**
      * hive列名
      */
-    private List<Map<String,String>> columns;
+    private List<Map<String,Object>> columns;
 
     /**
      * 数据源信息

@@ -15,7 +15,7 @@ import java.util.Map;
 public class HiveWriter extends BaseWriterPlugin implements DataxWriterInterface {
     @Override
     public String getName() {
-        return "hivewriter";
+        return "hdfswriter";
     }
 
 

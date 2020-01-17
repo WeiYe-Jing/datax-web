@@ -48,7 +48,7 @@ public class ScriptJobHandler extends IJobHandler {
 
 
     @Override
-    public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
+    public ReturnT<String> execute(TriggerParam tgParam) throws Exception {
         if (!glueType.isScript()) {
             return new ReturnT<String>(IJobHandler.FAIL.getCode(), "glueType["+ glueType +"] invalid.");
         }

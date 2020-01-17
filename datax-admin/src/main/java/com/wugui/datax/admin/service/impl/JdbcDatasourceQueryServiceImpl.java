@@ -47,7 +47,7 @@ public class JdbcDatasourceQueryServiceImpl implements JdbcDatasourceQueryServic
             return Lists.newArrayList();
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
-        return queryTool.getColumnNames(tableName,jdbcDatasource.getJdbcDriverClass());
+        return queryTool.getColumnNames(tableName,jdbcDatasource.getDatasource());
     }
 
     @Override

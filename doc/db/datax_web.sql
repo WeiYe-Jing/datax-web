@@ -290,3 +290,12 @@ CREATE TABLE `job_template`  (
  */
 ALTER TABLE `datax_web`.`job_jdbc_datasource`
 ADD COLUMN `datasource` VARCHAR(45) NOT NULL COMMENT '数据源' AFTER `datasource_name`;
+
+/**
+添加分区字段
+ */
+ALTER TABLE `datax_web`.`job_info`
+ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;
+
+ALTER TABLE `datax_web`.`job_template`
+ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;

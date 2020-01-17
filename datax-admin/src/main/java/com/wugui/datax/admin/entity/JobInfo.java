@@ -89,4 +89,6 @@ public class JobInfo {
 	@ApiModelProperty("增量初始时间")
 	private Date incStartTime;
 
+	@ApiModelProperty("分区信息")
+	private String partitionInfo;
 }

@@ -37,6 +37,8 @@
 		<result column="replace_param" property="replaceParam" />
 		<result column="jvm_param" property="jvmParam" />
 		<result column="inc_start_time" property="incStartTime" />
+
+		<result column="partition_info" property="partitionInfo" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -64,7 +66,8 @@
 		t.job_json,
 		t.replace_param,
 		t.jvm_param,
-		t.inc_start_time
+		t.inc_start_time,
+		t.partition_info
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobTemplate">
@@ -132,7 +135,8 @@
 			job_json,
 			replace_param,
 			jvm_param,
-			inc_start_time
+			inc_start_time,
+			partition_info
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -157,7 +161,8 @@
 			#{jobJson},
 			#{replaceParam},
 			#{jvmParam},
-			#{incStartTime}
+			#{incStartTime},
+			#{partitionInfo}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -196,7 +201,8 @@
 			job_json=#{jobJson},
 			replace_param=#{replaceParam},
 			jvm_param=#{jvmParam},
-			inc_start_time=#{incStartTime}
+			inc_start_time=#{incStartTime},
+			partition_info=#{partitionInfo}
 		WHERE id = #{id}
 	</update>
 

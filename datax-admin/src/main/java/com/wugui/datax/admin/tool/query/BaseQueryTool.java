@@ -5,6 +5,7 @@ import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.wugui.datatx.core.util.Constant;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
@@ -12,7 +13,6 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
-import com.wugui.datax.admin.util.Constant;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,7 +251,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnNames(String tableName, String driverClass) {
+    public List<String> getColumnNames(String tableName, String datasource) {
 
         List<String> res = Lists.newArrayList();
         Statement stmt = null;
@@ -269,11 +269,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
-                if (JdbcConstants.HIVE_DRIVER.equals(driverClass)) {
+                if (JdbcConstants.HIVE.equals(datasource)) {
                     if (columnName.contains(Constant.SPLIT_POINT)) {
-                        res.add(columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(i - 1 + Constant.SPLIT_SCOLON + columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     } else {
-                        res.add(columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(i - 1 + Constant.SPLIT_SCOLON + columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     }
                 } else {
                     res.add(columnName);

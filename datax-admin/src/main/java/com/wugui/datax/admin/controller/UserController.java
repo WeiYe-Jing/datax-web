@@ -50,52 +50,52 @@ public class UserController {
 
     @PostMapping("/add")
     @ApiOperation("添加用户")
-    public ReturnT<String> add(@RequestBody JobUser xxlJobUser) {
+    public ReturnT<String> add(@RequestBody JobUser jobUser) {
 
         // valid username
-        if (!StringUtils.hasText(xxlJobUser.getUsername())) {
+        if (!StringUtils.hasText(jobUser.getUsername())) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input")+I18nUtil.getString("user_username") );
         }
-        xxlJobUser.setUsername(xxlJobUser.getUsername().trim());
-        if (!(xxlJobUser.getUsername().length()>=4 && xxlJobUser.getUsername().length()<=20)) {
+        jobUser.setUsername(jobUser.getUsername().trim());
+        if (!(jobUser.getUsername().length()>=4 && jobUser.getUsername().length()<=20)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
         }
         // valid password
-        if (!StringUtils.hasText(xxlJobUser.getPassword())) {
+        if (!StringUtils.hasText(jobUser.getPassword())) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input")+I18nUtil.getString("user_password") );
         }
-        xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
-        if (!(xxlJobUser.getPassword().length()>=4 && xxlJobUser.getPassword().length()<=20)) {
+        jobUser.setPassword(jobUser.getPassword().trim());
+        if (!(jobUser.getPassword().length()>=4 && jobUser.getPassword().length()<=20)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
         }
-        xxlJobUser.setPassword(bCryptPasswordEncoder.encode(xxlJobUser.getPassword()));
+        jobUser.setPassword(bCryptPasswordEncoder.encode(jobUser.getPassword()));
 
         // check repeat
-        JobUser existUser = jobUserMapper.loadByUserName(xxlJobUser.getUsername());
+        JobUser existUser = jobUserMapper.loadByUserName(jobUser.getUsername());
         if (existUser != null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat") );
         }
 
         // write
-        jobUserMapper.save(xxlJobUser);
+        jobUserMapper.save(jobUser);
         return ReturnT.SUCCESS;
     }
 
     @PostMapping(value = "/update")
     @ApiOperation("更新用户信息")
-    public ReturnT<String> update(@RequestBody JobUser xxlJobUser) {
+    public ReturnT<String> update(@RequestBody JobUser jobUser) {
         // valid password
-        if (StringUtils.hasText(xxlJobUser.getPassword())) {
-            xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
-            if (!(xxlJobUser.getPassword().length()>=4 && xxlJobUser.getPassword().length()<=20)) {
+        if (StringUtils.hasText(jobUser.getPassword())) {
+            jobUser.setPassword(jobUser.getPassword().trim());
+            if (!(jobUser.getPassword().length()>=4 && jobUser.getPassword().length()<=20)) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
             }
-            xxlJobUser.setPassword(bCryptPasswordEncoder.encode(xxlJobUser.getPassword()));
+            jobUser.setPassword(bCryptPasswordEncoder.encode(jobUser.getPassword()));
         } else {
-            xxlJobUser.setPassword(null);
+            jobUser.setPassword(null);
         }
         // write
-        jobUserMapper.update(xxlJobUser);
+        jobUserMapper.update(jobUser);
         return ReturnT.SUCCESS;
     }
 
@@ -108,8 +108,8 @@ public class UserController {
 
     @PostMapping(value = "/updatePwd")
     @ApiOperation("修改密码")
-    public ReturnT<String> updatePwd(@RequestBody JobUser xxlJobUser){
-        String password=xxlJobUser.getPassword();
+    public ReturnT<String> updatePwd(@RequestBody JobUser jobUser){
+        String password=jobUser.getPassword();
         // valid password
         if (password==null || password.trim().length()==0){
             return new ReturnT<String>(ReturnT.FAIL.getCode(), "密码不可为空");
@@ -119,7 +119,7 @@ public class UserController {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
         }
         // do write
-        JobUser existUser = jobUserMapper.loadByUserName(xxlJobUser.getUsername());
+        JobUser existUser = jobUserMapper.loadByUserName(jobUser.getUsername());
         existUser.setPassword(bCryptPasswordEncoder.encode(password));
         jobUserMapper.update(existUser);
         return ReturnT.SUCCESS;

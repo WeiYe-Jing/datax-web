@@ -22,7 +22,7 @@ import java.io.File;
 public class KillJobHandler extends IJobHandler {
 
     @Override
-    public ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception {
+    public ReturnT<String> execute(TriggerParam tgParam) throws Exception {
         String processId = tgParam.getProcessId();
         boolean result = ProcessUtil.killProcessByPid(processId);
         //  删除临时文件

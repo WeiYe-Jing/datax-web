@@ -102,16 +102,16 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其�
     - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
 - 增量增新建议将阻塞策略设置为丢弃后续调度或者单机串行
     - 设置单机串行时应该注意合理设置重试次数(失败重试的次数*每次执行时间<任务的调度周期)，重试的次数如果设置的过多会导致数据重复，例如任务30秒执行一次，每次执行时间需要20秒，设置重试三次，如果任务失败了，第一个重试的时间段为1577755680-1577756680，重试任务没结束，新任务又开启，那新任务的时间段会是1577755680-1577758680
-- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md
-- [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md
+- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md)
+- [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md)
 
 )
 ### 10. 任务列表
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
 
 ### 11. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
-![] (https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
-![] (https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
 
 ### 12. admin可以创建用户，编辑用户信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)

@@ -110,8 +110,8 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其�
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
 
 ### 11. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
+![] (https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
+![] (https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
 
 ### 12. admin可以创建用户，编辑用户信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)

@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.util;
 
 import com.alibaba.druid.util.JdbcConstants;
+import com.wugui.datatx.core.util.Constant;
 
 /**
  * Created by judy.lt on 2015/6/5.

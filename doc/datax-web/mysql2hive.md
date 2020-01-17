@@ -31,7 +31,7 @@ datax.json
           "parameter": {
             "defaultFS": "hdfs://localhost:9000",
             "fileType": "text",
-            "path": "/user/hive/warehouse/offline.db/fgw_company_evaluate_gg/datety=2019-12-24",
+            "path": "/user/hive/warehouse/offline.db/fgw_company_evaluate_gg/datety=2019-12-22",
             "fileName": "test",
             "column": [
               {

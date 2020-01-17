@@ -130,6 +130,8 @@ public class JobTrigger {
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         triggerParam.setStartTime(jobInfo.getIncStartTime());
         triggerParam.setTriggerTime(triggerTime);
+        triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
+
         // 3、init address
         String address = null;
         ReturnT<String> routeAddressResult = null;

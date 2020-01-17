@@ -12,7 +12,7 @@ import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
-import com.wugui.datax.admin.util.Constant;
+import com.wugui.datatx.core.util.Constant;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -180,12 +180,12 @@ public class DataxJsonHelper implements DataxJsonInterface {
         DataxHivePojo dataxHivePojo = new DataxHivePojo();
         dataxHivePojo.setJdbcDatasource(readerDatasource);
         List<Map<String, Object>> columns = Lists.newArrayList();
-        for(int i=0;i<readerColumns.size();i++){
+        readerColumns.forEach(c -> {
             Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("index", i);
-            column.put("type", readerColumns.get(i).split(Constant.SPLIT_SCOLON)[1]);
+            column.put("index", c.split(Constant.SPLIT_SCOLON)[0]);
+            column.put("type", c.split(Constant.SPLIT_SCOLON)[2]);
             columns.add(column);
-        }
+        });
         dataxHivePojo.setColumns(columns);
         dataxHivePojo.setReaderDefaultFS(hiveReaderDto.getReaderDefaultFS());
         dataxHivePojo.setReaderFieldDelimiter(hiveReaderDto.getReaderFieldDelimiter());
@@ -211,8 +211,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         List<Map<String, Object>> columns = Lists.newArrayList();
         writerColumns.forEach(c -> {
             Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constant.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constant.SPLIT_SCOLON)[1]);
+            column.put("name", c.split(Constant.SPLIT_SCOLON)[1]);
+            column.put("type", c.split(Constant.SPLIT_SCOLON)[2]);
             columns.add(column);
         });
         dataxHivePojo.setColumns(columns);

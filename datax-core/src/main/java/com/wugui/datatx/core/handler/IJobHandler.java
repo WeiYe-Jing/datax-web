@@ -30,7 +30,7 @@ public abstract class IJobHandler {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract ReturnT<String> executeDataX(TriggerParam tgParam) throws Exception;
+	public abstract ReturnT<String> execute(TriggerParam tgParam) throws Exception;
 
 	/**
 	 * init handler, invoked when JobThread init

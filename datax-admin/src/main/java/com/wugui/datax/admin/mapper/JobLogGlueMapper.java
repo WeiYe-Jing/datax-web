@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface JobLogGlueMapper {
 	
-	public int save(JobLogGlue xxlJobLogGlue);
+	public int save(JobLogGlue jobLogGlue);
 	
 	public List<JobLogGlue> findByJobId(@Param("jobId") int jobId);
 

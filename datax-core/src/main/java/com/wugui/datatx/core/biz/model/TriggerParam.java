@@ -35,6 +35,8 @@ public class TriggerParam implements Serializable{
     private Date startTime;
     private Date triggerTime;
 
+    private String partitionInfo;
+
 
     public int getJobId() {
         return jobId;
@@ -180,6 +182,14 @@ public class TriggerParam implements Serializable{
         this.triggerTime = triggerTime;
     }
 
+    public String getPartitionInfo() {
+        return partitionInfo;
+    }
+
+    public void setPartitionInfo(String partitionInfo) {
+        this.partitionInfo = partitionInfo;
+    }
+
     @Override
     public String toString() {
         return "TriggerParam{" +
@@ -201,6 +211,7 @@ public class TriggerParam implements Serializable{
                 ", jvmParam=" + jvmParam +
                 ", startTime=" + startTime +
                 ", triggerTime=" + triggerTime +
+                ", partitionInfo=" + partitionInfo +
                 '}';
     }
 

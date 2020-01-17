@@ -134,7 +134,7 @@ public class JobThread extends Thread {
                         Thread futureThread = null;
                         try {
                             final TriggerParam tgParamT = tgParam;
-                            FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(() -> handler.executeDataX(tgParamT));
+                            FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(() -> handler.execute(tgParamT));
                             futureThread = new Thread(futureTask);
                             futureThread.start();
 
@@ -150,7 +150,7 @@ public class JobThread extends Thread {
                         }
                     } else {
                         // just execute
-                        executeResult = handler.executeDataX(tgParam);
+                        executeResult = handler.execute(tgParam);
                     }
 
                     if (executeResult == null) {

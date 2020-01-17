@@ -105,7 +105,6 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其�
 - [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md)
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md)
 
-)
 ### 10. 任务列表
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
 

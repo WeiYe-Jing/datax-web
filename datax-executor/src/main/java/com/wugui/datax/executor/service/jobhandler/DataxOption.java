@@ -16,4 +16,10 @@ public class DataxOption {
     public static final String JVM_CM = "-j";
 
     public static final String PARAMS_CM = "-p";
+
+    public static final String PARAMS_CM_V_PT = "-Dpartition=%s";
+
+    public static final String DEFAULT_JSON = "jsons";
+
+    public static final String DEFAULT_DATAX_PY = "bin/datax.py";
 }

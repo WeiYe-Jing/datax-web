@@ -46,11 +46,11 @@ public class JobServiceImpl implements JobService {
 	private final static ConcurrentMap<String, String> jobTmpFiles = Maps.newConcurrentMap();
 	
 	@Override
-	public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+	public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author) {
 
 		// page list
-		List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
-		int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+		List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
+		int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
 		
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
@@ -70,7 +70,7 @@ public class JobServiceImpl implements JobService {
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
 		}
-		if (jobInfo.getJobJson().trim().length()<=2) {
+		if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length()<=2) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobjson")) );
 		}
 		if (jobInfo.getJobDesc()==null || jobInfo.getJobDesc().trim().length()==0) {
@@ -151,7 +151,7 @@ public class JobServiceImpl implements JobService {
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
 		}
-		if (jobInfo.getJobJson().trim().length()<=2) {
+		if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length()<=2) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobjson")) );
 		}
 		if (jobInfo.getJobDesc()==null || jobInfo.getJobDesc().trim().length()==0) {
@@ -233,11 +233,21 @@ public class JobServiceImpl implements JobService {
 		exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
 		exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
 		exists_jobInfo.setTriggerNextTime(nextTriggerTime);
-		exists_jobInfo.setJobJson(jobInfo.getJobJson());
 		exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
 		exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
 		exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());
 		exists_jobInfo.setUpdateTime(new Date());
+		exists_jobInfo.setGlueType(jobInfo.getGlueType());
+		exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
+
+		if(GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())){
+			exists_jobInfo.setJobJson(jobInfo.getJobJson());
+			exists_jobInfo.setGlueSource(null);
+		}else{
+			exists_jobInfo.setGlueSource(jobInfo.getGlueSource());
+			exists_jobInfo.setJobJson(null);
+		}
+		exists_jobInfo.setGlueUpdatetime(new Date());
         jobInfoMapper.update(exists_jobInfo);
 
 
@@ -302,10 +312,10 @@ public class JobServiceImpl implements JobService {
 		int jobInfoCount = jobInfoMapper.findAllCount();
 		int jobLogCount = 0;
 		int jobLogSuccessCount = 0;
-		JobLogReport xxlJobLogReport = jobLogReportMapper.queryLogReportTotal();
-		if (xxlJobLogReport != null) {
-			jobLogCount = xxlJobLogReport.getRunningCount() + xxlJobLogReport.getSucCount() + xxlJobLogReport.getFailCount();
-			jobLogSuccessCount = xxlJobLogReport.getSucCount();
+		JobLogReport jobLogReport = jobLogReportMapper.queryLogReportTotal();
+		if (jobLogReport != null) {
+			jobLogCount = jobLogReport.getRunningCount() + jobLogReport.getSucCount() + jobLogReport.getFailCount();
+			jobLogSuccessCount = jobLogReport.getSucCount();
 		}
 
 		// executor count

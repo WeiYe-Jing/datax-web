@@ -20,11 +20,11 @@ public interface JobService {
 	 * @param length
 	 * @param jobGroup
 	 * @param jobDesc
-	 * @param executorHandler
+	 * @param glueType
 	 * @param author
 	 * @return
 	 */
-	public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
+	public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author);
 
 	/**
 	 * add job

@@ -51,7 +51,7 @@ public interface QueryToolInterface {
      * @param tableName
      * @return2
      */
-    public List<String> getColumnNames(String tableName,String driverClass);
+    public List<String> getColumnNames(String tableName,String datasource);
 
 
     /**

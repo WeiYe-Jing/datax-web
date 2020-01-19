@@ -12,7 +12,7 @@ import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
-import com.wugui.datax.admin.util.Constant;
+import com.wugui.datatx.core.util.Constant;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -179,11 +179,11 @@ public class DataxJsonHelper implements DataxJsonInterface {
     public Map<String, Object> buildHiveReader() {
         DataxHivePojo dataxHivePojo = new DataxHivePojo();
         dataxHivePojo.setJdbcDatasource(readerDatasource);
-        List<Map<String, String>> columns = Lists.newArrayList();
+        List<Map<String, Object>> columns = Lists.newArrayList();
         readerColumns.forEach(c -> {
-            Map<String, String> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constant.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constant.SPLIT_SCOLON)[1]);
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("index", c.split(Constant.SPLIT_SCOLON)[0]);
+            column.put("type", c.split(Constant.SPLIT_SCOLON)[2]);
             columns.add(column);
         });
         dataxHivePojo.setColumns(columns);
@@ -208,11 +208,11 @@ public class DataxJsonHelper implements DataxJsonInterface {
     public Map<String, Object> buildHiveWriter() {
         DataxHivePojo dataxHivePojo = new DataxHivePojo();
         dataxHivePojo.setJdbcDatasource(writerDatasource);
-        List<Map<String, String>> columns = Lists.newArrayList();
+        List<Map<String, Object>> columns = Lists.newArrayList();
         writerColumns.forEach(c -> {
-            Map<String, String> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constant.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constant.SPLIT_SCOLON)[1]);
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("name", c.split(Constant.SPLIT_SCOLON)[1]);
+            column.put("type", c.split(Constant.SPLIT_SCOLON)[2]);
             columns.add(column);
         });
         dataxHivePojo.setColumns(columns);

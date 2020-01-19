@@ -39,23 +39,23 @@ public class JobGroupController {
 
 	@PostMapping("/save")
 	@ApiOperation("新建执行器")
-	public ReturnT<String> save(@RequestBody JobGroup xxlJobGroup){
+	public ReturnT<String> save(@RequestBody JobGroup jobGroup){
 
 		// valid
-		if (xxlJobGroup.getAppName()==null || xxlJobGroup.getAppName().trim().length()==0) {
+		if (jobGroup.getAppName()==null || jobGroup.getAppName().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );
 		}
-		if (xxlJobGroup.getAppName().length()<4 || xxlJobGroup.getAppName().length()>64) {
+		if (jobGroup.getAppName().length()<4 || jobGroup.getAppName().length()>64) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_appName_length") );
 		}
-		if (xxlJobGroup.getTitle()==null || xxlJobGroup.getTitle().trim().length()==0) {
+		if (jobGroup.getTitle()==null || jobGroup.getTitle().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobgroup_field_title")) );
 		}
-		if (xxlJobGroup.getAddressType()!=0) {
-			if (xxlJobGroup.getAddressList()==null || xxlJobGroup.getAddressList().trim().length()==0) {
+		if (jobGroup.getAddressType()!=0) {
+			if (jobGroup.getAddressList()==null || jobGroup.getAddressList().trim().length()==0) {
 				return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_addressType_limit") );
 			}
-			String[] addresss = xxlJobGroup.getAddressList().split(",");
+			String[] addresss = jobGroup.getAddressList().split(",");
 			for (String item: addresss) {
 				if (item==null || item.trim().length()==0) {
 					return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_unvalid") );
@@ -63,26 +63,26 @@ public class JobGroupController {
 			}
 		}
 
-		int ret = jobGroupMapper.save(xxlJobGroup);
+		int ret = jobGroupMapper.save(jobGroup);
 		return (ret>0)?ReturnT.SUCCESS:ReturnT.FAIL;
 	}
 
 	@PostMapping("/update")
 	@ApiOperation("更新执行器")
-	public ReturnT<String> update(@RequestBody JobGroup xxlJobGroup){
+	public ReturnT<String> update(@RequestBody JobGroup jobGroup){
 		// valid
-		if (xxlJobGroup.getAppName()==null || xxlJobGroup.getAppName().trim().length()==0) {
+		if (jobGroup.getAppName()==null || jobGroup.getAppName().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );
 		}
-		if (xxlJobGroup.getAppName().length()<4 || xxlJobGroup.getAppName().length()>64) {
+		if (jobGroup.getAppName().length()<4 || jobGroup.getAppName().length()>64) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_appName_length") );
 		}
-		if (xxlJobGroup.getTitle()==null || xxlJobGroup.getTitle().trim().length()==0) {
+		if (jobGroup.getTitle()==null || jobGroup.getTitle().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobgroup_field_title")) );
 		}
-		if (xxlJobGroup.getAddressType() == 0) {
+		if (jobGroup.getAddressType() == 0) {
 			// 0=自动注册
-			List<String> registryList = findRegistryByAppName(xxlJobGroup.getAppName());
+			List<String> registryList = findRegistryByAppName(jobGroup.getAppName());
 			String addressListStr = null;
 			if (registryList!=null && !registryList.isEmpty()) {
 				Collections.sort(registryList);
@@ -92,13 +92,13 @@ public class JobGroupController {
 				}
 				addressListStr = addressListStr.substring(0, addressListStr.length()-1);
 			}
-			xxlJobGroup.setAddressList(addressListStr);
+			jobGroup.setAddressList(addressListStr);
 		} else {
 			// 1=手动录入
-			if (xxlJobGroup.getAddressList()==null || xxlJobGroup.getAddressList().trim().length()==0) {
+			if (jobGroup.getAddressList()==null || jobGroup.getAddressList().trim().length()==0) {
 				return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_addressType_limit") );
 			}
-			String[] addresss = xxlJobGroup.getAddressList().split(",");
+			String[] addresss = jobGroup.getAddressList().split(",");
 			for (String item: addresss) {
 				if (item==null || item.trim().length()==0) {
 					return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_unvalid") );
@@ -106,7 +106,7 @@ public class JobGroupController {
 			}
 		}
 
-		int ret = jobGroupMapper.update(xxlJobGroup);
+		int ret = jobGroupMapper.update(jobGroup);
 		return (ret>0)?ReturnT.SUCCESS:ReturnT.FAIL;
 	}
 

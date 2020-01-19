@@ -54,15 +54,15 @@ public class JobCodeController {
 		jobInfoMapper.update(exists_jobInfo);
 
 		// log old code
-		JobLogGlue xxlJobLogGlue = new JobLogGlue();
-		xxlJobLogGlue.setJobId(exists_jobInfo.getId());
-		xxlJobLogGlue.setGlueType(exists_jobInfo.getGlueType());
-		xxlJobLogGlue.setGlueSource(glueSource);
-		xxlJobLogGlue.setGlueRemark(glueRemark);
+		JobLogGlue jobLogGlue = new JobLogGlue();
+		jobLogGlue.setJobId(exists_jobInfo.getId());
+		jobLogGlue.setGlueType(exists_jobInfo.getGlueType());
+		jobLogGlue.setGlueSource(glueSource);
+		jobLogGlue.setGlueRemark(glueRemark);
 
-		xxlJobLogGlue.setAddTime(new Date());
-		xxlJobLogGlue.setUpdateTime(new Date());
-		jobLogGlueMapper.save(xxlJobLogGlue);
+		jobLogGlue.setAddTime(new Date());
+		jobLogGlue.setUpdateTime(new Date());
+		jobLogGlueMapper.save(jobLogGlue);
 
 		// remove code backup more than 30
 		jobLogGlueMapper.removeOld(exists_jobInfo.getId(), 30);

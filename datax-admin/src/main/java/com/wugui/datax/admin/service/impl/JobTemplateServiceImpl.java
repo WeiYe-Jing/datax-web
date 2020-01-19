@@ -4,13 +4,10 @@ import com.google.common.collect.Maps;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
-import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
-import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobGroup;
-import com.wugui.datax.admin.entity.JobLogReport;
 import com.wugui.datax.admin.entity.JobTemplate;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.JobTemplateService;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
-import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
@@ -219,6 +215,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
 		exists_jobTemplate.setReplaceParam(jobTemplate.getReplaceParam());
 		exists_jobTemplate.setJvmParam(jobTemplate.getJvmParam());
 		exists_jobTemplate.setIncStartTime(jobTemplate.getIncStartTime());
+		exists_jobTemplate.setPartitionInfo(jobTemplate.getPartitionInfo());
 		exists_jobTemplate.setUpdateTime(new Date());
 		jobTemplateMapper.update(exists_jobTemplate);
 

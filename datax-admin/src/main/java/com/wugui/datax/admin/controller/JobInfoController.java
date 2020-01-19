@@ -35,7 +35,7 @@ import java.util.Map;
 public class JobInfoController {
 
     @Resource
-    private JobService xxlJobService;
+    private JobService jobService;
 
 
     public static void validPermission(HttpServletRequest request, int jobGroup) {
@@ -49,39 +49,39 @@ public class JobInfoController {
     @ApiOperation("任务列表")
     public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
                                         @RequestParam(required = false, defaultValue = "10") int size,
-                                        int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+                                        int jobGroup, int triggerStatus, String jobDesc, String glueType, String author) {
 
-        return new ReturnT<>(xxlJobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, executorHandler, author));
+        return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, author));
     }
 
     @PostMapping("/add")
     @ApiOperation("添加任务")
     public ReturnT<String> add(@RequestBody JobInfo jobInfo) {
-        return xxlJobService.add(jobInfo);
+        return jobService.add(jobInfo);
     }
 
     @PostMapping("/update")
     @ApiOperation("更新任务")
     public ReturnT<String> update(@RequestBody JobInfo jobInfo) {
-        return xxlJobService.update(jobInfo);
+        return jobService.update(jobInfo);
     }
 
     @PostMapping(value = "/remove/{id}")
     @ApiOperation("移除任务")
     public ReturnT<String> remove(@PathVariable(value = "id") int id) {
-        return xxlJobService.remove(id);
+        return jobService.remove(id);
     }
 
     @RequestMapping(value = "/stop",method = RequestMethod.POST)
     @ApiOperation("停止任务")
     public ReturnT<String> pause(int id) {
-        return xxlJobService.stop(id);
+        return jobService.stop(id);
     }
 
     @RequestMapping(value = "/start",method = RequestMethod.POST)
     @ApiOperation("开启任务")
     public ReturnT<String> start(int id) {
-        return xxlJobService.start(id);
+        return jobService.start(id);
     }
 
     @PostMapping(value = "/trigger")

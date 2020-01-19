@@ -15,7 +15,7 @@ import java.util.Map;
 public class HiveReader extends BaseReaderPlugin implements DataxReaderInterface {
     @Override
     public String getName() {
-        return "hivereader";
+        return "hdfsreader";
     }
 
     @Override

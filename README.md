@@ -34,7 +34,14 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - 14、用户管理：支持在线管理系统用户，存在管理员、普通用户两种角色；
 - 15、任务依赖：支持配置子任务依赖，当父任务执行结束且执行成功后将会主动触发一次子任务的执行, 多个子任务用逗号分隔；
 - 16、运行报表：支持实时查看运行数据，以及调度报表，如调度日期分布图，调度成功分布图等；
-
+- 17、指定增量字段，配置定时任务自动获取每次的数据区间，任务失败重试，保证数据安全；
+- 18、页面可配置DataX启动JVM参数；
+- 19、数据源配置成功后添加手动测试功能；
+- 20、可以对常用任务进行配置模板，在构建完JSON之后可选择关联模板创建任务；
+- 21、jdbc添加hive数据源支持，可在构建JSON页面选择数据源生成column信息并简化配置；
+- 22、优先通过环境变量获取DataX文件目录，集群部署时不用指定JSON及日志目录；
+- 23、通过动态参数配置指定hive分区，也可以配合增量实现增量数据动态插入分区；
+- 24、任务类型由原来DataX任务扩展到Shell任务、Python任务、PowerShell任务；
 ## Quick Start
 
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包
@@ -74,19 +81,30 @@ http://localhost:8080/index.html#/dashboard
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
 
 ### 8. 构建JSON脚本
+JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其它数据源的JSON构建正在开发中,暂时需要手动编写。
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
 
 ### 9. 创建任务
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_job.png)
 
+#### DataX任务
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/datax.png)
+#### Shell任务
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/shell.png)
+#### Python任务
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/python.png)
+#### PowerShell任务
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/powershell.png)
+
+- 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
     - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
     - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
     - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
 - 增量增新建议将阻塞策略设置为丢弃后续调度或者单机串行
     - 设置单机串行时应该注意合理设置重试次数(失败重试的次数*每次执行时间<任务的调度周期)，重试的次数如果设置的过多会导致数据重复，例如任务30秒执行一次，每次执行时间需要20秒，设置重试三次，如果任务失败了，第一个重试的时间段为1577755680-1577756680，重试任务没结束，新任务又开启，那新任务的时间段会是1577755680-1577758680
-- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md
-)
+- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md)
+- [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md)
+
 ### 10. 任务列表
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
 
@@ -106,26 +124,26 @@ Quick Start操作完前四步之后
 ## UI
 [前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
 
-## 完成功能
-- 修复前端页面自适应问题
-- 修复添加任务时json转换失败的问题
-- 修复构建json时数据库连接增加问题
-- 修复增量更新失败重试成功后增量更新时间跳跃的问题
-- 修复失败重试时序列化失败问题
-- 1、指定增量字段，自动获取每次的数据区间
-- 2、页面配置datax启动参数
-- 3、数据源连接错误提醒功能
-- 4、任务模板创建
-- 5、构建JSON之后选择任务模板创建任务
-- 6、jdbc添加hive数据源支持
-- 7、json构建模块代码重构
-- 8、json构建支持hive
-- 9、添加数据源测试功能
-- 10、优先通过环境变量获取DataX文件目录
-- 11、字段映射优化
+### Contributing
+Contributions are welcome! Open a pull request to fix a bug, or open an Issue to discuss a new feature or change.
+
+欢迎参与项目贡献！比如提交PR修复一个bug，或者新建 Issue 讨论新特性或者变更。
+
+## Copyright and License
+This product is open source and free, and will continue to provide free community technical support. Individual or enterprise users are free to access and use.
+
+- Licensed under the GNU General Public License (GPL) v3.
+- Copyright (c) 2015-present, xuxueli.
+
+产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
+
+> 欢迎在 [登记地址](https://github.com/WeiYe-Jing/datax-web/issues/14 ) 登记，登记仅仅为了产品推广和提升社区开发的动力。
+>
 ## TODO List
-- 1、从源表到目标端表的自动创建
-- 2、任务批量导入功能
+- 1、对接DataX支持的数据源，简化json构建
+- 2、从源表到目标端表的自动创建
+- 3、任务批量导入功能
+
 
 
 ## Contact us

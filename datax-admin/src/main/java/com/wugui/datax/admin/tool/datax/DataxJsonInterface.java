@@ -24,5 +24,9 @@ public interface DataxJsonInterface {
 
     Map<String, Object> buildHiveWriter();
 
+    Map<String, Object> buildHbaseReader();
+
+    Map<String, Object> buildHbaseWriter();
+
     Map<String, Object> buildWriter();
 }

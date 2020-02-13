@@ -32,6 +32,10 @@ public class DataxJsonDto implements Serializable {
 
     private HiveWriterDto hiveWriter;
 
+    private HbaseReaderDto hbaseReader;
+
+    private HbaseWriterDto hbaseWriter;
+
     private RdbmsReaderDto rdbmsReader;
 
     private RdbmsWriterDto rdbmsWriter;

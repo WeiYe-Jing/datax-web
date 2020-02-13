@@ -113,7 +113,11 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
     @ApiModelProperty(value = "备注", hidden = true)
     private String comments;
 
-
+    /**
+     * zookeeper地址
+     */
+    @ApiModelProperty(value = "zookeeper地址", hidden = true)
+    private String zookeeper;
     /**
      * 获取主键值
      *

@@ -10,6 +10,7 @@ import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
+import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import com.wugui.datatx.core.util.Constant;
@@ -69,6 +70,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private HiveWriterDto hiveWriterDto;
 
+    private HbaseReaderDto hbaseReaderDto;
+
+    private HbaseWriterDto hbaseWriterDto;
+
     private RdbmsReaderDto rdbmsReaderDto;
 
     private RdbmsWriterDto rdbmsWriterDto;
@@ -78,27 +83,34 @@ public class DataxJsonHelper implements DataxJsonInterface {
     private Map<String, Object> extraParams = Maps.newHashMap();
 
     public void initReader(DataxJsonDto dataxJsonDto, JobJdbcDatasource readerDatasource) {
+
         this.readerDatasource = readerDatasource;
         this.readerTables = dataxJsonDto.getReaderTables();
         this.readerColumns = dataxJsonDto.getReaderColumns();
         this.hiveReaderDto = dataxJsonDto.getHiveReader();
         this.rdbmsReaderDto = dataxJsonDto.getRdbmsReader();
+        this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
         // reader 插件
         String readerDbType = JdbcUtils.getDbType(readerDatasource.getJdbcUrl(), readerDatasource.getJdbcDriverClass());
-        if (JdbcConstants.MYSQL.equals(readerDbType)) {
-            readerPlugin = new MysqlReader();
-        } else if (JdbcConstants.ORACLE.equals(readerDbType)) {
-            readerPlugin = new OracleReader();
-        } else if (JdbcConstants.SQL_SERVER.equals(readerDbType)) {
-            readerPlugin = new SqlServerReader();
-        } else if (JdbcConstants.POSTGRESQL.equals(readerDbType)) {
-            readerPlugin = new PostgresqlReader();
-        } else if (JdbcConstants.HIVE.equals(readerDbType)) {
-            readerPlugin = new HiveReader();
-            buildReader = buildHiveReader();
-        }
-        if(!JdbcConstants.HIVE.equals(readerDbType)){
-            buildReader = this.buildReader();
+        if (StringUtils.isEmpty(readerDatasource.getZookeeper())) {
+            if (JdbcConstants.MYSQL.equals(readerDbType)) {
+                readerPlugin = new MysqlReader();
+            } else if (JdbcConstants.ORACLE.equals(readerDbType)) {
+                readerPlugin = new OracleReader();
+            } else if (JdbcConstants.SQL_SERVER.equals(readerDbType)) {
+                readerPlugin = new SqlServerReader();
+            } else if (JdbcConstants.POSTGRESQL.equals(readerDbType)) {
+                readerPlugin = new PostgresqlReader();
+            } else if (JdbcConstants.HIVE.equals(readerDbType)) {
+                readerPlugin = new HiveReader();
+                buildReader = buildHiveReader();
+            }
+            if (!JdbcConstants.HIVE.equals(readerDbType)) {
+                buildReader = this.buildReader();
+            }
+        } else {
+            readerPlugin = new HbaseReader();
+            buildReader = buildHbaseReader();
         }
 
     }
@@ -109,22 +121,28 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.writerColumns = dataxJsonDto.getWriterColumns();
         this.hiveWriterDto = dataxJsonDto.getHiveWriter();
         this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
+        this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
         // writer
         String writerDbType = JdbcUtils.getDbType(writerDatasource.getJdbcUrl(), writerDatasource.getJdbcDriverClass());
-        if (JdbcConstants.MYSQL.equals(writerDbType)) {
-            writerPlugin = new MysqlWriter();
-        } else if (JdbcConstants.ORACLE.equals(writerDbType)) {
-            writerPlugin = new OraclelWriter();
-        } else if (JdbcConstants.SQL_SERVER.equals(writerDbType)) {
-            writerPlugin = new SqlServerlWriter();
-        } else if (JdbcConstants.POSTGRESQL.equals(writerDbType)) {
-            writerPlugin = new PostgresqllWriter();
-        } else if (JdbcConstants.HIVE.equals(writerDbType)) {
-            writerPlugin = new HiveWriter();
-            buildWriter = this.buildHiveWriter();
-        }
-        if(!JdbcConstants.HIVE.equals(writerDbType)){
-            buildWriter = this.buildWriter();
+        if (StringUtils.isEmpty(readerDatasource.getZookeeper())) {
+            if (JdbcConstants.MYSQL.equals(writerDbType)) {
+                writerPlugin = new MysqlWriter();
+            } else if (JdbcConstants.ORACLE.equals(writerDbType)) {
+                writerPlugin = new OraclelWriter();
+            } else if (JdbcConstants.SQL_SERVER.equals(writerDbType)) {
+                writerPlugin = new SqlServerlWriter();
+            } else if (JdbcConstants.POSTGRESQL.equals(writerDbType)) {
+                writerPlugin = new PostgresqllWriter();
+            } else if (JdbcConstants.HIVE.equals(writerDbType)) {
+                writerPlugin = new HiveWriter();
+                buildWriter = this.buildHiveWriter();
+            }
+            if (!JdbcConstants.HIVE.equals(writerDbType)) {
+                buildWriter = this.buildWriter();
+            }
+        } else {
+            writerPlugin = new HbaseWriter();
+            buildWriter = buildHbaseWriter();
         }
     }
 
@@ -223,5 +241,47 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHivePojo.setWriteMode(hiveWriterDto.getWriteMode());
         dataxHivePojo.setWriterFileName(hiveWriterDto.getWriterFileName());
         return writerPlugin.buildHive(dataxHivePojo);
+    }
+
+    @Override
+    public Map<String, Object> buildHbaseReader() {
+        DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
+        dataxHbasePojo.setJdbcDatasource(readerDatasource);
+        List<Map<String, Object>> columns = Lists.newArrayList();
+        for (int i = 0; i < readerColumns.size(); i++) {
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("name", readerColumns.get(i));
+            column.put("type", "string");
+            columns.add(column);
+        }
+        dataxHbasePojo.setColumns(columns);
+        dataxHbasePojo.setReaderHbaseConfig(hbaseReaderDto.getReaderHbaseConfig());
+        dataxHbasePojo.setReaderTable(hbaseReaderDto.getReaderTable());
+        dataxHbasePojo.setReaderEncoding(hbaseReaderDto.getReaderEncoding());
+        dataxHbasePojo.setReaderMode(hbaseReaderDto.getReaderMode());
+        dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
+        return readerPlugin.buildHbase(dataxHbasePojo);
+    }
+
+    @Override
+    public Map<String, Object> buildHbaseWriter() {
+        DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
+        dataxHbasePojo.setJdbcDatasource(writerDatasource);
+        List<Map<String, Object>> columns = Lists.newArrayList();
+        for(int i =0; i<writerColumns.size();i++){
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("index",i);
+            column.put("name", writerColumns.get(i));
+            column.put("type", "string");
+            columns.add(column);
+        }
+        dataxHbasePojo.setColumns(columns);
+        dataxHbasePojo.setWriterHbaseConfig(hbaseWriterDto.getWriterHbaseConfig());
+        dataxHbasePojo.setWriterTable(hbaseWriterDto.getWriterTable());
+        dataxHbasePojo.setWriterEncoding(hbaseWriterDto.getWriterEncoding());
+        dataxHbasePojo.setWritervVersionColumn(hbaseWriterDto.getWritervVersionColumn());
+        dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
+        dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());
+        return writerPlugin.buildHbase(dataxHbasePojo);
     }
 }

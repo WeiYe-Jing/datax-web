@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
+import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 
@@ -46,4 +47,8 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
     public Map<String, Object> buildHive(DataxHivePojo dataxHivePojo) {
         return null;
     }
+
+
+    @Override
+    public Map<String, Object> buildHbase(DataxHbasePojo dataxHbasePojo) { return null; }
 }

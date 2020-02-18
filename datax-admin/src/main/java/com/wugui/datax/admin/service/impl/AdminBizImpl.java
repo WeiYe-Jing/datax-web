@@ -77,7 +77,8 @@ public class AdminBizImpl implements AdminBiz {
 
         // trigger success, to trigger child job
         String callbackMsg = null;
-        if (IJobHandler.SUCCESS.getCode() == handleCallbackParam.getExecuteResult().getCode()) {
+        int resultCode = handleCallbackParam.getExecuteResult().getCode();
+        if (IJobHandler.SUCCESS.getCode() == resultCode) {
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
             jobInfoMapper.incrementTimeUpdate(log.getJobId(),log.getTriggerTime());
             if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
@@ -123,9 +124,10 @@ public class AdminBizImpl implements AdminBiz {
 
         // success, save log
         log.setHandleTime(new Date());
-        log.setHandleCode(handleCallbackParam.getExecuteResult().getCode());
+        log.setHandleCode(resultCode);
         log.setHandleMsg(handleMsg.toString());
         jobLogMapper.updateHandleInfo(log);
+        jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);
 
         return ReturnT.SUCCESS;
     }

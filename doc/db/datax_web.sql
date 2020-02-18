@@ -299,3 +299,9 @@ ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息
 
 ALTER TABLE `datax_web`.`job_template`
 ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;
+
+/**
+最近一次执行状态
+ */
+ALTER TABLE `datax_web`.`job_info`
+ADD COLUMN `last_handle_code` INT(11) NULL DEFAULT '0' COMMENT '最近一次执行状态' AFTER `partition_info`;

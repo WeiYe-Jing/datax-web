@@ -1,0 +1,11 @@
+{
+  "name": "field-format-transformer",
+  "parameter": {
+    "columnIndex": 0,
+    "context": {
+      "name": "dateFormatter(格式化器名称)",
+      "pattern": "yyyy-MM-dd HH:mm:ss(目标格式)",
+      "discard": true
+    }
+  }
+}

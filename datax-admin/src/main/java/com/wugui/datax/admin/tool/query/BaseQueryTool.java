@@ -3,8 +3,10 @@ package com.wugui.datax.admin.tool.query;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
+import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.wugui.datatx.core.util.Constant;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobJdbcDatasource;
@@ -14,6 +16,7 @@ import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.zaxxer.hikari.HikariDataSource;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +36,7 @@ import java.util.Map;
  */
 public abstract class BaseQueryTool implements QueryToolInterface {
 
+    public static final Map<String, Connection> CREATED_CONNECTIONS = Maps.newConcurrentMap();
     protected static final Logger logger = LoggerFactory.getLogger(BaseQueryTool.class);
     /**
      * 用于获取查询语句
@@ -53,25 +57,44 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * @param jobJdbcDatasource
      */
     BaseQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
-        String currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
-        if (LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName()) == null) {
-            //这里默认使用 hikari 数据源
-            HikariDataSource dataSource = new HikariDataSource();
-            dataSource.setUsername(jobJdbcDatasource.getJdbcUsername());
-            dataSource.setPassword(jobJdbcDatasource.getJdbcPassword());
-            dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
-            dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
-            dataSource.setMaximumPoolSize(1);
-            dataSource.setMinimumIdle(0);
-            dataSource.setConnectionTimeout(30000);
-            this.datasource = dataSource;
-            this.connection = this.datasource.getConnection();
+        if (StringUtils.isEmpty(jobJdbcDatasource.getZookeeper())) {
+            String currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
+            if (LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName()) == null) {
+                //这里默认使用 hikari 数据源
+                HikariDataSource dataSource = new HikariDataSource();
+                dataSource.setUsername(jobJdbcDatasource.getJdbcUsername());
+                dataSource.setPassword(jobJdbcDatasource.getJdbcPassword());
+                dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
+                dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
+                dataSource.setMaximumPoolSize(1);
+                dataSource.setMinimumIdle(0);
+                dataSource.setConnectionTimeout(30000);
+                this.datasource = dataSource;
+                this.connection = this.datasource.getConnection();
+            } else {
+                this.connection = (Connection) LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName());
+            }
+            sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
+            currentSchema = getSchema(jobJdbcDatasource.getJdbcUsername());
+            LocalCacheUtil.set(jobJdbcDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
         } else {
-            this.connection = (Connection) LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName());
+            // 连接Hbase
+            try {
+                boolean famliy = HbaseDao.me().getFamliy(HbaseDao.me().getConnection(jobJdbcDatasource.getZookeeper()));
+                if (famliy) {
+                    currentSchema = "hbase";
+                }
+            } catch (IOException e) {
+                logger.error("[dataSourceTest Exception] --> "
+                        + "the exception message is:" + e.getMessage());
+                currentSchema = "error";
+            }
         }
-        sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
-        currentSchema = getSchema(jobJdbcDatasource.getJdbcUsername());
-        LocalCacheUtil.set(jobJdbcDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
+
+    }
+
+    public String getCurrentSchema() {
+        return currentSchema;
     }
 
     //根据connection获取schema
@@ -251,7 +274,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnNames(String tableName, String datasource) {
+    public List<String> getColumnNames(String tableName, String driverClass) {
 
         List<String> res = Lists.newArrayList();
         Statement stmt = null;
@@ -269,11 +292,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
-                if (JdbcConstants.HIVE.equals(datasource)) {
+                if (JdbcConstants.HIVE_DRIVER.equals(driverClass) || "com.cloudera.hive.jdbc41.HS2Driver".equals(driverClass)) {
                     if (columnName.contains(Constant.SPLIT_POINT)) {
-                        res.add(i - 1 + Constant.SPLIT_SCOLON + columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     } else {
-                        res.add(i - 1 + Constant.SPLIT_SCOLON + columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     }
                 } else {
                     res.add(columnName);
@@ -290,6 +313,12 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return res;
     }
 
+
+    /**
+     * 查询表们
+     *
+     * @return
+     */
     @Override
     public List<String> getTableNames() {
         List<String> tables = new ArrayList<String>();

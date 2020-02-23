@@ -15,6 +15,7 @@
         <module>datax-executor</module>
         <module>datax-rpc</module>
         <module>datax-registry</module>
+        <module>datax-transformer</module>
     </modules>
 
     <properties>
@@ -50,6 +51,8 @@
         <hessian.version>4.0.63</hessian.version>
         <hadoop.version>2.7.3</hadoop.version>
         <hive.jdbc.version>2.1.0</hive.jdbc.version>
+
+        <datax.version>0.0.1-SNAPSHOT</datax.version>
         <hbase.version>1.1.3</hbase.version>
     </properties>
 

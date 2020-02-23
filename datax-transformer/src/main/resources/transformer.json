@@ -1,6 +1,0 @@
-{
-  "name": "field-format-transformer (注: 在编写datax任务json时transformer模块对应的名称,打包完成后将datax-transformer/target/datax-transformer/plugin/transformer下的datax-transformer文件夹名称修改为与name相同，并放到${DataXPath}/local_storage/transformer目录下)",
-  "class": "com.wugui.datax.transformer.fieldformat.FieldFormatTransformer (注: 转化方法主类)",
-  "description": "field format",
-  "developer": "fantasticKe"
-}

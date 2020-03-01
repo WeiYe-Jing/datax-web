@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.pojo;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.Data;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class DataxHivePojo {
     /**
      * 数据源信息
      */
-    private JobJdbcDatasource jdbcDatasource;
+    private JobDatasource jdbcDatasource;
 
     private String readerPath;
 

@@ -21,7 +21,7 @@ import java.util.Date;
 @Data
 @ApiModel
 @TableName("job_jdbc_datasource")
-public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
+public class JobDatasource extends Model<JobDatasource> {
 
     /**
      * 自增主键
@@ -117,7 +117,7 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
      * zookeeper地址
      */
     @ApiModelProperty(value = "zookeeper地址", hidden = true)
-    private String zookeeper;
+    private String zkAdress;
     /**
      * 获取主键值
      *

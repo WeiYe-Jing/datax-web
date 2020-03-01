@@ -3,20 +3,17 @@ package com.wugui.datax.admin.tool.query;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
-import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.wugui.datatx.core.util.Constant;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.zaxxer.hikari.HikariDataSource;
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +33,6 @@ import java.util.Map;
  */
 public abstract class BaseQueryTool implements QueryToolInterface {
 
-    public static final Map<String, Connection> CREATED_CONNECTIONS = Maps.newConcurrentMap();
     protected static final Logger logger = LoggerFactory.getLogger(BaseQueryTool.class);
     /**
      * 用于获取查询语句
@@ -54,48 +50,29 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     /**
      * 构造方法
      *
-     * @param jobJdbcDatasource
+     * @param jobDatasource
      */
-    BaseQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
-        if (StringUtils.isEmpty(jobJdbcDatasource.getZookeeper())) {
-            String currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
-            if (LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName()) == null) {
+    BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
+            String currentDbType = JdbcUtils.getDbType(jobDatasource.getJdbcUrl(), jobDatasource.getJdbcDriverClass());
+            if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
                 //这里默认使用 hikari 数据源
                 HikariDataSource dataSource = new HikariDataSource();
-                dataSource.setUsername(jobJdbcDatasource.getJdbcUsername());
-                dataSource.setPassword(jobJdbcDatasource.getJdbcPassword());
-                dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
-                dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
+                dataSource.setUsername(jobDatasource.getJdbcUsername());
+                dataSource.setPassword(jobDatasource.getJdbcPassword());
+                dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
+                dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
                 dataSource.setMaximumPoolSize(1);
                 dataSource.setMinimumIdle(0);
                 dataSource.setConnectionTimeout(30000);
                 this.datasource = dataSource;
                 this.connection = this.datasource.getConnection();
             } else {
-                this.connection = (Connection) LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName());
+                this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
             }
             sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
-            currentSchema = getSchema(jobJdbcDatasource.getJdbcUsername());
-            LocalCacheUtil.set(jobJdbcDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
-        } else {
-            // 连接Hbase
-            try {
-                boolean famliy = HbaseDao.me().getFamliy(HbaseDao.me().getConnection(jobJdbcDatasource.getZookeeper()));
-                if (famliy) {
-                    currentSchema = "hbase";
-                }
-            } catch (IOException e) {
-                logger.error("[dataSourceTest Exception] --> "
-                        + "the exception message is:" + e.getMessage());
-                currentSchema = "error";
-            }
+            currentSchema = getSchema(jobDatasource.getJdbcUsername());
+            LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
         }
-
-    }
-
-    public String getCurrentSchema() {
-        return currentSchema;
-    }
 
     //根据connection获取schema
     private String getSchema(String jdbcUsername) {

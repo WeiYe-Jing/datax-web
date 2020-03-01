@@ -2,7 +2,7 @@ package com.wugui.datax.admin.tool.datax.writer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
@@ -26,7 +26,7 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
 //        parameterObj.put("writeMode", "insert");
-        JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
+        JobDatasource jobJdbcDatasource = plugin.getJobDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
         parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
         parameterObj.put("column", plugin.getRdbmsColumns());

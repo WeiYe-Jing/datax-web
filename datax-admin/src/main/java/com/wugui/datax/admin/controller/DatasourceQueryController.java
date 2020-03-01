@@ -2,12 +2,13 @@ package com.wugui.datax.admin.controller;
 
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.wugui.datax.admin.service.JdbcDatasourceQueryService;
+import com.wugui.datax.admin.service.DatasourceQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -21,10 +22,10 @@ import java.util.List;
 @RestController
 @RequestMapping("api/jdbcDatasourceQuery")
 @Api(tags = "jdbc数据库查询控制器")
-public class JdbcDatasourceQueryController extends ApiController {
+public class DatasourceQueryController extends ApiController {
 
     @Autowired
-    private JdbcDatasourceQueryService jdbcDatasourceQueryService;
+    private DatasourceQueryService datasourceQueryService;
 
     /**
      * 根据数据源id获取可用表名
@@ -34,8 +35,8 @@ public class JdbcDatasourceQueryController extends ApiController {
      */
     @GetMapping("/getTables")
     @ApiOperation("根据数据源id获取可用表名")
-    public R<List<String>> getTableNames(Long datasourceId) {
-        return success(jdbcDatasourceQueryService.getTables(datasourceId));
+    public R<List<String>> getTableNames(Long datasourceId) throws IOException {
+        return success(datasourceQueryService.getTables(datasourceId));
     }
 
     /**
@@ -47,8 +48,8 @@ public class JdbcDatasourceQueryController extends ApiController {
      */
     @GetMapping("/getColumns")
     @ApiOperation("根据数据源id和表名获取所有字段")
-    public R<List<String>> getColumns(Long datasourceId, String tableName) {
-        return success(jdbcDatasourceQueryService.getColumns(datasourceId, tableName));
+    public R<List<String>> getColumns(Long datasourceId, String tableName) throws IOException {
+        return success(datasourceQueryService.getColumns(datasourceId, tableName));
     }
 
     /**
@@ -61,6 +62,6 @@ public class JdbcDatasourceQueryController extends ApiController {
     @GetMapping("/getColumnsByQuerySql")
     @ApiOperation("根据数据源id和sql语句获取所有字段")
     public R<List<String>> getColumnsByQuerySql(Long datasourceId, String querySql) {
-        return success(jdbcDatasourceQueryService.getColumnsByQuerySql(datasourceId, querySql));
+        return success(datasourceQueryService.getColumnsByQuerySql(datasourceId, querySql));
     }
 }

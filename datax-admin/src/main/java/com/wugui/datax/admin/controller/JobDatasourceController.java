@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.service.IJobJdbcDatasourceService;
+import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.util.PageUtils;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,12 +30,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/jobJdbcDatasource")
 @Api(tags = "jdbc数据源配置接口")
-public class JobJdbcDatasourceController extends ApiController {
+public class JobDatasourceController extends ApiController {
     /**
      * 服务对象
      */
     @Autowired
-    private IJobJdbcDatasourceService jobJdbcDatasourceService;
+    private JobDatasourceService jobJdbcDatasourceService;
 
     /**
      * 分页查询所有数据
@@ -51,8 +51,8 @@ public class JobJdbcDatasourceController extends ApiController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "ascs", value = "升序字段，多个用逗号分隔"),
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
             })
-    public R<IPage<JobJdbcDatasource>> selectAll() {
-        BaseForm<JobJdbcDatasource> baseForm = new BaseForm();
+    public R<IPage<JobDatasource>> selectAll() {
+        BaseForm<JobDatasource> baseForm = new BaseForm();
         return success(this.jobJdbcDatasourceService.page(baseForm.getPlusPagingQueryEntity(), pageQueryWrapperCustom(baseForm.getParameters())));
     }
 
@@ -62,7 +62,7 @@ public class JobJdbcDatasourceController extends ApiController {
      * @param map
      * @return
      */
-    protected QueryWrapper<JobJdbcDatasource> pageQueryWrapperCustom(Map<String, Object> map) {
+    protected QueryWrapper<JobDatasource> pageQueryWrapperCustom(Map<String, Object> map) {
         // mybatis plus 分页相关的参数
         Map<String, Object> pageHelperParams = PageUtils.filterPageParams(map);
         logger.info("分页相关的参数: {}", pageHelperParams);
@@ -70,7 +70,7 @@ public class JobJdbcDatasourceController extends ApiController {
         Map<String, Object> columnQueryMap = PageUtils.filterColumnQueryParams(map);
         logger.info("字段查询条件参数为: {}", columnQueryMap);
 
-        QueryWrapper<JobJdbcDatasource> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<JobDatasource> queryWrapper = new QueryWrapper<>();
 
         //排序 操作
         pageHelperParams.forEach((k, v) -> {
@@ -107,7 +107,7 @@ public class JobJdbcDatasourceController extends ApiController {
      */
     @ApiOperation("通过主键查询单条数据")
     @GetMapping("{id}")
-    public R<JobJdbcDatasource> selectOne(@PathVariable Serializable id) {
+    public R<JobDatasource> selectOne(@PathVariable Serializable id) {
         return success(this.jobJdbcDatasourceService.getById(id));
     }
 
@@ -119,7 +119,7 @@ public class JobJdbcDatasourceController extends ApiController {
      */
     @ApiOperation("新增数据")
     @PostMapping
-    public R<Boolean> insert(@RequestBody JobJdbcDatasource entity) {
+    public R<Boolean> insert(@RequestBody JobDatasource entity) {
         return success(this.jobJdbcDatasourceService.save(entity));
     }
 
@@ -131,7 +131,7 @@ public class JobJdbcDatasourceController extends ApiController {
      */
     @PutMapping
     @ApiOperation("修改数据")
-    public R<Boolean> update(@RequestBody JobJdbcDatasource entity) {
+    public R<Boolean> update(@RequestBody JobDatasource entity) {
         LocalCacheUtil.remove(entity.getDatasourceName());
         return success(this.jobJdbcDatasourceService.updateById(entity));
     }
@@ -155,7 +155,7 @@ public class JobJdbcDatasourceController extends ApiController {
      */
     @PostMapping("/test")
     @ApiOperation("测试数据")
-    public R<Boolean> dataSourceTest (@RequestBody JobJdbcDatasource jobJdbcDatasource) {
+    public R<Boolean> dataSourceTest (@RequestBody JobDatasource jobJdbcDatasource) {
         return success(jobJdbcDatasourceService.dataSourceTest(jobJdbcDatasource));
     }
 }

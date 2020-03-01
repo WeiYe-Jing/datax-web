@@ -3,7 +3,7 @@ package com.wugui.datax.admin.tool.datax.reader;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
 /**
- * TODO
+ * Reader
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName BaseReaderPlugin
@@ -33,7 +33,7 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
-        JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
+        JobDatasource jobJdbcDatasource = plugin.getJobDatasource();
         parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
         parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
 

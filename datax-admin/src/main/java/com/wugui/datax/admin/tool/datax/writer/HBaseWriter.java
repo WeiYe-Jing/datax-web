@@ -5,7 +5,7 @@ import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 
 import java.util.Map;
 
-public class HbaseWriter extends BaseWriterPlugin implements DataxWriterInterface {
+public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterface {
   @Override
   public String getName() {
     return "hbase11xwriter";
@@ -30,7 +30,7 @@ public class HbaseWriter extends BaseWriterPlugin implements DataxWriterInterfac
     parameterObj.put("column", plugin.getColumns());
     parameterObj.put("range", plugin.getWriterRange());
     parameterObj.put("rowkeyColumn", plugin.getWriterRowkeyColumn());
-    parameterObj.put("versionColumn",plugin.getWritervVersionColumn());
+    parameterObj.put("versionColumn",plugin.getWriterVersionColumn());
     readerObj.put("parameter", parameterObj);
     return readerObj;
   }

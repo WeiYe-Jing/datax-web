@@ -15,7 +15,7 @@
         <module>datax-executor</module>
         <module>datax-rpc</module>
         <module>datax-registry</module>
-        <module>datax-transformer</module>
+        <!--<module>datax-transformer</module>-->
     </modules>
 
     <properties>
@@ -28,7 +28,6 @@
 
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <fastjson.version>1.2.62</fastjson.version>
-        <guava.version>28.1-jre</guava.version>
         <slf4j-api.version>1.7.28</slf4j-api.version>
         <logback-classic.version>1.2.2</logback-classic.version>
         <commons-io.version>2.4</commons-io.version>
@@ -53,7 +52,7 @@
         <hive.jdbc.version>2.1.0</hive.jdbc.version>
 
         <datax.version>0.0.1-SNAPSHOT</datax.version>
-        <hbase.version>1.1.3</hbase.version>
+        <hbase.version>1.3.0</hbase.version>
     </properties>
 
 

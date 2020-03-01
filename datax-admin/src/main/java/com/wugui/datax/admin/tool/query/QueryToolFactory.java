@@ -2,7 +2,7 @@ package com.wugui.datax.admin.tool.query;
 
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.util.RdbmsException;
 
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  */
 public class QueryToolFactory {
 
-    public static final BaseQueryTool getByDbType(JobJdbcDatasource jobJdbcDatasource) {
+    public static final BaseQueryTool getByDbType(JobDatasource jobJdbcDatasource) {
         //获取dbType
         String dbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
         if (JdbcConstants.MYSQL.equals(dbType)) {
@@ -34,7 +34,7 @@ public class QueryToolFactory {
         throw new UnsupportedOperationException("找不到该类型: ".concat(dbType));
     }
 
-    private static BaseQueryTool getMySQLQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
+    private static BaseQueryTool getMySQLQueryToolInstance(JobDatasource jdbcDatasource) {
         try {
             return new MySQLQueryTool(jdbcDatasource);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class QueryToolFactory {
         }
     }
 
-    private static BaseQueryTool getOracleQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
+    private static BaseQueryTool getOracleQueryToolInstance(JobDatasource jdbcDatasource) {
         try {
             return new OracleQueryTool(jdbcDatasource);
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class QueryToolFactory {
         }
     }
 
-    private static BaseQueryTool getPostgresqlQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
+    private static BaseQueryTool getPostgresqlQueryToolInstance(JobDatasource jdbcDatasource) {
         try {
             return new PostgresqlQueryTool(jdbcDatasource);
         } catch (SQLException e) {
@@ -61,7 +61,7 @@ public class QueryToolFactory {
         }
     }
 
-    private static BaseQueryTool getSqlserverQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
+    private static BaseQueryTool getSqlserverQueryToolInstance(JobDatasource jdbcDatasource) {
         try {
             return new SqlServerQueryTool(jdbcDatasource);
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class QueryToolFactory {
         }
     }
 
-    private static BaseQueryTool getHiveQueryToolInstance(JobJdbcDatasource jdbcDatasource) {
+    private static BaseQueryTool getHiveQueryToolInstance(JobDatasource jdbcDatasource) {
         try {
             return new HiveQueryTool(jdbcDatasource);
         } catch (SQLException e) {

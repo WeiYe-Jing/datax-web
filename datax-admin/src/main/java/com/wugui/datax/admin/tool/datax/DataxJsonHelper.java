@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.wugui.datax.admin.dto.*;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
@@ -44,11 +44,11 @@ public class DataxJsonHelper implements DataxJsonInterface {
     /**
      * reader jdbc 数据源
      */
-    private JobJdbcDatasource readerDatasource;
+    private JobDatasource readerDatasource;
     /**
      * writer jdbc 数据源
      */
-    private JobJdbcDatasource writerDatasource;
+    private JobDatasource writerDatasource;
     /**
      * 写入的表
      */
@@ -82,7 +82,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
 
-    public void initReader(DataxJsonDto dataxJsonDto, JobJdbcDatasource readerDatasource) {
+    public void initReader(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
 
         this.readerDatasource = readerDatasource;
         this.readerTables = dataxJsonDto.getReaderTables();
@@ -92,7 +92,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
         // reader 插件
         String readerDbType = JdbcUtils.getDbType(readerDatasource.getJdbcUrl(), readerDatasource.getJdbcDriverClass());
-        if (StringUtils.isEmpty(readerDatasource.getZookeeper())) {
+        if (StringUtils.isEmpty(readerDatasource.getZkAdress())) {
             if (JdbcConstants.MYSQL.equals(readerDbType)) {
                 readerPlugin = new MysqlReader();
             } else if (JdbcConstants.ORACLE.equals(readerDbType)) {
@@ -109,13 +109,13 @@ public class DataxJsonHelper implements DataxJsonInterface {
                 buildReader = this.buildReader();
             }
         } else {
-            readerPlugin = new HbaseReader();
-            buildReader = buildHbaseReader();
+            readerPlugin = new HBaseReader();
+            buildReader = buildHBaseReader();
         }
 
     }
 
-    public void initWriter(DataxJsonDto dataxJsonDto, JobJdbcDatasource readerDatasource) {
+    public void initWriter(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
         this.writerDatasource = readerDatasource;
         this.writerTables = dataxJsonDto.getWriterTables();
         this.writerColumns = dataxJsonDto.getWriterColumns();
@@ -124,7 +124,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
         // writer
         String writerDbType = JdbcUtils.getDbType(writerDatasource.getJdbcUrl(), writerDatasource.getJdbcDriverClass());
-        if (StringUtils.isEmpty(readerDatasource.getZookeeper())) {
+        if (StringUtils.isEmpty(readerDatasource.getZkAdress())) {
             if (JdbcConstants.MYSQL.equals(writerDbType)) {
                 writerPlugin = new MysqlWriter();
             } else if (JdbcConstants.ORACLE.equals(writerDbType)) {
@@ -141,8 +141,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
                 buildWriter = this.buildWriter();
             }
         } else {
-            writerPlugin = new HbaseWriter();
-            buildWriter = buildHbaseWriter();
+            writerPlugin = new HBaseWriter();
+            buildWriter = buildHBaseWriter();
         }
     }
 
@@ -179,7 +179,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     @Override
     public Map<String, Object> buildReader() {
         DataxRdbmsPojo dataxPluginPojo = new DataxRdbmsPojo();
-        dataxPluginPojo.setJdbcDatasource(readerDatasource);
+        dataxPluginPojo.setJobDatasource(readerDatasource);
         dataxPluginPojo.setTables(readerTables);
         dataxPluginPojo.setRdbmsColumns(readerColumns);
         dataxPluginPojo.setSplitPk(rdbmsReaderDto.getReaderSplitPk());
@@ -215,7 +215,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     @Override
     public Map<String, Object> buildWriter() {
         DataxRdbmsPojo dataxPluginPojo = new DataxRdbmsPojo();
-        dataxPluginPojo.setJdbcDatasource(writerDatasource);
+        dataxPluginPojo.setJobDatasource(writerDatasource);
         dataxPluginPojo.setTables(writerTables);
         dataxPluginPojo.setRdbmsColumns(writerColumns);
         dataxPluginPojo.setPreSql(rdbmsWriterDto.getPreSql());
@@ -244,7 +244,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     }
 
     @Override
-    public Map<String, Object> buildHbaseReader() {
+    public Map<String, Object> buildHBaseReader() {
         DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
         dataxHbasePojo.setJdbcDatasource(readerDatasource);
         List<Map<String, Object>> columns = Lists.newArrayList();
@@ -264,7 +264,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     }
 
     @Override
-    public Map<String, Object> buildHbaseWriter() {
+    public Map<String, Object> buildHBaseWriter() {
         DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
         dataxHbasePojo.setJdbcDatasource(writerDatasource);
         List<Map<String, Object>> columns = Lists.newArrayList();
@@ -279,7 +279,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHbasePojo.setWriterHbaseConfig(hbaseWriterDto.getWriterHbaseConfig());
         dataxHbasePojo.setWriterTable(hbaseWriterDto.getWriterTable());
         dataxHbasePojo.setWriterEncoding(hbaseWriterDto.getWriterEncoding());
-        dataxHbasePojo.setWritervVersionColumn(hbaseWriterDto.getWritervVersionColumn());
+        dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWritervVersionColumn());
         dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
         dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());
         return writerPlugin.buildHbase(dataxHbasePojo);

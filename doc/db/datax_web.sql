@@ -305,3 +305,10 @@ ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息
  */
 ALTER TABLE `datax_web`.`job_info`
 ADD COLUMN `last_handle_code` INT(11) NULL DEFAULT '0' COMMENT '最近一次执行状态' AFTER `partition_info`;
+
+/**
+zookeeper地址
+ */
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ADD COLUMN `zk_adress` VARCHAR(200) NULL DEFAULT NULL AFTER `jdbc_driver_class`;
+

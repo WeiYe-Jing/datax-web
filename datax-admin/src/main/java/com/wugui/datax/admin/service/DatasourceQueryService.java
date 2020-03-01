@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.service;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @Version 1.0
  * @since 2019/7/31 20:50
  */
-public interface JdbcDatasourceQueryService {
+public interface DatasourceQueryService {
 
     /**
      * 根据数据源表id查询出可用的表
@@ -18,7 +19,7 @@ public interface JdbcDatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getTables(Long id);
+    List<String> getTables(Long id) throws IOException;
 
 
     /**
@@ -27,7 +28,7 @@ public interface JdbcDatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getColumns(Long id, String tableName);
+    List<String> getColumns(Long id, String tableName) throws IOException;
 
     /**
      * 根据 sql 语句获取字段

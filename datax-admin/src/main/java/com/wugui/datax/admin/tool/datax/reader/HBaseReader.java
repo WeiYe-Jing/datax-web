@@ -5,7 +5,7 @@ import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 
 import java.util.Map;
 
-public class HbaseReader extends BaseReaderPlugin implements DataxReaderInterface {
+public class HBaseReader extends BaseReaderPlugin implements DataxReaderInterface {
   @Override
   public String getName() {
     return "hbase11xreader";

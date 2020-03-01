@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import java.util.List;
 public class PostgresqlQueryToolTest {
 
     private BaseQueryTool queryTool;
-    private JobJdbcDatasource jdbcDatasource;
+    private JobDatasource jdbcDatasource;
 
     @Before
     public void before() {
@@ -18,7 +18,7 @@ public class PostgresqlQueryToolTest {
     }
 
     private void genDs() {
-        jdbcDatasource = new JobJdbcDatasource();
+        jdbcDatasource = new JobDatasource();
         jdbcDatasource.setDatasourceName("test");
         jdbcDatasource.setJdbcUsername("postgres");
         jdbcDatasource.setJdbcPassword("postgres");

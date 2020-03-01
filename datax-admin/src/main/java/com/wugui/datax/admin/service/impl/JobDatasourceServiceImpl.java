@@ -2,8 +2,8 @@ package com.wugui.datax.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wugui.datax.admin.mapper.JobJdbcDatasourceMapper;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
-import com.wugui.datax.admin.service.IJobJdbcDatasourceService;
+import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class JobJdbcDatasourceServiceImpl extends ServiceImpl<JobJdbcDatasourceMapper, JobJdbcDatasource> implements IJobJdbcDatasourceService {
+public class JobDatasourceServiceImpl extends ServiceImpl<JobJdbcDatasourceMapper, JobDatasource> implements JobDatasourceService {
 
     @Override
-    public Boolean dataSourceTest(JobJdbcDatasource jdbcDatasource)  {
+    public Boolean dataSourceTest(JobDatasource jdbcDatasource)  {
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
         return queryTool.dataSourceTest();
     }

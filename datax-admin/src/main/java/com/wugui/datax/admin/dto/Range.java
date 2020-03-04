@@ -6,7 +6,10 @@ import java.io.Serializable;
 
 @Data
 public class Range implements Serializable {
+
   private String startRowkey;
+
   private String endRowkey;
-  private boolean isBinaryRowkey=true;
+
+  private boolean isBinaryRowkey;
 }

@@ -3,6 +3,8 @@ package com.wugui.datax.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wugui.datax.admin.entity.JobDatasource;
 
+import java.io.IOException;
+
 /**
  * jdbc数据源配置表服务接口
  *
@@ -16,5 +18,5 @@ public interface JobDatasourceService extends IService<JobDatasource> {
      * @param jdbcDatasource
      * @return
      */
-    Boolean dataSourceTest(JobDatasource jdbcDatasource);
+    Boolean dataSourceTest(JobDatasource jdbcDatasource) throws IOException;
 }

@@ -24,11 +24,9 @@ public class DataxHbasePojo {
 
   private List<String> readerTable;
 
-  private String readerEncoding;
-
   private String readerMode;
 
-  private String readmaxVersion;
+  private String readerMaxVersion;
 
   private Range readerRange;
 
@@ -36,11 +34,7 @@ public class DataxHbasePojo {
 
   private List<String> writerTable;
 
-  private String writerEncoding;
-
   private String writerMode;
-
-  private Range writerRange;
 
   private VersionColumn writerVersionColumn;
 

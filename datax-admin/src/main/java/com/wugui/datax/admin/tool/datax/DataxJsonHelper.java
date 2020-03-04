@@ -213,6 +213,24 @@ public class DataxJsonHelper implements DataxJsonInterface {
     }
 
     @Override
+    public Map<String, Object> buildHBaseReader() {
+        DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
+        dataxHbasePojo.setJdbcDatasource(readerDatasource);
+        List<Map<String, Object>> columns = Lists.newArrayList();
+        for (int i = 0; i < readerColumns.size(); i++) {
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("name", readerColumns.get(i));
+            column.put("type", "string");
+            columns.add(column);
+        }
+        dataxHbasePojo.setColumns(columns);
+        dataxHbasePojo.setReaderHbaseConfig(readerDatasource.getZkAdress());
+        dataxHbasePojo.setReaderTable(readerTables);
+        dataxHbasePojo.setReaderMode(hbaseReaderDto.getReaderMode());
+        dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
+        return readerPlugin.buildHbase(dataxHbasePojo);
+    }
+    @Override
     public Map<String, Object> buildWriter() {
         DataxRdbmsPojo dataxPluginPojo = new DataxRdbmsPojo();
         dataxPluginPojo.setJobDatasource(writerDatasource);
@@ -244,26 +262,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
     }
 
     @Override
-    public Map<String, Object> buildHBaseReader() {
-        DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
-        dataxHbasePojo.setJdbcDatasource(readerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        for (int i = 0; i < readerColumns.size(); i++) {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("name", readerColumns.get(i));
-            column.put("type", "string");
-            columns.add(column);
-        }
-        dataxHbasePojo.setColumns(columns);
-        dataxHbasePojo.setReaderHbaseConfig(hbaseReaderDto.getReaderHbaseConfig());
-        dataxHbasePojo.setReaderTable(hbaseReaderDto.getReaderTable());
-        dataxHbasePojo.setReaderEncoding(hbaseReaderDto.getReaderEncoding());
-        dataxHbasePojo.setReaderMode(hbaseReaderDto.getReaderMode());
-        dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
-        return readerPlugin.buildHbase(dataxHbasePojo);
-    }
-
-    @Override
     public Map<String, Object> buildHBaseWriter() {
         DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
         dataxHbasePojo.setJdbcDatasource(writerDatasource);
@@ -276,10 +274,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
             columns.add(column);
         }
         dataxHbasePojo.setColumns(columns);
-        dataxHbasePojo.setWriterHbaseConfig(hbaseWriterDto.getWriterHbaseConfig());
-        dataxHbasePojo.setWriterTable(hbaseWriterDto.getWriterTable());
-        dataxHbasePojo.setWriterEncoding(hbaseWriterDto.getWriterEncoding());
-        dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWritervVersionColumn());
+        dataxHbasePojo.setWriterHbaseConfig(writerDatasource.getZkAdress());
+        dataxHbasePojo.setWriterTable(readerTables);
+        dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWriterVersionColumn());
         dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
         dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());
         return writerPlugin.buildHbase(dataxHbasePojo);

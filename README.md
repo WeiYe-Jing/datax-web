@@ -42,7 +42,8 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - 22、优先通过环境变量获取DataX文件目录，集群部署时不用指定JSON及日志目录；
 - 23、通过动态参数配置指定hive分区，也可以配合增量实现增量数据动态插入分区；
 - 24、任务类型由原来DataX任务扩展到Shell任务、Python任务、PowerShell任务；
-- 25、添加自定义数据转化模块。
+- 25、添加HBase数据源支持，JSON构建可通过HBase数据源获取hbaseConfig，column；
+- 26、添加自定义数据转化模块；
 ## Quick Start
 
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包

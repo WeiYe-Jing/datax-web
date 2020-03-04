@@ -4,7 +4,7 @@ spring:
   #数据源
   datasource:
     username: root
-    password: root
+    password: mysql
     url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 

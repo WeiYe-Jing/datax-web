@@ -312,3 +312,5 @@ zookeeper地址
 ALTER TABLE `datax_web`.`job_jdbc_datasource`
 ADD COLUMN `zk_adress` VARCHAR(200) NULL DEFAULT NULL AFTER `jdbc_driver_class`;
 
+ALTER TABLE `datax_web`.`job_info`
+CHANGE COLUMN `executor_timeout` `executor_timeout` INT(11) NOT NULL DEFAULT '0' COMMENT '任务执行超时时间，单位分钟' ;

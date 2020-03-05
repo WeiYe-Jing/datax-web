@@ -6,6 +6,7 @@ import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
@@ -80,7 +81,7 @@ public class AdminBizImpl implements AdminBiz {
         int resultCode = handleCallbackParam.getExecuteResult().getCode();
         if (IJobHandler.SUCCESS.getCode() == resultCode) {
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
-            jobInfoMapper.incrementTimeUpdate(log.getJobId(),log.getTriggerTime());
+            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
             if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
@@ -108,6 +109,11 @@ public class AdminBizImpl implements AdminBiz {
                 }
 
             }
+        }
+
+        //kill execution timeout DataX process
+        if (!StringUtils.isEmpty(log.getProcessId()) && IJobHandler.FAIL_TIMEOUT.getCode() == resultCode) {
+            KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
         }
 
         // handle msg

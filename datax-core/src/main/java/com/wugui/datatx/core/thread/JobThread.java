@@ -138,7 +138,7 @@ public class JobThread extends Thread {
                             futureThread = new Thread(futureTask);
                             futureThread.start();
 
-                            executeResult = futureTask.get(tgParam.getExecutorTimeout(), TimeUnit.SECONDS);
+                            executeResult = futureTask.get(tgParam.getExecutorTimeout(), TimeUnit.MINUTES);
                         } catch (TimeoutException e) {
 
                             JobLogger.log("<br>----------- datax-web job execute timeout");

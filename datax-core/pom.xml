@@ -12,7 +12,9 @@
 
     <artifactId>datax-core</artifactId>
     <packaging>jar</packaging>
-
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
     <dependencies>
 
         <!-- xxl-rpc-core -->
@@ -69,5 +71,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -80,7 +80,7 @@ public class NettyHttpServer extends Server {
 
                     // stop
                     try {
-                        serverHandlerPool.shutdown();	// shutdownNow
+                        serverHandlerPool.shutdown();    // shutdownNow
                     } catch (Exception e) {
                         logger.error(e.getMessage(), e);
                     }
@@ -95,19 +95,19 @@ public class NettyHttpServer extends Server {
             }
 
         });
-        thread.setDaemon(true);	// daemon, service jvm, user thread leave >>> daemon leave >>> jvm leave
+        thread.setDaemon(true);    // daemon, service jvm, user thread leave >>> daemon leave >>> jvm leave
         thread.start();
     }
 
     @Override
     public void stop() throws Exception {
         // destroy server thread
-        if (thread!=null && thread.isAlive()) {
+        if (thread != null && thread.isAlive()) {
             thread.interrupt();
         }
 
         // on stop
-        onStoped();
+        onStopped();
         logger.info(">>>>>>>>>>> xxl-rpc remoting server destroy success.");
     }
 

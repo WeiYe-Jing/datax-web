@@ -34,72 +34,66 @@ public class XxlRegistryClient {
         logger.info(">>>>>>>>>>> xxl-registry, XxlRegistryClient init .... [adminAddress={}, accessToken={}, biz={}, env={}]", adminAddress, accessToken, biz, env);
 
         // registry thread
-        registryThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!registryThreadStop) {
-                    try {
-                        if (registryData.size() > 0) {
+        registryThread = new Thread(() -> {
+            while (!registryThreadStop) {
+                try {
+                    if (registryData.size() > 0) {
 
-                            boolean ret = registryBaseClient.registry(new ArrayList<XxlRegistryDataParamVO>(registryData));
-                            logger.debug(">>>>>>>>>>> xxl-registry, refresh registry data {}, registryData = {}", ret?"success":"fail",registryData);
-                        }
-                    } catch (Exception e) {
-                        if (!registryThreadStop) {
-                            logger.error(">>>>>>>>>>> xxl-registry, registryThread error.", e);
-                        }
+                        boolean ret = registryBaseClient.registry(new ArrayList<>(registryData));
+                        logger.debug(">>>>>>>>>>> xxl-registry, refresh registry data {}, registryData = {}", ret ? "success" : "fail", registryData);
                     }
-                    try {
-                        TimeUnit.SECONDS.sleep(10);
-                    } catch (Exception e) {
-                        if (!registryThreadStop) {
-                            logger.error(">>>>>>>>>>> xxl-registry, registryThread error.", e);
-                        }
+                } catch (Exception e) {
+                    if (!registryThreadStop) {
+                        logger.error(">>>>>>>>>>> xxl-registry, registryThread error.", e);
                     }
                 }
-                logger.info(">>>>>>>>>>> xxl-registry, registryThread stoped.");
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (Exception e) {
+                    if (!registryThreadStop) {
+                        logger.error(">>>>>>>>>>> xxl-registry, registryThread error.", e);
+                    }
+                }
             }
+            logger.info(">>>>>>>>>>> xxl-registry, registryThread stoped.");
         });
         registryThread.setName("xxl-registry, XxlRegistryClient registryThread.");
         registryThread.setDaemon(true);
         registryThread.start();
 
         // discovery thread
-        discoveryThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!registryThreadStop) {
+        discoveryThread = new Thread(() -> {
+            while (!registryThreadStop) {
 
-                    if (discoveryData.size() == 0) {
-                        try {
-                            TimeUnit.SECONDS.sleep(3);
-                        } catch (Exception e) {
-                            if (!registryThreadStop) {
-                                logger.error(">>>>>>>>>>> xxl-registry, discoveryThread error.", e);
-                            }
-                        }
-                    } else {
-                        try {
-                            // monitor
-                            boolean monitorRet = registryBaseClient.monitor(discoveryData.keySet());
-
-                            // avoid fail-retry request too quick
-                            if (!monitorRet){
-                                TimeUnit.SECONDS.sleep(10);
-                            }
-
-                            // refreshDiscoveryData, all
-                            refreshDiscoveryData(discoveryData.keySet());
-                        } catch (Exception e) {
-                            if (!registryThreadStop) {
-                                logger.error(">>>>>>>>>>> xxl-registry, discoveryThread error.", e);
-                            }
+                if (discoveryData.size() == 0) {
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (Exception e) {
+                        if (!registryThreadStop) {
+                            logger.error(">>>>>>>>>>> xxl-registry, discoveryThread error.", e);
                         }
                     }
+                } else {
+                    try {
+                        // monitor
+                        boolean monitorRet = registryBaseClient.monitor(discoveryData.keySet());
 
+                        // avoid fail-retry request too quick
+                        if (!monitorRet) {
+                            TimeUnit.SECONDS.sleep(10);
+                        }
+
+                        // refreshDiscoveryData, all
+                        refreshDiscoveryData(discoveryData.keySet());
+                    } catch (Exception e) {
+                        if (!registryThreadStop) {
+                            logger.error(">>>>>>>>>>> xxl-registry, discoveryThread error.", e);
+                        }
+                    }
                 }
-                logger.info(">>>>>>>>>>> xxl-registry, discoveryThread stoped.");
+
             }
+            logger.info(">>>>>>>>>>> xxl-registry, discoveryThread stoped.");
         });
         discoveryThread.setName("xxl-registry, XxlRegistryClient discoveryThread.");
         discoveryThread.setDaemon(true);
@@ -126,17 +120,17 @@ public class XxlRegistryClient {
      * @param registryDataList
      * @return
      */
-    public boolean registry(List<XxlRegistryDataParamVO> registryDataList){
+    public boolean registry(List<XxlRegistryDataParamVO> registryDataList) {
 
         // valid
-        if (registryDataList==null || registryDataList.size()==0) {
+        if (registryDataList == null || registryDataList.size() == 0) {
             throw new RuntimeException("xxl-registry registryDataList empty");
         }
-        for (XxlRegistryDataParamVO registryParam: registryDataList) {
-            if (registryParam.getKey()==null || registryParam.getKey().trim().length()<4 || registryParam.getKey().trim().length()>255) {
+        for (XxlRegistryDataParamVO registryParam : registryDataList) {
+            if (registryParam.getKey() == null || registryParam.getKey().trim().length() < 4 || registryParam.getKey().trim().length() > 255) {
                 throw new RuntimeException("xxl-registry registryDataList#key Invalid[4~255]");
             }
-            if (registryParam.getValue()==null || registryParam.getValue().trim().length()<4 || registryParam.getValue().trim().length()>255) {
+            if (registryParam.getValue() == null || registryParam.getValue().trim().length() < 4 || registryParam.getValue().trim().length() > 255) {
                 throw new RuntimeException("xxl-registry registryDataList#value Invalid[4~255]");
             }
         }
@@ -151,7 +145,6 @@ public class XxlRegistryClient {
     }
 
 
-
     /**
      * remove
      *
@@ -160,14 +153,14 @@ public class XxlRegistryClient {
      */
     public boolean remove(List<XxlRegistryDataParamVO> registryDataList) {
         // valid
-        if (registryDataList==null || registryDataList.size()==0) {
+        if (registryDataList == null || registryDataList.size() == 0) {
             throw new RuntimeException("xxl-registry registryDataList empty");
         }
-        for (XxlRegistryDataParamVO registryParam: registryDataList) {
-            if (registryParam.getKey()==null || registryParam.getKey().trim().length()<4 || registryParam.getKey().trim().length()>255) {
+        for (XxlRegistryDataParamVO registryParam : registryDataList) {
+            if (registryParam.getKey() == null || registryParam.getKey().trim().length() < 4 || registryParam.getKey().trim().length() > 255) {
                 throw new RuntimeException("xxl-registry registryDataList#key Invalid[4~255]");
             }
-            if (registryParam.getValue()==null || registryParam.getValue().trim().length()<4 || registryParam.getValue().trim().length()>255) {
+            if (registryParam.getValue() == null || registryParam.getValue().trim().length() < 4 || registryParam.getValue().trim().length() > 255) {
                 throw new RuntimeException("xxl-registry registryDataList#value Invalid[4~255]");
             }
         }
@@ -189,7 +182,7 @@ public class XxlRegistryClient {
      * @return
      */
     public Map<String, TreeSet<String>> discovery(Set<String> keys) {
-        if (keys==null || keys.size() == 0) {
+        if (keys == null || keys.size() == 0) {
             return null;
         }
 
@@ -224,8 +217,8 @@ public class XxlRegistryClient {
     /**
      * refreshDiscoveryData, some or all
      */
-    private void refreshDiscoveryData(Set<String> keys){
-        if (keys==null || keys.size() == 0) {
+    private void refreshDiscoveryData(Set<String> keys) {
+        if (keys == null || keys.size() == 0) {
             return;
         }
 
@@ -233,8 +226,8 @@ public class XxlRegistryClient {
         Map<String, TreeSet<String>> updatedData = new HashMap<>();
 
         Map<String, TreeSet<String>> keyValueListData = registryBaseClient.discovery(keys);
-        if (keyValueListData!=null) {
-            for (String keyItem: keyValueListData.keySet()) {
+        if (keyValueListData != null) {
+            for (String keyItem : keyValueListData.keySet()) {
 
                 // list > set
                 TreeSet<String> valueSet = new TreeSet<>();
@@ -243,7 +236,7 @@ public class XxlRegistryClient {
                 // valid if updated
                 boolean updated = true;
                 TreeSet<String> oldValSet = discoveryData.get(keyItem);
-                if (oldValSet!=null && BasicJson.toJson(oldValSet).equals(BasicJson.toJson(valueSet))) {
+                if (oldValSet != null && BasicJson.toJson(oldValSet).equals(BasicJson.toJson(valueSet))) {
                     updated = false;
                 }
 
@@ -264,11 +257,11 @@ public class XxlRegistryClient {
 
 
     public TreeSet<String> discovery(String key) {
-        if (key==null) {
+        if (key == null) {
             return null;
         }
 
-        Map<String, TreeSet<String>> keyValueSetTmp = discovery(new HashSet<String>(Arrays.asList(key)));
+        Map<String, TreeSet<String>> keyValueSetTmp = discovery(new HashSet<>(Arrays.asList(key)));
         if (keyValueSetTmp != null) {
             return keyValueSetTmp.get(key);
         }

@@ -25,7 +25,8 @@ public class ProcessCallbackThread {
     private static Logger logger = LoggerFactory.getLogger(ProcessCallbackThread.class);
 
     private static ProcessCallbackThread instance = new ProcessCallbackThread();
-    public static ProcessCallbackThread getInstance(){
+
+    public static ProcessCallbackThread getInstance() {
         return instance;
     }
 
@@ -33,7 +34,8 @@ public class ProcessCallbackThread {
      * job results callback queue
      */
     private LinkedBlockingQueue<HandleProcessCallbackParam> callBackQueue = new LinkedBlockingQueue<HandleProcessCallbackParam>();
-    public static void pushCallBack(HandleProcessCallbackParam callback){
+
+    public static void pushCallBack(HandleProcessCallbackParam callback) {
         getInstance().callBackQueue.add(callback);
         logger.debug(">>>>>>>>>>> datax-web, push process callback request, logId:{}", callback.getLogId());
     }
@@ -44,6 +46,7 @@ public class ProcessCallbackThread {
     private Thread processCallbackThread;
     private Thread processRetryCallbackThread;
     private volatile boolean toStop = false;
+
     public void start() {
 
         // valid
@@ -56,7 +59,7 @@ public class ProcessCallbackThread {
         processCallbackThread = new Thread(() -> {
 
             // normal callback
-            while(!toStop){
+            while (!toStop) {
                 try {
                     HandleProcessCallbackParam callback = getInstance().callBackQueue.take();
 
@@ -80,7 +83,7 @@ public class ProcessCallbackThread {
             try {
                 List<HandleProcessCallbackParam> callbackParamList = new ArrayList<HandleProcessCallbackParam>();
                 int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
-                if (callbackParamList!=null && callbackParamList.size()>0) {
+                if (callbackParamList != null && callbackParamList.size() > 0) {
                     doCallback(callbackParamList);
                 }
             } catch (Exception e) {
@@ -98,7 +101,7 @@ public class ProcessCallbackThread {
 
         // retry
         processRetryCallbackThread = new Thread(() -> {
-            while(!toStop){
+            while (!toStop) {
                 try {
                     retryFailCallbackFile();
                 } catch (Exception e) {
@@ -121,7 +124,8 @@ public class ProcessCallbackThread {
         processRetryCallbackThread.start();
 
     }
-    public void toStop(){
+
+    public void toStop() {
         toStop = true;
         // stop callback, interrupt and wait
         if (processCallbackThread != null) {    // support empty admin address
@@ -147,15 +151,16 @@ public class ProcessCallbackThread {
 
     /**
      * do callback, will retry if error
+     *
      * @param callbackParamList
      */
-    private void doCallback(List<HandleProcessCallbackParam> callbackParamList){
+    private void doCallback(List<HandleProcessCallbackParam> callbackParamList) {
         boolean callbackRet = false;
         // callback, will retry if error
-        for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
+        for (AdminBiz adminBiz : JobExecutor.getAdminBizList()) {
             try {
                 ReturnT<String> callbackResult = adminBiz.processCallback(callbackParamList);
-                if (callbackResult!=null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
+                if (callbackResult != null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
                     callbackLog(callbackParamList, "<br>----------- datax-web job callback finish.");
                     callbackRet = true;
                     break;
@@ -174,8 +179,8 @@ public class ProcessCallbackThread {
     /**
      * callback log
      */
-    private void callbackLog(List<HandleProcessCallbackParam> callbackParamList, String logContent){
-        for (HandleProcessCallbackParam callbackParam: callbackParamList) {
+    private void callbackLog(List<HandleProcessCallbackParam> callbackParamList, String logContent) {
+        for (HandleProcessCallbackParam callbackParam : callbackParamList) {
             String logFileName = JobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTim()), callbackParam.getLogId());
             JobFileAppender.contextHolder.set(logFileName);
             JobLogger.log(logContent);
@@ -188,9 +193,9 @@ public class ProcessCallbackThread {
     private static String failCallbackFilePath = JobFileAppender.getLogPath().concat(File.separator).concat("processcallbacklog").concat(File.separator);
     private static String failCallbackFileName = failCallbackFilePath.concat("datax-web-processcallback-{x}").concat(".log");
 
-    private void appendFailCallbackFile(List<HandleProcessCallbackParam> handleProcessCallbackParams){
+    private void appendFailCallbackFile(List<HandleProcessCallbackParam> handleProcessCallbackParams) {
         // valid
-        if (handleProcessCallbackParams==null || handleProcessCallbackParams.size()==0) {
+        if (handleProcessCallbackParams == null || handleProcessCallbackParams.size() == 0) {
             return;
         }
 
@@ -200,7 +205,7 @@ public class ProcessCallbackThread {
         File callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis())));
         if (callbackLogFile.exists()) {
             for (int i = 0; i < 100; i++) {
-                callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis()).concat("-").concat(String.valueOf(i)) ));
+                callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis()).concat("-").concat(String.valueOf(i))));
                 if (!callbackLogFile.exists()) {
                     break;
                 }
@@ -209,7 +214,7 @@ public class ProcessCallbackThread {
         FileUtil.writeFileContent(callbackLogFile, callbackParamList_bytes);
     }
 
-    private void retryFailCallbackFile(){
+    private void retryFailCallbackFile() {
 
         // valid
         File callbackLogPath = new File(failCallbackFilePath);
@@ -219,16 +224,16 @@ public class ProcessCallbackThread {
         if (callbackLogPath.isFile()) {
             callbackLogPath.delete();
         }
-        if (!(callbackLogPath.isDirectory() && callbackLogPath.list()!=null && callbackLogPath.list().length>0)) {
+        if (!(callbackLogPath.isDirectory() && callbackLogPath.list() != null && callbackLogPath.list().length > 0)) {
             return;
         }
 
         // load and clear file, retry
-        for (File callbaclLogFile: callbackLogPath.listFiles()) {
-            byte[] callbackParamList_bytes = FileUtil.readFileContent(callbaclLogFile);
+        for (File callbackLogFile : callbackLogPath.listFiles()) {
+            byte[] callbackParamList_bytes = FileUtil.readFileContent(callbackLogFile);
             List<HandleProcessCallbackParam> callbackParamList = (List<HandleProcessCallbackParam>) JobExecutor.getSerializer().deserialize(callbackParamList_bytes, HandleProcessCallbackParam.class);
 
-            callbaclLogFile.delete();
+            callbackLogFile.delete();
             doCallback(callbackParamList);
         }
 

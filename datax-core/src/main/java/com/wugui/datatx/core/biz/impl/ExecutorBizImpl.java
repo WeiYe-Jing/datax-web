@@ -42,7 +42,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
         }
 
         if (isRunningOrHasQueue) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "job thread is running or has trigger queue.");
+            return new ReturnT<>(ReturnT.FAIL_CODE, "job thread is running or has trigger queue.");
         }
         return ReturnT.SUCCESS;
     }
@@ -56,7 +56,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
             return ReturnT.SUCCESS;
         }
 
-        return new ReturnT<String>(ReturnT.SUCCESS_CODE, "job thread already killed.");
+        return new ReturnT<>(ReturnT.SUCCESS_CODE, "job thread already killed.");
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
         String logFileName = JobFileAppender.makeLogFileName(new Date(logDateTim), logId);
 
         LogResult logResult = JobFileAppender.readLog(logFileName, fromLineNum);
-        return new ReturnT<LogResult>(logResult);
+        return new ReturnT<>(logResult);
     }
 
     @Override

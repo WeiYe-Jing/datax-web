@@ -31,7 +31,7 @@ public class SystemUtils {
             //LOGGER.warn("DATAX_HOME 环境变量为NULL");
             return null;
         }
-        DATAX_HOME =  System.getProperty("os.name").contains("Windows") ?
+        DATAX_HOME = System.getProperty("os.name").contains("Windows") ?
                 (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) :
                 (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);
         //LOGGER.info("DATAX_HOME:{}", DATAX_HOME);

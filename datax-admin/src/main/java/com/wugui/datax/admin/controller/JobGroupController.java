@@ -112,7 +112,7 @@ public class JobGroupController {
     }
 
     private List<String> findRegistryByAppName(String appNameParam) {
-        HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
+        HashMap<String, List<String>> appAddressMap = new HashMap<>();
         List<JobRegistry> list = jobRegistryMapper.findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
         if (list != null) {
             for (JobRegistry item : list) {
@@ -120,7 +120,7 @@ public class JobGroupController {
                     String appName = item.getRegistryKey();
                     List<String> registryList = appAddressMap.get(appName);
                     if (registryList == null) {
-                        registryList = new ArrayList<String>();
+                        registryList = new ArrayList<>();
                     }
 
                     if (!registryList.contains(item.getRegistryValue())) {
@@ -140,12 +140,12 @@ public class JobGroupController {
         // valid
         int count = jobInfoMapper.pageListCount(0, 10, id, -1, null, null, null);
         if (count > 0) {
-            return new ReturnT<String>(500, I18nUtil.getString("jobgroup_del_limit_0"));
+            return new ReturnT<>(500, I18nUtil.getString("jobgroup_del_limit_0"));
         }
 
         List<JobGroup> allList = jobGroupMapper.findAll();
         if (allList.size() == 1) {
-            return new ReturnT<String>(500, I18nUtil.getString("jobgroup_del_limit_1"));
+            return new ReturnT<>(500, I18nUtil.getString("jobgroup_del_limit_1"));
         }
 
         int ret = jobGroupMapper.remove(id);
@@ -156,7 +156,7 @@ public class JobGroupController {
     @ApiOperation("获取执行器")
     public ReturnT<JobGroup> loadById(int id) {
         JobGroup jobGroup = jobGroupMapper.load(id);
-        return jobGroup != null ? new ReturnT<JobGroup>(jobGroup) : new ReturnT<JobGroup>(ReturnT.FAIL_CODE, null);
+        return jobGroup != null ? new ReturnT<>(jobGroup) : new ReturnT<>(ReturnT.FAIL_CODE, null);
     }
 
     @GetMapping("/get")

@@ -110,7 +110,7 @@ public class NettyServer extends Server {
         }
 
         // on stop
-        onStoped();
+        onStopped();
         logger.info(">>>>>>>>>>> xxl-rpc remoting server destroy success.");
     }
 

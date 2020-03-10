@@ -31,22 +31,24 @@ public class DataxJsonController extends ApiController {
     @Autowired
     private DataxJsonService dataxJsonService;
 
+
     @PostMapping("/buildJson")
     @ApiOperation("JSON构建")
-    public R<String> buildJobJson(@RequestBody DataxJsonDto dataxJsonDto) {
-        if (dataxJsonDto.getReaderDatasourceId()==null) {
-            return failed(I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_readerDataSource"));
+    public R<String> buildJobJson(@RequestBody DataxJsonDto dto) {
+        String key = "system_please_choose";
+        if (dto.getReaderDatasourceId() == null) {
+            return failed(I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_readerDataSource"));
         }
-        if (dataxJsonDto.getWriterDatasourceId()==null) {
-            return failed(I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_writerDataSource"));
+        if (dto.getWriterDatasourceId() == null) {
+            return failed(I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_writerDataSource"));
         }
-        if (CollectionUtils.isEmpty(dataxJsonDto.getReaderColumns())) {
-            return failed(I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_readerColumns"));
+        if (CollectionUtils.isEmpty(dto.getReaderColumns())) {
+            return failed(I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_readerColumns"));
         }
-        if (CollectionUtils.isEmpty(dataxJsonDto.getWriterColumns())) {
-            return failed(I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_writerColumns"));
+        if (CollectionUtils.isEmpty(dto.getWriterColumns())) {
+            return failed(I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_writerColumns"));
         }
-        return success(dataxJsonService.buildJobJson(dataxJsonDto));
+        return success(dataxJsonService.buildJobJson(dto));
     }
 
 }

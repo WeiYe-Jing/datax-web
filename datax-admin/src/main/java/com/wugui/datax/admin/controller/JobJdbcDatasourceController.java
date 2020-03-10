@@ -51,51 +51,11 @@ public class JobJdbcDatasourceController extends ApiController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "ascs", value = "升序字段，多个用逗号分隔"),
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
             })
+    //TODO  不确定该接口哪里用到，但是想把current修改pageNo，size修改为pageSize
     public R<IPage<JobJdbcDatasource>> selectAll() {
-        BaseForm<JobJdbcDatasource> baseForm = new BaseForm();
-        return success(this.jobJdbcDatasourceService.page(baseForm.getPlusPagingQueryEntity(), pageQueryWrapperCustom(baseForm.getParameters())));
-    }
-
-    /**
-     * 自定义查询组装
-     *
-     * @param map
-     * @return
-     */
-    protected QueryWrapper<JobJdbcDatasource> pageQueryWrapperCustom(Map<String, Object> map) {
-        // mybatis plus 分页相关的参数
-        Map<String, Object> pageHelperParams = PageUtils.filterPageParams(map);
-        logger.info("分页相关的参数: {}", pageHelperParams);
-        //过滤空值，分页查询相关的参数
-        Map<String, Object> columnQueryMap = PageUtils.filterColumnQueryParams(map);
-        logger.info("字段查询条件参数为: {}", columnQueryMap);
-
-        QueryWrapper<JobJdbcDatasource> queryWrapper = new QueryWrapper<>();
-
-        //排序 操作
-        pageHelperParams.forEach((k, v) -> {
-            switch (k) {
-                case "ascs":
-                    queryWrapper.orderByAsc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
-                    break;
-                case "descs":
-                    queryWrapper.orderByDesc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
-                    break;
-            }
-        });
-
-        //遍历进行字段查询条件组装
-        columnQueryMap.forEach((k, v) -> {
-            switch (k) {
-                case "datasourceName":
-                    queryWrapper.like(StrUtil.toUnderlineCase(k), v);
-                    break;
-                default:
-                    queryWrapper.eq(StrUtil.toUnderlineCase(k), v);
-            }
-        });
-
-        return queryWrapper;
+        BaseForm form = new BaseForm();
+        QueryWrapper<JobJdbcDatasource> query = (QueryWrapper<JobJdbcDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobJdbcDatasource>());
+        return success(jobJdbcDatasourceService.page(form.getPlusPagingQueryEntity(), query));
     }
 
 
@@ -150,12 +110,13 @@ public class JobJdbcDatasourceController extends ApiController {
 
     /**
      * 测试数据源
+     *
      * @param jobJdbcDatasource
      * @return
      */
     @PostMapping("/test")
     @ApiOperation("测试数据")
-    public R<Boolean> dataSourceTest (@RequestBody JobJdbcDatasource jobJdbcDatasource) {
+    public R<Boolean> dataSourceTest(@RequestBody JobJdbcDatasource jobJdbcDatasource) {
         return success(jobJdbcDatasourceService.dataSourceTest(jobJdbcDatasource));
     }
 }

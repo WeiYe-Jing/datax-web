@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * index controller
+ *
  * @author xuxueli 2015-12-19 16:13:16
  */
 @RestController
@@ -22,28 +23,27 @@ import java.util.Map;
 @RequestMapping("/api")
 public class IndexController {
 
-	@Resource
-	private JobService jobService;
+    @Resource
+    private JobService jobService;
 
 
-	@GetMapping("/index")
-	@ApiOperation("监控图")
-	public ReturnT<Map<String, Object>> index() {
-		return new ReturnT<>(jobService.dashboardInfo());
-	}
-
-    @RequestMapping(value = "/chartInfo",method  = RequestMethod.POST)
-	@ApiOperation("图表信息")
-	public ReturnT<Map<String, Object>> chartInfo() {
-        ReturnT<Map<String, Object>> chartInfo = jobService.chartInfo();
-        return chartInfo;
+    @GetMapping("/index")
+    @ApiOperation("监控图")
+    public ReturnT<Map<String, Object>> index() {
+        return new ReturnT<>(jobService.dashboardInfo());
     }
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		dateFormat.setLenient(false);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-	}
-	
+    @PostMapping("/chartInfo")
+    @ApiOperation("图表信息")
+    public ReturnT<Map<String, Object>> chartInfo() {
+        return jobService.chartInfo();
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
 }

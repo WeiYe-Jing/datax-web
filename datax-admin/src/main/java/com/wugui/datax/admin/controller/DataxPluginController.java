@@ -1,12 +1,10 @@
 package com.wugui.datax.admin.controller;
 
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.wugui.datax.admin.util.PageUtils;
 import com.wugui.datax.admin.entity.DataxPlugin;
 import com.wugui.datax.admin.service.DataxPluginService;
 import io.swagger.annotations.Api;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * datax插件信息表控制层
@@ -54,50 +51,9 @@ public class DataxPluginController extends ApiController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "pluginType", value = "插件类型")
             })
     public R<IPage<DataxPlugin>> selectAll() {
-        BaseForm<DataxPlugin> baseForm = new BaseForm();
-        return success(this.dataxPluginService.page(baseForm.getPlusPagingQueryEntity(), pageQueryWrapperCustom(baseForm.getParameters())));
-    }
-
-    /**
-     * 自定义查询组装
-     *
-     * @param map
-     * @return
-     */
-    protected QueryWrapper<DataxPlugin> pageQueryWrapperCustom(Map<String, Object> map) {
-        // mybatis plus 分页相关的参数
-        Map<String, Object> pageHelperParams = PageUtils.filterPageParams(map);
-        logger.info("分页相关的参数: {}", pageHelperParams);
-        //过滤空值，分页查询相关的参数
-        Map<String, Object> columnQueryMap = PageUtils.filterColumnQueryParams(map);
-        logger.info("字段查询条件参数为: {}", columnQueryMap);
-
-        QueryWrapper<DataxPlugin> queryWrapper = new QueryWrapper<>();
-
-        //排序 操作
-        pageHelperParams.forEach((k, v) -> {
-            switch (k) {
-                case "ascs":
-                    queryWrapper.orderByAsc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
-                    break;
-                case "descs":
-                    queryWrapper.orderByDesc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
-                    break;
-            }
-        });
-
-        //遍历进行字段查询条件组装
-        columnQueryMap.forEach((k, v) -> {
-            switch (k) {
-                case "pluginName":
-                    queryWrapper.like(StrUtil.toUnderlineCase(k), v);
-                    break;
-                default:
-                    queryWrapper.eq(StrUtil.toUnderlineCase(k), v);
-            }
-        });
-
-        return queryWrapper;
+        BaseForm form = new BaseForm();
+        QueryWrapper<DataxPlugin> query = (QueryWrapper<DataxPlugin>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<DataxPlugin>());
+        return success(dataxPluginService.page(form.getPlusPagingQueryEntity(), query));
     }
 
 

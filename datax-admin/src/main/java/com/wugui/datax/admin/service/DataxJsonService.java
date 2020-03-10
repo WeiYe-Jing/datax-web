@@ -14,9 +14,9 @@ public interface DataxJsonService {
     /**
      * 用map接收
      *
-     * @param dataxJsonDto
+     * @param dto
      * @return
      */
-    String buildJobJson(DataxJsonDto dataxJsonDto);
+    String buildJobJson(DataxJsonDto dto);
 
 }

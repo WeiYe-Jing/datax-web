@@ -24,10 +24,14 @@ public interface JobUserMapper {
 
     JobUser loadByUserName(@Param("username") String username);
 
+    JobUser getUserById(@Param("id") int id);
+
     int save(JobUser xxlJobUser);
 
     int update(JobUser xxlJobUser);
 
     int delete(@Param("id") int id);
+
+
 
 }

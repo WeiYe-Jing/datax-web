@@ -9,6 +9,7 @@ import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.util.ProcessUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
 import java.io.File;
 
 /**
@@ -22,7 +23,7 @@ import java.io.File;
 public class KillJobHandler extends IJobHandler {
 
     @Override
-    public ReturnT<String> execute(TriggerParam tgParam) throws Exception {
+    public ReturnT<String> execute(TriggerParam tgParam) {
         String processId = tgParam.getProcessId();
         boolean result = ProcessUtil.killProcessByPid(processId);
         //  删除临时文件
@@ -33,6 +34,6 @@ public class KillJobHandler extends IJobHandler {
                 jobTmpFiles.remove(processId);
             }
         }
-        return result?IJobHandler.SUCCESS:IJobHandler.FAIL;
+        return result ? IJobHandler.SUCCESS : IJobHandler.FAIL;
     }
 }

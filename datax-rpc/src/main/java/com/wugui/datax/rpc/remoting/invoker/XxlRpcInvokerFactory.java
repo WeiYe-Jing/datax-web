@@ -25,6 +25,7 @@ public class XxlRpcInvokerFactory {
     // ---------------------- default instance ----------------------
 
     private static volatile XxlRpcInvokerFactory instance = new XxlRpcInvokerFactory(LocalServiceRegistry.class, null);
+
     public static XxlRpcInvokerFactory getInstance() {
         return instance;
     }
@@ -38,6 +39,7 @@ public class XxlRpcInvokerFactory {
 
     public XxlRpcInvokerFactory() {
     }
+
     public XxlRpcInvokerFactory(Class<? extends ServiceRegistry> serviceRegistryClass, Map<String, String> serviceRegistryParam) {
         this.serviceRegistryClass = serviceRegistryClass;
         this.serviceRegistryParam = serviceRegistryParam;
@@ -54,7 +56,7 @@ public class XxlRpcInvokerFactory {
         }
     }
 
-    public void  stop() throws Exception {
+    public void stop() throws Exception {
         // stop registry
         if (serviceRegistry != null) {
             serviceRegistry.stop();
@@ -62,7 +64,7 @@ public class XxlRpcInvokerFactory {
 
         // stop callback
         if (stopCallbackList.size() > 0) {
-            for (BaseCallback callback: stopCallbackList) {
+            for (BaseCallback callback : stopCallbackList) {
                 try {
                     callback.run();
                 } catch (Exception e) {
@@ -79,6 +81,7 @@ public class XxlRpcInvokerFactory {
     // ---------------------- service registry ----------------------
 
     private ServiceRegistry serviceRegistry;
+
     public ServiceRegistry getServiceRegistry() {
         return serviceRegistry;
     }
@@ -88,7 +91,7 @@ public class XxlRpcInvokerFactory {
 
     private List<BaseCallback> stopCallbackList = new ArrayList<BaseCallback>();
 
-    public void addStopCallBack(BaseCallback callback){
+    public void addStopCallBack(BaseCallback callback) {
         stopCallbackList.add(callback);
     }
 
@@ -98,13 +101,16 @@ public class XxlRpcInvokerFactory {
     // XxlRpcFutureResponseFactory
 
     private ConcurrentMap<String, XxlRpcFutureResponse> futureResponsePool = new ConcurrentHashMap<String, XxlRpcFutureResponse>();
-    public void setInvokerFuture(String requestId, XxlRpcFutureResponse futureResponse){
+
+    public void setInvokerFuture(String requestId, XxlRpcFutureResponse futureResponse) {
         futureResponsePool.put(requestId, futureResponse);
     }
-    public void removeInvokerFuture(String requestId){
+
+    public void removeInvokerFuture(String requestId) {
         futureResponsePool.remove(requestId);
     }
-    public void notifyInvokerFuture(String requestId, final XxlRpcResponse xxlRpcResponse){
+
+    public void notifyInvokerFuture(String requestId, final XxlRpcResponse xxlRpcResponse) {
 
         // get
         final XxlRpcFutureResponse futureResponse = futureResponsePool.get(requestId);
@@ -113,21 +119,18 @@ public class XxlRpcInvokerFactory {
         }
 
         // notify
-        if (futureResponse.getInvokeCallback()!=null) {
+        if (futureResponse.getInvokeCallback() != null) {
 
             // callback type
             try {
-                executeResponseCallback(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (xxlRpcResponse.getErrorMsg() != null) {
-                            futureResponse.getInvokeCallback().onFailure(new XxlRpcException(xxlRpcResponse.getErrorMsg()));
-                        } else {
-                            futureResponse.getInvokeCallback().onSuccess(xxlRpcResponse.getResult());
-                        }
+                executeResponseCallback(() -> {
+                    if (xxlRpcResponse.getErrorMsg() != null) {
+                        futureResponse.getInvokeCallback().onFailure(new XxlRpcException(xxlRpcResponse.getErrorMsg()));
+                    } else {
+                        futureResponse.getInvokeCallback().onSuccess(xxlRpcResponse.getResult());
                     }
                 });
-            }catch (Exception e) {
+            } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
         } else {
@@ -145,7 +148,8 @@ public class XxlRpcInvokerFactory {
     // ---------------------- response callback ThreadPool ----------------------
 
     private ThreadPoolExecutor responseCallbackThreadPool = null;
-    public void executeResponseCallback(Runnable runnable){
+
+    public void executeResponseCallback(Runnable runnable) {
 
         if (responseCallbackThreadPool == null) {
             synchronized (this) {
@@ -155,24 +159,17 @@ public class XxlRpcInvokerFactory {
                             100,
                             60L,
                             TimeUnit.SECONDS,
-                            new LinkedBlockingQueue<Runnable>(1000),
-                            new ThreadFactory() {
-                                @Override
-                                public Thread newThread(Runnable r) {
-                                    return new Thread(r, "xxl-rpc, XxlRpcInvokerFactory-responseCallbackThreadPool-" + r.hashCode());
-                                }
-                            },
-                            new RejectedExecutionHandler() {
-                                @Override
-                                public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                                    throw new XxlRpcException("xxl-rpc Invoke Callback Thread pool is EXHAUSTED!");
-                                }
-                            });		// default maxThreads 300, minThreads 60
+                            new LinkedBlockingQueue<>(1000),
+                            r -> new Thread(r, "xxl-rpc, XxlRpcInvokerFactory-responseCallbackThreadPool-" + r.hashCode()),
+                            (r, executor) -> {
+                                throw new XxlRpcException("xxl-rpc Invoke Callback Thread pool is EXHAUSTED!");
+                            });        // default maxThreads 300, minThreads 60
                 }
             }
         }
         responseCallbackThreadPool.execute(runnable);
     }
+
     public void stopCallbackThreadPool() {
         if (responseCallbackThreadPool != null) {
             responseCallbackThreadPool.shutdown();

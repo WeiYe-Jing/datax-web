@@ -20,7 +20,12 @@
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobUser">
-		SELECT <include refid="Base_Column_List" />
+		<!--SELECT <include refid="Base_Column_List" />--> /*不返回密码（前端密码置空）*/
+		SELECT
+		t.id,
+		t.username,
+		t.role,
+		t.permission
 		FROM job_user AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="username != null and username != ''">

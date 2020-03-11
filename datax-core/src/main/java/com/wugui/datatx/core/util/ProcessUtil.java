@@ -27,7 +27,7 @@ public class ProcessUtil {
 
     public static String getProcessId(Process process) {
         long pid = -1;
-        Field field = null;
+        Field field;
         if (Platform.isWindows()) {
             try {
                 field = process.getClass().getDeclaredField("handle");
@@ -61,7 +61,7 @@ public class ProcessUtil {
         Process process = null;
         BufferedReader reader = null;
         String command = "";
-        boolean result = false;
+        boolean result;
         if (Platform.isWindows()) {
             command = "cmd.exe /c taskkill /PID " + pid + " /F /T ";
         } else if (Platform.isLinux() || Platform.isAIX()) {
@@ -71,7 +71,7 @@ public class ProcessUtil {
             //杀掉进程
             process = Runtime.getRuntime().exec(command);
             reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 JobLogger.log(line);
             }

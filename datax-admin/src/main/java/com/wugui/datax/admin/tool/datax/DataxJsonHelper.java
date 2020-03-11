@@ -97,7 +97,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
             readerPlugin = new HiveReader();
             buildReader = buildHiveReader();
         }
-        if(!JdbcConstants.HIVE.equals(readerDbType)){
+        if (!JdbcConstants.HIVE.equals(readerDbType)) {
             buildReader = this.buildReader();
         }
 
@@ -123,7 +123,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
         }
-        if(!JdbcConstants.HIVE.equals(writerDbType)){
+        if (!JdbcConstants.HIVE.equals(writerDbType)) {
             buildWriter = this.buildWriter();
         }
     }

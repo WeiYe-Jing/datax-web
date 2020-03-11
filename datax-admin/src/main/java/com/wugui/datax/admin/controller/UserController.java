@@ -38,12 +38,12 @@ public class UserController {
 
         // page list
         List<JobUser> list = jobUserMapper.pageList((current-1)*size, size, username);
-        int list_count = jobUserMapper.pageListCount((current-1)*size, size, username);
+        int recordsTotal = jobUserMapper.pageListCount((current-1)*size, size, username);
 
         // package result
-        Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("recordsTotal", list_count);		// 总记录数
-        maps.put("recordsFiltered", list_count);	// 过滤后的总记录数
+        Map<String, Object> maps = new HashMap<>();
+        maps.put("recordsTotal", recordsTotal);		// 总记录数
+        maps.put("recordsFiltered", recordsTotal);	// 过滤后的总记录数
         maps.put("data", list);  					// 分页列表
         return new ReturnT<>(maps);
     }
@@ -54,26 +54,26 @@ public class UserController {
 
         // valid username
         if (!StringUtils.hasText(jobUser.getUsername())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input")+I18nUtil.getString("user_username") );
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
         }
         jobUser.setUsername(jobUser.getUsername().trim());
         if (!(jobUser.getUsername().length()>=4 && jobUser.getUsername().length()<=20)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
         }
         // valid password
         if (!StringUtils.hasText(jobUser.getPassword())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input")+I18nUtil.getString("user_password") );
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_password"));
         }
         jobUser.setPassword(jobUser.getPassword().trim());
         if (!(jobUser.getPassword().length()>=4 && jobUser.getPassword().length()<=20)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
         }
         jobUser.setPassword(bCryptPasswordEncoder.encode(jobUser.getPassword()));
 
         // check repeat
         JobUser existUser = jobUserMapper.loadByUserName(jobUser.getUsername());
         if (existUser != null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat") );
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat"));
         }
 
         // write
@@ -88,7 +88,7 @@ public class UserController {
         if (StringUtils.hasText(jobUser.getPassword())) {
             jobUser.setPassword(jobUser.getPassword().trim());
             if (!(jobUser.getPassword().length()>=4 && jobUser.getPassword().length()<=20)) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
+                return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
             }
             jobUser.setPassword(bCryptPasswordEncoder.encode(jobUser.getPassword()));
         } else {
@@ -112,11 +112,11 @@ public class UserController {
         String password=jobUser.getPassword();
         // valid password
         if (password==null || password.trim().length()==0){
-            return new ReturnT<String>(ReturnT.FAIL.getCode(), "密码不可为空");
+            return new ReturnT<>(ReturnT.FAIL.getCode(), "密码不可为空");
         }
         password = password.trim();
         if (!(password.length()>=4 && password.length()<=20)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit")+"[4-20]" );
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
         }
         // do write
         JobUser existUser = jobUserMapper.loadByUserName(jobUser.getUsername());

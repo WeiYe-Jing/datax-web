@@ -14,6 +14,10 @@ public interface JobGroupMapper {
 
     public List<JobGroup> findAll();
 
+    public List<JobGroup> find(@Param("appName") String appName,
+                               @Param("title") String title,
+                               @Param("addressList") String addressList);
+
     public List<JobGroup> findByAddressType(@Param("addressType") int addressType);
 
     public int save(JobGroup xxlJobGroup);

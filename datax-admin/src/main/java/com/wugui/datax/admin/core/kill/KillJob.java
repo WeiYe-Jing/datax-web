@@ -15,13 +15,12 @@ import java.util.Date;
 public class KillJob {
 
     /**
-     *
      * @param logId
      * @param address
      * @param processId
      */
-    public static ReturnT<String> trigger(long logId,Date triggerTime, String address,String processId) {
-        ReturnT<String> triggerResult = null;
+    public static ReturnT<String> trigger(long logId, Date triggerTime, String address, String processId) {
+        ReturnT<String> triggerResult;
         TriggerParam triggerParam = new TriggerParam();
         triggerParam.setJobId(-1);
         triggerParam.setExecutorHandler("killJobHandler");

@@ -4,7 +4,10 @@ import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wugui.datax.admin.entity.DataxPlugin;
+import com.wugui.datax.admin.util.PageUtils;
 import com.wugui.datax.admin.util.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +25,7 @@ import java.util.Map;
  * @since 2019/5/15
  */
 @Slf4j
-public class BaseForm<T> {
+public class BaseForm {
     /**
      * 查询参数对象
      */
@@ -31,12 +34,12 @@ public class BaseForm<T> {
     /**
      * 当前页码
      */
-    private int pageNo = 1;
+    private Long current = 1L;
 
     /**
      * 页大小
      */
-    private int pageSize = 10;
+    private Long size = 10L;
 
     /**
      * 构造方法
@@ -62,13 +65,12 @@ public class BaseForm<T> {
      *
      * @return
      */
-    public int getPageNo() {
-        String pageNum = StrUtil.emptyToDefault(StrUtil.toString(this.get("pageNum")), StrUtil.toString(this.get("page")));
-
+    public Long getPageNo() {
+        String pageNum = StrUtil.toString(this.get("current"));
         if (!StrUtil.isEmpty(pageNum) && NumberUtil.isNumber(pageNum)) {
-            this.pageNo = Integer.parseInt(pageNum);
+            this.current = Long.parseLong(pageNum);
         }
-        return this.pageNo;
+        return this.current;
     }
 
     /**
@@ -76,13 +78,13 @@ public class BaseForm<T> {
      *
      * @return
      */
-    public int getPageSize() {
-        String pageSize = StrUtil.emptyToDefault(StrUtil.toString(this.get("pageSize")), StrUtil.toString(this.get("rows")));
+    public Long getPageSize() {
+        String pageSize = StrUtil.toString(this.get("size"));
 
-        if (!StrUtil.isEmpty(pageSize) || NumberUtil.isNumber(pageSize)) {
-            this.pageSize = Integer.parseInt(pageSize);
+        if (StrUtil.isNotEmpty(pageSize) && NumberUtil.isNumber(pageSize) && !"null".equalsIgnoreCase(pageSize)) {
+            this.size = Long.parseLong(pageSize);
         }
-        return this.pageSize;
+        return this.size;
     }
 
     /**
@@ -151,8 +153,8 @@ public class BaseForm<T> {
     public Page getPlusPagingQueryEntity() {
         Page page = new Page();
         //如果无current，默认返回1000条数据
-        page.setCurrent(Long.valueOf(StrUtil.toString(ObjectUtil.defaultIfNull(this.get("current"), "0"))));
-        page.setSize(Long.valueOf(StrUtil.toString(ObjectUtil.defaultIfNull(this.get("size"), "1000"))));
+        page.setCurrent(this.getPageNo());
+        page.setSize(this.getPageSize());
         if (ObjectUtil.isNotNull(this.get("ifCount"))) {
             page.setSearchCount(BooleanUtil.toBoolean(this.getString("ifCount")));
         } else {
@@ -208,6 +210,50 @@ public class BaseForm<T> {
         if (values != null) {
             values.clear();
         }
+    }
+
+
+    /**
+     * 自定义查询组装
+     *
+     * @param map
+     * @return
+     */
+    protected QueryWrapper<?> pageQueryWrapperCustom(Map<String, Object> map, QueryWrapper<?> queryWrapper) {
+        // mybatis plus 分页相关的参数
+        Map<String, Object> pageParams = PageUtils.filterPageParams(map);
+        log.info("分页相关的参数: {}", pageParams);
+        //过滤空值，分页查询相关的参数
+        Map<String, Object> colQueryMap = PageUtils.filterColumnQueryParams(map);
+        log.info("字段查询条件参数为: {}", colQueryMap);
+
+//        QueryWrapper<DataxPlugin> queryWrapper = new QueryWrapper<>();
+
+        //排序 操作
+        pageParams.forEach((k, v) -> {
+            switch (k) {
+                case "ascs":
+                    queryWrapper.orderByAsc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
+                    break;
+                case "descs":
+                    queryWrapper.orderByDesc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
+                    break;
+            }
+        });
+
+        //遍历进行字段查询条件组装
+        colQueryMap.forEach((k, v) -> {
+            switch (k) {
+                case "pluginName":
+                case "datasourceName":
+                    queryWrapper.like(StrUtil.toUnderlineCase(k), v);
+                    break;
+                default:
+                    queryWrapper.eq(StrUtil.toUnderlineCase(k), v);
+            }
+        });
+
+        return queryWrapper;
     }
 
 }

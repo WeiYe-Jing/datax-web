@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class DataxJsonServiceImpl implements DataxJsonService {
 
-    private static final String[] sqlDataSource = new String[]{"mysql", "oracle", "postgresql", "sqlserver", "hive"};
+    private static final String[] sqlDataSource = new String[]{"mysql", "oracle", "postgresql", "sqlserver"};
 
     @Autowired
     private IJobJdbcDatasourceService jobJdbcDatasourceService;

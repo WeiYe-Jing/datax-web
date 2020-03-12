@@ -115,6 +115,9 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其�
 ### 12. admin可以创建用户，编辑用户信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
 
+### 13.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/json_demo.png)
+
 ## Linux部署说明
 Quick Start操作完前四步之后
 - 5、执行mvn package -Dmaven.test.skip=true 

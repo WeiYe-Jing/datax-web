@@ -34,7 +34,6 @@ public class JobGroupController {
     @GetMapping("/list")
     @ApiOperation("执行器列表")
     public ReturnT<List<JobGroup>> getExecutorList() {
-        // job group (executor)
         return new ReturnT<>(jobGroupMapper.findAll());
     }
 
@@ -133,7 +132,7 @@ public class JobGroupController {
         return appAddressMap.get(appNameParam);
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @PostMapping("/remove")
     @ApiOperation("移除执行器")
     public ReturnT<String> remove(int id) {
 
@@ -153,14 +152,14 @@ public class JobGroupController {
     }
 
     @RequestMapping(value = "/loadById", method = RequestMethod.POST)
-    @ApiOperation("获取执行器")
+    @ApiOperation("根据id获取执行器")
     public ReturnT<JobGroup> loadById(int id) {
         JobGroup jobGroup = jobGroupMapper.load(id);
         return jobGroup != null ? new ReturnT<>(jobGroup) : new ReturnT<>(ReturnT.FAIL_CODE, null);
     }
 
-    @GetMapping("/get")
-    @ApiOperation("执行器列表")
+    @GetMapping("/query")
+    @ApiOperation("查询执行器")
     public ReturnT<List<JobGroup>> get(@ApiParam(value = "执行器AppName")
                                        @RequestParam(value = "appName", required = false) String appName,
                                        @ApiParam(value = "执行器名称")

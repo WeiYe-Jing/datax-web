@@ -66,8 +66,7 @@ public class BaseForm {
      * @return
      */
     public Long getPageNo() {
-        String pageNum = StrUtil.emptyToDefault(StrUtil.toString(this.get("pageNum")), StrUtil.toString(this.get("page")));
-
+        String pageNum = StrUtil.toString(this.get("current"));
         if (!StrUtil.isEmpty(pageNum) && NumberUtil.isNumber(pageNum)) {
             this.current = Long.parseLong(pageNum);
         }
@@ -80,9 +79,9 @@ public class BaseForm {
      * @return
      */
     public Long getPageSize() {
-        String pageSize = StrUtil.emptyToDefault(StrUtil.toString(this.get("pageSize")), StrUtil.toString(this.get("rows")));
+        String pageSize = StrUtil.toString(this.get("size"));
 
-        if (!StrUtil.isEmpty(pageSize) || NumberUtil.isNumber(pageSize)) {
+        if (StrUtil.isNotEmpty(pageSize) && NumberUtil.isNumber(pageSize) && !"null".equalsIgnoreCase(pageSize)) {
             this.size = Long.parseLong(pageSize);
         }
         return this.size;

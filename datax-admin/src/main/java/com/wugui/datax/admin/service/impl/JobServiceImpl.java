@@ -327,7 +327,7 @@ public class JobServiceImpl implements JobService {
         }
 
         // executor count
-        Set<String> executorAddressSet = new HashSet<String>();
+        Set<String> executorAddressSet = new HashSet<>();
         List<JobGroup> groupList = jobGroupMapper.findAll();
 
         if (groupList != null && !groupList.isEmpty()) {
@@ -340,7 +340,7 @@ public class JobServiceImpl implements JobService {
 
         int executorCount = executorAddressSet.size();
 
-        Map<String, Object> dashboardMap = new HashMap<String, Object>();
+        Map<String, Object> dashboardMap = new HashMap<>();
         dashboardMap.put("jobInfoCount", jobInfoCount);
         dashboardMap.put("jobLogCount", jobLogCount);
         dashboardMap.put("jobLogSuccessCount", jobLogSuccessCount);

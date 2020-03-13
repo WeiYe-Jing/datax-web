@@ -24,7 +24,7 @@ public interface JobTemplateService {
 	 * @param author
 	 * @return
 	 */
-	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String author);
+	Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String author);
 
 	/**
 	 * add job
@@ -32,7 +32,7 @@ public interface JobTemplateService {
 	 * @param jobTemplate
 	 * @return
 	 */
-	public ReturnT<String> add(JobTemplate jobTemplate);
+	ReturnT<String> add(JobTemplate jobTemplate);
 
 	/**
 	 * update job
@@ -40,7 +40,7 @@ public interface JobTemplateService {
 	 * @param jobTemplate
 	 * @return
 	 */
-	public ReturnT<String> update(JobTemplate jobTemplate);
+	ReturnT<String> update(JobTemplate jobTemplate);
 
 	/**
 	 * remove job
@@ -48,5 +48,5 @@ public interface JobTemplateService {
 	 * @param id
 	 * @return
 	 */
-	public ReturnT<String> remove(int id);
+	ReturnT<String> remove(int id);
 }

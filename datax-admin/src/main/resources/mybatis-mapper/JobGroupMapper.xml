@@ -30,8 +30,8 @@
 
     <select id="find" resultMap="JobGroup">
         select
-        id,app_name,title,order,address_type,address_list
-        from m_file_app_cnt
+        id,app_name,title,`order`,address_type,address_list
+        from job_group
         <where>
             <if test="appName != null and appName != ''">
                 and app_name like concat('%',#{appName,jdbcType=VARCHAR},'%')

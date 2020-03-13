@@ -88,7 +88,7 @@ public class JobLogController {
 			return logResult;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			return new ReturnT<LogResult>(ReturnT.FAIL_CODE, e.getMessage());
+			return new ReturnT<>(ReturnT.FAIL_CODE, e.getMessage());
 		}
 	}
 
@@ -99,10 +99,10 @@ public class JobLogController {
 		JobLog log = jobLogMapper.load(id);
 		JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
 		if (jobInfo==null) {
-			return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+			return new ReturnT<>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
 		}
 		if (ReturnT.SUCCESS_CODE != log.getTriggerCode()) {
-			return new ReturnT<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
+			return new ReturnT<>(500, I18nUtil.getString("joblog_kill_log_limit"));
 		}
 
 		// request of kill
@@ -112,7 +112,7 @@ public class JobLogController {
 			runResult = executorBiz.kill(jobInfo.getId());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			runResult = new ReturnT<String>(500, e.getMessage());
+			runResult = new ReturnT<>(500, e.getMessage());
 		}
 
 		if (ReturnT.SUCCESS_CODE == runResult.getCode()) {
@@ -120,9 +120,9 @@ public class JobLogController {
 			log.setHandleMsg( I18nUtil.getString("joblog_kill_log_byman")+":" + (runResult.getMsg()!=null?runResult.getMsg():""));
 			log.setHandleTime(new Date());
 			jobLogMapper.updateHandleInfo(log);
-			return new ReturnT<String>(runResult.getMsg());
+			return new ReturnT<>(runResult.getMsg());
 		} else {
-			return new ReturnT<String>(500, runResult.getMsg());
+			return new ReturnT<>(500, runResult.getMsg());
 		}
 	}
 
@@ -151,10 +151,10 @@ public class JobLogController {
 		} else if (type == 9) {
 			clearBeforeNum = 0;			// 清理所有日志数据
 		} else {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
+			return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
 		}
 
-		List<Long> logIds = null;
+		List<Long> logIds;
 		do {
 			logIds = jobLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
 			if (logIds!=null && logIds.size()>0) {

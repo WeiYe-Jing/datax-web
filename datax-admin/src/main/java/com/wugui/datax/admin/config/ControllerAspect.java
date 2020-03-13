@@ -44,10 +44,10 @@ public class ControllerAspect {
             log.info("---controller: {} costTime is {}ms", method, cost);
             return resObj;
         } catch (Throwable e) {
-            long excepCost = System.currentTimeMillis() - start;
+            long exceptCost = System.currentTimeMillis() - start;
             log.error(
                     "controller request failed {} costTime is {}ms with exception {}",
-                    method, excepCost, e.getMessage());
+                    method, exceptCost, e.getMessage());
             throw e;
         }
     }

@@ -78,7 +78,7 @@ public class JobLogController {
             ReturnT<LogResult> logResult = executorBiz.log(triggerTime, logId, fromLineNum);
 
             // is end
-            if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
+            if (logResult.getContent() != null && fromLineNum > logResult.getContent().getToLineNum()) {
                 JobLog jobLog = jobLogMapper.load(logId);
                 if (jobLog.getHandleCode() > 0) {
                     logResult.getContent().setEnd(true);

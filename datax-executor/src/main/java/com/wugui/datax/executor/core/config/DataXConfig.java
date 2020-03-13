@@ -52,7 +52,9 @@ public class DataXConfig {
         jobSpringExecutor.setPort(port);
         jobSpringExecutor.setAccessToken(accessToken);
         String dataXHomePath = SystemUtils.getDataXHomePath();
-        if (StringUtils.isNotEmpty(dataXHomePath)) logPath = dataXHomePath + DEFAULT_LOG_PATH;
+        if (StringUtils.isEmpty(logPath)) {
+            logPath = dataXHomePath + DEFAULT_LOG_PATH;
+        }
         jobSpringExecutor.setLogPath(logPath);
         jobSpringExecutor.setLogRetentionDays(logRetentionDays);
 

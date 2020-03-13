@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.tool.meta;
 
 /**
- * TODO
+ * MySQL数据库 meta信息查询
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName MySQLDatabaseMeta

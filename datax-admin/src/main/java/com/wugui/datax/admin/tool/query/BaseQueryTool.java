@@ -55,24 +55,32 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
             String currentDbType = JdbcUtils.getDbType(jobDatasource.getJdbcUrl(), jobDatasource.getJdbcDriverClass());
             if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
-                //这里默认使用 hikari 数据源
-                HikariDataSource dataSource = new HikariDataSource();
-                dataSource.setUsername(jobDatasource.getJdbcUsername());
-                dataSource.setPassword(jobDatasource.getJdbcPassword());
-                dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
-                dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
-                dataSource.setMaximumPoolSize(1);
-                dataSource.setMinimumIdle(0);
-                dataSource.setConnectionTimeout(30000);
-                this.datasource = dataSource;
-                this.connection = this.datasource.getConnection();
+                getDataSource(jobDatasource);
             } else {
                 this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
+                if(!this.connection.isValid(500)){
+                    LocalCacheUtil.remove(jobDatasource.getDatasourceName());
+                    getDataSource(jobDatasource);
+                }
             }
             sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
             currentSchema = getSchema(jobDatasource.getJdbcUsername());
             LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
         }
+
+    private void getDataSource(JobDatasource jobDatasource) throws SQLException {
+        //这里默认使用 hikari 数据源
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setUsername(jobDatasource.getJdbcUsername());
+        dataSource.setPassword(jobDatasource.getJdbcPassword());
+        dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
+        dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
+        dataSource.setMaximumPoolSize(1);
+        dataSource.setMinimumIdle(0);
+        dataSource.setConnectionTimeout(30000);
+        this.datasource = dataSource;
+        this.connection = this.datasource.getConnection();
+    }
 
     //根据connection获取schema
     private String getSchema(String jdbcUsername) {

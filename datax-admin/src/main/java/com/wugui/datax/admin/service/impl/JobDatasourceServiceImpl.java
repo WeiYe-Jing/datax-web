@@ -7,7 +7,7 @@ import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.HBaseQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.util.DataSourceConstants;
+import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +26,7 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobJdbcDatasourceMappe
 
     @Override
     public Boolean dataSourceTest(JobDatasource jobDatasource) throws IOException {
-        if (DataSourceConstants.HBASE.equals(jobDatasource.getDatasource())) {
+        if (JdbcConstants.HBASE.equals(jobDatasource.getDatasource())) {
             return HBaseQueryTool.getInstance(jobDatasource).getFamily();
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jobDatasource);

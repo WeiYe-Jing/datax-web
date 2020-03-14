@@ -1,10 +1,11 @@
 package com.wugui.datax.admin.service;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
- * 数据库查询服务层
+ * 数据库查询服务
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName JdbcDatasourceQueryService
@@ -14,6 +15,13 @@ import java.util.List;
 public interface DatasourceQueryService {
 
     /**
+     * 获取db列表
+     * @param id
+     * @return
+     */
+    List<String> getDBs(Long id) throws UnknownHostException;
+
+    /**
      * 根据数据源表id查询出可用的表
      *
      * @param id
@@ -21,6 +29,12 @@ public interface DatasourceQueryService {
      */
     List<String> getTables(Long id) throws IOException;
 
+    /**
+     * 获取CollectionNames
+     * @param dbName
+     * @return
+     */
+    List<String> getCollectionNames(long id,String dbName) throws UnknownHostException;
 
     /**
      * 根据数据源id，表名查询出该表所有字段

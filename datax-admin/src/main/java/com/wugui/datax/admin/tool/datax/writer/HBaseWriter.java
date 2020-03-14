@@ -19,8 +19,8 @@ public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterfac
 
     public Map<String, Object> buildHbase(DataxHbasePojo plugin) {
         //构建
-        Map<String, Object> readerObj = Maps.newLinkedHashMap();
-        readerObj.put("name", getName());
+        Map<String, Object> writerObj = Maps.newLinkedHashMap();
+        writerObj.put("name", getName());
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
         Map<String, Object> confige = Maps.newLinkedHashMap();
         confige.put("hbase.zookeeper.quorum", plugin.getWriterHbaseConfig());
@@ -34,7 +34,7 @@ public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterfac
         if (StringUtils.isNotBlank(plugin.getWriterVersionColumn().getValue())) {
             parameterObj.put("versionColumn", plugin.getWriterVersionColumn());
         }
-        readerObj.put("parameter", parameterObj);
-        return readerObj;
+        writerObj.put("parameter", parameterObj);
+        return writerObj;
     }
 }

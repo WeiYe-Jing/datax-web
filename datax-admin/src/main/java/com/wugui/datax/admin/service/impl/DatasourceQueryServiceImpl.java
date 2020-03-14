@@ -7,16 +7,18 @@ import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.HBaseQueryTool;
+import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.util.DataSourceConstants;
+import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
- * TODO
+ * datasource query
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName JdbcDatasourceQueryServiceImpl
@@ -30,20 +32,40 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     private JobDatasourceService jobDatasourceService;
 
     @Override
+    public List<String> getDBs(Long id) throws UnknownHostException {
+        //获取数据源对象
+        JobDatasource datasource = jobDatasourceService.getById(id);
+        return MongoDBQueryTool.getInstance(datasource).getDBNames();
+    }
+
+
+    @Override
     public List<String> getTables(Long id) throws IOException {
         //获取数据源对象
-        JobDatasource jobDatasource = jobDatasourceService.getById(id);
+        JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装
-        if (ObjectUtil.isNull(jobDatasource)) {
+        if (ObjectUtil.isNull(datasource)) {
             return Lists.newArrayList();
         }
-        if (DataSourceConstants.HBASE.equals(jobDatasource.getDatasource())) {
-            return HBaseQueryTool.getInstance(jobDatasource).getTableNames();
+        if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
+            return HBaseQueryTool.getInstance(datasource).getTableNames();
         } else {
-            BaseQueryTool qTool = QueryToolFactory.getByDbType(jobDatasource);
+            BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
             return qTool.getTableNames();
         }
     }
+
+    @Override
+    public List<String> getCollectionNames(long id,String dbName) throws UnknownHostException {
+        //获取数据源对象
+        JobDatasource datasource = jobDatasourceService.getById(id);
+        //queryTool组装
+        if (ObjectUtil.isNull(datasource)) {
+            return Lists.newArrayList();
+        }
+        return MongoDBQueryTool.getInstance(datasource).getCollectionNames(dbName);
+    }
+
 
     @Override
     public List<String> getColumns(Long id, String tableName) throws IOException {
@@ -53,8 +75,10 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
         if (ObjectUtil.isNull(datasource)) {
             return Lists.newArrayList();
         }
-        if (DataSourceConstants.HBASE.equals(datasource.getDatasource())) {
+        if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
             return HBaseQueryTool.getInstance(datasource).getColumns(tableName);
+        } else if (JdbcConstants.MONGODB.equals(datasource.getDatasource())) {
+            return MongoDBQueryTool.getInstance(datasource).getColumns(tableName);
         } else {
             BaseQueryTool queryTool = QueryToolFactory.getByDbType(datasource);
             return queryTool.getColumnNames(tableName, datasource.getDatasource());

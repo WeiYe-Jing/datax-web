@@ -7,6 +7,7 @@ import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import org.apache.commons.lang3.StringUtils;
 
@@ -65,4 +66,9 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
 
     @Override
     public Map<String, Object> buildHbase(DataxHbasePojo dataxHbasePojo) { return null; }
+
+    @Override
+    public Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo) {
+        return null;
+    }
 }

@@ -1,8 +1,7 @@
 package com.wugui.datax.admin.tool.query;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.druid.util.JdbcUtils;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.wugui.datatx.core.util.Constant;
@@ -13,6 +12,8 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
+import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * @param jobDatasource
      */
     BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
-            String currentDbType = JdbcUtils.getDbType(jobDatasource.getJdbcUrl(), jobDatasource.getJdbcDriverClass());
             if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
                 getDataSource(jobDatasource);
             } else {
@@ -63,7 +63,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                     getDataSource(jobDatasource);
                 }
             }
-            sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
+            sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
             currentSchema = getSchema(jobDatasource.getJdbcUsername());
             LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
         }

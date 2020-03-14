@@ -10,8 +10,8 @@ import java.util.List;
  *
  * @author jingwk
  * @ClassName DataxJsonDto
- * @Version 2.0
- * @since 2020/01/11 17:15
+ * @Version 2.1.1
+ * @since 2020/03/14 07:15
  */
 @Data
 public class DataxJsonDto implements Serializable {
@@ -39,4 +39,8 @@ public class DataxJsonDto implements Serializable {
     private RdbmsReaderDto rdbmsReader;
 
     private RdbmsWriterDto rdbmsWriter;
+
+    private MongoDBReaderDto mongoDBReaderDto;
+
+    private MongoDBWriterDto mongoDBWriterDto;
 }

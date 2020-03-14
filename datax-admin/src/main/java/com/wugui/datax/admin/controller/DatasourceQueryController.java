@@ -28,6 +28,31 @@ public class DatasourceQueryController extends ApiController {
     private DatasourceQueryService datasourceQueryService;
 
     /**
+     * 根据数据源id获取mongo库名
+     *
+     * @param datasourceId
+     * @return
+     */
+    @GetMapping("/getDBs")
+    @ApiOperation("根据数据源id获取mongo库名")
+    public R<List<String>> getDBs(Long datasourceId) throws IOException {
+        return success(datasourceQueryService.getDBs(datasourceId));
+    }
+
+
+    /**
+     * 根据数据源id,dbname获取CollectionNames
+     *
+     * @param datasourceId
+     * @return
+     */
+    @GetMapping("/collectionNames")
+    @ApiOperation("根据数据源id,dbname获取CollectionNames")
+    public R<List<String>> getTableNames(Long datasourceId,String dbName) throws IOException {
+        return success(datasourceQueryService.getCollectionNames(datasourceId,dbName));
+    }
+
+    /**
      * 根据数据源id获取可用表名
      *
      * @param datasourceId

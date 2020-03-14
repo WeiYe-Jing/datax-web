@@ -1,8 +1,7 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.druid.util.JdbcUtils;
 import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.RdbmsException;
 
 import java.sql.SQLException;
@@ -17,21 +16,21 @@ import java.sql.SQLException;
  */
 public class QueryToolFactory {
 
-    public static final BaseQueryTool getByDbType(JobDatasource jobJdbcDatasource) {
+    public static final BaseQueryTool getByDbType(JobDatasource jobDatasource) {
         //获取dbType
-        String dbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
-        if (JdbcConstants.MYSQL.equals(dbType)) {
-            return getMySQLQueryToolInstance(jobJdbcDatasource);
-        } else if (JdbcConstants.ORACLE.equals(dbType)) {
-            return getOracleQueryToolInstance(jobJdbcDatasource);
-        } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
-            return getPostgresqlQueryToolInstance(jobJdbcDatasource);
-        } else if (JdbcConstants.SQL_SERVER.equals(dbType)) {
-            return getSqlserverQueryToolInstance(jobJdbcDatasource);
-        }else if (JdbcConstants.HIVE.equals(dbType)) {
-            return getHiveQueryToolInstance(jobJdbcDatasource);
+        String datasource = jobDatasource.getDatasource();
+        if (JdbcConstants.MYSQL.equals(datasource)) {
+            return getMySQLQueryToolInstance(jobDatasource);
+        } else if (JdbcConstants.ORACLE.equals(datasource)) {
+            return getOracleQueryToolInstance(jobDatasource);
+        } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
+            return getPostgresqlQueryToolInstance(jobDatasource);
+        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
+            return getSqlserverQueryToolInstance(jobDatasource);
+        }else if (JdbcConstants.HIVE.equals(datasource)) {
+            return getHiveQueryToolInstance(jobDatasource);
         }
-        throw new UnsupportedOperationException("找不到该类型: ".concat(dbType));
+        throw new UnsupportedOperationException("找不到该类型: ".concat(datasource));
     }
 
     private static BaseQueryTool getMySQLQueryToolInstance(JobDatasource jdbcDatasource) {

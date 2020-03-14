@@ -34,7 +34,6 @@
         <junit.version>4.12</junit.version>
         <hutool.version>4.5.1</hutool.version>
         <postgresql.version>42.2.5</postgresql.version>
-        <druid.version>1.1.14</druid.version>
         <mysql-connector.version>5.1.47</mysql-connector.version>
         <jna.version>4.1.0</jna.version>
         <groovy.version>2.5.8</groovy.version>

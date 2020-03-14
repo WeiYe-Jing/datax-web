@@ -125,7 +125,7 @@ Quick Start操作完前四步之后
 - 7、分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
 - 8、启动命令demo：nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
 ## UI
-[前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
+[前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
 
 ### Contributing
 Contributions are welcome! Open a pull request to fix a bug, or open an Issue to discuss a new feature or change.

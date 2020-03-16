@@ -323,8 +323,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxMongoDBPojo.setAddress(writerDatasource.getJdbcUrl());
         dataxMongoDBPojo.setDbName(mongoDBWriterDto.getDbName());
         dataxMongoDBPojo.setCollectionName(mongoDBWriterDto.getCollectionName());
-        dataxMongoDBPojo.setUpsert(mongoDBWriterDto.isUpsert());
-        dataxMongoDBPojo.setUpsertKey(mongoDBWriterDto.getUpsertKey());
+
+        dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
         return writerPlugin.buildMongoDB(dataxMongoDBPojo);
     }
 }

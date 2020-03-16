@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.tool.pojo;
 
+import com.wugui.datax.admin.dto.UpsertInfo;
 import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.Data;
 
@@ -20,7 +21,7 @@ public class DataxMongoDBPojo {
     /**
      * hive列名
      */
-    private List<Map<String,Object>> columns;
+    private List<Map<String, Object>> columns;
 
     /**
      * 数据源信息
@@ -33,13 +34,6 @@ public class DataxMongoDBPojo {
 
     private String collectionName;
 
-    /**
-     * 当设置为true时，表示针对相同的upsertKey做更新操作
-     */
-    private boolean isUpsert;
-    /**
-     *  upsertKey指定了没行记录的业务主键。用来做更新时使用。
-     */
-    private String upsertKey;
-}
+    private UpsertInfo upsertInfo;
 
+}

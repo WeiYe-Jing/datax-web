@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.tool.datax.writer;
 
 import com.google.common.collect.Maps;
+import com.wugui.datax.admin.dto.UpsertInfo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 
 import java.util.Map;
@@ -17,7 +18,6 @@ public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterf
     }
 
 
-
     @Override
     public Map<String, Object> buildMongoDB(DataxMongoDBPojo plugin) {
         //构建
@@ -29,12 +29,11 @@ public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterf
         parameterObj.put("userPassword", plugin.getJdbcDatasource().getJdbcPassword());
         parameterObj.put("dbName", plugin.getDbName());
         parameterObj.put("collectionName", plugin.getCollectionName());
+        UpsertInfo upsert = plugin.getUpsertInfo();
+        if (upsert != null) {
+            parameterObj.put("upsertInfo", upsert);
+        }
         writerObj.put("parameter", parameterObj);
-
-        Map<String, Object> upsertInfo = Maps.newLinkedHashMap();
-        upsertInfo.put("isUpsert", plugin.isUpsert());
-        parameterObj.put("upsertKey", plugin.getUpsertKey());
-        writerObj.put("upsertInfo", upsertInfo);
         return writerObj;
     }
 }

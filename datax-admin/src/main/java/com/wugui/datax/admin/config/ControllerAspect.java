@@ -23,6 +23,8 @@ import java.util.Map;
 @Component
 public class ControllerAspect {
 
+    private String clsPath = "com.wugui.datax.admin.controller.";
+
     /**
      * ~ 第一个 * 代表任意修饰符及任意返回值. ~ 第二个 * 定义在web包或者子包 ~ 第三个 * 任意方法 ~ .. 匹配任意数量的参数.
      */
@@ -33,15 +35,12 @@ public class ControllerAspect {
     @Around("logPointcut()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        String method = signature.getDeclaringTypeName() + "." + signature.getName();
+        String method = signature.getDeclaringTypeName().replace(clsPath, "") + "." + signature.getName();
         long start = System.currentTimeMillis();
         String input = Arrays.toString(joinPoint.getArgs());
-        log.info("---controller:{},input:{}", method, input);
+        log.info("controller:{},input:{}", method, input);
         try {
             Object resObj = joinPoint.proceed();
-            // log.info("---controller:{}, resObj:{},input:{}", method, resObj, input);
-            long cost = System.currentTimeMillis() - start;
-            log.info("---controller: {} costTime is {}ms", method, cost);
             return resObj;
         } catch (Throwable e) {
             long exceptCost = System.currentTimeMillis() - start;

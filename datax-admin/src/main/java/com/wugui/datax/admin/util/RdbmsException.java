@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.util;
 
-import com.wugui.datatx.core.util.Constant;
+import com.wugui.datatx.core.util.Constants;
 
 /**
  * RdbmsException
@@ -43,15 +43,15 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode mySqlConnectionErrorAna(String e){
-        if (e.contains(Constant.MYSQL_DATABASE)){
+        if (e.contains(Constants.MYSQL_DATABASE)){
             return DBUtilErrorCode.MYSQL_CONN_DB_ERROR;
         }
 
-        if (e.contains(Constant.MYSQL_CONNEXP)){
+        if (e.contains(Constants.MYSQL_CONNEXP)){
             return DBUtilErrorCode.MYSQL_CONN_IPPORT_ERROR;
         }
 
-        if (e.contains(Constant.MYSQL_ACCDENIED)){
+        if (e.contains(Constants.MYSQL_ACCDENIED)){
             return DBUtilErrorCode.MYSQL_CONN_USERPWD_ERROR;
         }
 
@@ -59,15 +59,15 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode oracleConnectionErrorAna(String e){
-        if (e.contains(Constant.ORACLE_DATABASE)){
+        if (e.contains(Constants.ORACLE_DATABASE)){
             return DBUtilErrorCode.ORACLE_CONN_DB_ERROR;
         }
 
-        if (e.contains(Constant.ORACLE_CONNEXP)){
+        if (e.contains(Constants.ORACLE_CONNEXP)){
             return DBUtilErrorCode.ORACLE_CONN_IPPORT_ERROR;
         }
 
-        if (e.contains(Constant.ORACLE_ACCDENIED)){
+        if (e.contains(Constants.ORACLE_ACCDENIED)){
             return DBUtilErrorCode.ORACLE_CONN_USERPWD_ERROR;
         }
 
@@ -104,24 +104,24 @@ public class RdbmsException extends DataXException{
     }
 
     public static DBUtilErrorCode mySqlQueryErrorAna(String e){
-        if (e.contains(Constant.MYSQL_TABLE_NAME_ERR1) && e.contains(Constant.MYSQL_TABLE_NAME_ERR2)){
+        if (e.contains(Constants.MYSQL_TABLE_NAME_ERR1) && e.contains(Constants.MYSQL_TABLE_NAME_ERR2)){
             return DBUtilErrorCode.MYSQL_QUERY_TABLE_NAME_ERROR;
-        }else if (e.contains(Constant.MYSQL_SELECT_PRI)){
+        }else if (e.contains(Constants.MYSQL_SELECT_PRI)){
             return DBUtilErrorCode.MYSQL_QUERY_SELECT_PRI_ERROR;
-        }else if (e.contains(Constant.MYSQL_COLUMN1) && e.contains(Constant.MYSQL_COLUMN2)){
+        }else if (e.contains(Constants.MYSQL_COLUMN1) && e.contains(Constants.MYSQL_COLUMN2)){
             return DBUtilErrorCode.MYSQL_QUERY_COLUMN_ERROR;
-        }else if (e.contains(Constant.MYSQL_WHERE)){
+        }else if (e.contains(Constants.MYSQL_WHERE)){
             return DBUtilErrorCode.MYSQL_QUERY_SQL_ERROR;
         }
         return DBUtilErrorCode.READ_RECORD_FAIL;
     }
 
     public static DBUtilErrorCode oracleQueryErrorAna(String e){
-        if (e.contains(Constant.ORACLE_TABLE_NAME)){
+        if (e.contains(Constants.ORACLE_TABLE_NAME)){
             return DBUtilErrorCode.ORACLE_QUERY_TABLE_NAME_ERROR;
-        }else if (e.contains(Constant.ORACLE_SQL)){
+        }else if (e.contains(Constants.ORACLE_SQL)){
             return DBUtilErrorCode.ORACLE_QUERY_SQL_ERROR;
-        }else if (e.contains(Constant.ORACLE_SELECT_PRI)){
+        }else if (e.contains(Constants.ORACLE_SELECT_PRI)){
             return DBUtilErrorCode.ORACLE_QUERY_SELECT_PRI_ERROR;
         }
         return DBUtilErrorCode.READ_RECORD_FAIL;

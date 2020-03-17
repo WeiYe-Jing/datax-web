@@ -1,6 +1,6 @@
 package com.wugui.datatx.core.util;
 
-public final class Constant {
+public final class Constants {
 
     public static final String MYSQL_DATABASE = "Unknown database";
     public static final String MYSQL_CONNEXP = "Communications link failure";

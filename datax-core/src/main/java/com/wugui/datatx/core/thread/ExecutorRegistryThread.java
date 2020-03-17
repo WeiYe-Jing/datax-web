@@ -5,6 +5,7 @@ import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datatx.core.executor.JobExecutor;
+import com.wugui.datatx.core.util.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class ExecutorRegistryThread {
             // registry
             while (!toStop) {
                 try {
-                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address);
+                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address, OSUtils.cpuUsage(),OSUtils.memoryUsage(),OSUtils.loadAverage());
                     for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
                         try {
                             ReturnT<String> registryResult = adminBiz.registry(registryParam);

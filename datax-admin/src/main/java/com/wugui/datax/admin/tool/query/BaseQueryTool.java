@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.wugui.datatx.core.util.Constant;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
@@ -278,10 +278,10 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
                 if (JdbcConstants.HIVE_DRIVER.equals(driverClass) || "com.cloudera.hive.jdbc41.HS2Driver".equals(driverClass)) {
-                    if (columnName.contains(Constant.SPLIT_POINT)) {
-                        res.add(columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                    if (columnName.contains(Constants.SPLIT_POINT)) {
+                        res.add(columnName.substring(columnName.indexOf(Constants.SPLIT_POINT) + 1) + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     } else {
-                        res.add(columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(columnName + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     }
                 } else {
                     res.add(columnName);

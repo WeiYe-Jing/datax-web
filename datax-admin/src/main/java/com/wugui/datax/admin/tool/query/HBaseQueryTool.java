@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.tool.query;
 
 
-import com.wugui.datatx.core.util.Constant;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.entity.JobDatasource;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -27,7 +27,7 @@ public class HBaseQueryTool {
 
    HBaseQueryTool(JobDatasource jobDatasource) throws IOException {
     if (connection == null|| connection.isClosed()){
-      String[] zkAdress=jobDatasource.getZkAdress().split(Constant.SPLIT_SCOLON);
+      String[] zkAdress=jobDatasource.getZkAdress().split(Constants.SPLIT_SCOLON);
       conf.set("hbase.zookeeper.quorum",zkAdress[0]);
       conf.set("hbase.zookeeper.property.clientPort", zkAdress[1]);
       connection = ConnectionFactory.createConnection(conf,pool);

@@ -9,7 +9,7 @@ import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
-import com.wugui.datatx.core.util.Constant;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datatx.core.util.ProcessUtil;
 import com.wugui.datax.executor.util.SystemUtils;
@@ -150,13 +150,13 @@ public class ExecutorJobHandler extends IJobHandler {
             doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
             if (StringUtils.isNotBlank(partitionStr)) {
                 doc.append(DataxOption.SPLIT_SPACE);
-                List<String> partitionInfo = Arrays.asList(partitionStr.split(Constant.SPLIT_COMMA));
+                List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
                 doc.append(String.format(DataxOption.PARAMS_CM_V_PT, buildPartition(partitionInfo)));
             }
             doc.append(DataxOption.TRANSFORM_QUOTES);
         }else{
             if (StringUtils.isNotBlank(partitionStr)) {
-                List<String> partitionInfo = Arrays.asList(partitionStr.split(Constant.SPLIT_COMMA));
+                List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
                 if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
                 doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(DataxOption.PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(DataxOption.TRANSFORM_QUOTES);
             }
@@ -170,7 +170,7 @@ public class ExecutorJobHandler extends IJobHandler {
         int timeOffset = Integer.parseInt(partitionInfo.get(1));
         String timeFormat = partitionInfo.get(2);
         String partitionTime = DateUtil.format(DateUtil.addDays(new Date(), timeOffset), timeFormat);
-        return field + Constant.EQUAL + partitionTime;
+        return field + Constants.EQUAL + partitionTime;
     }
 
     private String generateTemJsonFile(String jobJson) {

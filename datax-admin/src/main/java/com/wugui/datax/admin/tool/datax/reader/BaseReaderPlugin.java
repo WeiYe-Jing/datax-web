@@ -7,6 +7,7 @@ import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.util.AESUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -26,15 +27,13 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
     public Map<String, Object> build(DataxRdbmsPojo plugin) {
         //构建
         Map<String, Object> readerObj = Maps.newLinkedHashMap();
-
         readerObj.put("name", getName());
-//
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
         JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
-        parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
-        parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
+        parameterObj.put("username", AESUtil.decrypt(jobJdbcDatasource.getJdbcUsername()));
+        parameterObj.put("password", AESUtil.decrypt(jobJdbcDatasource.getJdbcPassword()));
 
         //判断是否是 querySql
         if (StrUtil.isNotBlank(plugin.getQuerySql())) {

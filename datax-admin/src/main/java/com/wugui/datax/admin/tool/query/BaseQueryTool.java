@@ -13,6 +13,7 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
+import com.wugui.datax.admin.util.AESUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +55,12 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      */
     BaseQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
         String currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
+        String userName = AESUtil.decrypt(jobJdbcDatasource.getJdbcUsername());
         if (LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName()) == null) {
             //这里默认使用 hikari 数据源
             HikariDataSource dataSource = new HikariDataSource();
-            dataSource.setUsername(jobJdbcDatasource.getJdbcUsername());
-            dataSource.setPassword(jobJdbcDatasource.getJdbcPassword());
+            dataSource.setUsername(userName);
+            dataSource.setPassword(AESUtil.decrypt(jobJdbcDatasource.getJdbcPassword()));
             dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
             dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
             dataSource.setMaximumPoolSize(1);
@@ -70,7 +72,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             this.connection = (Connection) LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName());
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
-        currentSchema = getSchema(jobJdbcDatasource.getJdbcUsername());
+        currentSchema = getSchema(userName);
         LocalCacheUtil.set(jobJdbcDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
     }
 

@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.config;
 
+import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
-import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * MybatisPlus配置类 Spring boot方式
+ *
  * @author huzekang
  */
 @EnableTransactionManagement
@@ -29,11 +30,15 @@ public class MybatisPlusConfig {
 
     /**
      * MyBatisPlus逻辑删除 ，需要在 yml 中配置开启
+     * 3.0.7.1版本的LogicSqlInjector里面什么都没做只是 extends DefaultSqlInjector
+     * 以后版本直接去的了LogicSqlInjector
      *
      * @return
      */
     @Bean
     public ISqlInjector sqlInjector() {
-        return new LogicSqlInjector();
+        return new DefaultSqlInjector();
     }
+
+
 }

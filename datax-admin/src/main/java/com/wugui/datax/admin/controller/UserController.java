@@ -116,7 +116,7 @@ public class UserController {
     @ApiOperation("删除用户")
     public ReturnT<String> remove(int id) {
         int result = jobUserMapper.delete(id);
-        return result == 1 ? ReturnT.FAIL : ReturnT.SUCCESS;
+        return result != 1 ? ReturnT.FAIL : ReturnT.SUCCESS;
     }
 
     @PostMapping(value = "/updatePwd")

@@ -3,8 +3,8 @@ server:
 spring:
   #数据源
   datasource:
-    username: root
-    password: mysql
+    username: ENC(6WpAwrc9TXkZo2aIXeYtHw==)
+    password: ENC(flGBggksQibhINCvRmntzw==)
     url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 
@@ -37,6 +37,11 @@ spring:
             required: true
         socketFactory:
           class: javax.net.ssl.SSLSocketFactory
+
+jasypt:
+  encryptor:
+    password: hVO0O2NeySpANQUk
+
 
 management:
   health:
@@ -77,7 +82,7 @@ mybatis-plus:
 logging:
   level:
     com.wugui.datax.admin.mapper: error
-  path: /data/applogs/admin/
+  path: /data/applogs/admin
 #  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
 
 

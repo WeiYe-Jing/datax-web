@@ -3,7 +3,7 @@
 
     <contextName>admin</contextName>
     <property name="LOG_PATH"
-              value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/data/applogs/admin/}}}"/>
+              value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/data/applogs/admin}}}"/>
 
     <!--控制台日志， 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -14,7 +14,7 @@
     </appender>
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}datax-admin.log</file>
+        <file>${LOG_PATH}/datax-admin.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}.%d{yyyy-MM-dd}.zip</fileNamePattern>
         </rollingPolicy>

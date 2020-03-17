@@ -118,6 +118,12 @@ public class JobDatasource extends Model<JobDatasource> {
      */
     @ApiModelProperty(value = "zookeeper地址", hidden = true)
     private String zkAdress;
+
+    /**
+     * 数据库名
+     */
+    @ApiModelProperty(value = "数据库名", hidden = true)
+    private String databaseName;
     /**
      * 获取主键值
      *

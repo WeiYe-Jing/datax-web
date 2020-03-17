@@ -3,13 +3,14 @@ package com.wugui.datax.admin.tool.query;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
 import com.wugui.datax.admin.entity.JobDatasource;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +31,7 @@ public class MongoDBQueryTool {
       if(StringUtils.isBlank(jobDatasource.getJdbcUsername()) && StringUtils.isBlank(jobDatasource.getJdbcPassword())){
         mongoClient = new MongoClient(jobDatasource.getJdbcUrl());
       }else{
-        MongoCredential credential = MongoCredential.createCredential(jobDatasource.getJdbcUsername(), null, jobDatasource.getJdbcPassword().toCharArray());
+        MongoCredential credential = MongoCredential.createCredential(jobDatasource.getJdbcUsername(), jobDatasource.getDatabaseName(), jobDatasource.getJdbcPassword().toCharArray());
         mongoClient = new MongoClient(parseServerAddress(jobDatasource.getJdbcUrl()), Arrays.asList(credential));
       }
 
@@ -139,4 +140,38 @@ public class MongoDBQueryTool {
     return addressList;
   }
 
+
+  public static void main(String args[]) {
+
+    try {
+      MongoClient mongoClient = new MongoClient("47.98.125.243:27017");
+      //db
+      MongoIterable<String> tables = mongoClient.listDatabaseNames();
+      tables.forEach((Block<? super String>) System.out::println);
+      //collection
+      MongoDatabase collections = mongoClient.getDatabase("jingwk");
+      collections.listCollectionNames().forEach((Block<? super String>) System.out::println);
+      MongoCollection<Document> collection = collections.getCollection("ceshi");
+
+      MongoCursor<Document> iterator = collection.find(Filters.eq("_id", "1111")).iterator();
+      while (iterator.hasNext()) {
+        Document document = iterator.next();
+        document.forEach((k, v) -> {
+          String type = v.getClass().getSimpleName();
+          if ("Document".equals(type)) {
+            ((Document) v).forEach((k1, v1) -> {
+              String simpleName = v1.getClass().getSimpleName();
+              System.out.printf("key:%s,valueType:%s \n", k + "." + k1, simpleName);
+            });
+          }else{
+            System.out.printf("key:%s,valueType:%s \n", k + "." + k, type);
+          }
+        });
+
+      }
+      mongoClient.close();
+    } catch (Exception e) {
+      System.err.println(e.getClass().getName() + ": " + e.getMessage());
+    }
+  }
 }

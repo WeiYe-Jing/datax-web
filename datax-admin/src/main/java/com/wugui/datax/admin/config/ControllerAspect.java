@@ -38,7 +38,9 @@ public class ControllerAspect {
         String method = signature.getDeclaringTypeName().replace(clsPath, "") + "." + signature.getName();
         long start = System.currentTimeMillis();
         String input = Arrays.toString(joinPoint.getArgs());
-        log.info("controller:{},input:{}", method, input);
+        if (!method.contains("JobApiController")) {
+            log.info("controller:{},input:{}", method, input);
+        }
         try {
             Object resObj = joinPoint.proceed();
             return resObj;

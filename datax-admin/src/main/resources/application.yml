@@ -77,6 +77,7 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
+    type-handlers-package: com.wugui.datax.admin.core.handler
 
 # 配置mybatis-plus打印slq日志
 logging:

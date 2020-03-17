@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobJdbcDatasourceMapper">
 
+    <!--<resultMap type="com.wugui.datax.admin.entity.JobJdbcDatasource" id="jobJdbcDatasource">-->
+
+        <!--<result property="jdbcUsername" column="jdbc_username" jdbcType="VARCHAR" javaType="String"-->
+                <!--typeHandler="com.wugui.datax.admin.core.util.AESEncryptHandler"/>-->
+        <!--<result property="jdbcPassword" column="jdbc_password" jdbcType="VARCHAR" javaType="String"-->
+                <!--typeHandler="com.wugui.datax.admin.core.util.AESEncryptHandler"/>-->
+    <!--</resultMap>-->
 </mapper>

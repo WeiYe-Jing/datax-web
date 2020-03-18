@@ -14,5 +14,8 @@ public class JobRegistry {
     private String registryGroup;
     private String registryKey;
     private String registryValue;
+    private double cpuUsage;
+    private double memoryUsage;
+    private double loadAverage;
     private Date updateTime;
 }

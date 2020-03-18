@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobRegistryMapper">
-	
-	<resultMap id="JobRegistry" type="com.wugui.datax.admin.entity.JobRegistry" >
-		<result column="id" property="id" />
-	    <result column="registry_group" property="registryGroup" />
-	    <result column="registry_key" property="registryKey" />
-	    <result column="registry_value" property="registryValue" />
-		<result column="update_time" property="updateTime" />
-	</resultMap>
 
-	<sql id="Base_Column_List">
+    <resultMap id="JobRegistry" type="com.wugui.datax.admin.entity.JobRegistry">
+        <result column="id" property="id"/>
+        <result column="registry_group" property="registryGroup"/>
+        <result column="registry_key" property="registryKey"/>
+        <result column="registry_value" property="registryValue"/>
+		<result column="cpu_usage" property="cpuUsage"/>
+		<result column="memory_usage" property="memoryUsage"/>
+		<result column="load_average" property="loadAverage"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
 		t.id,
 		t.registry_group,
 		t.registry_key,
 		t.registry_value,
+		t.cpu_usage,
+		t.memory_usage,
+		t.load_average,
 		t.update_time
 	</sql>
 
-	<select id="findDead" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
+    <select id="findDead" parameterType="java.util.HashMap" resultType="java.lang.Integer">
 		SELECT t.id
 		FROM job_registry AS t
 		WHERE t.update_time <![CDATA[ < ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
 	</select>
-	
-	<delete id="removeDead" parameterType="java.lang.Integer" >
-		DELETE FROM job_registry
-		WHERE id in
-		<foreach collection="ids" item="item" open="(" close=")" separator="," >
-			#{item}
-		</foreach>
-	</delete>
 
-	<select id="findAll" parameterType="java.util.HashMap" resultMap="JobRegistry">
-		SELECT <include refid="Base_Column_List" />
-		FROM job_registry AS t
-		WHERE t.update_time <![CDATA[ > ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
-	</select>
+    <delete id="removeDead" parameterType="java.lang.Integer">
+        DELETE FROM job_registry
+        WHERE id in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
 
-    <update id="registryUpdate" >
+    <select id="findAll" parameterType="java.util.HashMap" resultMap="JobRegistry">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM job_registry AS t
+        WHERE t.update_time <![CDATA[ > ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
+    </select>
+
+    <update id="registryUpdate">
         UPDATE job_registry
-        SET `update_time` = #{updateTime}
+        SET `update_time` = #{updateTime},
+        	`cpu_usage`=#{cpuUsage},
+        	`memory_usage`=#{memoryUsage},
+        	`load_average`=#{loadAverage}
         WHERE `registry_group` = #{registryGroup}
           AND `registry_key` = #{registryKey}
           AND `registry_value` = #{registryValue}
     </update>
 
-    <insert id="registrySave" >
-        INSERT INTO job_registry( `registry_group` , `registry_key` , `registry_value`, `update_time`)
-        VALUES( #{registryGroup}  , #{registryKey} , #{registryValue}, #{updateTime})
+    <insert id="registrySave">
+        INSERT INTO job_registry( `registry_group` , `registry_key` , `registry_value`, `cpu_usage`,`memory_usage`,`load_average`,`update_time`)
+        VALUES( #{registryGroup}  , #{registryKey} , #{registryValue},#{cpuUsage}, #{memoryUsage},#{loadAverage},#{updateTime})
     </insert>
 
-	<delete id="registryDelete" >
+    <delete id="registryDelete">
 		DELETE FROM job_registry
 		WHERE registry_group = #{registryGroup}
 			AND registry_key = #{registryKey}

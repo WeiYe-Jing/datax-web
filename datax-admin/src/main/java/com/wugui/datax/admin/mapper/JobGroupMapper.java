@@ -16,9 +16,9 @@ public interface JobGroupMapper {
 
     public List<JobGroup> findByAddressType(@Param("addressType") int addressType);
 
-    public int save(JobGroup xxlJobGroup);
+    public int save(JobGroup jobGroup);
 
-    public int update(JobGroup xxlJobGroup);
+    public int update(JobGroup jobGroup);
 
     public int remove(@Param("id") int id);
 

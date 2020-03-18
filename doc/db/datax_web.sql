@@ -326,3 +326,11 @@ CHANGE COLUMN `jdbc_password` `jdbc_password` VARCHAR(200) CHARACTER SET 'utf8mb
  */
 ALTER TABLE `datax_web`.`job_jdbc_datasource`
 ADD COLUMN `database_name` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据库名' AFTER `datasource_group`;
+/**
+添加执行器资源字段
+ */
+ALTER TABLE `datax_web`.`job_registry`
+ADD COLUMN `cpu_usage` DOUBLE NULL AFTER `registry_value`,
+ADD COLUMN `memory_usage` DOUBLE NULL AFTER `cpu_usage`,
+ADD COLUMN `load_average` DOUBLE NULL AFTER `memory_usage`;
+

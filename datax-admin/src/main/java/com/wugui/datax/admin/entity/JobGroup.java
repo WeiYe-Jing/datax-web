@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by xuxueli on 16/9/30.
+ * Created by jingwk on 2019/11/17
  */
 public class JobGroup {
 

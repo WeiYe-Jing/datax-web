@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 @Service
 public class DataxJsonServiceImpl implements DataxJsonService {
 
-    private static final String[] sqlDataSource = new String[]{"mysql", "oracle", "postgresql", "sqlserver"};
-
     @Autowired
     private IJobJdbcDatasourceService jobJdbcDatasourceService;
 
@@ -34,21 +32,9 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
         // reader
         JobJdbcDatasource readerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getReaderDatasourceId());
-        if (Arrays.stream(sqlDataSource).anyMatch(db -> db.equals(readerDatasource.getDatasource()))) {
-            List<String> readerColumns = dataxJsonDto.getReaderColumns().stream()
-                    .map(column -> "`" + column + "`")
-                    .collect(Collectors.toList());
-            dataxJsonDto.setReaderColumns(readerColumns);
-        }
         // reader plugin init
         dataxJsonHelper.initReader(dataxJsonDto,readerDatasource);
         JobJdbcDatasource writerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getWriterDatasourceId());
-        if (Arrays.stream(sqlDataSource).anyMatch(db -> db.equals(writerDatasource.getDatasource()))) {
-            List<String> writerColumns = dataxJsonDto.getWriterColumns().stream()
-                    .map(column -> "`" + column + "`")
-                    .collect(Collectors.toList());
-            dataxJsonDto.setWriterColumns(writerColumns);
-        }
         dataxJsonHelper.initWriter(dataxJsonDto,writerDatasource);
         return JSON.toJSONString(dataxJsonHelper.buildJob());
     }

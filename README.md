@@ -117,6 +117,9 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其�
 ### 12. admin可以创建用户，编辑用户信息
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
 
+### 13.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/json_demo.png)
+
 ## Linux部署说明
 Quick Start操作完前四步之后
 - 5、执行mvn package -Dmaven.test.skip=true 
@@ -124,7 +127,7 @@ Quick Start操作完前四步之后
 - 7、分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
 - 8、启动命令demo：nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
 ## UI
-[前端github地址](https://github.com/WeiYe-Jing/datax-vue-admin.git)
+[前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
 
 ### Contributing
 Contributions are welcome! Open a pull request to fix a bug, or open an Issue to discuss a new feature or change.
@@ -135,7 +138,7 @@ Contributions are welcome! Open a pull request to fix a bug, or open an Issue to
 This product is open source and free, and will continue to provide free community technical support. Individual or enterprise users are free to access and use.
 
 - Licensed under the GNU General Public License (GPL) v3.
-- Copyright (c) 2015-present, jingwenkai.
+- Copyright (c) 2020 WeiYe.
 
 产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
 

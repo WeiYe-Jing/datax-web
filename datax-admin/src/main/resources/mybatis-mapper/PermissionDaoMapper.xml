@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wugui.datax.admin.mapper.PermissionDao">
+
+    <select id="findAll" resultType="com.wugui.datax.admin.entity.JobPermission">
+
+   SELECT * from job_permission ;
+</select>
+
+    <select id="findByAdminUserId" parameterType="int" resultType="com.wugui.datax.admin.entity.JobPermission">
+      select p.*
+        from job_User u
+        LEFT JOIN role_user sru on u.id= sru.job_User_id
+        LEFT JOIN job_Role r on sru.job_Role_id=r.id
+        LEFT JOIN job_permission_role spr on spr.role_id=r.id
+        LEFT JOIN job_permission p on p.id =spr.permission_id
+        where u.id=#{userId}
+ </select>
+</mapper>

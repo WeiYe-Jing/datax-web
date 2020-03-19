@@ -51,6 +51,7 @@ public abstract class ConnectClient {
 
     private static volatile ConcurrentMap<String, ConnectClient> connectClientMap;        // (static) alread addStopCallBack
     private static volatile ConcurrentMap<String, Object> connectClientLockMap = new ConcurrentHashMap<>();
+
     private static ConnectClient getPool(String address, Class<? extends ConnectClient> connectClientImpl,
                                          final XxlRpcReferenceBean xxlRpcReferenceBean) throws Exception {
 
@@ -65,7 +66,7 @@ public abstract class ConnectClient {
                         @Override
                         public void run() throws Exception {
                             if (connectClientMap.size() > 0) {
-                                for (String key: connectClientMap.keySet()) {
+                                for (String key : connectClientMap.keySet()) {
                                     ConnectClient clientPool = connectClientMap.get(key);
                                     clientPool.close();
                                 }
@@ -79,7 +80,7 @@ public abstract class ConnectClient {
 
         // get-valid client
         ConnectClient connectClient = connectClientMap.get(address);
-        if (connectClient!=null && connectClient.isValidate()) {
+        if (connectClient != null && connectClient.isValidate()) {
             return connectClient;
         }
 
@@ -95,7 +96,7 @@ public abstract class ConnectClient {
 
             // get-valid client, avlid repeat
             connectClient = connectClientMap.get(address);
-            if (connectClient!=null && connectClient.isValidate()) {
+            if (connectClient != null && connectClient.isValidate()) {
                 return connectClient;
             }
 

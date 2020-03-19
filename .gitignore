@@ -12,3 +12,5 @@
 /datax-rpc/datax-rpc.iml
 /datax-rpc/target/
 /datax-all.iml
+/logs/
+*-dev*

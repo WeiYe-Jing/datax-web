@@ -8,6 +8,7 @@ import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.util.AESUtil;
 
 import java.util.Map;
 
@@ -27,9 +28,9 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
 //        parameterObj.put("writeMode", "insert");
-        JobDatasource jobJdbcDatasource = plugin.getJobDatasource();
-        parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
-        parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
+        JobDatasource jobDatasource = plugin.getDatasource();
+        parameterObj.put("username", AESUtil.decrypt(jobDatasource.getJdbcUsername()));
+        parameterObj.put("password", AESUtil.decrypt(jobDatasource.getJdbcPassword()));
         parameterObj.put("column", plugin.getRdbmsColumns());
         // preSql
         parameterObj.put("preSql", ImmutableList.of(plugin.getPreSql()));

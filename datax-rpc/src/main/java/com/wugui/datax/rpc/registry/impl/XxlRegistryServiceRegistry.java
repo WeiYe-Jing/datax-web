@@ -19,6 +19,7 @@ public class XxlRegistryServiceRegistry extends ServiceRegistry {
     public static final String ENV = "ENV";
 
     private XxlRegistryClient xxlRegistryClient;
+
     public XxlRegistryClient getXxlRegistryClient() {
         return xxlRegistryClient;
     }
@@ -31,8 +32,8 @@ public class XxlRegistryServiceRegistry extends ServiceRegistry {
         String env = param.get(ENV);
 
         // fill
-        biz = (biz!=null&&biz.trim().length()>0)?biz:"default";
-        env = (env!=null&&env.trim().length()>0)?env:"default";
+        biz = (biz != null && biz.trim().length() > 0) ? biz : "default";
+        env = (env != null && env.trim().length() > 0) ? env : "default";
 
         xxlRegistryClient = new XxlRegistryClient(xxlRegistryAddress, accessToken, biz, env);
     }
@@ -46,33 +47,29 @@ public class XxlRegistryServiceRegistry extends ServiceRegistry {
 
     @Override
     public boolean registry(Set<String> keys, String value) {
-        if (keys==null || keys.size() == 0 || value == null) {
+        if (keys == null || keys.size() == 0 || value == null) {
             return false;
         }
 
-        // init
-        List<XxlRegistryDataParamVO> registryDataList = new ArrayList<>();
-        for (String key:keys) {
-            registryDataList.add(new XxlRegistryDataParamVO(key, value));
-        }
-
-        return xxlRegistryClient.registry(registryDataList);
+        return xxlRegistryClient.registry(buildRegistryData(keys, value));
     }
 
     @Override
     public boolean remove(Set<String> keys, String value) {
-        if (keys==null || keys.size() == 0 || value == null) {
+        if (keys == null || keys.size() == 0 || value == null) {
             return false;
         }
-
-        // init
-        List<XxlRegistryDataParamVO> registryDataList = new ArrayList<>();
-        for (String key:keys) {
-            registryDataList.add(new XxlRegistryDataParamVO(key, value));
-        }
-
-        return xxlRegistryClient.remove(registryDataList);
+        return xxlRegistryClient.remove(buildRegistryData(keys, value));
     }
+
+    public List<XxlRegistryDataParamVO> buildRegistryData(Set<String> keys, String value) {
+        List<XxlRegistryDataParamVO> registryParams = new ArrayList<>();
+        for (String key : keys) {
+            registryParams.add(new XxlRegistryDataParamVO(key, value));
+        }
+        return registryParams;
+    }
+
 
     @Override
     public Map<String, TreeSet<String>> discovery(Set<String> keys) {

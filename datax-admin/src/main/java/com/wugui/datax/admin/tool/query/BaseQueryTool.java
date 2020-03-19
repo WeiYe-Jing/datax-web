@@ -12,8 +12,6 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
-import com.wugui.datax.admin.util.JdbcConstants;
-import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +67,12 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
 
     private void getDataSource(JobDatasource jobDatasource) throws SQLException {
-        //这里默认使用 hikari 数据源
+            String userName = AESUtil.decrypt(jobJdbcDatasource.getJdbcUsername());
+
+            //这里默认使用 hikari 数据源
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setUsername(jobDatasource.getJdbcUsername());
-        dataSource.setPassword(jobDatasource.getJdbcPassword());
+        dataSource.setUsername(userName);
+        dataSource.setPassword(AESUtil.decrypt(jobJdbcDatasource.getJdbcPassword()));
         dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
         dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
         dataSource.setMaximumPoolSize(1);
@@ -259,7 +259,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnNames(String tableName, String driverClass) {
+    public List<String> getColumnNames(String tableName, String datasource) {
 
         List<String> res = Lists.newArrayList();
         Statement stmt = null;
@@ -298,12 +298,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return res;
     }
 
-
-    /**
-     * 查询表们
-     *
-     * @return
-     */
     @Override
     public List<String> getTableNames() {
         List<String> tables = new ArrayList<String>();

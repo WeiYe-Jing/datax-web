@@ -2,6 +2,7 @@ package com.wugui.datax.rpc.remoting.net.impl.netty_http.client;
 
 import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
 import com.wugui.datax.rpc.remoting.net.common.ConnectClient;
+import com.wugui.datax.rpc.remoting.net.common.NettyConstant;
 import com.wugui.datax.rpc.remoting.net.params.Beat;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcRequest;
 import com.wugui.datax.rpc.serialize.Serializer;
@@ -41,13 +42,13 @@ public class NettyHttpConnectClient extends ConnectClient {
         final NettyHttpConnectClient thisClient = this;
 
         if (!address.toLowerCase().startsWith("http")) {
-            address = "http://" + address;	// IP:PORT, need parse to url
+            address = "http://" + address;    // IP:PORT, need parse to url
         }
 
         this.address = address;
         URL url = new URL(address);
         this.host = url.getHost();
-        int port = url.getPort()>-1?url.getPort():80;
+        int port = url.getPort() > -1 ? url.getPort() : 80;
 
 
         this.group = new NioEventLoopGroup();
@@ -58,9 +59,9 @@ public class NettyHttpConnectClient extends ConnectClient {
                     @Override
                     public void initChannel(SocketChannel channel) throws Exception {
                         channel.pipeline()
-                                .addLast(new IdleStateHandler(0,0, Beat.BEAT_INTERVAL, TimeUnit.SECONDS))   // beat N, close if fail
+                                .addLast(new IdleStateHandler(0, 0, Beat.BEAT_INTERVAL, TimeUnit.SECONDS))   // beat N, close if fail
                                 .addLast(new HttpClientCodec())
-                                .addLast(new HttpObjectAggregator(5*1024*1024))
+                                .addLast(new HttpObjectAggregator(NettyConstant.MAX_LENGTH))
                                 .addLast(new NettyHttpClientHandler(xxlRpcInvokerFactory, serializer, thisClient));
                     }
                 })
@@ -90,10 +91,10 @@ public class NettyHttpConnectClient extends ConnectClient {
 
     @Override
     public void close() {
-        if (this.channel!=null && this.channel.isActive()) {
-            this.channel.close();		// if this.channel.isOpen()
+        if (this.channel != null && this.channel.isActive()) {
+            this.channel.close();        // if this.channel.isOpen()
         }
-        if (this.group!=null && !this.group.isShutdown()) {
+        if (this.group != null && !this.group.isShutdown()) {
             this.group.shutdownGracefully();
         }
         logger.debug(">>>>>>>>>>> xxl-rpc netty client close.");

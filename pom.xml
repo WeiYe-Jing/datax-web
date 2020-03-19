@@ -37,7 +37,7 @@
         <mysql-connector.version>5.1.47</mysql-connector.version>
         <jna.version>4.1.0</jna.version>
         <groovy.version>2.5.8</groovy.version>
-        <mybatisplus.version>3.0.7.1</mybatisplus.version>
+        <mybatisplus.version>3.3.1</mybatisplus.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-models.version>1.5.21</swagger-models.version>
         <spring.version>4.3.25.RELEASE</spring.version>

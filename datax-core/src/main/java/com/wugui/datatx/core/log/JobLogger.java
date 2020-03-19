@@ -19,42 +19,36 @@ public class JobLogger {
     /**
      * append log
      *
-     * @param callInfo
+     * @param call
      * @param appendLog
      */
-    private static void logDetail(StackTraceElement callInfo, String appendLog) {
+    private static void logDetail(StackTraceElement call, String appendLog) {
 
+        // "yyyy-MM-dd HH:mm:ss [fileName.MethodName-LineNumber] log";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(DateUtil.formatDateTime(new Date())).append(" ")
+                .append("[" + call.getFileName().replace("java", "") + call.getMethodName())
+                .append("-" + call.getLineNumber() + "]").append(" ")
+                .append(appendLog != null ? appendLog : "");
+        String formatAppendLog = buffer.toString();
 
-        /*// "yyyy-MM-dd HH:mm:ss [ClassName]-[MethodName]-[LineNumber]-[ThreadName] log";
-        StackTraceElement[] stackTraceElements = new Throwable().getStackTrace();
-        StackTraceElement callInfo = stackTraceElements[1];*/
-
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(DateUtil.formatDateTime(new Date())).append(" ")
-            .append("["+ callInfo.getClassName() + "#" + callInfo.getMethodName() +"]").append("-")
-            .append("["+ callInfo.getLineNumber() +"]").append("-")
-            .append("["+ Thread.currentThread().getName() +"]").append(" ")
-            .append(appendLog!=null?appendLog:"");
-        String formatAppendLog = stringBuffer.toString();
-
-        // appendlog
         String logFileName = JobFileAppender.contextHolder.get();
-        if (logFileName!=null && logFileName.trim().length()>0) {
+        if (logFileName != null && logFileName.trim().length() > 0) {
             JobFileAppender.appendLog(logFileName, formatAppendLog);
         } else {
-            logger.info(">>>>>>>>>>> {}", formatAppendLog);
+            logger.info(">>> {}", formatAppendLog);
         }
     }
 
     /**
      * append log with pattern
      *
-     * @param appendLogPattern  like "aaa {} bbb {} ccc"
-     * @param appendLogArguments    like "111, true"
+     * @param appendLogPattern   like "aaa {} bbb {} ccc"
+     * @param appendLogArguments like "111, true"
      */
-    public static void log(String appendLogPattern, Object ... appendLogArguments) {
+    public static void log(String appendLogPattern, Object... appendLogArguments) {
 
-    	FormattingTuple ft = MessageFormatter.arrayFormat(appendLogPattern, appendLogArguments);
+        FormattingTuple ft = MessageFormatter.arrayFormat(appendLogPattern, appendLogArguments);
         String appendLog = ft.getMessage();
 
         /*appendLog = appendLogPattern;

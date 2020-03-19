@@ -1,4 +1,4 @@
-package com.wugui.datax.admin.config;
+package com.wugui.datax.admin.core.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;

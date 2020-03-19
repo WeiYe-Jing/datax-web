@@ -12,15 +12,18 @@ import java.util.List;
 @Mapper
 public interface JobGroupMapper {
 
-    public List<JobGroup> findAll();
+    List<JobGroup> findAll();
 
-    public List<JobGroup> findByAddressType(@Param("addressType") int addressType);
+    List<JobGroup> find(@Param("appName") String appName,
+                        @Param("title") String title,
+                        @Param("addressList") String addressList);
 
-    public int save(JobGroup jobGroup);
+    int save(JobGroup jobGroup);
+    List<JobGroup> findByAddressType(@Param("addressType") int addressType);
 
-    public int update(JobGroup jobGroup);
+    int update(JobGroup jobGroup);
 
-    public int remove(@Param("id") int id);
+    int remove(@Param("id") int id);
 
-    public JobGroup load(@Param("id") int id);
+    JobGroup load(@Param("id") int id);
 }

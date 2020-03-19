@@ -57,7 +57,7 @@ public abstract class Server {
 	/**
 	 * callback when stoped
 	 */
-	public void onStoped() {
+	public void onStopped() {
 		if (stopedCallback != null) {
 			try {
 				stopedCallback.run();

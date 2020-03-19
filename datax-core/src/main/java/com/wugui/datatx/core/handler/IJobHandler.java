@@ -15,11 +15,11 @@ public abstract class IJobHandler {
 
 
 	/** success */
-	public static final ReturnT<String> SUCCESS = new ReturnT<String>(200, null);
+	public static final ReturnT<String> SUCCESS = new ReturnT<>(200, null);
 	/** fail */
-	public static final ReturnT<String> FAIL = new ReturnT<String>(500, null);
+	public static final ReturnT<String> FAIL = new ReturnT<>(500, null);
 	/** fail timeout */
-	public static final ReturnT<String> FAIL_TIMEOUT = new ReturnT<String>(502, null);
+	public static final ReturnT<String> FAIL_TIMEOUT = new ReturnT<>(502, null);
 
 	public static final ConcurrentMap<String, String> jobTmpFiles = new ConcurrentHashMap<>();
 	/**

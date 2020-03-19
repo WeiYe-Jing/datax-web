@@ -23,12 +23,13 @@ public class DataXAdminApplication {
         String port = envPort == null ? "8080" : envPort;
         String context = envContext == null ? "" : envContext;
         String path = port + "" + context + "/doc.html";
+        String externalAPI = InetAddress.getLocalHost().getHostAddress();
         logger.info(
                 "Access URLs:\n----------------------------------------------------------\n\t"
-                        + "Local: \t\thttp://127.0.0.1:{}\n\t"
-                        + "External: \thttp://{}:{}\n----------------------------------------------------------",
-                path,
-                InetAddress.getLocalHost().getHostAddress(), path);
+                        + "Local-API: \t\thttp://127.0.0.1:{}\n\t"
+                        + "External-API: \thttp://{}:{}\n\t"
+                        + "web-URL: \t\thttp://127.0.0.1:{}\n\t----------------------------------------------------------",
+                path, externalAPI, path, port);
     }
 
 

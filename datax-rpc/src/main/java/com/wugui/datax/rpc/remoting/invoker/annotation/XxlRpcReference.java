@@ -20,8 +20,11 @@ import java.lang.annotation.*;
 public @interface XxlRpcReference {
 
     Class<? extends Client> client() default NettyClient.class;
+
     Class<? extends Serializer> serializer() default HessianSerializer.class;
+
     CallType callType() default CallType.SYNC;
+
     LoadBalance loadBalance() default LoadBalance.ROUND;
 
     //Class<?> iface;
@@ -30,6 +33,7 @@ public @interface XxlRpcReference {
     long timeout() default 1000;
 
     String address() default "";
+
     String accessToken() default "";
 
     //XxlRpcInvokeCallback invokeCallback() ;

@@ -2,80 +2,92 @@ package com.wugui.datax.admin.service;
 
 
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobInfo;
 
 import java.util.Map;
 
 /**
  * core job action for datax-web
- * 
+ *
  * @author xuxueli 2016-5-28 15:30:33
  */
 public interface JobService {
 
-	/**
-	 * page list
-	 *
-	 * @param start
-	 * @param length
-	 * @param jobGroup
-	 * @param jobDesc
-	 * @param glueType
-	 * @param author
-	 * @return
-	 */
-	public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author);
+    /**
+     * page list
+     *
+     * @param start
+     * @param length
+     * @param jobGroup
+     * @param jobDesc
+     * @param glueType
+     * @param author
+     * @return
+     */
+    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author);
 
-	/**
-	 * add job
-	 *
-	 * @param jobInfo
-	 * @return
-	 */
-	public ReturnT<String> add(JobInfo jobInfo);
+    /**
+     * add job
+     *
+     * @param jobInfo
+     * @return
+     */
+    ReturnT<String> add(JobInfo jobInfo);
 
-	/**
-	 * update job
-	 *
-	 * @param jobInfo
-	 * @return
-	 */
-	public ReturnT<String> update(JobInfo jobInfo);
 
-	/**
-	 * remove job
-	 * 	 *
-	 * @param id
-	 * @return
-	 */
-	public ReturnT<String> remove(int id);
+    /**
+     * create cron
+     *
+     * @param dto
+     * @return
+     */
+    ReturnT<String> createCron(TaskScheduleDto dto);
 
-	/**
-	 * start job
-	 *
-	 * @param id
-	 * @return
-	 */
-	public ReturnT<String> start(int id);
+    /**
+     * update job
+     *
+     * @param jobInfo
+     * @return
+     */
+    ReturnT<String> update(JobInfo jobInfo);
 
-	/**
-	 * stop job
-	 *
-	 * @param id
-	 * @return
-	 */
-	public ReturnT<String> stop(int id);
+    /**
+     * remove job
+     * *
+     *
+     * @param id
+     * @return
+     */
+    ReturnT<String> remove(int id);
 
-	/**
-	 * dashboard info
-	 *
-	 * @return
-	 */
-	public Map<String, Object> dashboardInfo();
+    /**
+     * start job
+     *
+     * @param id
+     * @return
+     */
+    ReturnT<String> start(int id);
 
-	/**
-	 * chart info
-	 * @return
-	 */
-	public ReturnT<Map<String, Object>> chartInfo();
+    /**
+     * stop job
+     *
+     * @param id
+     * @return
+     */
+    ReturnT<String> stop(int id);
+
+    /**
+     * dashboard info
+     *
+     * @return
+     */
+    Map<String, Object> dashboardInfo();
+
+    /**
+     * chart info
+     *
+     * @return
+     */
+    ReturnT<Map<String, Object>> chartInfo();
 }

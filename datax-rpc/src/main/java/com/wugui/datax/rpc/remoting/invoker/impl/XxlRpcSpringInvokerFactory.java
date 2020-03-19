@@ -62,53 +62,50 @@ public class XxlRpcSpringInvokerFactory extends InstantiationAwareBeanPostProces
         final Set<String> serviceKeyList = new HashSet<>();
 
         // parse XxlRpcReferenceBean
-        ReflectionUtils.doWithFields(bean.getClass(), new ReflectionUtils.FieldCallback() {
-            @Override
-            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                if (field.isAnnotationPresent(XxlRpcReference.class)) {
-                    // valid
-                    Class iface = field.getType();
-                    if (!iface.isInterface()) {
-                        throw new XxlRpcException("xxl-rpc, reference(XxlRpcReference) must be interface.");
-                    }
-
-                    XxlRpcReference rpcReference = field.getAnnotation(XxlRpcReference.class);
-
-                    // init reference bean
-                    XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
-                    referenceBean.setClient(rpcReference.client());
-                    referenceBean.setSerializer(rpcReference.serializer());
-                    referenceBean.setCallType(rpcReference.callType());
-                    referenceBean.setLoadBalance(rpcReference.loadBalance());
-                    referenceBean.setIface(iface);
-                    referenceBean.setVersion(rpcReference.version());
-                    referenceBean.setTimeout(rpcReference.timeout());
-                    referenceBean.setAddress(rpcReference.address());
-                    referenceBean.setAccessToken(rpcReference.accessToken());
-                    referenceBean.setInvokeCallback(null);
-                    referenceBean.setInvokerFactory(xxlRpcInvokerFactory);
-
-
-                    // get proxyObj
-                    Object serviceProxy = null;
-                    try {
-                        serviceProxy = referenceBean.getObject();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    // set bean
-                    field.setAccessible(true);
-                    field.set(bean, serviceProxy);
-
-                    logger.info(">>>>>>>>>>> xxl-rpc, invoker factory init reference bean success. serviceKey = {}, bean.field = {}.{}",
-                            XxlRpcProviderFactory.makeServiceKey(iface.getName(), rpcReference.version()), beanName, field.getName());
-
-                    // collection
-                    String serviceKey = XxlRpcProviderFactory.makeServiceKey(iface.getName(), rpcReference.version());
-                    serviceKeyList.add(serviceKey);
-
+        ReflectionUtils.doWithFields(bean.getClass(), field -> {
+            if (field.isAnnotationPresent(XxlRpcReference.class)) {
+                // valid
+                Class iface = field.getType();
+                if (!iface.isInterface()) {
+                    throw new XxlRpcException("xxl-rpc, reference(XxlRpcReference) must be interface.");
                 }
+
+                XxlRpcReference rpcReference = field.getAnnotation(XxlRpcReference.class);
+
+                // init reference bean
+                XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
+                referenceBean.setClient(rpcReference.client());
+                referenceBean.setSerializer(rpcReference.serializer());
+                referenceBean.setCallType(rpcReference.callType());
+                referenceBean.setLoadBalance(rpcReference.loadBalance());
+                referenceBean.setIface(iface);
+                referenceBean.setVersion(rpcReference.version());
+                referenceBean.setTimeout(rpcReference.timeout());
+                referenceBean.setAddress(rpcReference.address());
+                referenceBean.setAccessToken(rpcReference.accessToken());
+                referenceBean.setInvokeCallback(null);
+                referenceBean.setInvokerFactory(xxlRpcInvokerFactory);
+
+
+                // get proxyObj
+                Object serviceProxy;
+                try {
+                    serviceProxy = referenceBean.getObject();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+                // set bean
+                field.setAccessible(true);
+                field.set(bean, serviceProxy);
+
+                logger.info(">>>>>>>>>>> xxl-rpc, invoker factory init reference bean success. serviceKey = {}, bean.field = {}.{}",
+                        XxlRpcProviderFactory.makeServiceKey(iface.getName(), rpcReference.version()), beanName, field.getName());
+
+                // collection
+                String serviceKey = XxlRpcProviderFactory.makeServiceKey(iface.getName(), rpcReference.version());
+                serviceKeyList.add(serviceKey);
+
             }
         });
 

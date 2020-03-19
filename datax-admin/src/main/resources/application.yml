@@ -3,8 +3,8 @@ server:
 spring:
   #数据源
   datasource:
-    username: ENC(6WpAwrc9TXkZo2aIXeYtHw==)
-    password: ENC(flGBggksQibhINCvRmntzw==)
+    username: root
+    password: mysql
     url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 
@@ -38,9 +38,9 @@ spring:
         socketFactory:
           class: javax.net.ssl.SSLSocketFactory
 
-jasypt:
-  encryptor:
-    password: hVO0O2NeySpANQUk
+#jasypt:
+#  encryptor:
+#    password: hVO0O2NeySpANQUk
 
 
 management:

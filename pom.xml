@@ -5,7 +5,7 @@
 
     <groupId>com.wugui</groupId>
     <artifactId>datax-all</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
@@ -54,6 +54,7 @@
         <hbase.version>1.3.0</hbase.version>
         <mongo-java-driver.version>3.4.2</mongo-java-driver.version>
         <oshi.core.version>3.5.0</oshi.core.version>
+        <jasypt-spring-boot-starter.version>2.0.0</jasypt-spring-boot-starter.version>
     </properties>
 
 

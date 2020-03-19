@@ -45,7 +45,7 @@ public class JobRegistryController extends ApiController {
 					@ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
 			})
 	public R<IPage<JobRegistry>> selectAll() {
-		BaseForm<JobRegistry> baseForm = new BaseForm();
+		BaseForm baseForm = new BaseForm();
 		return success(this.jobRegistryService.page(baseForm.getPlusPagingQueryEntity(), pageQueryWrapperCustom(baseForm.getParameters())));
 	}
 

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.wugui</groupId>
         <artifactId>datax-all</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
     </parent>
     <artifactId>datax-admin</artifactId>
     <packaging>jar</packaging>
@@ -41,11 +41,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
         <!-- starter-actuator -->
@@ -107,8 +102,9 @@
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>2.0.0</version>
+            <version>${jasypt-spring-boot-starter.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>

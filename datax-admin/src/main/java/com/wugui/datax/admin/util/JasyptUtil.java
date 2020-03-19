@@ -32,8 +32,8 @@ public class JasyptUtil {
 //        System.out.println(test.decrypt("k6vl6SNCrZ8hyTcK4ew+pQ=="));
 //        System.out.println(test.decrypt("nFNBAlHJtaE5tz9yKEqYSA=="));
 
-        System.out.println(test.encrypt("root"));
-        System.out.println(test.encrypt("mysql"));
+        System.out.println(test.encrypt("datax_web"));
+        System.out.println(test.encrypt("KGZzy5KEb8ptMMnP"));
 
 
 

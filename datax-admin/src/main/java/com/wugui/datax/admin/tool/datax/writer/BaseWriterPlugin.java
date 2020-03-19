@@ -13,7 +13,7 @@ import com.wugui.datax.admin.util.AESUtil;
 import java.util.Map;
 
 /**
- * TODO
+ * datax writer base
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName BaseWriterPlugin
@@ -28,7 +28,7 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
 //        parameterObj.put("writeMode", "insert");
-        JobDatasource jobDatasource = plugin.getDatasource();
+        JobDatasource jobDatasource = plugin.getJobDatasource();
         parameterObj.put("username", AESUtil.decrypt(jobDatasource.getJdbcUsername()));
         parameterObj.put("password", AESUtil.decrypt(jobDatasource.getJdbcPassword()));
         parameterObj.put("column", plugin.getRdbmsColumns());
@@ -37,7 +37,7 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
 
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
         connectionObj.put("table", plugin.getTables());
-        connectionObj.put("jdbcUrl", jobJdbcDatasource.getJdbcUrl());
+        connectionObj.put("jdbcUrl", jobDatasource.getJdbcUrl());
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));
         writerObj.put("parameter", parameterObj);

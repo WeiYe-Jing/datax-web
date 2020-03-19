@@ -139,39 +139,4 @@ public class MongoDBQueryTool {
     }
     return addressList;
   }
-
-
-  public static void main(String args[]) {
-
-    try {
-      MongoClient mongoClient = new MongoClient("47.98.125.243:27017");
-      //db
-      MongoIterable<String> tables = mongoClient.listDatabaseNames();
-      tables.forEach((Block<? super String>) System.out::println);
-      //collection
-      MongoDatabase collections = mongoClient.getDatabase("jingwk");
-      collections.listCollectionNames().forEach((Block<? super String>) System.out::println);
-      MongoCollection<Document> collection = collections.getCollection("ceshi");
-
-      MongoCursor<Document> iterator = collection.find(Filters.eq("_id", "1111")).iterator();
-      while (iterator.hasNext()) {
-        Document document = iterator.next();
-        document.forEach((k, v) -> {
-          String type = v.getClass().getSimpleName();
-          if ("Document".equals(type)) {
-            ((Document) v).forEach((k1, v1) -> {
-              String simpleName = v1.getClass().getSimpleName();
-              System.out.printf("key:%s,valueType:%s \n", k + "." + k1, simpleName);
-            });
-          }else{
-            System.out.printf("key:%s,valueType:%s \n", k + "." + k, type);
-          }
-        });
-
-      }
-      mongoClient.close();
-    } catch (Exception e) {
-      System.err.println(e.getClass().getName() + ": " + e.getMessage());
-    }
-  }
 }

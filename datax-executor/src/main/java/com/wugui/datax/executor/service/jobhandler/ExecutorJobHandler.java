@@ -48,11 +48,11 @@ public class ExecutorJobHandler extends IJobHandler {
         //生成Json临时文件
         tmpFilePath = generateTemJsonFile(trigger.getJobJson());
         try {
-            String[] cmdarrayFinal = buildCmd(tgParam, tmpFilePath);
+            String[] cmdarrayFinal = buildCmd(trigger, tmpFilePath);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
-            String processId = ProcessUtil.getProcessId(process);
-            JobLogger.log("------------------DataX运行进程Id: " + processId);
-            jobTmpFiles.put(processId, tmpFilePath);
+            String prcsId = ProcessUtil.getProcessId(process);
+            JobLogger.log("------------------DataX运行进程Id: " + prcsId);
+            jobTmpFiles.put(prcsId, tmpFilePath);
             //更新任务进程Id
             HandleProcessCallbackParam prcs = new HandleProcessCallbackParam(trigger.getLogId(), trigger.getLogDateTime(), prcsId);
             ProcessCallbackThread.pushCallBack(prcs);

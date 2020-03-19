@@ -12,6 +12,9 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
+import com.wugui.datax.admin.util.AESUtil;
+import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +70,12 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
 
     private void getDataSource(JobDatasource jobDatasource) throws SQLException {
-            String userName = AESUtil.decrypt(jobJdbcDatasource.getJdbcUsername());
+            String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
 
             //这里默认使用 hikari 数据源
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setUsername(userName);
-        dataSource.setPassword(AESUtil.decrypt(jobJdbcDatasource.getJdbcPassword()));
+        dataSource.setPassword(AESUtil.decrypt(jobDatasource.getJdbcPassword()));
         dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
         dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
         dataSource.setMaximumPoolSize(1);
@@ -277,11 +280,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
-                if (JdbcConstants.HIVE_DRIVER.equals(driverClass) || "com.cloudera.hive.jdbc41.HS2Driver".equals(driverClass)) {
+                if (JdbcConstants.HIVE.equals(datasource)) {
                     if (columnName.contains(Constants.SPLIT_POINT)) {
-                        res.add(columnName.substring(columnName.indexOf(Constants.SPLIT_POINT) + 1) + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(i - 1 + Constants.SPLIT_SCOLON + columnName.substring(columnName.indexOf(Constants.SPLIT_POINT) + 1) + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     } else {
-                        res.add(columnName + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(i - 1 + Constants.SPLIT_SCOLON + columnName + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     }
                 } else {
                     res.add(columnName);

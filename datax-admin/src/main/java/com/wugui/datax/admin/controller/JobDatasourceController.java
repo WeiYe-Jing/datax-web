@@ -53,11 +53,11 @@ public class JobDatasourceController extends ApiController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
             })
     //TODO  不确定该接口哪里用到，但是想把current修改pageNo，size修改为pageSize
-    public R<IPage<JobJdbcDatasource>> selectAll() {
+    public R<IPage<JobDatasource>> selectAll() {
         BaseForm form = new BaseForm();
-        QueryWrapper<JobJdbcDatasource> query = (QueryWrapper<JobJdbcDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobJdbcDatasource>());
+        QueryWrapper<JobDatasource> query = (QueryWrapper<JobDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobDatasource>());
         return success(jobJdbcDatasourceService.page(form.getPlusPagingQueryEntity(), query));
-
+    }
     /**
      * 通过主键查询单条数据
      *

@@ -11,6 +11,7 @@ import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLog;
+import com.wugui.datax.admin.util.JSONUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.slf4j.Logger;
@@ -38,13 +39,15 @@ public class JobTrigger {
      *                              not null: cover job param
      */
     public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam) {
-        // load data
         JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoMapper().loadById(jobId);
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
         }
-        if (executorParam != null) {
+        //解密账密
+        String json = JSONUtils.decryptJson(jobInfo.getJobJson());
+        jobInfo.setJobJson(json);
+        if (executorParam != null && !"".equals(executorParam.trim())) {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
@@ -102,7 +105,7 @@ public class JobTrigger {
         // 1、save log-id
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.set(Calendar.MILLISECOND,0);
+        calendar.set(Calendar.MILLISECOND, 0);
         Date triggerTime = calendar.getTime();
         JobLog jobLog = new JobLog();
         jobLog.setJobGroup(jobInfo.getJobGroup());

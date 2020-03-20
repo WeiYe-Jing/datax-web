@@ -38,12 +38,13 @@ public class JobInfoController {
     private JobService jobService;
 
 
-    public static void validPermission(HttpServletRequest request, int jobGroup) {
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-        if (!loginUser.validPermission(jobGroup)) {
-            throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
-        }
-    }
+//    public static void validPermission(HttpServletRequest request, int jobGroup) {
+//        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+//
+//        if (!loginUser.validPermission(jobGroup)) {
+//            throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
+//        }
+//    }
 
     @GetMapping("/pageList")
     @ApiOperation("任务列表")

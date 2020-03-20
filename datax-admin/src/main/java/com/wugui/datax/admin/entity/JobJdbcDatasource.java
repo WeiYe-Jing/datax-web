@@ -3,6 +3,7 @@ package com.wugui.datax.admin.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.wugui.datax.admin.core.handler.AESEncryptHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -50,13 +51,17 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
 
     /**
      * 用户名
+     * AESEncryptHandler 加密类
+     * MyBatis Plus 3.0.7.1之前版本没有typeHandler属性，需要升级到最低3.1.2
      */
     @ApiModelProperty(value = "用户名")
+    @TableField(typeHandler = AESEncryptHandler.class)
     private String jdbcUsername;
 
     /**
      * 密码
      */
+    @TableField(typeHandler = AESEncryptHandler.class)
     @ApiModelProperty(value = "密码")
     private String jdbcPassword;
 
@@ -82,6 +87,7 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建人", hidden = true)
     private String createBy;
 
@@ -96,6 +102,7 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
     /**
      * 更新人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新人", hidden = true)
     private String updateBy;
 

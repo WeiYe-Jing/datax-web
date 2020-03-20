@@ -77,26 +77,21 @@ public class JobTriggerPoolHelper {
         if (jobTimeoutCount!=null && jobTimeoutCount.get() > 10) {      // job-timeout 10 times in 1 min
             triggerPool_ = slowTriggerPool;
         }
-
         // trigger
         triggerPool_.execute(() -> {
-
             long start = System.currentTimeMillis();
-
             try {
                 // do trigger
                 JobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             } finally {
-
                 // check timeout-count-map
                 long minTim_now = System.currentTimeMillis()/60000;
                 if (minTim != minTim_now) {
                     minTim = minTim_now;
                     jobTimeoutCountMap.clear();
                 }
-
                 // incr timeout-count-map
                 long cost = System.currentTimeMillis()-start;
                 if (cost > 500) {       // ob-timeout threshold 500ms
@@ -105,9 +100,7 @@ public class JobTriggerPoolHelper {
                         timeoutCount.incrementAndGet();
                     }
                 }
-
             }
-
         });
     }
 

@@ -6,6 +6,7 @@ import com.wugui.datax.admin.entity.JobJdbcDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.util.AESUtil;
 
 import java.util.Map;
 

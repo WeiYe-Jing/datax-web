@@ -6,15 +6,17 @@ import com.wugui.datax.admin.exception.JWTAuthenticationEntryPoint;
 import com.wugui.datax.admin.filter.JWTAuthenticationFilter;
 import com.wugui.datax.admin.filter.JWTAuthorizationFilter;
 import com.wugui.datax.admin.service.impl.LoginService;
+import com.wugui.datax.admin.service.impl.MyFilterSecurityInterceptor;
+import com.wugui.datax.admin.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,8 +29,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
+
+
+
+    @Bean
+    UserDetailsService customUserService(){ //注册UserDetailsService 的bean
+        return new UserDetailsServiceImpl();
+    }
+
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

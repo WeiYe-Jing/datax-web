@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.service.impl;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datax.admin.entity.JobRole;
 import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.entity.JobUser;
 import com.wugui.datax.admin.core.util.CookieUtil;
@@ -30,12 +31,13 @@ public class LoginService implements UserDetailsService {
     private JobUserMapper jobUserMapper;
 
 
-    private String makeToken(JobUser xxlJobUser){
+    private String makeToken(JobUser xxlJobUser) {
         String tokenJson = JacksonUtil.writeValueAsString(xxlJobUser);
         String tokenHex = new BigInteger(tokenJson.getBytes()).toString(16);
         return tokenHex;
     }
-    private JobUser parseToken(String tokenHex){
+
+    private JobUser parseToken(String tokenHex) {
         JobUser xxlJobUser = null;
         if (tokenHex != null) {
             String tokenJson = new String(new BigInteger(tokenHex, 16).toByteArray());      // username_password(md5)
@@ -45,21 +47,21 @@ public class LoginService implements UserDetailsService {
     }
 
 
-    public ReturnT<String> login(HttpServletRequest request, HttpServletResponse response, String username, String password, boolean ifRemember){
+    public ReturnT<String> login(HttpServletRequest request, HttpServletResponse response, String username, String password, boolean ifRemember) {
 
         // param
-        if (username==null || username.trim().length()==0 || password==null || password.trim().length()==0){
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
+        if (username == null || username.trim().length() == 0 || password == null || password.trim().length() == 0) {
+            return new ReturnT<>(500, I18nUtil.getString("login_param_empty"));
         }
 
         // valid passowrd
         JobUser xxlJobUser = jobUserMapper.loadByUserName(username);
         if (xxlJobUser == null) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new ReturnT<>(500, I18nUtil.getString("login_param_unvalid"));
         }
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!passwordMd5.equals(xxlJobUser.getPassword())) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new ReturnT<>(500, I18nUtil.getString("login_param_unvalid"));
         }
 
         String loginToken = makeToken(xxlJobUser);
@@ -75,7 +77,7 @@ public class LoginService implements UserDetailsService {
      * @param request
      * @param response
      */
-    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response){
+    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.remove(request, response, LOGIN_IDENTITY_KEY);
         return ReturnT.SUCCESS;
     }
@@ -86,7 +88,7 @@ public class LoginService implements UserDetailsService {
      * @param request
      * @return
      */
-    public JobUser ifLogin(HttpServletRequest request, HttpServletResponse response){
+    public JobUser ifLogin(HttpServletRequest request, HttpServletResponse response) {
         String cookieToken = CookieUtil.getValue(request, LOGIN_IDENTITY_KEY);
         if (cookieToken != null) {
             JobUser cookieUser = null;
@@ -111,6 +113,7 @@ public class LoginService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         JobUser user = jobUserMapper.loadByUserName(s);
-        return new JwtUser(user);
+        JobRole role = jobUserMapper.getRoleByUserId(user.getId());
+        return new JwtUser(user, role);
     }
 }

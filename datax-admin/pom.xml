@@ -43,6 +43,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!-- starter-actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -98,6 +103,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- 数据库加密 -->
+        <!--<dependency>-->
+            <!--<groupId>com.github.ulisesbocchio</groupId>-->
+            <!--<artifactId>jasypt-spring-boot-starter</artifactId>-->
+            <!--<version>2.0.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>

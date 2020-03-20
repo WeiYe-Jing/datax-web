@@ -38,6 +38,11 @@ spring:
         socketFactory:
           class: javax.net.ssl.SSLSocketFactory
 
+#jasypt:
+#  encryptor:
+#    password: hVO0O2NeySpANQUk
+
+
 management:
   health:
     mail:
@@ -72,12 +77,14 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
+    type-handlers-package: com.wugui.datax.admin.core.handler
 
-# 配置slq打印日志
+# 配置mybatis-plus打印slq日志
 logging:
   level:
-    com.wugui.datax.admin.mapper: info
-  config: classpath:logback.xml
+    com.wugui.datax.admin.mapper: error
+  path: /data/applogs/admin
+#  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
 
 
 

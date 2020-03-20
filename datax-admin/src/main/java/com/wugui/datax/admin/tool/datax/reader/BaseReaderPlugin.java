@@ -32,8 +32,8 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
         JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
-        parameterObj.put("username", AESUtil.decrypt(jobJdbcDatasource.getJdbcUsername()));
-        parameterObj.put("password", AESUtil.decrypt(jobJdbcDatasource.getJdbcPassword()));
+        parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
+        parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
 
         //判断是否是 querySql
         if (StrUtil.isNotBlank(plugin.getQuerySql())) {

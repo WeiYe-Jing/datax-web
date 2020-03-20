@@ -26,9 +26,9 @@ public interface JobUserMapper {
 
     JobUser getUserById(@Param("id") int id);
 
-    int save(JobUser xxlJobUser);
+    int save(JobUser jobUser);
 
-    int update(JobUser xxlJobUser);
+    int update(JobUser jobUser);
 
     int delete(@Param("id") int id);
 

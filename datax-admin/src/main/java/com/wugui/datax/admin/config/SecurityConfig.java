@@ -1,20 +1,18 @@
 package com.wugui.datax.admin.config;
 
 
-import com.wugui.datax.admin.exception.JWTAccessDeniedHandler;
-import com.wugui.datax.admin.exception.JWTAuthenticationEntryPoint;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.filter.JWTAuthenticationFilter;
 import com.wugui.datax.admin.filter.JWTAuthorizationFilter;
-import com.wugui.datax.admin.service.impl.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -28,7 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private LoginService loginService;
+    private UserDetailsService userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -37,33 +35,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(loginService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/user/register").hasRole("ADMIN")
-                .antMatchers("/api/auth/login").permitAll()
-                .anyRequest().permitAll()
-                // 需要验证了的用户才能访问
-                //.anyRequest().authenticated()
+                .antMatchers("/static/**","/index.html","/favicon.ico","/avatar.jpg").permitAll()
+                .antMatchers("/doc.html","/swagger-resources/**","/webjars/**","/*/api-docs").anonymous()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                // 不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling().authenticationEntryPoint(new JWTAuthenticationEntryPoint())
-                .accessDeniedHandler(new JWTAccessDeniedHandler());      //添加无权限时的处理
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedMethod("*");
+        config.addAllowedMethod(Constants.SPLIT_STAR);
         config.applyPermitDefaultValues();
         source.registerCorsConfiguration("/**", config);
         return source;

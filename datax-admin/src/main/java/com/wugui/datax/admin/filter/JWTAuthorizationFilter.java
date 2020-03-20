@@ -31,7 +31,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     FilterChain chain) throws IOException, ServletException {
 
         String tokenHeader = request.getHeader(JwtTokenUtils.TOKEN_HEADER);
-        // 如果请求头中没有Authorization信息则直接放行了
+        // 如果请求头中没有Authorization信息则直接放行
         if (tokenHeader == null || !tokenHeader.startsWith(JwtTokenUtils.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
             return;
@@ -44,8 +44,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            String reason = "统一处理，原因：" + e.getMessage();
-            response.getWriter().write(new ObjectMapper().writeValueAsString(reason));
+            response.getWriter().write(new ObjectMapper().writeValueAsString(e.getMessage()));
             response.getWriter().flush();
             return;
         }
@@ -57,7 +56,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         String token = tokenHeader.replace(JwtTokenUtils.TOKEN_PREFIX, "");
         boolean expiration = JwtTokenUtils.isExpiration(token);
         if (expiration) {
-            throw new TokenIsExpiredException("token超时了");
+            throw new TokenIsExpiredException("token过期");
         } else {
             String username = JwtTokenUtils.getUsername(token);
             String role = JwtTokenUtils.getUserRole(token);

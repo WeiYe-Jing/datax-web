@@ -28,7 +28,7 @@ public class DataXAdminApplication {
                 "Access URLs:\n----------------------------------------------------------\n\t"
                         + "Local-API: \t\thttp://127.0.0.1:{}\n\t"
                         + "External-API: \thttp://{}:{}\n\t"
-                        + "web-URL: \t\thttp://127.0.0.1:{}\n\t----------------------------------------------------------",
+                        + "web-URL: \t\thttp://127.0.0.1:{}/index.html\n\t----------------------------------------------------------",
                 path, externalAPI, path, port);
     }
 

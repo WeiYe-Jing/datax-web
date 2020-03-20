@@ -87,6 +87,7 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
     @ApiModelProperty(value = "创建人", hidden = true)
     private String createBy;
 
@@ -101,6 +102,7 @@ public class JobJdbcDatasource extends Model<JobJdbcDatasource> {
     /**
      * 更新人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "更新人", hidden = true)
     private String updateBy;
 

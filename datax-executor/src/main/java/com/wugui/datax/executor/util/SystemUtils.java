@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 /**
  * @author maokeluo
  * @description 多隆镇楼，bug退散🙏🙏🙏
@@ -31,9 +33,7 @@ public class SystemUtils {
             //LOGGER.warn("DATAX_HOME 环境变量为NULL");
             return null;
         }
-        DATAX_HOME = System.getProperty("os.name").contains("Windows") ?
-                (!dataXHome.endsWith("\\") ? dataXHome.concat("\\") : dataXHome) :
-                (!dataXHome.endsWith("/") ? dataXHome.concat("/") : dataXHome);
+        DATAX_HOME = dataXHome.endsWith(File.separator) ? dataXHome : dataXHome.concat(File.separator);
         //LOGGER.info("DATAX_HOME:{}", DATAX_HOME);
         return DATAX_HOME;
     }

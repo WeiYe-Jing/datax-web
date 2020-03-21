@@ -11,10 +11,14 @@ import com.wugui.datax.admin.entity.JobJdbcDatasource;
  * @since 2019-07-30
  */
 public interface IJobJdbcDatasourceService extends IService<JobJdbcDatasource> {
+
+
     /**
      * 测试数据源
      * @param jdbcDatasource
      * @return
      */
     Boolean dataSourceTest(JobJdbcDatasource jdbcDatasource);
+
+    int update(JobJdbcDatasource datasource);
 }

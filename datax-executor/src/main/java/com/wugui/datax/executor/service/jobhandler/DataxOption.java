@@ -21,5 +21,5 @@ public class DataxOption {
 
     public static final String DEFAULT_JSON = "jsons";
 
-    public static final String DEFAULT_DATAX_PY = "bin/datax.py";
+    public static final String DEFAULT_DATAX_PY = "datax.py";
 }

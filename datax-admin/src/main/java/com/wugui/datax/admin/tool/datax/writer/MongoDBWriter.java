@@ -24,10 +24,10 @@ public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterf
         Map<String, Object> writerObj = Maps.newLinkedHashMap();
         writerObj.put("name", getName());
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-        parameterObj.put("address", plugin.getAddress());
+        parameterObj.put("address", plugin.getJdbcDatasource().getJdbcUrl());
         parameterObj.put("userName", plugin.getJdbcDatasource().getJdbcUsername());
         parameterObj.put("userPassword", plugin.getJdbcDatasource().getJdbcPassword());
-        parameterObj.put("dbName", plugin.getDbName());
+        parameterObj.put("dbName", plugin.getJdbcDatasource().getDatabaseName());
         parameterObj.put("collectionName", plugin.getCollectionName());
         UpsertInfo upsert = plugin.getUpsertInfo();
         if (upsert != null) {

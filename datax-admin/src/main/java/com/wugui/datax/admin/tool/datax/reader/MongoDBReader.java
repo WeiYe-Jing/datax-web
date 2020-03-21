@@ -21,10 +21,10 @@ public class MongoDBReader extends BaseReaderPlugin implements DataxReaderInterf
     Map<String, Object> readerObj = Maps.newLinkedHashMap();
     readerObj.put("name", getName());
     Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-    parameterObj.put("address", plugin.getAddress());
+    parameterObj.put("address", plugin.getJdbcDatasource().getJdbcUrl());
     parameterObj.put("userName", plugin.getJdbcDatasource().getJdbcUsername());
     parameterObj.put("userPassword", plugin.getJdbcDatasource().getJdbcPassword());
-    parameterObj.put("dbName", plugin.getDbName());
+    parameterObj.put("dbName", plugin.getJdbcDatasource());
     parameterObj.put("collectionName", plugin.getCollectionName());
     readerObj.put("parameter", parameterObj);
     return readerObj;

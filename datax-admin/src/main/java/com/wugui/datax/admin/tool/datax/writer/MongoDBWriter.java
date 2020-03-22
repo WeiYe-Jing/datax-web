@@ -28,7 +28,7 @@ public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterf
         parameterObj.put("userName", plugin.getJdbcDatasource().getJdbcUsername());
         parameterObj.put("userPassword", plugin.getJdbcDatasource().getJdbcPassword());
         parameterObj.put("dbName", plugin.getJdbcDatasource().getDatabaseName());
-        parameterObj.put("collectionName", plugin.getCollectionName());
+        parameterObj.put("collectionName", plugin.getWriterTable());
         UpsertInfo upsert = plugin.getUpsertInfo();
         if (upsert != null) {
             parameterObj.put("upsertInfo", upsert);

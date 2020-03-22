@@ -32,7 +32,9 @@ public class DataxMongoDBPojo {
 
     private String dbName;
 
-    private String collectionName;
+    private String readerTable;
+
+    private String writerTable;
 
     private UpsertInfo upsertInfo;
 

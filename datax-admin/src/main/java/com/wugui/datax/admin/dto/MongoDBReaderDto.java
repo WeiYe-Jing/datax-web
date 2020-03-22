@@ -15,10 +15,5 @@ import java.io.Serializable;
 @Data
 public class MongoDBReaderDto implements Serializable {
 
-    private String address;
-
-    private String dbName;
-
-    private String collectionName;
 
 }

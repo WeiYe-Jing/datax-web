@@ -250,8 +250,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         buildColumns(readerColumns, columns);
         dataxMongoDBPojo.setColumns(columns);
         dataxMongoDBPojo.setAddress(readerDatasource.getJdbcUrl());
-        dataxMongoDBPojo.setDbName(mongoDBReaderDto.getDbName());
-        dataxMongoDBPojo.setCollectionName(mongoDBReaderDto.getCollectionName());
+        dataxMongoDBPojo.setDbName(readerDatasource.getDatabaseName());
+        dataxMongoDBPojo.setReaderTable(readerTables.get(0));
         return readerPlugin.buildMongoDB(dataxMongoDBPojo);
     }
 
@@ -321,8 +321,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         buildColumns(writerColumns, columns);
         dataxMongoDBPojo.setColumns(columns);
         dataxMongoDBPojo.setAddress(writerDatasource.getJdbcUrl());
-        dataxMongoDBPojo.setDbName(mongoDBWriterDto.getDbName());
-        dataxMongoDBPojo.setCollectionName(mongoDBWriterDto.getCollectionName());
+        dataxMongoDBPojo.setDbName(writerDatasource.getDatabaseName());
+        dataxMongoDBPojo.setWriterTable(readerTables.get(0));
 
         dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
         return writerPlugin.buildMongoDB(dataxMongoDBPojo);

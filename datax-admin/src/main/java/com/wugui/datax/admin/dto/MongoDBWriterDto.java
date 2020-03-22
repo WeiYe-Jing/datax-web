@@ -15,12 +15,6 @@ import java.io.Serializable;
 @Data
 public class MongoDBWriterDto implements Serializable {
 
-    private String address;
-
-    private String dbName;
-
-    private String collectionName;
-
     private UpsertInfo upsertInfo;
 
 }

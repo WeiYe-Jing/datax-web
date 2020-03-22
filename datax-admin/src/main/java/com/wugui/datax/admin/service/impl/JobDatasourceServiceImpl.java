@@ -6,6 +6,7 @@ import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.HBaseQueryTool;
+import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
 import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 
 /**
- * jdbc数据源配置表服务实现类
- *
- * @author zhouhongfa@gz-yibo.com
- * @version v1.0
- * @since 2019-07-30
+ * Created by jingwk on 2020/01/30
  */
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +24,10 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobJdbcDatasourceMappe
     @Override
     public Boolean dataSourceTest(JobDatasource jobDatasource) throws IOException {
         if (JdbcConstants.HBASE.equals(jobDatasource.getDatasource())) {
-            return HBaseQueryTool.getInstance(jobDatasource).getFamily();
+            return HBaseQueryTool.getInstance(jobDatasource).dataSourceTest();
+        }
+        if (JdbcConstants.MONGODB.equals(jobDatasource.getDatasource())) {
+            return MongoDBQueryTool.getInstance(jobDatasource).dataSourceTest(jobDatasource.getDatabaseName());
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jobDatasource);
         return queryTool.dataSourceTest();

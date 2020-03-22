@@ -68,12 +68,12 @@ public class HBaseQueryTool {
     }
   }
   /**
-   * 查询是否连接Hbase成功
+   * 测试是否连接成功
    *
    * @return
    * @throws IOException
    */
-  public boolean getFamily() throws IOException {
+  public boolean dataSourceTest() throws IOException {
     Admin admin =connection.getAdmin();
     HTableDescriptor[] tableDescriptor = admin.listTables();
     return tableDescriptor.length > 0;

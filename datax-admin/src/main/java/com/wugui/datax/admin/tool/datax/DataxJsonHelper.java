@@ -271,7 +271,12 @@ public class DataxJsonHelper implements DataxJsonInterface {
         DataxHivePojo dataxHivePojo = new DataxHivePojo();
         dataxHivePojo.setJdbcDatasource(writerDatasource);
         List<Map<String, Object>> columns = Lists.newArrayList();
-        buildColumns(writerColumns, columns);
+        writerColumns.forEach(c -> {
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("name", c.split(Constants.SPLIT_SCOLON)[1]);
+            column.put("type", c.split(Constants.SPLIT_SCOLON)[2]);
+            columns.add(column);
+        });
         dataxHivePojo.setColumns(columns);
         dataxHivePojo.setWriterDefaultFS(hiveWriterDto.getWriterDefaultFS());
         dataxHivePojo.setWriteFieldDelimiter(hiveWriterDto.getWriteFieldDelimiter());
@@ -280,15 +285,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHivePojo.setWriteMode(hiveWriterDto.getWriteMode());
         dataxHivePojo.setWriterFileName(hiveWriterDto.getWriterFileName());
         return writerPlugin.buildHive(dataxHivePojo);
-    }
-
-    private void buildColumns(List<String> columns, List<Map<String, Object>> returnColumns) {
-        columns.forEach(c -> {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constants.SPLIT_SCOLON)[1]);
-            column.put("type", c.split(Constants.SPLIT_SCOLON)[2]);
-            returnColumns.add(column);
-        });
     }
 
     @Override
@@ -326,5 +322,14 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
         dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
         return writerPlugin.buildMongoDB(dataxMongoDBPojo);
+    }
+
+    private void buildColumns(List<String> columns, List<Map<String, Object>> returnColumns) {
+        columns.forEach(c -> {
+            Map<String, Object> column = Maps.newLinkedHashMap();
+            column.put("name", c.split(Constants.SPLIT_SCOLON)[0]);
+            column.put("type", c.split(Constants.SPLIT_SCOLON)[1]);
+            returnColumns.add(column);
+        });
     }
 }

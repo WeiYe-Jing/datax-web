@@ -7,7 +7,7 @@ package com.wugui.datatx.core.util;
  */
 public class ShardingUtil {
 
-    private static InheritableThreadLocal<ShardingVO> contextHolder = new InheritableThreadLocal<ShardingVO>();
+    private static InheritableThreadLocal<ShardingVO> contextHolder = new InheritableThreadLocal<>();
 
     public static class ShardingVO {
 

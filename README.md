@@ -164,7 +164,7 @@ This product is open source and free, and will continue to provide free communit
 
 ### 升级：
 1. 数据源管理对用户名和密码进行加密，提高安全性；
-2. 对JSON文件中的用户名密码进行加密，执行时DataX任务时解密
+2. 对JSON文件中的用户名密码进行加密，执行DataX任务时解密
 3. 对页面菜单整理，图标升级，提示信息等交互优化；
 4. 日志输出取消项目类名等无关信息，减小文件大小，优化大文件输出，优化页面展示；
 5. logback为从yml中获取日志路径配置

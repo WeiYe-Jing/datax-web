@@ -33,7 +33,7 @@ public class ProcessCallbackThread {
     /**
      * job results callback queue
      */
-    private LinkedBlockingQueue<HandleProcessCallbackParam> callBackQueue = new LinkedBlockingQueue<HandleProcessCallbackParam>();
+    private LinkedBlockingQueue<HandleProcessCallbackParam> callBackQueue = new LinkedBlockingQueue<>();
 
     public static void pushCallBack(HandleProcessCallbackParam callback) {
         getInstance().callBackQueue.add(callback);
@@ -229,14 +229,13 @@ public class ProcessCallbackThread {
         }
 
         // load and clear file, retry
-        for (File callbackLogFile : callbackLogPath.listFiles()) {
-            byte[] callbackParamList_bytes = FileUtil.readFileContent(callbackLogFile);
-            List<HandleProcessCallbackParam> callbackParamList = (List<HandleProcessCallbackParam>) JobExecutor.getSerializer().deserialize(callbackParamList_bytes, HandleProcessCallbackParam.class);
-
-            callbackLogFile.delete();
-            doCallback(callbackParamList);
+        List<HandleProcessCallbackParam> params;
+        for (File f : callbackLogPath.listFiles()) {
+            byte[] ps = FileUtil.readFileContent(f);
+            params = (List<HandleProcessCallbackParam>) JobExecutor.getSerializer().deserialize(ps, HandleProcessCallbackParam.class);
+            f.delete();
+            doCallback(params);
         }
-
     }
 
 }

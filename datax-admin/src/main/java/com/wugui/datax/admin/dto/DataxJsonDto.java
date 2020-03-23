@@ -40,7 +40,7 @@ public class DataxJsonDto implements Serializable {
 
     private RdbmsWriterDto rdbmsWriter;
 
-    private MongoDBReaderDto mongoDBReaderDto;
+    private MongoDBReaderDto mongoDBReader;
 
-    private MongoDBWriterDto mongoDBWriterDto;
+    private MongoDBWriterDto mongoDBWriter;
 }

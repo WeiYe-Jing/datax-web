@@ -129,7 +129,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hiveWriterDto = dataxJsonDto.getHiveWriter();
         this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
         this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
-        this.mongoDBWriterDto=dataxJsonDto.getMongoDBWriterDto();
+        this.mongoDBWriterDto=dataxJsonDto.getMongoDBWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
         if (JdbcConstants.MYSQL.equals(datasource)) {
@@ -319,7 +319,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxMongoDBPojo.setAddress(writerDatasource.getJdbcUrl());
         dataxMongoDBPojo.setDbName(writerDatasource.getDatabaseName());
         dataxMongoDBPojo.setWriterTable(readerTables.get(0));
-
         dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
         return writerPlugin.buildMongoDB(dataxMongoDBPojo);
     }

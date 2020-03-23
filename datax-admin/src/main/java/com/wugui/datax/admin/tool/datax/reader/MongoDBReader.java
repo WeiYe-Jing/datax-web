@@ -24,8 +24,9 @@ public class MongoDBReader extends BaseReaderPlugin implements DataxReaderInterf
     parameterObj.put("address", plugin.getJdbcDatasource().getJdbcUrl());
     parameterObj.put("userName", plugin.getJdbcDatasource().getJdbcUsername());
     parameterObj.put("userPassword", plugin.getJdbcDatasource().getJdbcPassword());
-    parameterObj.put("dbName", plugin.getJdbcDatasource());
+    parameterObj.put("dbName", plugin.getJdbcDatasource().getDatabaseName());
     parameterObj.put("collectionName", plugin.getReaderTable());
+    parameterObj.put("column", plugin.getColumns());
     readerObj.put("parameter", parameterObj);
     return readerObj;
   }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wugui.datax.admin.mapper.JobDatasourceMapper">
+
+    <update id="update" parameterType="com.wugui.datax.admin.entity.JobDatasource">
+        UPDATE job_jdbc_datasource
+        <set>
+            <if test="datasourceName!=null">datasource_name = #{datasourceName},</if>
+            <if test="datasource!=null">datasource = #{datasource},</if>
+            <if test="datasourceGroup!=null">datasource_group = #{datasourceGroup},</if>
+            <if test="jdbcUsername!=null">jdbc_username = #{jdbcUsername},</if>
+            <if test="jdbcPassword!=null">jdbc_password = #{jdbcPassword},</if>
+            <if test="jdbcUrl!=null">jdbc_url = #{jdbcUrl},</if>
+            <if test="jdbcDriverClass!=null">jdbc_driver_class = #{jdbcDriverClass},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="comments!=null">comments = #{comments},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

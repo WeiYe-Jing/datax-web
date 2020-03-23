@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import java.util.List;
 @Slf4j
 public class SqlServerQueryToolTest {
     private BaseQueryTool queryTool;
-    private JobJdbcDatasource jdbcDatasource;
+    private JobDatasource jdbcDatasource;
 
     @Before
     public void before() {
@@ -19,7 +19,7 @@ public class SqlServerQueryToolTest {
     }
 
     private void genMysqlDemo() {
-        jdbcDatasource = new JobJdbcDatasource();
+        jdbcDatasource = new JobDatasource();
         jdbcDatasource.setDatasourceName("test");
         jdbcDatasource.setJdbcUsername("sa");
         jdbcDatasource.setJdbcPassword("Sa123");

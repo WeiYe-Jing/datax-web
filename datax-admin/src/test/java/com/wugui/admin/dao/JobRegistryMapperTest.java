@@ -21,9 +21,9 @@ public class JobRegistryMapperTest {
 
     @Test
     public void test(){
-        int ret = jobRegistryMapper.registryUpdate("g1", "k1", "v1", new Date());
+        int ret = jobRegistryMapper.registryUpdate("g1", "k1", "v1",0,0,0, new Date());
         if (ret < 1) {
-            ret = jobRegistryMapper.registrySave("g1", "k1", "v1", new Date());
+            ret = jobRegistryMapper.registrySave("g1", "k1", "v1", 0,0,0,new Date());
         }
 
         List<JobRegistry> list = jobRegistryMapper.findAll(1, new Date());

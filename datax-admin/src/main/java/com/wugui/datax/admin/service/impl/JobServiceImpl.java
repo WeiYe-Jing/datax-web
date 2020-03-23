@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.service.impl;
 
-import com.google.common.collect.Maps;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -24,7 +23,6 @@ import javax.annotation.Resource;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * core job action for xxl-job
@@ -45,8 +43,6 @@ public class JobServiceImpl implements JobService {
     private JobLogGlueMapper jobLogGlueMapper;
     @Resource
     private JobLogReportMapper jobLogReportMapper;
-
-    private final static ConcurrentMap<String, String> jobTmpFiles = Maps.newConcurrentMap();
 
     @Override
     public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author) {

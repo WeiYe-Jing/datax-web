@@ -5,7 +5,7 @@
 
     <groupId>com.wugui</groupId>
     <artifactId>datax-all</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
@@ -15,6 +15,7 @@
         <module>datax-executor</module>
         <module>datax-rpc</module>
         <module>datax-registry</module>
+        <!--<module>datax-transformer</module>-->
     </modules>
 
     <properties>
@@ -27,14 +28,12 @@
 
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <fastjson.version>1.2.62</fastjson.version>
-        <guava.version>28.1-jre</guava.version>
         <slf4j-api.version>1.7.28</slf4j-api.version>
         <logback-classic.version>1.2.2</logback-classic.version>
         <commons-io.version>2.4</commons-io.version>
         <junit.version>4.12</junit.version>
         <hutool.version>4.5.1</hutool.version>
         <postgresql.version>42.2.5</postgresql.version>
-        <druid.version>1.1.14</druid.version>
         <mysql-connector.version>5.1.47</mysql-connector.version>
         <jna.version>4.1.0</jna.version>
         <groovy.version>2.5.8</groovy.version>
@@ -50,6 +49,11 @@
         <hessian.version>4.0.63</hessian.version>
         <hadoop.version>2.7.3</hadoop.version>
         <hive.jdbc.version>2.1.0</hive.jdbc.version>
+
+        <datax.version>0.0.1-SNAPSHOT</datax.version>
+        <hbase.version>1.3.0</hbase.version>
+        <mongo-java-driver.version>3.4.2</mongo-java-driver.version>
+        <oshi.core.version>3.5.0</oshi.core.version>
     </properties>
 
 

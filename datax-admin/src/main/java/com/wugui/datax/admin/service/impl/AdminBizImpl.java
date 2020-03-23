@@ -6,6 +6,7 @@ import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
@@ -77,9 +78,10 @@ public class AdminBizImpl implements AdminBiz {
 
         // trigger success, to trigger child job
         String callbackMsg = null;
-        if (IJobHandler.SUCCESS.getCode() == handleCallbackParam.getExecuteResult().getCode()) {
+        int resultCode = handleCallbackParam.getExecuteResult().getCode();
+        if (IJobHandler.SUCCESS.getCode() == resultCode) {
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
-            jobInfoMapper.incrementTimeUpdate(log.getJobId(),log.getTriggerTime());
+            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
             if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
@@ -109,6 +111,11 @@ public class AdminBizImpl implements AdminBiz {
             }
         }
 
+        //kill execution timeout DataX process
+        if (!StringUtils.isEmpty(log.getProcessId()) && IJobHandler.FAIL_TIMEOUT.getCode() == resultCode) {
+            KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
+        }
+
         // handle msg
         StringBuffer handleMsg = new StringBuffer();
         if (log.getHandleMsg() != null) {
@@ -123,9 +130,10 @@ public class AdminBizImpl implements AdminBiz {
 
         // success, save log
         log.setHandleTime(new Date());
-        log.setHandleCode(handleCallbackParam.getExecuteResult().getCode());
+        log.setHandleCode(resultCode);
         log.setHandleMsg(handleMsg.toString());
         jobLogMapper.updateHandleInfo(log);
+        jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);
 
         return ReturnT.SUCCESS;
     }
@@ -149,9 +157,11 @@ public class AdminBizImpl implements AdminBiz {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
         }
 
-        int ret = jobRegistryMapper.registryUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+        int ret = jobRegistryMapper.registryUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(),
+                registryParam.getRegistryValue(), registryParam.getCpuUsage(), registryParam.getMemoryUsage(), registryParam.getLoadAverage(), new Date());
         if (ret < 1) {
-            jobRegistryMapper.registrySave(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+            jobRegistryMapper.registrySave(registryParam.getRegistryGroup(), registryParam.getRegistryKey(),
+                    registryParam.getRegistryValue(), registryParam.getCpuUsage(), registryParam.getMemoryUsage(), registryParam.getLoadAverage(), new Date());
 
             // fresh
             freshGroupRegistryInfo(registryParam);

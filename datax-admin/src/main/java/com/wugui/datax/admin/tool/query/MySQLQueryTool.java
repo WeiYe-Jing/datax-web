@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 
 import java.sql.SQLException;
 
@@ -14,8 +14,8 @@ import java.sql.SQLException;
  */
 public class MySQLQueryTool extends BaseQueryTool implements QueryToolInterface {
 
-    public MySQLQueryTool(JobJdbcDatasource codeJdbcDatasource) throws SQLException {
-        super(codeJdbcDatasource);
+    public MySQLQueryTool(JobDatasource jobDatasource) throws SQLException {
+        super(jobDatasource);
     }
 
 }

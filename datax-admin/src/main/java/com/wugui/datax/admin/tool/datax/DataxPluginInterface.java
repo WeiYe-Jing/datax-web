@@ -1,6 +1,8 @@
 package com.wugui.datax.admin.tool.datax;
 
+import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 
 import java.util.Map;
@@ -30,11 +32,25 @@ public interface DataxPluginInterface {
 
 
     /**
-     *
+     * hive json构建
      * @param dataxHivePojo
      * @return
      */
     Map<String, Object> buildHive(DataxHivePojo dataxHivePojo);
+
+    /**
+     * hbase json构建
+     * @param dataxHbasePojo
+     * @return
+     */
+    Map<String, Object> buildHbase(DataxHbasePojo dataxHbasePojo);
+
+    /**
+     * mongodb json构建
+     * @param dataxMongoDBPojo
+     * @return
+     */
+    Map<String,Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
 
     /**
      * 获取示例

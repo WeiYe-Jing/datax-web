@@ -9,15 +9,12 @@ import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.TriggerJobDto;
 import com.wugui.datax.admin.entity.JobInfo;
-import com.wugui.datax.admin.entity.JobUser;
 import com.wugui.datax.admin.service.JobService;
-import com.wugui.datax.admin.service.impl.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,14 +34,6 @@ public class JobInfoController {
     @Resource
     private JobService jobService;
 
-
-//    public static void validPermission(HttpServletRequest request, int jobGroup) {
-//        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-//
-//        if (!loginUser.validPermission(jobGroup)) {
-//            throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
-//        }
-//    }
 
     @GetMapping("/pageList")
     @ApiOperation("任务列表")

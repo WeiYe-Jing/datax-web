@@ -7,6 +7,7 @@ import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.entity.LoginUser;
 import com.wugui.datax.admin.util.JwtTokenUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,9 +25,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.wugui.datatx.core.util.Constants.SPLIT_COMMA;
+
 /**
  * Created by jingwk on 2019/11/17
  */
+@Slf4j
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private ThreadLocal<Integer> rememberMe = new ThreadLocal<>();
@@ -49,7 +53,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword(), new ArrayList<>())
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("attemptAuthentication error :{}",e);
             return null;
         }
     }
@@ -72,24 +76,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         String token = JwtTokenUtils.createToken(jwtUser.getUsername(), role, isRemember);
-        // 返回创建成功的token
-        // 但是这里创建的token只是单纯的token
-        // 按照jwt的规定，最后请求的时候应该是 `Bearer token`
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
         response.setCharacterEncoding("UTF-8");
         Map<String, Object> maps = new HashMap<>();
         maps.put("data", JwtTokenUtils.TOKEN_PREFIX + token);
-        maps.put("roles", role.split(","));
+        maps.put("roles", role.split(SPLIT_COMMA));
         response.getWriter().write(JSON.toJSON(new ReturnT<>(maps)).toString());
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("data", "");
-        maps.put("msg", I18nUtil.getString("login_param_unvalid"));
-        maps.put("code", ReturnT.FAIL_CODE);
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(JSON.toJSON(maps).toString());
+        response.getWriter().write(JSON.toJSON(new ReturnT<>(ReturnT.FAIL_CODE,I18nUtil.getString("login_param_unvalid"))).toString());
     }
 }

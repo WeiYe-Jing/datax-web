@@ -1,11 +1,11 @@
 package com.wugui.datax.admin.tool.datax;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 
 public class DataxJsonHelperTest {
 
-    private JobJdbcDatasource getReaderDatasource() {
-        JobJdbcDatasource readerDatasource = new JobJdbcDatasource();
+    private JobDatasource getReaderDatasource() {
+        JobDatasource readerDatasource = new JobDatasource();
         readerDatasource.setDatasourceName("z01_mysql_3306");
         readerDatasource.setJdbcUsername("root");
         readerDatasource.setJdbcPassword("root");
@@ -14,8 +14,8 @@ public class DataxJsonHelperTest {
         return readerDatasource;
     }
 
-    private JobJdbcDatasource getWriterDatasource() {
-        JobJdbcDatasource writerDatasource = new JobJdbcDatasource();
+    private JobDatasource getWriterDatasource() {
+        JobDatasource writerDatasource = new JobDatasource();
         writerDatasource.setDatasourceName("z01_mysql_3306");
         writerDatasource.setJdbcUsername("root");
         writerDatasource.setJdbcPassword("root");

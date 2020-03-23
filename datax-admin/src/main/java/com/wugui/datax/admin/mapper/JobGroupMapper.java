@@ -18,11 +18,10 @@ public interface JobGroupMapper {
                         @Param("title") String title,
                         @Param("addressList") String addressList);
 
+    int save(JobGroup jobGroup);
     List<JobGroup> findByAddressType(@Param("addressType") int addressType);
 
-    int save(JobGroup xxlJobGroup);
-
-    int update(JobGroup xxlJobGroup);
+    int update(JobGroup jobGroup);
 
     int remove(@Param("id") int id);
 

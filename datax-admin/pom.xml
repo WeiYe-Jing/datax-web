@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.wugui</groupId>
         <artifactId>datax-all</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
     </parent>
     <artifactId>datax-admin</artifactId>
     <packaging>jar</packaging>
@@ -41,11 +41,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
         <!-- starter-actuator -->
@@ -103,22 +98,10 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 数据库加密 -->
-        <!--<dependency>-->
-            <!--<groupId>com.github.ulisesbocchio</groupId>-->
-            <!--<artifactId>jasypt-spring-boot-starter</artifactId>-->
-            <!--<version>2.0.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${druid.version}</version>
         </dependency>
 
         <dependency>
@@ -206,6 +189,25 @@
             <artifactId>hive-jdbc</artifactId>
             <version>${hive.jdbc.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongo-java-driver.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -1,8 +1,9 @@
 package com.wugui.datax.admin.tool.meta;
-import com.alibaba.druid.util.JdbcConstants;
+
+import com.wugui.datax.admin.util.JdbcConstants;
 
 /**
- * TODO
+ * meta信息工厂
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName DatabaseMetaFactory

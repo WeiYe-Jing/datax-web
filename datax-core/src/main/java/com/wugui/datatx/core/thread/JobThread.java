@@ -46,8 +46,8 @@ public class JobThread extends Thread {
     public JobThread(int jobId, IJobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
-        this.triggerQueue = new LinkedBlockingQueue<>();
-        this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<>());
+        this.triggerQueue = new LinkedBlockingQueue<TriggerParam>();
+        this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<Long>());
     }
 
     public IJobHandler getHandler() {
@@ -137,10 +137,13 @@ public class JobThread extends Thread {
                             FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(() -> handler.execute(tgParamT));
                             futureThread = new Thread(futureTask);
                             futureThread.start();
-                            executeResult = futureTask.get(tgParam.getExecutorTimeout(), TimeUnit.SECONDS);
+
+                            executeResult = futureTask.get(tgParam.getExecutorTimeout(), TimeUnit.MINUTES);
                         } catch (TimeoutException e) {
+
                             JobLogger.log("<br>----------- datax-web job execute timeout");
                             JobLogger.log(e);
+
                             executeResult = new ReturnT<>(IJobHandler.FAIL_TIMEOUT.getCode(), "job execute timeout ");
                         } finally {
                             futureThread.interrupt();

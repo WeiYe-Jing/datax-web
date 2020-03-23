@@ -51,9 +51,8 @@ public class ScriptUtil {
      * @param logFile
      * @param params
      * @return
-     * @throws IOException
      */
-    public static int execToFile(String command, String scriptFile, String logFile, String... params) throws IOException {
+    public static int execToFile(String command, String scriptFile, String logFile, String... params) {
 
         FileOutputStream fileOutputStream = null;
         Thread inputThread = null;

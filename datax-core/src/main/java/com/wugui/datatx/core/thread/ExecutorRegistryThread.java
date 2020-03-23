@@ -5,6 +5,7 @@ import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datatx.core.executor.JobExecutor;
+import com.wugui.datatx.core.util.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,18 +18,16 @@ public class ExecutorRegistryThread {
     private static Logger logger = LoggerFactory.getLogger(ExecutorRegistryThread.class);
 
     private static ExecutorRegistryThread instance = new ExecutorRegistryThread();
-
-    public static ExecutorRegistryThread getInstance() {
+    public static ExecutorRegistryThread getInstance(){
         return instance;
     }
 
     private Thread registryThread;
     private volatile boolean toStop = false;
-
-    public void start(final String appName, final String address) {
+    public void start(final String appName, final String address){
 
         // valid
-        if (appName == null || appName.trim().length() == 0) {
+        if (appName==null || appName.trim().length()==0) {
             logger.warn(">>>>>>>>>>> datax-web, executor registry config fail, appName is null.");
             return;
         }
@@ -42,11 +41,11 @@ public class ExecutorRegistryThread {
             // registry
             while (!toStop) {
                 try {
-                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address);
-                    for (AdminBiz adminBiz : JobExecutor.getAdminBizList()) {
+                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address, OSUtils.cpuUsage(),OSUtils.memoryUsage(),OSUtils.loadAverage());
+                    for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
                         try {
                             ReturnT<String> registryResult = adminBiz.registry(registryParam);
-                            if (registryResult != null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
+                            if (registryResult!=null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
                                 registryResult = ReturnT.SUCCESS;
                                 logger.debug(">>>>>>>>>>> datax-web registry success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
                                 break;
@@ -79,10 +78,10 @@ public class ExecutorRegistryThread {
             // registry remove
             try {
                 RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appName, address);
-                for (AdminBiz adminBiz : JobExecutor.getAdminBizList()) {
+                for (AdminBiz adminBiz: JobExecutor.getAdminBizList()) {
                     try {
                         ReturnT<String> registryResult = adminBiz.registryRemove(registryParam);
-                        if (registryResult != null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
+                        if (registryResult!=null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
                             registryResult = ReturnT.SUCCESS;
                             logger.info(">>>>>>>>>>> datax-web registry-remove success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
                             break;

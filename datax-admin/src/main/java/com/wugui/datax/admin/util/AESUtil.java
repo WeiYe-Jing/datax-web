@@ -6,6 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 
 @Slf4j
 public class AESUtil {
@@ -46,15 +47,17 @@ public class AESUtil {
      */
     public static String encrypt(String content, String key) {
         try {
-            SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
-            IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
-            Cipher cipher = Cipher.getInstance(transformation);
-            byte[] byteContent = content.getBytes(charset);
-            cipher.init(Cipher.ENCRYPT_MODE, skey, iv);// 初始化
-            byte[] result = cipher.doFinal(byteContent);
-            return new Base64().encodeToString(result); // 加密
+            if(StringUtils.isNotBlank(content)) {
+                SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
+                IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
+                Cipher cipher = Cipher.getInstance(transformation);
+                byte[] byteContent = content.getBytes(charset);
+                cipher.init(Cipher.ENCRYPT_MODE, skey, iv);// 初始化
+                byte[] result = cipher.doFinal(byteContent);
+                return new Base64().encodeToString(result); // 加密
+            }
         } catch (Exception e) {
-            //log.error("content encrypt error {0}",e);
+            log.error("content encrypt error {0}",e);
         }
         return null;
     }
@@ -69,15 +72,16 @@ public class AESUtil {
      */
     public static String decrypt(String content, String key) {
         try {
-
-            SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
-            IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
-            Cipher cipher = Cipher.getInstance(transformation);
-            cipher.init(Cipher.DECRYPT_MODE, skey, iv);// 初始化
-            byte[] result = cipher.doFinal(new Base64().decode(content));
-            return new String(result); // 解密
+            if(StringUtils.isNotBlank(content)){
+                SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
+                IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
+                Cipher cipher = Cipher.getInstance(transformation);
+                cipher.init(Cipher.DECRYPT_MODE, skey, iv);// 初始化
+                byte[] result = cipher.doFinal(new Base64().decode(content));
+                return new String(result); // 解密
+            }
         } catch (Exception e) {
-            //log.error("content decrypt error {0}",e);
+            log.error("content decrypt error {0}",e);
         }
         return null;
     }

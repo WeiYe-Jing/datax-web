@@ -172,7 +172,8 @@ This product is open source and free, and will continue to provide free communit
 ### 修复：
 1. 任务日志过大时，查看日志报错，请求超时；
 
-
+## 项目规划
+https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/plan.png
 
 ## Contact us
 

@@ -4,8 +4,10 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
+@Slf4j
 public class AESUtil {
     // 密钥
     public static String key = "AD42F6697B035B7580E4FEF93BE20BAD";
@@ -52,7 +54,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(byteContent);
             return new Base64().encodeToString(result); // 加密
         } catch (Exception e) {
-            // LogUtil.exception(e);
+            log.error("content encrypt error {0}",e);
         }
         return null;
     }
@@ -75,7 +77,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(new Base64().decode(content));
             return new String(result); // 解密
         } catch (Exception e) {
-            //LogUtil.exception(e);
+            log.error("content decrypt error {0}",e);
         }
         return null;
     }

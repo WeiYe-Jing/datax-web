@@ -32,4 +32,5 @@ public final class Constants {
     public static final String SPLIT_AMPERSAND = "&";
     public static final String AND = "AND";
     public static final String SPACE = " ";
+    public static final String STRING_BLANK = "";
 }

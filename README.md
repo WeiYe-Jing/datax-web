@@ -43,7 +43,13 @@ DataX阿里的开源的时候并未提供任何可视化界面，我们在使用
 - 23、通过动态参数配置指定hive分区，也可以配合增量实现增量数据动态插入分区；
 - 24、任务类型由原来DataX任务扩展到Shell任务、Python任务、PowerShell任务；
 - 25、添加HBase数据源支持，JSON构建可通过HBase数据源获取hbaseConfig，column；
-- 26、添加自定义数据转化模块；
+- 26、添加MongoDB数据源支持，用户仅需要选择collectionName即可完成json构建；
+- 27、添加执行器CPU、内存、负载的监控页面；
+- 28、添加24类插件DataX JSON配置样例
+- 29、公共字段（创建时间，创建人，修改时间，修改者）插入或更新时自动填充
+- 30、对swagger接口进行token验证
+- 31、任务增加超时时间，对超时任务kill datax进程，可配合重试策略避免网络问题导致的datax卡死。
+
 ## Quick Start
 
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包
@@ -144,10 +150,27 @@ This product is open source and free, and will continue to provide free communit
 
 > 欢迎在 [登记地址](https://github.com/WeiYe-Jing/datax-web/issues/14 ) 登记，登记仅仅为了产品推广和提升社区开发的动力。
 >
-## TODO List
-- 1、对接DataX支持的数据源，简化json构建
-- 2、从源表到目标端表的自动创建
-- 3、任务批量导入功能
+## v-2.1.1
+
+### 新增
+
+1. 添加HBase数据源支持，JSON构建可通过HBase数据源获取hbaseConfig，column；
+2. 添加MongoDB数据源支持，用户仅需要选择collectionName即可完成json构建；
+3. 添加执行器CPU.内存.负载的监控页面；
+4. 添加24类插件DataX JSON配置样例
+5. 公共字段（创建时间，创建人，修改时间，修改者）插入或更新时自动填充
+6. 对swagger接口进行token验证
+7. 任务增加超时时间，对超时任务kill datax进程，可配合重试策略避免网络问题导致的datax卡死。
+
+### 升级：
+1. 数据源管理对用户名和密码进行加密，提高安全性；
+2. 对JSON文件中的用户名密码进行加密，执行时DataX任务时解密
+3. 对页面菜单整理，图标升级，提示信息等交互优化；
+4. 日志输出取消项目类名等无关信息，减小文件大小，优化大文件输出，优化页面展示；
+5. logback为从yml中获取日志路径配置
+
+### 修复：
+1. 任务日志过大时，查看日志报错，请求超时；
 
 
 

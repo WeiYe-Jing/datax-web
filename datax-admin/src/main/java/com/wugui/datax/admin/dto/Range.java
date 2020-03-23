@@ -11,5 +11,5 @@ public class Range implements Serializable {
 
   private String endRowkey;
 
-  private boolean isBinaryRowkey;
+  private Boolean isBinaryRowkey;
 }

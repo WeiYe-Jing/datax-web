@@ -33,7 +33,7 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
-        JobDatasource jobDatasource = plugin.getJdbcDatasource();
+        JobDatasource jobDatasource = plugin.getJobDatasource();
         parameterObj.put("username", jobDatasource.getJdbcUsername());
         parameterObj.put("password", jobDatasource.getJdbcPassword());
 

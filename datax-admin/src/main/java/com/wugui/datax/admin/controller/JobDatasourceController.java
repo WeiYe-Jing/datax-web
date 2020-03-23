@@ -93,7 +93,7 @@ public class JobDatasourceController extends ApiController {
     @ApiOperation("修改数据")
     public R<Boolean> update(@RequestBody JobDatasource entity) {
         LocalCacheUtil.remove(entity.getDatasourceName());
-        JobJdbcDatasource d = jobJdbcDatasourceService.getById(entity.getId());
+        JobDatasource d = jobJdbcDatasourceService.getById(entity.getId());
         if (entity.getJdbcUsername().equals(d.getJdbcUsername())) {
             entity.setJdbcUsername(null);
         }

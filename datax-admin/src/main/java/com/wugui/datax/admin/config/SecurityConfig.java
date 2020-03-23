@@ -4,7 +4,6 @@ package com.wugui.datax.admin.config;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.filter.JWTAuthenticationFilter;
 import com.wugui.datax.admin.filter.JWTAuthorizationFilter;
-import com.wugui.datax.admin.service.impl.LoginService;
 import com.wugui.datax.admin.service.impl.MyFilterSecurityInterceptor;
 import com.wugui.datax.admin.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/static/**","/index.html","/favicon.ico","/avatar.jpg").permitAll()
+                .antMatchers("/api/callback","/api/processCallback","/api/registry","/api/registryRemove").permitAll()
                 .antMatchers("/doc.html","/swagger-resources/**","/webjars/**","/*/api-docs").anonymous()
                 .anyRequest().authenticated()
                 .and()

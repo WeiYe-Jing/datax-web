@@ -28,9 +28,9 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
 //        parameterObj.put("writeMode", "insert");
-        JobJdbcDatasource jobJdbcDatasource = plugin.getJdbcDatasource();
-        parameterObj.put("username", jobJdbcDatasource.getJdbcUsername());
-        parameterObj.put("password", jobJdbcDatasource.getJdbcPassword());
+        JobDatasource jobDatasource = plugin.getJobDatasource();
+        parameterObj.put("username", jobDatasource.getJdbcUsername());
+        parameterObj.put("password", jobDatasource.getJdbcPassword());
         parameterObj.put("column", plugin.getRdbmsColumns());
         // preSql
         parameterObj.put("preSql", ImmutableList.of(plugin.getPreSql()));

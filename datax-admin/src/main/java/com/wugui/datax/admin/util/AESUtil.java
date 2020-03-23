@@ -54,7 +54,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(byteContent);
             return new Base64().encodeToString(result); // 加密
         } catch (Exception e) {
-            log.error("content encrypt error {0}",e);
+            //log.error("content encrypt error {0}",e);
         }
         return null;
     }
@@ -77,7 +77,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(new Base64().decode(content));
             return new String(result); // 解密
         } catch (Exception e) {
-            log.error("content decrypt error {0}",e);
+            //log.error("content decrypt error {0}",e);
         }
         return null;
     }

@@ -10,6 +10,8 @@ import com.wugui.datax.admin.entity.JobDatasource;
  * @version v1.0
  * @since 2019-07-30
  */
+@Mapper
 public interface JobJdbcDatasourceMapper extends BaseMapper<JobDatasource> {
+    int update(JobJdbcDatasource datasource);
 
 }

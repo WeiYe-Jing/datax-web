@@ -82,11 +82,9 @@ public class AESUtil {
 
     public static void main(String[] args) throws Exception {
         String s = "root";
-        // 加密
-        System.out.println("加密前：" + s);
         String encryptResultStr = encrypt(s);
-        System.out.println("加密后：" + encryptResultStr);
-        // 解密
-        System.out.println("解密后：" + decrypt(encryptResultStr));
+        System.out.println(s+" 加密后 ：" + encryptResultStr);
+        System.out.println("mysql"+" 加密后 ：" + encrypt("mysql"));
+        System.out.println("解密后：" + decrypt("mysql"));
     }
 }

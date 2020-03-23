@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.wugui.datax.executor.service.jobhandler.DataxOption.DEFAULT_DATAX_PY;
+
 /**
  * DataX任务运行
  *
@@ -106,7 +108,7 @@ public class ExecutorJobHandler extends IJobHandler {
         cmdArr.add("python");
         String dataXHomePath = SystemUtils.getDataXHomePath();
         if (StringUtils.isNotEmpty(dataXHomePath)) {
-            dataXPyPath = dataXHomePath + DataxOption.DEFAULT_DATAX_PY;
+            dataXPyPath = dataXHomePath.contains("bin") ? dataXHomePath + DEFAULT_DATAX_PY : dataXHomePath + "bin" + File.separator + DEFAULT_DATAX_PY;
         }
         cmdArr.add(dataXPyPath);
         String doc = buildDataXParam(tgParam);

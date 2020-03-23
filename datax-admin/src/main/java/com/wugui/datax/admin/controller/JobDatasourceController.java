@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,6 +93,13 @@ public class JobDatasourceController extends ApiController {
     @ApiOperation("修改数据")
     public R<Boolean> update(@RequestBody JobDatasource entity) {
         LocalCacheUtil.remove(entity.getDatasourceName());
+        JobJdbcDatasource d = jobJdbcDatasourceService.getById(entity.getId());
+        if (entity.getJdbcUsername().equals(d.getJdbcUsername())) {
+            entity.setJdbcUsername(null);
+        }
+        if (entity.getJdbcPassword().equals(d.getJdbcPassword())) {
+            entity.setJdbcPassword(null);
+        }
         return success(this.jobJdbcDatasourceService.updateById(entity));
     }
 

@@ -206,7 +206,7 @@ public class JobServiceImpl implements JobService {
         // stage job info
         JobInfo exists_jobInfo = jobInfoMapper.loadById(jobInfo.getId());
         if (exists_jobInfo == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_not_found")));
+            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_not_found")));
         }
 
         // next trigger time (5s后生效，避开预读周期)
@@ -382,7 +382,7 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
         result.put("triggerDayList", triggerDayList);
         result.put("triggerDayCountRunningList", triggerDayCountRunningList);
         result.put("triggerDayCountSucList", triggerDayCountSucList);
@@ -392,7 +392,7 @@ public class JobServiceImpl implements JobService {
         result.put("triggerCountSucTotal", triggerCountSucTotal);
         result.put("triggerCountFailTotal", triggerCountFailTotal);
 
-        return new ReturnT<Map<String, Object>>(result);
+        return new ReturnT<>(result);
     }
 
 }

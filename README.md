@@ -54,7 +54,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 1. 下载datax打包之后的文件或者github拉取datax代码打包
 
-### 2. 拉取release最新版本到本地代码库，执行doc/db下面的datax_web.sql文件(注意更新语句有指定库名)
+### 2. 拉取release最新版本或master分支到本地代码库，执行doc/db下面的datax_web.sql文件(注意更新语句有指定库名)
 
 ### 3. 修改datax_admin下application.yml的数据库配置信息及邮件地址信息
 
@@ -89,7 +89,7 @@ http://localhost:8080/index.html#/dashboard
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
 
 ### 8. 构建JSON脚本
-JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,其它数据源的JSON构建正在开发中,暂时需要手动编写。
+JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb其它数据源的JSON构建正在开发中,暂时需要手动编写。
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
 
 ### 9. 创建任务

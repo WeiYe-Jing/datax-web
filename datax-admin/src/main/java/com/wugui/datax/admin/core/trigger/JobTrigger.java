@@ -16,6 +16,7 @@ import com.wugui.datax.admin.entity.JobLog;
 import com.wugui.datax.admin.util.JSONUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class JobTrigger {
             String json = JSONUtils.decryptJson(jobInfo.getJobJson());
             jobInfo.setJobJson(json);
         }
-        if (executorParam != null && !Constants.STRING_BLANK.equals(executorParam.trim())) {
+        if (StringUtils.isNotBlank(executorParam)) {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();

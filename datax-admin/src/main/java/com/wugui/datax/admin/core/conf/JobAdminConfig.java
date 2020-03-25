@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 public class JobAdminConfig implements InitializingBean, DisposableBean {
 
     private static JobAdminConfig adminConfig = null;
+
     public static JobAdminConfig getAdminConfig() {
         return adminConfig;
     }
@@ -96,24 +97,15 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
     }
 
     public int getTriggerPoolFastMax() {
-        if (triggerPoolFastMax < 200) {
-            return 200;
-        }
-        return triggerPoolFastMax;
+        return triggerPoolFastMax < 200 ? 200 : triggerPoolFastMax;
     }
 
     public int getTriggerPoolSlowMax() {
-        if (triggerPoolSlowMax < 100) {
-            return 100;
-        }
-        return triggerPoolSlowMax;
+        return triggerPoolSlowMax < 100 ? 100 : triggerPoolSlowMax;
     }
 
     public int getLogretentiondays() {
-        if (logretentiondays < 7) {
-            return -1;  // Limit greater than or equal to 7, otherwise close
-        }
-        return logretentiondays;
+        return logretentiondays < 7 ? -1 : logretentiondays;
     }
 
     public JobLogMapper getJobLogMapper() {

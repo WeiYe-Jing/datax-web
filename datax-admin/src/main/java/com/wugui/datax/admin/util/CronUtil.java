@@ -18,12 +18,7 @@ public class CronUtil {
             //每隔几秒
             if (dto.getJobType().intValue() == 0) {
                 cronExp.append("0/").append(dto.getSecond());
-                cronExp.append(" ");
-                cronExp.append("* ");
-                cronExp.append("* ");
-                cronExp.append("* ");
-                cronExp.append("* ");
-                cronExp.append("?");
+                cronExp.append(" * * * * ?");
             }
 
         }
@@ -35,13 +30,8 @@ public class CronUtil {
             if (dto.getJobType().intValue() == 4) {
                 cronExp.append("* ");
                 cronExp.append("0/").append(dto.getMinute());
-                cronExp.append(" ");
-                cronExp.append("* ");
-                cronExp.append("* ");
-                cronExp.append("* ");
-                cronExp.append("?");
+                cronExp.append(" * * * ?");
             }
-
         }
 
         if (null != dto.getSecond()

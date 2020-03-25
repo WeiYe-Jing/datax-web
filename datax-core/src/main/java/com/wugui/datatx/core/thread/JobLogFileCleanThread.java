@@ -53,6 +53,10 @@ public class JobLogFileCleanThread {
                         Date todayDate = todayCal.getTime();
                         for (File childFile : childDirs) {
 
+                            // valid
+                            if (!childFile.isDirectory() || childFile.getName().indexOf("-") == -1) {
+                                continue;
+                            }
                             // file create date
                             Date logFileCreateDate = null;
                             try {
@@ -62,7 +66,7 @@ public class JobLogFileCleanThread {
                                 logger.error(e.getMessage(), e);
                             }
                             // valid
-                            if (!childFile.isDirectory() || childFile.getName().indexOf("-") == -1 || logFileCreateDate == null) {
+                            if (logFileCreateDate == null) {
                                 continue;
                             }
                             if ((todayDate.getTime() - logFileCreateDate.getTime()) >= logRetentionDays * (24 * 60 * 60 * 1000)) {

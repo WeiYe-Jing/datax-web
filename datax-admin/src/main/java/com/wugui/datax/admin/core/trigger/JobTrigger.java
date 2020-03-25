@@ -4,6 +4,8 @@ import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
+import com.wugui.datatx.core.glue.GlueTypeEnum;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.scheduler.JobScheduler;
@@ -44,10 +46,12 @@ public class JobTrigger {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
         }
-        //解密账密
-        String json = JSONUtils.decryptJson(jobInfo.getJobJson());
-        jobInfo.setJobJson(json);
-        if (executorParam != null && !"".equals(executorParam.trim())) {
+        if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
+            //解密账密
+            String json = JSONUtils.decryptJson(jobInfo.getJobJson());
+            jobInfo.setJobJson(json);
+        }
+        if (executorParam != null && !Constants.STRING_BLANK.equals(executorParam.trim())) {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();

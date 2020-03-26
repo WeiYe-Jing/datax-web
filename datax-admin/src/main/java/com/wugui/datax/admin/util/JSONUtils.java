@@ -40,8 +40,15 @@ public class JSONUtils {
     public static JSONObject decrypt(String content, String key) {
         JSONObject writer = JSONObject.parseObject(JSONObject.parseObject(content).getString(key));
         JSONObject writerParams = JSONObject.parseObject(writer.getString("parameter"));
-        writerParams.put("username", AESUtil.decrypt(writerParams.getString("username")));
-        writerParams.put("password", AESUtil.decrypt(writerParams.getString("password")));
+
+        String dUsername = AESUtil.decrypt(writerParams.getString("username"));
+        String username = dUsername == null ? writerParams.getString("username") : dUsername;
+        writerParams.put("username", username);
+
+        String dPassword = AESUtil.decrypt(writerParams.getString("password"));
+        String password = dPassword == null ? writerParams.getString("password") : dPassword;
+        writerParams.put("password", password);
+
         writer.put("parameter", writerParams);
         return writer;
     }

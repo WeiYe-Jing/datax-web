@@ -5,10 +5,12 @@ import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
+import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,43 +20,37 @@ import java.util.List;
 public class MongoDBQueryTool {
 
 
-    private static MongoClient mongoClient = null;
-    private static MongoDBQueryTool instance = null;
+    private static MongoClient connection = null;
     private static MongoDatabase collections;
 
 
-    MongoDBQueryTool(JobDatasource jobDatasource) throws UnknownHostException {
-        if (mongoClient == null) {
-            if (StringUtils.isBlank(jobDatasource.getJdbcUsername()) && StringUtils.isBlank(jobDatasource.getJdbcPassword())) {
-                mongoClient = new MongoClient(jobDatasource.getJdbcUrl());
-            } else {
-                MongoCredential credential = MongoCredential.createCredential(jobDatasource.getJdbcUsername(), jobDatasource.getDatabaseName(), jobDatasource.getJdbcPassword().toCharArray());
-                mongoClient = new MongoClient(parseServerAddress(jobDatasource.getJdbcUrl()), Arrays.asList(credential));
-            }
-
-        }
-    }
-
-    /**
-     * 获得该类的实例，单例模式
-     *
-     * @return
-     */
-    public static MongoDBQueryTool getInstance(JobDatasource jobDatasource) throws UnknownHostException {
-        if (instance == null) {
-            synchronized (MongoDBQueryTool.class) {
-                if (instance == null) {
-                    instance = new MongoDBQueryTool(jobDatasource);
-                }
+    public MongoDBQueryTool(JobDatasource jobDatasource) throws IOException {
+        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+            getDataSource(jobDatasource);
+        } else {
+            connection = (MongoClient) LocalCacheUtil.get(jobDatasource.getDatasourceName());
+            if (connection == null) {
+                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
+                getDataSource(jobDatasource);
             }
         }
-        return instance;
+        LocalCacheUtil.set(jobDatasource.getDatasourceName(), connection, 4 * 60 * 60 * 1000);
     }
+
+    private void getDataSource(JobDatasource jobDatasource) throws IOException {
+        if (StringUtils.isBlank(jobDatasource.getJdbcUsername()) && StringUtils.isBlank(jobDatasource.getJdbcPassword())) {
+            connection = new MongoClient(jobDatasource.getJdbcUrl());
+        } else {
+            MongoCredential credential = MongoCredential.createCredential(jobDatasource.getJdbcUsername(), jobDatasource.getDatabaseName(), jobDatasource.getJdbcPassword().toCharArray());
+            connection = new MongoClient(parseServerAddress(jobDatasource.getJdbcUrl()), Arrays.asList(credential));
+        }
+    }
+    
 
     // 关闭连接
     public static void sourceClose() {
-        if (mongoClient != null) {
-            mongoClient.close();
+        if (connection != null) {
+            connection.close();
         }
     }
 
@@ -64,7 +60,7 @@ public class MongoDBQueryTool {
      * @return
      */
     public List<String> getDBNames() {
-        MongoIterable<String> dbs = mongoClient.listDatabaseNames();
+        MongoIterable<String> dbs = connection.listDatabaseNames();
         List<String> dbNames = new ArrayList<>();
         dbs.forEach((Block<? super String>) dbNames::add);
         return dbNames;
@@ -76,7 +72,7 @@ public class MongoDBQueryTool {
      * @return
      */
     public boolean dataSourceTest(String dbName) {
-        collections = mongoClient.getDatabase(dbName);
+        collections = connection.getDatabase(dbName);
         return collections.listCollectionNames().iterator().hasNext();
     }
 
@@ -86,7 +82,7 @@ public class MongoDBQueryTool {
      * @return
      */
     public List<String> getCollectionNames(String dbName) {
-        collections = mongoClient.getDatabase(dbName);
+        collections = connection.getDatabase(dbName);
         List<String> collectionNames = new ArrayList<>();
         collections.listCollectionNames().forEach((Block<? super String>) collectionNames::add);
         return collectionNames;

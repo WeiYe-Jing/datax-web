@@ -16,6 +16,7 @@ import com.wugui.datax.admin.util.AESUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +102,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                     + "the exception message is:" + e.getMessage());
         }
         // 如果res是null，则将用户名当作 schema
-        if (StrUtil.isBlank(res)) {
+        if (StrUtil.isBlank(res) && StringUtils.isNotBlank(jdbcUsername)) {
             res = jdbcUsername.toUpperCase();
         }
         return res;

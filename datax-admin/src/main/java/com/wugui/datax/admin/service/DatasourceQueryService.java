@@ -1,7 +1,6 @@
 package com.wugui.datax.admin.service;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ public interface DatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getDBs(Long id) throws UnknownHostException;
+    List<String> getDBs(Long id) throws IOException;
 
     /**
      * 根据数据源表id查询出可用的表
@@ -34,7 +33,7 @@ public interface DatasourceQueryService {
      * @param dbName
      * @return
      */
-    List<String> getCollectionNames(long id,String dbName) throws UnknownHostException;
+    List<String> getCollectionNames(long id,String dbName) throws IOException;
 
     /**
      * 根据数据源id，表名查询出该表所有字段

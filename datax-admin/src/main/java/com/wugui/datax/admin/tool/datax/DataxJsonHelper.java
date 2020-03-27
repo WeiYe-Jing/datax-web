@@ -294,7 +294,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         List<Map<String, Object>> columns = Lists.newArrayList();
         for (int i = 0; i < writerColumns.size(); i++) {
             Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("index", i);
+            column.put("index", i+1);
             column.put("name", writerColumns.get(i));
             column.put("type", "string");
             columns.add(column);

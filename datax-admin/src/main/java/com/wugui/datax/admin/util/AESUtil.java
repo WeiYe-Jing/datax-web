@@ -57,7 +57,7 @@ public class AESUtil {
                 return new Base64().encodeToString(result); // 加密
             }
         } catch (Exception e) {
-            log.error("content encrypt error {}",e.getMessage());
+            log.warn("content encrypt error {}",e.getMessage());
         }
         return null;
     }
@@ -81,7 +81,7 @@ public class AESUtil {
                 return new String(result); // 解密
             }
         } catch (Exception e) {
-            log.error("content decrypt error {}",e.getMessage());
+            log.warn("content decrypt error {}",e.getMessage());
         }
         return null;
     }

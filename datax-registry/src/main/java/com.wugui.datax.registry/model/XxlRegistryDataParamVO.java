@@ -14,6 +14,7 @@ public class XxlRegistryDataParamVO {
 
     public XxlRegistryDataParamVO() {
     }
+
     public XxlRegistryDataParamVO(String key, String value) {
         this.key = key;
         this.value = value;

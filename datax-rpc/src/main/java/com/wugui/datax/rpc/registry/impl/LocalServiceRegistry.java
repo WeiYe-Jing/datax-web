@@ -36,7 +36,7 @@ public class LocalServiceRegistry extends ServiceRegistry {
 
     @Override
     public boolean registry(Set<String> keys, String value) {
-        if (keys==null || keys.size()==0 || value==null || value.trim().length()==0) {
+        if (keys == null || keys.size() == 0 || value == null || value.trim().length() == 0) {
             return false;
         }
         for (String key : keys) {
@@ -52,7 +52,7 @@ public class LocalServiceRegistry extends ServiceRegistry {
 
     @Override
     public boolean remove(Set<String> keys, String value) {
-        if (keys==null || keys.size()==0 || value==null || value.trim().length()==0) {
+        if (keys == null || keys.size() == 0 || value == null || value.trim().length() == 0) {
             return false;
         }
         for (String key : keys) {
@@ -66,7 +66,7 @@ public class LocalServiceRegistry extends ServiceRegistry {
 
     @Override
     public Map<String, TreeSet<String>> discovery(Set<String> keys) {
-        if (keys==null || keys.size()==0) {
+        if (keys == null || keys.size() == 0) {
             return null;
         }
         Map<String, TreeSet<String>> registryDataTmp = new HashMap<String, TreeSet<String>>();

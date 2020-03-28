@@ -127,6 +127,21 @@
         </dependency>
 
         <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>local_policy</artifactId>
+            <version>4.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/lib/local_policy.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>US_export_policy</artifactId>
+            <version>4.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/lib/US_export_policy.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>

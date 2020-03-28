@@ -65,6 +65,9 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 - 3、datax.executor.jsonpath(datax json临时文件保存路径)
 - 4、datax.pypath(datax/bin/datax.py)注意：是第一步中DataX打包好的，DataX启动文件的地址
 如果系统配置DataX环境变量（DATAX_HOME），2、3、4步可省略，log文件和临时json存放在环境变量路径下。
+
+#### 详情请点击：[User Guid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
+
 ### 5.执行器配置(使用开源项目xxl-job)
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;

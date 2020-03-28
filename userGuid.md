@@ -253,7 +253,7 @@ datax:
 - executor.logretentiondays 执行器日志文件保存天数,过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；
 - executor.jsonpath datax json临时文件保存路径
 - pypath DataX启动脚本地址，例如：xxx/datax/bin/datax.py
-如果系统配置DataX环境变量（DATAX_HOME），2、3、4步可省略，log文件和临时json存放在环境变量路径下。
+如果系统配置DataX环境变量（DATAX_HOME），logpath、jsonpath、pypath可不配，log文件和临时json存放在环境变量路径下。
 
 ## 五、启动项目
 
@@ -276,7 +276,12 @@ admin启动成功后日志会输出三个地址，两个接口文档地址，一
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-2.1.1.jar&
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-executor-2.1.1.jar&
 
-## 六、集群部署
+## 六、启动成功
+启动成功后打开页面（默认管理员用户名：admin 密码：123456）
+http://localhost:8080/index.html#/dashboard
+![](http://q7vnain67.bkt.clouddn.com/dashboard.png)
+
+## 七、集群部署
 
 - 调度中心、执行器支持集群部署，提升调度系统容灾和可用性。
 

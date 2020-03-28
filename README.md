@@ -50,25 +50,12 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 - 30、对swagger接口进行token验证
 - 31、任务增加超时时间，对超时任务kill datax进程，可配合重试策略避免网络问题导致的datax卡死。
 
-## Quick Start
 
-### 1. 下载datax打包之后的文件或者github拉取datax代码打包
+## Quick Start：[User Guid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
 
-### 2. 拉取release最新版本或master分支到本地代码库，执行doc/db下面的datax_web.sql文件(注意更新语句有指定库名)
+## Introduction：
 
-### 3. 修改datax_admin下application.yml的数据库配置信息及邮件地址信息
-
-### 4. 修改datax-executor下application.yml文件
-
-- 1、datax.job.admin.addresses(调度中心地址，多个以逗号分隔)
-- 2、datax.job.executor.logpath(数据抽取日志文件保存路径)
-- 3、datax.executor.jsonpath(datax json临时文件保存路径)
-- 4、datax.pypath(datax/bin/datax.py)注意：是第一步中DataX打包好的，DataX启动文件的地址
-如果系统配置DataX环境变量（DATAX_HOME），2、3、4步可省略，log文件和临时json存放在环境变量路径下。
-
-#### 详情请点击：[User Guid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
-
-### 5.执行器配置(使用开源项目xxl-job)
+### 1.执行器配置(使用开源项目xxl-job)
 ![](http://q7vnain67.bkt.clouddn.com/executor.png)
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;
@@ -84,18 +71,12 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
     手动录入：人工手动录入执行器的地址信息，多地址逗号分隔，供调度中心使用；
 5、机器地址："注册方式"为"手动录入"时有效，支持人工维护执行器的地址信息；
 ```
-                     
-### 6. idea启动 datax-admin，datax-executor
-
-### 7. 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
-http://localhost:8080/index.html#/dashboard
-![](http://q7vnain67.bkt.clouddn.com/dashboard.png)
-
-### 8. 构建JSON脚本
+                   
+### 2. 构建JSON脚本
 JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb其它数据源的JSON构建正在开发中,暂时需要手动编写。
 ![](http://q7vnain67.bkt.clouddn.com/build.png)
 
-### 9. 创建任务
+### 3. 创建任务
 
 #### DataX任务
 ![](http://q7vnain67.bkt.clouddn.com/datax.png)
@@ -116,25 +97,19 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbas
 - [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md)
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md)
 
-### 10. 任务列表
+### 4. 任务列表
 ![](http://q7vnain67.bkt.clouddn.com/job.png)
 
-### 11. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
+### 5. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
 ![](http://q7vnain67.bkt.clouddn.com/job_log.png)
 ![](http://q7vnain67.bkt.clouddn.com/log_detail.png)
 
-### 12. admin可以创建用户，编辑用户信息
+### 6. admin可以创建用户，编辑用户信息
 ![](http://q7vnain67.bkt.clouddn.com/user.png)
 
-### 13.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
+### 7.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
 ![](http://q7vnain67.bkt.clouddn.com/json_demo.png)
 
-## Linux部署说明
-Quick Start操作完前四步之后
-- 5、执行mvn package -Dmaven.test.skip=true 
-- 6、分别将datax-admin、datax-executor模块target下datax-admin-1.0.0.jar、datax-executor-1.0.0.jar放到对应服务器
-- 7、分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
-- 8、启动命令demo：nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-1.0.0.jar --server.port=8080&
 ## UI
 [前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
 

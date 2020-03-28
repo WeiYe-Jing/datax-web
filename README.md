@@ -145,7 +145,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 ![](http://q7vnain67.bkt.clouddn.com/job_log.png)
 ![](http://q7vnain67.bkt.clouddn.com/log_detail.png)
 
-### 8.任务监控
+### 8.任务资源监控
 
 ![](http://q7vnain67.bkt.clouddn.com/monitor.png)
 

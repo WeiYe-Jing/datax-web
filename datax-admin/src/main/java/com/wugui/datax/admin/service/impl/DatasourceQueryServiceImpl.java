@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -32,10 +31,10 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     private JobDatasourceService jobDatasourceService;
 
     @Override
-    public List<String> getDBs(Long id) throws UnknownHostException {
+    public List<String> getDBs(Long id) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
-        return MongoDBQueryTool.getInstance(datasource).getDBNames();
+        return new MongoDBQueryTool(datasource).getDBNames();
     }
 
 
@@ -48,9 +47,9 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             return Lists.newArrayList();
         }
         if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
-            return HBaseQueryTool.getInstance(datasource).getTableNames();
+            return new HBaseQueryTool(datasource).getTableNames();
         } else if(JdbcConstants.MONGODB.equals(datasource.getDatasource())){
-            return MongoDBQueryTool.getInstance(datasource).getCollectionNames(datasource.getDatabaseName());
+            return new MongoDBQueryTool(datasource).getCollectionNames(datasource.getDatabaseName());
         } else {
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
             return qTool.getTableNames();
@@ -58,14 +57,14 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     }
 
     @Override
-    public List<String> getCollectionNames(long id,String dbName) throws UnknownHostException {
+    public List<String> getCollectionNames(long id,String dbName) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装
         if (ObjectUtil.isNull(datasource)) {
             return Lists.newArrayList();
         }
-        return MongoDBQueryTool.getInstance(datasource).getCollectionNames(dbName);
+        return new MongoDBQueryTool(datasource).getCollectionNames(dbName);
     }
 
 
@@ -78,9 +77,9 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             return Lists.newArrayList();
         }
         if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
-            return HBaseQueryTool.getInstance(datasource).getColumns(tableName);
+            return new HBaseQueryTool(datasource).getColumns(tableName);
         } else if (JdbcConstants.MONGODB.equals(datasource.getDatasource())) {
-            return MongoDBQueryTool.getInstance(datasource).getColumns(tableName);
+            return new MongoDBQueryTool(datasource).getColumns(tableName);
         } else {
             BaseQueryTool queryTool = QueryToolFactory.getByDbType(datasource);
             return queryTool.getColumnNames(tableName, datasource.getDatasource());

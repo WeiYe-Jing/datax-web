@@ -29,7 +29,7 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobDatasourceMapper, J
     @Override
     public Boolean dataSourceTest(JobDatasource jobDatasource) throws IOException {
         if (JdbcConstants.HBASE.equals(jobDatasource.getDatasource())) {
-            return HBaseQueryTool.getInstance(jobDatasource).dataSourceTest();
+            return new HBaseQueryTool(jobDatasource).dataSourceTest();
         }
         String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
         //  判断账密是否为密文
@@ -41,7 +41,7 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobDatasourceMapper, J
             jobDatasource.setJdbcPassword(AESUtil.encrypt(jobDatasource.getJdbcPassword()));
         }
         if (JdbcConstants.MONGODB.equals(jobDatasource.getDatasource())) {
-            return MongoDBQueryTool.getInstance(jobDatasource).dataSourceTest(jobDatasource.getDatabaseName());
+            return new MongoDBQueryTool(jobDatasource).dataSourceTest(jobDatasource.getDatabaseName());
         }
         BaseQueryTool queryTool = QueryToolFactory.getByDbType(jobDatasource);
         return queryTool.dataSourceTest();

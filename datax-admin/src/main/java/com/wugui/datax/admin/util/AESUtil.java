@@ -47,7 +47,7 @@ public class AESUtil {
      */
     public static String encrypt(String content, String key) {
         try {
-            if (StringUtils.isNotBlank(content)) {
+            if(StringUtils.isNotBlank(content)) {
                 SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
                 IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
                 Cipher cipher = Cipher.getInstance(transformation);
@@ -57,7 +57,7 @@ public class AESUtil {
                 return new Base64().encodeToString(result); // 加密
             }
         } catch (Exception e) {
-            log.error("content encrypt error {}", e.getMessage());
+            log.warn("content encrypt error {}",e.getMessage());
         }
         return null;
     }
@@ -72,7 +72,7 @@ public class AESUtil {
      */
     public static String decrypt(String content, String key) {
         try {
-            if (StringUtils.isNotBlank(content)) {
+            if(StringUtils.isNotBlank(content)){
                 SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
                 IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
                 Cipher cipher = Cipher.getInstance(transformation);
@@ -81,8 +81,16 @@ public class AESUtil {
                 return new String(result); // 解密
             }
         } catch (Exception e) {
-            log.error("content decrypt error {}", e.getMessage());
+            log.warn("content decrypt error {}",e.getMessage());
         }
         return null;
+    }
+
+    public static void main(String[] args) throws Exception {
+        String s = "root";
+        String encryptResultStr = encrypt(s);
+        System.out.println(s+" 加密后 ：" + encryptResultStr);
+        System.out.println("mysql"+" 加密后 ：" + encrypt("mysql"));
+        System.out.println("解密后：" + decrypt("mysql"));
     }
 }

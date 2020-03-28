@@ -9,7 +9,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ## System Requirements
 
-- Language: Java 8<br>
+- Language: Java 8（jdk版本建议1.8.201以上）<br>
   Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax-web/datax-python3下)
 - Environment: MacOS, Windows,Linux
 - Database: Mysql5.7
@@ -72,12 +72,29 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
     手动录入：人工手动录入执行器的地址信息，多地址逗号分隔，供调度中心使用；
 5、机器地址："注册方式"为"手动录入"时有效，支持人工维护执行器的地址信息；
 ```
-                   
-### 2. 构建JSON脚本
-JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb其它数据源的JSON构建正在开发中,暂时需要手动编写。
+
+### 2.创建数据源
+![](http://q7vnain67.bkt.clouddn.com/add_datasource.png)
+第四步使用
+
+### 3.创建任务模版
+![](http://q7vnain67.bkt.clouddn.com/template_list.png)
+第四步使用
+
+
+
+### 4. 构建JSON脚本
+- 1.步骤一，步骤二，选择第二步中创建的数据源，JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb其它数据源的JSON构建正在开发中,暂时需要手动编写。
 ![](http://q7vnain67.bkt.clouddn.com/build.png)
 
-### 3. 创建任务
+- 2.字段映射
+![](http://q7vnain67.bkt.clouddn.com/mapping.png)
+
+- 3.点击构建，生成json,此时可以选择复制json然后创建任务，选择datax任务，将json粘贴到文本框。也可以点击选择模版，直接生成任务。
+![](http://q7vnain67.bkt.clouddn.com/select_template.png)
+
+
+### 5.任务创建介绍（关联模版创建任务不再介绍，具体参考4. 构建JSON脚本）
 
 #### DataX任务
 ![](http://q7vnain67.bkt.clouddn.com/datax.png)
@@ -98,17 +115,20 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbas
 - [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%AE%8C%E6%88%90%E5%A2%9E%E9%87%8F%E6%8A%BD%E5%8F%96.md)
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md)
 
-### 4. 任务列表
+### 6. 任务列表
 ![](http://q7vnain67.bkt.clouddn.com/job.png)
 
-### 5. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
+### 7. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
 ![](http://q7vnain67.bkt.clouddn.com/job_log.png)
 ![](http://q7vnain67.bkt.clouddn.com/log_detail.png)
 
-### 6. admin可以创建用户，编辑用户信息
+### 8.任务监控
+![](http://q7vnain67.bkt.clouddn.com/monitor.png)
+
+### 9. admin可以创建用户，编辑用户信息
 ![](http://q7vnain67.bkt.clouddn.com/user.png)
 
-### 7.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
+### 10.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
 ![](http://q7vnain67.bkt.clouddn.com/json_demo.png)
 
 ## UI

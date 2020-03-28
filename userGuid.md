@@ -165,7 +165,10 @@
     读出记录总数                    :                  50
     读写失败总数                    :                   0
     ```
-## 三、修改项目配置
+    
+## 三、执行doc/db下面的datax_web.sql文件(注意老版本更新语句有指定库名)
+
+## 四、修改项目配置
 
 ### 1.修改datax_admin下resources/application.yml文件
 
@@ -252,7 +255,7 @@ datax:
 - pypath DataX启动脚本地址，例如：xxx/datax/bin/datax.py
 如果系统配置DataX环境变量（DATAX_HOME），2、3、4步可省略，log文件和临时json存放在环境变量路径下。
 
-## 四、启动项目
+## 五、启动项目
 
 ### 1.本地idea开发环境
 
@@ -273,7 +276,7 @@ admin启动成功后日志会输出三个地址，两个接口文档地址，一
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-2.1.1.jar&
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-executor-2.1.1.jar&
 
-## 五、集群部署
+## 六、集群部署
 
 - 调度中心、执行器支持集群部署，提升调度系统容灾和可用性。
 

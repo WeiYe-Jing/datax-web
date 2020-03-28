@@ -69,11 +69,11 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 #### 详情请点击：[User Guid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
 
 ### 5.执行器配置(使用开源项目xxl-job)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
+![](http://q7vnain67.bkt.clouddn.com/executor.png)
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;
 #### 执行器属性说明
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_executor.png)
+![](http://q7vnain67.bkt.clouddn.com/add_executor.png)
 ```
 1、AppName: （与datax-executor中application.yml的datax.job.executor.appname保持一致）
    每个执行器集群的唯一标示AppName, 执行器会周期性以AppName为对象进行自动注册。可通过该配置自动发现注册成功的执行器, 供任务调度时使用;
@@ -89,22 +89,22 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 7. 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
 http://localhost:8080/index.html#/dashboard
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
+![](http://q7vnain67.bkt.clouddn.com/dashboard.png)
 
 ### 8. 构建JSON脚本
 JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb其它数据源的JSON构建正在开发中,暂时需要手动编写。
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
+![](http://q7vnain67.bkt.clouddn.com/build.png)
 
 ### 9. 创建任务
 
 #### DataX任务
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/datax.png)
+![](http://q7vnain67.bkt.clouddn.com/datax.png)
 #### Shell任务
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/shell.png)
+![](http://q7vnain67.bkt.clouddn.com/shell.png)
 #### Python任务
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/python.png)
+![](http://q7vnain67.bkt.clouddn.com/python.png)
 #### PowerShell任务
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/powershell.png)
+![](http://q7vnain67.bkt.clouddn.com/powershell.png)
 
 - 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
@@ -117,17 +117,17 @@ JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbas
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/%E5%88%86%E5%8C%BA%E5%8A%A8%E6%80%81%E4%BC%A0%E5%8F%82%E4%BD%BF%E7%94%A8.md)
 
 ### 10. 任务列表
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
+![](http://q7vnain67.bkt.clouddn.com/job.png)
 
 ### 11. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
+![](http://q7vnain67.bkt.clouddn.com/job_log.png)
+![](http://q7vnain67.bkt.clouddn.com/log_detail.png)
 
 ### 12. admin可以创建用户，编辑用户信息
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
+![](http://q7vnain67.bkt.clouddn.com/user.png)
 
 ### 13.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/json_demo.png)
+![](http://q7vnain67.bkt.clouddn.com/json_demo.png)
 
 ## Linux部署说明
 Quick Start操作完前四步之后
@@ -177,7 +177,7 @@ This product is open source and free, and will continue to provide free communit
 
 ## 项目规划
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/plan.png)
+![](http://q7vnain67.bkt.clouddn.com/plan.png)
 ## Contact us
 
 ### QQ交流群 776939467

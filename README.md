@@ -51,7 +51,8 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 - 31、任务增加超时时间，对超时任务kill datax进程，可配合重试策略避免网络问题导致的datax卡死。
 
 
-## Quick Start：[User Guid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
+## Quick Start：[userGuid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
+
 
 ## Introduction：
 

@@ -8,6 +8,7 @@
 ## 二、安装DataX
 
 * 方法一、直接下载DataX工具包：[DataX下载地址](http://datax-opensource.oss-cn-hangzhou.aliyuncs.com/datax.tar.gz)
+    
     下载后解压至本地某个目录，进入bin目录，即可运行同步作业：
     
     ``` shell
@@ -18,6 +19,7 @@
     python {YOUR_DATAX_HOME}/bin/datax.py {YOUR_DATAX_HOME}/job/job.json
 
 * 方法二、下载DataX源码，自己编译：[DataX源码](https://github.com/alibaba/DataX)
+    
     (1)、下载DataX源码：
     
     ``` shell

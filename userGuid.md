@@ -273,6 +273,21 @@ admin启动成功后日志会输出三个地址，两个接口文档地址，一
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-2.1.1.jar&
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-executor-2.1.1.jar&
 
+## 五、集群部署
+
+- 调度中心、执行器支持集群部署，提升调度系统容灾和可用性。
+
+* 1.调度中心集群：
+   
+    DB配置保持一致；<br>
+    集群机器时钟保持一致（单机集群忽视）；<br>
+    
+* 2.执行器集群:
+
+    执行器回调地址(admin.addresses）需要保持一致；执行器根据该配置进行执行器自动注册等操作。
+    
+    同一个执行器集群内AppName（executor.appname）需要保持一致；调度中心根据该配置动态发现不同集群的在线执行器列表。
+  
 ## Contact us
 
 ### QQ交流群 776939467

@@ -2,12 +2,12 @@
 ![](https://img.shields.io/badge/springboot-2.1.4.RELEASE-red.svg)
 ![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
 
-## DataX-Web
+# DataX-Web
 
 DataX阿里在开源的时候并未提供任何可视化界面，我们在使用的过程中，需要将Json配置文件放到DataX的job路径下，随着业务的增加，配置文件不方便管理和迁移并且每次执行都需要记录命令。
 目前DataX只支持单机版，多节点之间的协作不能控制，我们希望能有一款有友好的可视化界面，支持定时任务,支持分布式的数据同步利器，这也是该项目的目标。
 
-## System Requirements
+# System Requirements
 
 - Language: Java 8（jdk版本建议1.8.201以上）<br>
   Python2.7(支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax-web/datax-python3下)
@@ -16,7 +16,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 
 
-## Features
+# Features
 
 - 1、通过Web构建DataX Json；
 - 2、DataX Json保存在数据库中，方便任务的迁移，管理；
@@ -51,10 +51,12 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 - 31、任务增加超时时间，对超时任务kill datax进程，可配合重试策略避免网络问题导致的datax卡死。
 
 
-## Quick Start：[userGuid](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
+# Quick Start：
+
+##### 请点击：[Quick Start](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
 
 
-## Introduction：
+# Introduction：
 
 ### 1.执行器配置(使用开源项目xxl-job)
 
@@ -157,17 +159,17 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ![](http://q7vnain67.bkt.clouddn.com/json_demo.png)
 
-## UI
+# UI
 
 [前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
 
-### Contributing
+# Contributing
 
 Contributions are welcome! Open a pull request to fix a bug, or open an Issue to discuss a new feature or change.
 
 欢迎参与项目贡献！比如提交PR修复一个bug，或者新建 Issue 讨论新特性或者变更。
 
-## Copyright and License
+# Copyright and License
 
 This product is open source and free, and will continue to provide free community technical support. Individual or enterprise users are free to access and use.
 
@@ -177,8 +179,9 @@ This product is open source and free, and will continue to provide free communit
 产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
 
 > 欢迎在 [登记地址](https://github.com/WeiYe-Jing/datax-web/issues/14 ) 登记，登记仅仅为了产品推广和提升社区开发的动力。
->
-## v-2.1.1
+
+
+# v-2.1.1
 
 ### 新增
 
@@ -191,6 +194,7 @@ This product is open source and free, and will continue to provide free communit
 7. 任务增加超时时间，对超时任务kill datax进程，可配合重试策略避免网络问题导致的datax卡死。
 
 ### 升级：
+
 1. 数据源管理对用户名和密码进行加密，提高安全性；
 2. 对JSON文件中的用户名密码进行加密，执行DataX任务时解密
 3. 对页面菜单整理，图标升级，提示信息等交互优化；
@@ -198,11 +202,13 @@ This product is open source and free, and will continue to provide free communit
 5. logback为从yml中获取日志路径配置
 
 ### 修复：
+
 1. 任务日志过大时，查看日志报错，请求超时；
 
-## 项目规划
+# 项目规划
 
 ![](http://q7vnain67.bkt.clouddn.com/plan.png)
-## Contact us
+
+# Contact us
 
 ### QQ交流群 776939467

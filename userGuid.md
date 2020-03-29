@@ -1,11 +1,12 @@
 
 # DataX Web用户手册
 
-## 一、github下载master分支或者release版本到本地
+# 一、github下载master分支或者release版本到本地
+
 [DataX Web下载地址](https://github.com/WeiYe-Jing/datax-web)
 ![](http://q7vnain67.bkt.clouddn.com/github_datax_web.png)
 
-## 二、安装DataX
+# 二、安装DataX
 
 * 方法一、直接下载DataX工具包：[DataX下载地址](http://datax-opensource.oss-cn-hangzhou.aliyuncs.com/datax.tar.gz)
     
@@ -166,9 +167,11 @@
     读写失败总数                    :                   0
     ```
     
-## 三、执行doc/db下面的datax_web.sql文件(注意老版本更新语句有指定库名)
+# 三、创建数据库
 
-## 四、修改项目配置
+#### 执行doc/db下面的datax_web.sql文件(注意老版本更新语句有指定库名)
+
+# 四、修改项目配置
 
 ### 1.修改datax_admin下resources/application.yml文件
 
@@ -255,7 +258,7 @@ datax:
 - pypath DataX启动脚本地址，例如：xxx/datax/bin/datax.py
 如果系统配置DataX环境变量（DATAX_HOME），logpath、jsonpath、pypath可不配，log文件和临时json存放在环境变量路径下。
 
-## 五、启动项目
+# 五、启动项目
 
 ### 1.本地idea开发环境
 
@@ -276,12 +279,13 @@ admin启动成功后日志会输出三个地址，两个接口文档地址，一
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-2.1.1.jar&
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-executor-2.1.1.jar&
 
-## 六、启动成功
+# 六、启动成功
+
 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
 http://localhost:8080/index.html#/dashboard
 ![](http://q7vnain67.bkt.clouddn.com/dashboard.png)
 
-## 七、集群部署
+# 七、集群部署
 
 - 调度中心、执行器支持集群部署，提升调度系统容灾和可用性。
 
@@ -296,6 +300,6 @@ http://localhost:8080/index.html#/dashboard
     
     同一个执行器集群内AppName（executor.appname）需要保持一致；调度中心根据该配置动态发现不同集群的在线执行器列表。
   
-## Contact us
+# Contact us
 
 ### QQ交流群 776939467

@@ -1,4 +1,4 @@
-package com.wugui.datax.admin.tool.meta;
+package com.wugui.datax.admin.tool.query.tool.meta;
 
 import com.wugui.datax.admin.util.JdbcConstants;
 
@@ -24,8 +24,6 @@ public class DatabaseMetaFactory {
             return SqlServerDatabaseMeta.getInstance();
         } else if (JdbcConstants.HIVE.equals(dbType)) {
             return HiveDatabaseMeta.getInstance();
-        }else if(JdbcConstants.CLICKHOUSE.equals(dbType)) {
-            return ClickHouseDataBaseMeta.getInstance();
         } else {
             throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
         }

@@ -49,7 +49,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
 		int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, author);
 		
 		// package result
-		Map<String, Object> maps = new HashMap<String, Object>();
+		Map<String, Object> maps = new HashMap<>();
 	    maps.put("recordsTotal", list_count);		// 总记录数
 	    maps.put("recordsFiltered", list_count);	// 过滤后的总记录数
 	    maps.put("data", list);  					// 分页列表
@@ -64,7 +64,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose")+I18nUtil.getString("jobinfo_field_jobgroup")) );
 		}
 		if (!CronExpression.isValidExpression(jobTemplate.getJobCron())) {
-			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
+			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid") );
 		}
 		if (jobTemplate.getJobDesc()==null || jobTemplate.getJobDesc().trim().length()==0) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
@@ -142,7 +142,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
 
 		// valid
 		if (!CronExpression.isValidExpression(jobTemplate.getJobCron())) {
-			return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
+			return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
 		}
 		if (jobTemplate.getJobDesc()==null || jobTemplate.getJobDesc().trim().length()==0) {
 			return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));

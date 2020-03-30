@@ -51,10 +51,17 @@ public class BasicHttpUtil {
             dataOutputStream.flush();
             dataOutputStream.close();
 
+            /*byte[] requestBodyBytes = requestBody.getBytes("UTF-8");
+            connection.setRequestProperty("Content-Length", String.valueOf(requestBodyBytes.length));
+            OutputStream outwritestream = connection.getOutputStream();
+            outwritestream.write(requestBodyBytes);
+            outwritestream.flush();
+            outwritestream.close();*/
+
             // valid StatusCode
             int statusCode = connection.getResponseCode();
             if (statusCode != 200) {
-                throw new RuntimeException("http request StatusCode(" + statusCode + ") invalid. for url : " + url);
+                throw new RuntimeException("http request StatusCode("+ statusCode +") invalid. for url : " + url);
             }
 
             // result
@@ -116,7 +123,7 @@ public class BasicHttpUtil {
             // valid StatusCode
             int statusCode = connection.getResponseCode();
             if (statusCode != 200) {
-                throw new RuntimeException("Http Request StatusCode(" + statusCode + ") Invalid.");
+                throw new RuntimeException("Http Request StatusCode("+ statusCode +") Invalid.");
             }
 
             // result

@@ -82,13 +82,13 @@ public class BasicJsonwriter {
             // string
 
             json.append(STR_SLASH).append(value.toString()).append(STR_SLASH);
-        } else if (value instanceof Boolean
+        } else if ( value instanceof Boolean
                 || value instanceof Short
                 || value instanceof Integer
                 || value instanceof Long
                 || value instanceof Float
                 || value instanceof Double
-        ) {
+                ) {
             // number
 
             json.append(value);
@@ -189,6 +189,7 @@ public class BasicJsonwriter {
             field.setAccessible(false);
         }
     }
+
 
 
 }

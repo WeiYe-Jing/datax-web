@@ -33,13 +33,13 @@ public class XxlRegistryBaseClient {
         this.env = env;
 
         // valid
-        if (adminAddress == null || adminAddress.trim().length() == 0) {
+        if (adminAddress==null || adminAddress.trim().length()==0) {
             throw new RuntimeException("xxl-registry adminAddress empty");
         }
-        if (biz == null || biz.trim().length() < 4 || biz.trim().length() > 255) {
+        if (biz==null || biz.trim().length()<4 || biz.trim().length()>255) {
             throw new RuntimeException("xxl-registry biz empty Invalid[4~255]");
         }
-        if (env == null || env.trim().length() < 2 || env.trim().length() > 255) {
+        if (env==null || env.trim().length()<2 || env.trim().length()>255) {
             throw new RuntimeException("xxl-registry biz env Invalid[2~255]");
         }
 
@@ -59,17 +59,17 @@ public class XxlRegistryBaseClient {
      * @param registryDataList
      * @return
      */
-    public boolean registry(List<XxlRegistryDataParamVO> registryDataList) {
+    public boolean registry(List<XxlRegistryDataParamVO> registryDataList){
 
         // valid
-        if (registryDataList == null || registryDataList.size() == 0) {
+        if (registryDataList==null || registryDataList.size()==0) {
             throw new RuntimeException("xxl-registry registryDataList empty");
         }
-        for (XxlRegistryDataParamVO registryParam : registryDataList) {
-            if (registryParam.getKey() == null || registryParam.getKey().trim().length() < 4 || registryParam.getKey().trim().length() > 255) {
+        for (XxlRegistryDataParamVO registryParam: registryDataList) {
+            if (registryParam.getKey()==null || registryParam.getKey().trim().length()<4 || registryParam.getKey().trim().length()>255) {
                 throw new RuntimeException("xxl-registry registryDataList#key Invalid[4~255]");
             }
-            if (registryParam.getValue() == null || registryParam.getValue().trim().length() < 4 || registryParam.getValue().trim().length() > 255) {
+            if (registryParam.getValue()==null || registryParam.getValue().trim().length()<4 || registryParam.getValue().trim().length()>255) {
                 throw new RuntimeException("xxl-registry registryDataList#value Invalid[4~255]");
             }
         }
@@ -88,12 +88,12 @@ public class XxlRegistryBaseClient {
 
         // result
         Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 5);
-        return respObj != null ? true : false;
+        return respObj!=null?true:false;
     }
 
-    private Map<String, Object> requestAndValid(String pathUrl, String requestBody, int timeout) {
+    private Map<String, Object> requestAndValid(String pathUrl, String requestBody, int timeout){
 
-        for (String adminAddressUrl : adminAddressArr) {
+        for (String adminAddressUrl: adminAddressArr) {
             String finalUrl = adminAddressUrl + pathUrl;
 
             // request
@@ -106,15 +106,14 @@ public class XxlRegistryBaseClient {
             Map<String, Object> resopnseMap = null;
             try {
                 resopnseMap = BasicJson.parseMap(responseData);
-            } catch (Exception e) {
-            }
+            } catch (Exception e) { }
 
 
             // valid resopnse
-            if (resopnseMap == null
+            if (resopnseMap==null
                     || !resopnseMap.containsKey("code")
                     || !"200".equals(String.valueOf(resopnseMap.get("code")))
-            ) {
+                    ) {
                 logger.warn("XxlRegistryBaseClient response fail, responseData={}", responseData);
                 return null;
             }
@@ -134,14 +133,14 @@ public class XxlRegistryBaseClient {
      */
     public boolean remove(List<XxlRegistryDataParamVO> registryDataList) {
         // valid
-        if (registryDataList == null || registryDataList.size() == 0) {
+        if (registryDataList==null || registryDataList.size()==0) {
             throw new RuntimeException("xxl-registry registryDataList empty");
         }
-        for (XxlRegistryDataParamVO registryParam : registryDataList) {
-            if (registryParam.getKey() == null || registryParam.getKey().trim().length() < 4 || registryParam.getKey().trim().length() > 255) {
+        for (XxlRegistryDataParamVO registryParam: registryDataList) {
+            if (registryParam.getKey()==null || registryParam.getKey().trim().length()<4 || registryParam.getKey().trim().length()>255) {
                 throw new RuntimeException("xxl-registry registryDataList#key Invalid[4~255]");
             }
-            if (registryParam.getValue() == null || registryParam.getValue().trim().length() < 4 || registryParam.getValue().trim().length() > 255) {
+            if (registryParam.getValue()==null || registryParam.getValue().trim().length()<4 || registryParam.getValue().trim().length()>255) {
                 throw new RuntimeException("xxl-registry registryDataList#value Invalid[4~255]");
             }
         }
@@ -160,7 +159,7 @@ public class XxlRegistryBaseClient {
 
         // result
         Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 5);
-        return respObj != null ? true : false;
+        return respObj!=null?true:false;
     }
 
     /**
@@ -171,7 +170,7 @@ public class XxlRegistryBaseClient {
      */
     public Map<String, TreeSet<String>> discovery(Set<String> keys) {
         // valid
-        if (keys == null || keys.size() == 0) {
+        if (keys==null || keys.size()==0) {
             throw new RuntimeException("xxl-registry keys empty");
         }
 
@@ -191,7 +190,7 @@ public class XxlRegistryBaseClient {
         Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 5);
 
         // parse
-        if (respObj != null && respObj.containsKey("data")) {
+        if (respObj!=null && respObj.containsKey("data")) {
             Map<String, TreeSet<String>> data = (Map<String, TreeSet<String>>) respObj.get("data");
             return data;
         }
@@ -207,7 +206,7 @@ public class XxlRegistryBaseClient {
      */
     public boolean monitor(Set<String> keys) {
         // valid
-        if (keys == null || keys.size() == 0) {
+        if (keys==null || keys.size()==0) {
             throw new RuntimeException("xxl-registry keys empty");
         }
 
@@ -225,7 +224,7 @@ public class XxlRegistryBaseClient {
 
         // result
         Map<String, Object> respObj = requestAndValid(pathUrl, paramsJson, 60);
-        return respObj != null ? true : false;
+        return respObj!=null?true:false;
     }
 
 }

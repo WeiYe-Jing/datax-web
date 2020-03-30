@@ -74,7 +74,7 @@ public class JobTemplateController {
                 }
             }
         } catch (ParseException e) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         return new ReturnT<>(result);
     }

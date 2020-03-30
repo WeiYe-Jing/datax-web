@@ -65,7 +65,7 @@
         UPDATE job_user
         SET
         <if test="password != null and password != ''">
-            password = #{password},
+            password = #{password}
         </if>
         role = #{role},
         permission = #{permission}

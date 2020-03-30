@@ -70,7 +70,7 @@ public class DataXConfig {
      *             <artifactId>spring-cloud-commons</artifactId>
      *             <version>${version}</version>
      *         </dependency>
-     *AE
+     *
      *      2、配置文件，或者容器启动变量
      *          spring.cloud.inetutils.preferred-networks: 'xxx.xxx.xxx.'
      *

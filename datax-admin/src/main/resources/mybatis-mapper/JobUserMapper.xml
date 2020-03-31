@@ -47,7 +47,7 @@
         WHERE t.username = #{username}
     </select>
 
-    <select id="getRoleByUserId" parameterType="java.util.HashMap" resultMap="JobRole">
+   <!-- <select id="getRoleByUserId" parameterType="java.util.HashMap" resultMap="JobRole">
         SELECT
         a.id,
         a.NAME
@@ -57,7 +57,7 @@
         LEFT JOIN job_user c ON b.user_id = c.id
         WHERE
         b.user_id = #{userId}
-    </select>
+    </select>-->
 
     <insert id="save" parameterType="com.wugui.datax.admin.entity.JobUser" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO job_user (

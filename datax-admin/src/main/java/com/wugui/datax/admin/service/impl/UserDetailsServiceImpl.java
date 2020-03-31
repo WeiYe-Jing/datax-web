@@ -25,8 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         JobUser user = jobUserMapper.loadByUserName(s);
-        JobRole role = jobUserMapper.getRoleByUserId(user.getId());
-        return new JwtUser(user, role);
+        //JobRole role = jobUserMapper.getRoleByUserId(user.getId());
+        //return new JwtUser(user, role);
+        return new JwtUser(user);
     }
 
 }

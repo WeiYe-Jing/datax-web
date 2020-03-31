@@ -29,7 +29,7 @@ public class QueryToolFactory {
             return getSqlserverQueryToolInstance(jobDatasource);
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             return getHiveQueryToolInstance(jobDatasource);
-        } else if (JdbcConstants.CLICKHOUSE.equals(jobDatasource)) {
+        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
 
             return getClickHouseQueryToolInstance(jobDatasource);
 

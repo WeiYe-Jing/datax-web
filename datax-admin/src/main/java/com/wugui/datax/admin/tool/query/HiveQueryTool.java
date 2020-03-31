@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 
 import java.sql.SQLException;
 
@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * @since 2020/01/05
  */
 public class HiveQueryTool extends BaseQueryTool implements QueryToolInterface {
-    public HiveQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
-        super(jobJdbcDatasource);
+    public HiveQueryTool(JobDatasource jobDatasource) throws SQLException {
+        super(jobDatasource);
     }
 }

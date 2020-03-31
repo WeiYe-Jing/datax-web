@@ -5,10 +5,10 @@ import java.util.Map;
 /**
  * 构建 com.wugui.datax json的基础接口
  *
- * @author zhouhongfa@gz-yibo.com
+ * @author jingwk
  * @ClassName DataxJsonHelper
- * @Version 1.0
- * @since 2019/7/30 22:24
+ * @Version 2.1.1
+ * @since 2020/03/14 12:24
  */
 public interface DataxJsonInterface {
 
@@ -23,6 +23,14 @@ public interface DataxJsonInterface {
     Map<String, Object> buildHiveReader();
 
     Map<String, Object> buildHiveWriter();
+
+    Map<String, Object> buildHBaseReader();
+
+    Map<String, Object> buildHBaseWriter();
+
+    Map<String, Object> buildMongoDBReader();
+
+    Map<String, Object> buildMongoDBWriter();
 
     Map<String, Object> buildWriter();
 }

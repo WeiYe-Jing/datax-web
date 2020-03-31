@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.pojo;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.Data;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class DataxRdbmsPojo {
     /**
      * 数据源信息
      */
-    private JobJdbcDatasource jdbcDatasource;
+    private JobDatasource jobDatasource;
 
     /**
      * querySql 属性，如果指定了，则优先于columns参数

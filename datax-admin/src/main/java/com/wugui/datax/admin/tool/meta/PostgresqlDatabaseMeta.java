@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.tool.meta;
 
 /**
- * TODO
+ * Postgresql数据库 meta信息查询
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName PostgresqlDatabaseMeta

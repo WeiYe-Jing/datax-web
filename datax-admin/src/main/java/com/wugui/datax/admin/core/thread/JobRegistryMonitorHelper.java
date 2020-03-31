@@ -39,7 +39,7 @@ public class JobRegistryMonitorHelper {
 						}
 
 						// fresh online address (admin/executor)
-						HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
+						HashMap<String, List<String>> appAddressMap = new HashMap<>();
 						List<JobRegistry> list = JobAdminConfig.getAdminConfig().getJobRegistryMapper().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
 						if (list != null) {
 							for (JobRegistry item: list) {
@@ -47,7 +47,7 @@ public class JobRegistryMonitorHelper {
 									String appName = item.getRegistryKey();
 									List<String> registryList = appAddressMap.get(appName);
 									if (registryList == null) {
-										registryList = new ArrayList<String>();
+										registryList = new ArrayList<>();
 									}
 
 									if (!registryList.contains(item.getRegistryValue())) {

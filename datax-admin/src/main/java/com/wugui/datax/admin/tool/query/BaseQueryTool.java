@@ -1,20 +1,22 @@
 package com.wugui.datax.admin.tool.query;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.druid.util.JdbcUtils;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.wugui.datatx.core.util.Constant;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.wugui.datax.admin.util.AESUtil;
+import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,29 +53,37 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     /**
      * 构造方法
      *
-     * @param jobJdbcDatasource
+     * @param jobDatasource
      */
-    BaseQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
-        String currentDbType = JdbcUtils.getDbType(jobJdbcDatasource.getJdbcUrl(), jobJdbcDatasource.getJdbcDriverClass());
-        String userName = AESUtil.decrypt(jobJdbcDatasource.getJdbcUsername());
-        if (LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName()) == null) {
-            //这里默认使用 hikari 数据源
-            HikariDataSource dataSource = new HikariDataSource();
-            dataSource.setUsername(userName);
-            dataSource.setPassword(AESUtil.decrypt(jobJdbcDatasource.getJdbcPassword()));
-            dataSource.setJdbcUrl(jobJdbcDatasource.getJdbcUrl());
-            dataSource.setDriverClassName(jobJdbcDatasource.getJdbcDriverClass());
-            dataSource.setMaximumPoolSize(1);
-            dataSource.setMinimumIdle(0);
-            dataSource.setConnectionTimeout(30000);
-            this.datasource = dataSource;
-            this.connection = this.datasource.getConnection();
-        } else {
-            this.connection = (Connection) LocalCacheUtil.get(jobJdbcDatasource.getDatasourceName());
+    BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
+            if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+                getDataSource(jobDatasource);
+            } else {
+                this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
+                if(!this.connection.isValid(500)){
+                    LocalCacheUtil.remove(jobDatasource.getDatasourceName());
+                    getDataSource(jobDatasource);
+                }
+            }
+            sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
+            currentSchema = getSchema(jobDatasource.getJdbcUsername());
+            LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
         }
-        sqlBuilder = DatabaseMetaFactory.getByDbType(currentDbType);
-        currentSchema = getSchema(userName);
-        LocalCacheUtil.set(jobJdbcDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
+
+    private void getDataSource(JobDatasource jobDatasource) throws SQLException {
+            String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
+
+            //这里默认使用 hikari 数据源
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setUsername(userName);
+        dataSource.setPassword(AESUtil.decrypt(jobDatasource.getJdbcPassword()));
+        dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
+        dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
+        dataSource.setMaximumPoolSize(1);
+        dataSource.setMinimumIdle(0);
+        dataSource.setConnectionTimeout(30000);
+        this.datasource = dataSource;
+        this.connection = this.datasource.getConnection();
     }
 
     //根据connection获取schema
@@ -92,7 +102,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                     + "the exception message is:" + e.getMessage());
         }
         // 如果res是null，则将用户名当作 schema
-        if (StrUtil.isBlank(res)) {
+        if (StrUtil.isBlank(res) && StringUtils.isNotBlank(jdbcUsername)) {
             res = jdbcUsername.toUpperCase();
         }
         return res;
@@ -272,10 +282,10 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
                 if (JdbcConstants.HIVE.equals(datasource)) {
-                    if (columnName.contains(Constant.SPLIT_POINT)) {
-                        res.add(i - 1 + Constant.SPLIT_SCOLON + columnName.substring(columnName.indexOf(Constant.SPLIT_POINT) + 1) + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                    if (columnName.contains(Constants.SPLIT_POINT)) {
+                        res.add(i - 1 + Constants.SPLIT_SCOLON + columnName.substring(columnName.indexOf(Constants.SPLIT_POINT) + 1) + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     } else {
-                        res.add(i - 1 + Constant.SPLIT_SCOLON + columnName + Constant.SPLIT_SCOLON + metaData.getColumnTypeName(i));
+                        res.add(i - 1 + Constants.SPLIT_SCOLON + columnName + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     }
                 } else {
                     res.add(columnName);

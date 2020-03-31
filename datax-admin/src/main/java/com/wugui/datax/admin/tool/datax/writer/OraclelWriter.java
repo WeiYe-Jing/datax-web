@@ -15,7 +15,6 @@ public class OraclelWriter extends BaseWriterPlugin implements DataxWriterInterf
         return "oraclewriter";
     }
 
-
     @Override
     public Map<String, Object> sample() {
         return null;

@@ -1,8 +1,9 @@
 package com.wugui.datax.admin.tool.meta;
-import com.alibaba.druid.util.JdbcConstants;
+
+import com.wugui.datax.admin.util.JdbcConstants;
 
 /**
- * TODO
+ * meta信息工厂
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName DatabaseMetaFactory
@@ -23,6 +24,8 @@ public class DatabaseMetaFactory {
             return SqlServerDatabaseMeta.getInstance();
         } else if (JdbcConstants.HIVE.equals(dbType)) {
             return HiveDatabaseMeta.getInstance();
+        }else if(JdbcConstants.CLICKHOUSE.equals(dbType)) {
+            return ClickHouseDataBaseMeta.getInstance();
         } else {
             throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
         }

@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.tool.datax.reader;
 
+import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
+
 import java.util.Map;
 
 /**

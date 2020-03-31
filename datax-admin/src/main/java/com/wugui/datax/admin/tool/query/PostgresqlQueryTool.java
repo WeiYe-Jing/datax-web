@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.wugui.datax.admin.entity.JobJdbcDatasource;
+import com.wugui.datax.admin.entity.JobDatasource;
 
 import java.sql.SQLException;
 
@@ -13,8 +13,8 @@ import java.sql.SQLException;
  * @since 2019/8/2 11:28
  */
 public class PostgresqlQueryTool extends BaseQueryTool implements QueryToolInterface {
-    public PostgresqlQueryTool(JobJdbcDatasource jobJdbcDatasource) throws SQLException {
-        super(jobJdbcDatasource);
+    public PostgresqlQueryTool(JobDatasource jobDatasource) throws SQLException {
+        super(jobDatasource);
     }
 
 }

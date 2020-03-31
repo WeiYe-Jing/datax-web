@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.tool.meta;
 
 /**
- * TODO
+ * meta信息interface
  *
  * @author zhouhongfa@gz-yibo.com
  * @ClassName BaseDatabaseMeta

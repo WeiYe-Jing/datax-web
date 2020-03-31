@@ -26,7 +26,7 @@ public class JwtTokenUtils {
     private static final long EXPIRATION = 86400L;
 
     // 选择了记住我之后的过期时间为7天
-    private static final long EXPIRATION_REMEMBER = 604800L;
+    private static final long EXPIRATION_REMEMBER = 7 * EXPIRATION;
 
     // 创建token
     public static String createToken(String username, String role, boolean isRememberMe) {
@@ -44,12 +44,12 @@ public class JwtTokenUtils {
     }
 
     // 从token中获取用户名
-    public static String getUsername(String token){
+    public static String getUsername(String token) {
         return getTokenBody(token).getSubject();
     }
 
     // 获取用户角色
-    public static String getUserRole(String token){
+    public static String getUserRole(String token) {
         return (String) getTokenBody(token).get(ROLE_CLAIMS);
     }
 
@@ -62,7 +62,7 @@ public class JwtTokenUtils {
         }
     }
 
-    private static Claims getTokenBody(String token){
+    private static Claims getTokenBody(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)

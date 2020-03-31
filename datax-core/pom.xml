@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.wugui</groupId>
         <artifactId>datax-all</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
     </parent>
 
     <artifactId>datax-core</artifactId>
@@ -63,11 +63,10 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi.core.version}</version>
         </dependency>
     </dependencies>
 

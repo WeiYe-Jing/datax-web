@@ -91,4 +91,7 @@ public class JobInfo {
 
 	@ApiModelProperty("分区信息")
 	private String partitionInfo;
+
+	@ApiModelProperty("最近一次执行状态")
+	private int lastHandleCode;
 }

@@ -46,8 +46,8 @@ public class JobThread extends Thread {
     public JobThread(int jobId, IJobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
-        this.triggerQueue = new LinkedBlockingQueue<>();
-        this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<>());
+        this.triggerQueue = new LinkedBlockingQueue<TriggerParam>();
+        this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<Long>());
     }
 
     public IJobHandler getHandler() {

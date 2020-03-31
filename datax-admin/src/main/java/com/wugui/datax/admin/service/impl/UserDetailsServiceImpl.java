@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.service.impl;
 
-import com.wugui.datax.admin.entity.JobRole;
 import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.entity.JobUser;
 import com.wugui.datax.admin.mapper.JobUserMapper;
@@ -25,8 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         JobUser user = jobUserMapper.loadByUserName(s);
-        JobRole role = jobUserMapper.getRoleByUserId(user.getId());
-        return new JwtUser(user, role);
+        return new JwtUser(user);
     }
 
 }

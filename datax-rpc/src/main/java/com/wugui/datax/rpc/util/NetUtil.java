@@ -47,7 +47,7 @@ public class NetUtil {
      * @return
      */
     public static boolean isPortUsed(int port) {
-        boolean used;
+        boolean used = false;
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(port);

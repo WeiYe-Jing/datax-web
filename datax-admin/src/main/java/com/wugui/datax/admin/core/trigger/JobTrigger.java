@@ -49,7 +49,7 @@ public class JobTrigger {
         }
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             //解密账密
-            String json = JSONUtils.decryptJson(jobInfo.getJobJson());
+            String json = JSONUtils.changeJson(jobInfo.getJobJson(), JSONUtils.decrypt);
             jobInfo.setJobJson(json);
         }
         if (StringUtils.isNotBlank(executorParam)) {

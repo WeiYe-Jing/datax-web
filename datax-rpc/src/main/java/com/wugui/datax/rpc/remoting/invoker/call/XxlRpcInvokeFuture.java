@@ -20,11 +20,11 @@ public class XxlRpcInvokeFuture implements Future {
     public XxlRpcInvokeFuture(XxlRpcFutureResponse futureResponse) {
         this.futureResponse = futureResponse;
     }
-    public void stop(){
+
+    public void stop() {
         // remove-InvokerFuture
         futureResponse.removeInvokerFuture();
     }
-
 
 
     @Override

@@ -187,7 +187,7 @@
 修改数据源配置，目前仅支持mysql
 
 ```
-# 配置mybatis-plus打印slq日志
+# 配置mybatis-plus打印sql日志
 logging:
   level:
     com.wugui.datax.admin.mapper: error

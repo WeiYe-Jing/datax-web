@@ -99,7 +99,7 @@ public class JobLogController {
         JobLog log = jobLogMapper.load(id);
         JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
         if (jobInfo == null) {
-            return new ReturnT<>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new ReturnT<>(500, I18nUtil.getString("jobinfo_glue_jobid_invalid"));
         }
         if (ReturnT.SUCCESS_CODE != log.getTriggerCode()) {
             return new ReturnT<>(500, I18nUtil.getString("joblog_kill_log_limit"));
@@ -151,7 +151,7 @@ public class JobLogController {
         } else if (type == 9) {
             clearBeforeNum = 0;            // 清理所有日志数据
         } else {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_invalid"));
         }
 
         List<Long> logIds;

@@ -45,7 +45,7 @@ public class JobCodeController {
         }
         JobInfo existsJobInfo = jobInfoMapper.loadById(id);
         if (existsJobInfo == null) {
-            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("jobinfo_glue_jobid_invalid"));
         }
 
         // update new code

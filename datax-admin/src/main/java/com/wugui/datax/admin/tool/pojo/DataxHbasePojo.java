@@ -1,7 +1,6 @@
 package com.wugui.datax.admin.tool.pojo;
 
 import com.wugui.datax.admin.dto.Range;
-import com.wugui.datax.admin.dto.RowkeyColumn;
 import com.wugui.datax.admin.dto.VersionColumn;
 import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.Data;
@@ -38,5 +37,5 @@ public class DataxHbasePojo {
 
   private VersionColumn writerVersionColumn;
 
-  private RowkeyColumn writerRowkeyColumn;
+  private String writerRowkeyColumn;
 }

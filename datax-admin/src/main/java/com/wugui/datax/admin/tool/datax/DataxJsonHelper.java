@@ -109,6 +109,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
             readerPlugin = new PostgresqlReader();
             buildReader = buildReader();
+        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
+            readerPlugin = new ClickHouseReader();
+            buildReader = buildReader();
         } else if (JdbcConstants.HIVE.equals(datasource)) {
             readerPlugin = new HiveReader();
             buildReader = buildHiveReader();
@@ -129,7 +132,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hiveWriterDto = dataxJsonDto.getHiveWriter();
         this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
         this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
-        this.mongoDBWriterDto=dataxJsonDto.getMongoDBWriter();
+        this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
         if (JdbcConstants.MYSQL.equals(datasource)) {
@@ -144,13 +147,16 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
             writerPlugin = new PostgresqllWriter();
             buildWriter = this.buildWriter();
-        } else if (JdbcConstants.HIVE.equals(datasource)) {
+        }  else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
+            writerPlugin = new ClickHouseWriter();
+            buildWriter = buildWriter();
+        }else if (JdbcConstants.HIVE.equals(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
         } else if (JdbcConstants.HBASE.equals(datasource)) {
             writerPlugin = new HBaseWriter();
             buildWriter = this.buildHBaseWriter();
-        }else if (JdbcConstants.MONGODB.equals(datasource)) {
+        } else if (JdbcConstants.MONGODB.equals(datasource)) {
             writerPlugin = new MongoDBWriter();
             buildWriter = this.buildMongoDBWriter();
         }
@@ -294,7 +300,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         List<Map<String, Object>> columns = Lists.newArrayList();
         for (int i = 0; i < writerColumns.size(); i++) {
             Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("index", i+1);
+            column.put("index", i + 1);
             column.put("name", writerColumns.get(i));
             column.put("type", "string");
             columns.add(column);

@@ -94,10 +94,10 @@ public class JobDatasourceController extends ApiController {
     public R<Boolean> update(@RequestBody JobDatasource entity) {
         LocalCacheUtil.remove(entity.getDatasourceName());
         JobDatasource d = jobJdbcDatasourceService.getById(entity.getId());
-        if (entity.getJdbcUsername().equals(d.getJdbcUsername())) {
+        if (null != d.getJdbcUsername() && entity.getJdbcUsername().equals(d.getJdbcUsername())) {
             entity.setJdbcUsername(null);
         }
-        if (entity.getJdbcPassword().equals(d.getJdbcPassword())) {
+        if (null != entity.getJdbcPassword() && entity.getJdbcPassword().equals(d.getJdbcPassword())) {
             entity.setJdbcPassword(null);
         }
         return success(this.jobJdbcDatasourceService.updateById(entity));

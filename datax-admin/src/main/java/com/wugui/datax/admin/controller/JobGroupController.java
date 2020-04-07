@@ -55,10 +55,10 @@ public class JobGroupController {
             if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
                 return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_addressType_limit"));
             }
-            String[] addresss = jobGroup.getAddressList().split(",");
-            for (String item : addresss) {
+            String[] addresses = jobGroup.getAddressList().split(",");
+            for (String item : addresses) {
                 if (item == null || item.trim().length() == 0) {
-                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_unvalid"));
+                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_invalid"));
                 }
             }
         }
@@ -98,10 +98,10 @@ public class JobGroupController {
             if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
                 return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_addressType_limit"));
             }
-            String[] addresss = jobGroup.getAddressList().split(",");
-            for (String item : addresss) {
+            String[] addresses = jobGroup.getAddressList().split(",");
+            for (String item : addresses) {
                 if (item == null || item.trim().length() == 0) {
-                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_unvalid"));
+                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_invalid"));
                 }
             }
         }

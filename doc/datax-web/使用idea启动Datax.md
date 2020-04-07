@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/peter1040080742/picbed/master/20190407000709.png)
+![](http://q7vnain67.bkt.clouddn.com/idea_start_datax.png)
 
 ## vm option
 需要写上你用maven打包后生成的target目录

@@ -56,7 +56,7 @@ public class ServletUtils {
      * <filter-name>requestContextFilter</filter-name><url-pattern>/*</url-pattern></filter-mapping>
      */
     public static HttpServletResponse getResponse() {
-        HttpServletResponse response = null;
+        HttpServletResponse response;
         try {
             response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
             if (response == null) {

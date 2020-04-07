@@ -239,15 +239,15 @@ INSERT INTO `job_user` VALUES (1, 'admin', '$2a$10$2KCqRbra0Yn2TwvkZxtfLuWuUP5Ky
 /**
 v2.1.1脚本更新
 */
-ALTER TABLE `datax_web`.`job_info`
+ALTER TABLE `job_info`
 ADD COLUMN `replace_param` VARCHAR(100) NULL DEFAULT NULL COMMENT '动态参数' AFTER `job_json`,
 ADD COLUMN `jvm_param` VARCHAR(200) NULL DEFAULT NULL COMMENT 'jvm参数' AFTER `replace_param`,
 ADD COLUMN `time_offset` INT(11) NULL DEFAULT '0'COMMENT '时间偏移量'  AFTER `jvm_param`;
 /**
 增量改版脚本更新
  */
-ALTER TABLE `datax_web`.`job_info` DROP COLUMN `time_offset`;
-ALTER TABLE `datax_web`.`job_info`
+ALTER TABLE `job_info` DROP COLUMN `time_offset`;
+ALTER TABLE `job_info`
 ADD COLUMN `inc_start_time` DATETIME NULL DEFAULT NULL COMMENT '增量初始时间' AFTER `jvm_param`;
 
 -- ----------------------------
@@ -286,16 +286,16 @@ CREATE TABLE `job_template`  (
 /**
 添加数据源字段
  */
-ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ALTER TABLE `job_jdbc_datasource`
 ADD COLUMN `datasource` VARCHAR(45) NOT NULL COMMENT '数据源' AFTER `datasource_name`;
 
 /**
 添加分区字段
  */
-ALTER TABLE `datax_web`.`job_info`
+ALTER TABLE `job_info`
 ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;
 
-ALTER TABLE `datax_web`.`job_template`
+ALTER TABLE `job_template`
 ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;
 
 /**
@@ -305,33 +305,33 @@ ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息
 /**
 最近一次执行状态
  */
-ALTER TABLE `datax_web`.`job_info`
+ALTER TABLE `job_info`
 ADD COLUMN `last_handle_code` INT(11) NULL DEFAULT '0' COMMENT '最近一次执行状态' AFTER `partition_info`;
 
 /**
 zookeeper地址
  */
-ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ALTER TABLE `job_jdbc_datasource`
 ADD COLUMN `zk_adress` VARCHAR(200) NULL DEFAULT NULL AFTER `jdbc_driver_class`;
 
-ALTER TABLE `datax_web`.`job_info`
+ALTER TABLE `job_info`
 CHANGE COLUMN `executor_timeout` `executor_timeout` INT(11) NOT NULL DEFAULT '0' COMMENT '任务执行超时时间，单位分钟' ;
 
 /**
 用户名密码改为非必填
  */
-ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ALTER TABLE `job_jdbc_datasource`
 CHANGE COLUMN `jdbc_username` `jdbc_username` VARCHAR(100) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '用户名' ,
 CHANGE COLUMN `jdbc_password` `jdbc_password` VARCHAR(200) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '密码' ;
 /**
 添加mongodb数据库名字段
  */
-ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ALTER TABLE `job_jdbc_datasource`
 ADD COLUMN `database_name` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据库名' AFTER `datasource_group`;
 /**
 添加执行器资源字段
  */
-ALTER TABLE `datax_web`.`job_registry`
+ALTER TABLE `job_registry`
 ADD COLUMN `cpu_usage` DOUBLE NULL AFTER `registry_value`,
 ADD COLUMN `memory_usage` DOUBLE NULL AFTER `cpu_usage`,
 ADD COLUMN `load_average` DOUBLE NULL AFTER `memory_usage`;

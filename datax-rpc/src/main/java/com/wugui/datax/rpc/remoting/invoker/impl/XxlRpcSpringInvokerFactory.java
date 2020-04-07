@@ -26,7 +26,7 @@ import java.util.Set;
  *
  * @author xuxueli 2018-10-19
  */
-public class XxlRpcSpringInvokerFactory extends InstantiationAwareBeanPostProcessorAdapter implements InitializingBean,DisposableBean, BeanFactoryAware {
+public class XxlRpcSpringInvokerFactory extends InstantiationAwareBeanPostProcessorAdapter implements InitializingBean, DisposableBean, BeanFactoryAware {
     private Logger logger = LoggerFactory.getLogger(XxlRpcSpringInvokerFactory.class);
 
     // ---------------------- config ----------------------

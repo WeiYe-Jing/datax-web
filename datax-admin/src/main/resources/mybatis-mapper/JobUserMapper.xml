@@ -3,26 +3,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobUserMapper">
 
-    <resultMap id="JobUser" type="com.wugui.datax.admin.entity.JobUser" >
-        <result column="id" property="id" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
-        <result column="role" property="role" />
-        <result column="permission" property="permission" />
+    <resultMap id="JobUser" type="com.wugui.datax.admin.entity.JobUser">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+    </resultMap>
+
+    <resultMap id="JobRole" type="com.wugui.datax.admin.entity.JobRole">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
     </resultMap>
 
     <sql id="Base_Column_List">
 		t.id,
 		t.username,
-		t.password,
-		t.role,
-		t.permission
+		t.password
 	</sql>
 
     <select id="pageList" parameterType="java.util.HashMap" resultMap="JobUser">
-        SELECT <include refid="Base_Column_List" />
+        <!--SELECT <include refid="Base_Column_List" />--> /*不返回密码（前端密码置空）*/
+        SELECT
+        t.id,
+        t.username
         FROM job_user AS t
-        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="username != null and username != ''">
                 AND t.username like CONCAT(CONCAT('%', #{username}), '%')
             </if>
@@ -34,7 +38,7 @@
     <select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
         SELECT count(1)
         FROM job_user AS t
-        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="username != null and username != ''">
                 AND t.username like CONCAT(CONCAT('%', #{username}), '%')
             </if>
@@ -42,33 +46,48 @@
     </select>
 
     <select id="loadByUserName" parameterType="java.util.HashMap" resultMap="JobUser">
-        SELECT <include refid="Base_Column_List" />
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM job_user AS t
         WHERE t.username = #{username}
     </select>
 
-    <insert id="save" parameterType="com.wugui.datax.admin.entity.JobUser" useGeneratedKeys="true" keyProperty="id" >
+    <select id="getRoleByUserId" parameterType="java.util.HashMap" resultMap="JobRole">
+        SELECT
+        a.id,
+        a.NAME
+        FROM
+        job_role a
+        LEFT JOIN role_user b ON a.id = b.role_id
+        LEFT JOIN job_user c ON b.user_id = c.id
+        WHERE
+        b.user_id = #{userId}
+    </select>
+
+    <select id="getUserById" parameterType="java.util.HashMap" resultMap="JobUser">
+        SELECT
+        t.id,
+        t.username
+        FROM job_user AS t
+        WHERE t.id = #{userId}
+    </select>
+
+    <insert id="save" parameterType="com.wugui.datax.admin.entity.JobUser" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO job_user (
 			username,
-			password,
-			role,
-			permission
+			password
 		) VALUES (
 			#{username},
-			#{password},
-			#{role},
-			#{permission}
+			#{password}
 		);
 	</insert>
 
-    <update id="update" parameterType="com.wugui.datax.admin.entity.JobUser" >
+    <update id="update" parameterType="com.wugui.datax.admin.entity.JobUser">
         UPDATE job_user
         SET
         <if test="password != null and password != ''">
-            password = #{password}
+            password = #{password},
         </if>
-        role = #{role},
-        permission = #{permission}
         WHERE id = #{id}
     </update>
 

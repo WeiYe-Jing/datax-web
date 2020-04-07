@@ -87,6 +87,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(JSON.toJSON(new ReturnT<>(ReturnT.FAIL_CODE,I18nUtil.getString("login_param_unvalid"))).toString());
+        response.getWriter().write(JSON.toJSON(new ReturnT<>(ReturnT.FAIL_CODE,I18nUtil.getString("login_param_invalid"))).toString());
     }
 }

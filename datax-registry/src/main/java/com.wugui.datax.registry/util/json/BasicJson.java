@@ -29,7 +29,7 @@ public class BasicJson {
      * parse json to map
      *
      * @param json
-     * @return      only for filed type "null、ArrayList、LinkedHashMap、String、Long、Double、..."
+     * @return only for filed type "null、ArrayList、LinkedHashMap、String、Long、Double、..."
      */
     public static Map<String, Object> parseMap(String json) {
         return basicJsonReader.parseMap(json);
@@ -46,12 +46,11 @@ public class BasicJson {
     }
 
 
-
     public static void main(String[] args) {
         Map<String, Object> result = new HashMap<>();
         result.put("code", 200);
         result.put("msg", "success");
-        result.put("arr", Arrays.asList("111","222"));
+        result.put("arr", Arrays.asList("111", "222"));
         result.put("float", 1.11f);
         result.put("temp", null);
 
@@ -204,8 +203,6 @@ public class BasicJson {
         }
 
     }*/
-
-
 
 
 }

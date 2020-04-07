@@ -13,6 +13,7 @@ import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.wugui.datax.admin.util.AESUtil;
+import com.wugui.datax.admin.util.ClickHouseConstant;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
@@ -49,6 +50,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * 当前数据库名
      */
     private String currentSchema;
+    private String currentDatabase;
 
     /**
      * 构造方法
@@ -56,24 +58,26 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * @param jobDatasource
      */
     BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
-            if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+            getDataSource(jobDatasource);
+        } else {
+            this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
+            if (!this.connection.isValid(500)) {
+                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
                 getDataSource(jobDatasource);
-            } else {
-                this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
-                if(!this.connection.isValid(500)){
-                    LocalCacheUtil.remove(jobDatasource.getDatasourceName());
-                    getDataSource(jobDatasource);
-                }
             }
-            sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
-            currentSchema = getSchema(jobDatasource.getJdbcUsername());
-            LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
         }
+        sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
+        currentSchema = getSchema(jobDatasource.getJdbcUsername());
+        ClickHouseConstant.database_name=currentSchema;
+        currentDatabase=jobDatasource.getDatasource();
+        LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
+    }
 
     private void getDataSource(JobDatasource jobDatasource) throws SQLException {
-            String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
+        String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
 
-            //这里默认使用 hikari 数据源
+        //这里默认使用 hikari 数据源
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setUsername(userName);
         dataSource.setPassword(AESUtil.decrypt(jobDatasource.getJdbcPassword()));
@@ -206,7 +210,9 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             ColumnInfo columnInfo = new ColumnInfo();
             columnInfo.setName(e.getColumnName());
             columnInfo.setComment(e.getColumnComment());
-            columnInfo.setType(e.getColumnClassName());
+            columnInfo.setType(e.getColumnTypeName());
+            columnInfo.setIfPrimaryKey(e.isIsprimaryKey());
+            columnInfo.setIsnull(e.getIsNull());
             res.add(columnInfo);
         });
         return res;
@@ -222,23 +228,54 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                 dasColumn.setColumnClassName(metaData.getColumnClassName(i));
                 dasColumn.setColumnTypeName(metaData.getColumnTypeName(i));
                 dasColumn.setColumnName(metaData.getColumnName(i));
+                dasColumn.setIsNull(metaData.isNullable(i));
+
                 res.add(dasColumn);
             }
-            Statement statement = connection.createStatement();
-            res.forEach(e -> {
-                String sqlQueryComment = sqlBuilder.getSQLQueryComment(currentSchema, tableName, e.getColumnName());
-                //查询字段注释
-                try {
-                    ResultSet resultSetComment = statement.executeQuery(sqlQueryComment);
-                    while (resultSetComment.next()) {
-                        e.setColumnComment(resultSetComment.getString(1));
-                    }
-                    JdbcUtils.close(resultSetComment);
-                } catch (SQLException e1) {
-                    logger.error("[buildDasColumn executeQuery Exception] --> "
-                            + "the exception message is:" + e1.getMessage());
-                }
-            });
+
+
+           Statement statement = connection.createStatement();
+
+
+
+
+
+   if(currentDatabase.equals(JdbcConstants.MYSQL) || currentDatabase.equals(JdbcConstants.ORACLE)){
+       DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+
+
+       ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, tableName);
+
+       while (resultSet.next()) {
+           String name = resultSet.getString("COLUMN_NAME");
+           res.forEach(e -> {
+               if (e.getColumnName().equals(name)) {
+                   e.setIsprimaryKey(true);
+
+               } else {
+                   e.setIsprimaryKey(false);
+               }
+           });
+       }
+
+
+       res.forEach(e -> {
+           String sqlQueryComment = sqlBuilder.getSQLQueryComment(currentSchema, tableName, e.getColumnName());
+           //查询字段注释
+           try {
+               ResultSet resultSetComment = statement.executeQuery(sqlQueryComment);
+               while (resultSetComment.next()) {
+                   e.setColumnComment(resultSetComment.getString(1));
+               }
+               JdbcUtils.close(resultSetComment);
+           } catch (SQLException e1) {
+               logger.error("[buildDasColumn executeQuery Exception] --> "
+                       + "the exception message is:" + e1.getMessage());
+           }
+       });
+   }
+
             JdbcUtils.close(statement);
         } catch (SQLException e) {
             logger.error("[buildDasColumn Exception] --> "
@@ -385,5 +422,27 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             JdbcUtils.close(stmt);
         }
         return res;
+    }
+
+
+
+
+    public void  execeBuildTableSql(String querySql) {
+
+        Statement stmt = null;
+        try {
+
+
+            stmt = connection.createStatement();
+            stmt.executeUpdate(querySql);
+
+
+        } catch (SQLException e) {
+            logger.error("[getColumnsByQuerySql Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        } finally {
+            JdbcUtils.close(stmt);
+        }
+
     }
 }

@@ -150,6 +150,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }  else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
             writerPlugin = new ClickHouseWriter();
             buildWriter = buildWriter();
+
+            //执行建表语句
+
+
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();

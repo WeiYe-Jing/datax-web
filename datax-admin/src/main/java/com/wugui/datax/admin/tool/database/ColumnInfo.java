@@ -28,4 +28,8 @@ public class ColumnInfo {
      * 是否是主键列
      */
     private Boolean ifPrimaryKey;
+    /**
+     * 是否可为null   0 不可为空  1 可以为null
+     */
+    private int isnull;
 }

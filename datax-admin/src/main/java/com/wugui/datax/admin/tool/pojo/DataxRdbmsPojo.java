@@ -42,6 +42,11 @@ public class DataxRdbmsPojo {
     private String preSql;
 
     /**
+     * postSql 属性
+     */
+    private String postSql;
+
+    /**
      * 切分主键
      */
     private String splitPk;

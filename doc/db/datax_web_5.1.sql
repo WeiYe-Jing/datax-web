@@ -346,3 +346,8 @@ CREATE TABLE `job_permission`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+/**
+日志列表添加任务描述
+ */
+ALTER TABLE `job_log`
+ADD COLUMN `job_desc` VARCHAR(255) NULL AFTER `job_id`;

@@ -12,11 +12,11 @@ datax:
   job:
     admin:
       ### datax-web admin address
-      addresses: http://47.98.125.243:12345
+      addresses: http://127.0.0.1:8080
     executor:
       appname: datax-executor
       ip:
-      port: 9998
+      port: 9999
       ### job log path
       logpath: /data/applogs/executor/jobhandler
       ### job log retention days

@@ -20,6 +20,8 @@ public class JobLog {
 	private int jobGroup;
 	@ApiModelProperty("任务，主键ID")
 	private int jobId;
+	@ApiModelProperty("任务描述")
+	private String jobDesc;
 
 	// execute info
 	@ApiModelProperty("执行器地址，本次执行的地址")

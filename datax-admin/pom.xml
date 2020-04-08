@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.wugui</groupId>
-        <artifactId>datax-all</artifactId>
+        <artifactId>datax-web</artifactId>
         <version>2.1.1</version>
     </parent>
     <artifactId>datax-admin</artifactId>

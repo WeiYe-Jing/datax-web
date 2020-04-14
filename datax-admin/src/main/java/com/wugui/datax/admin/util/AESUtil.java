@@ -87,10 +87,11 @@ public class AESUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        String s = "root";
+        String s = "default";
         String encryptResultStr = encrypt(s);
         System.out.println(s+" 加密后 ：" + encryptResultStr);
         System.out.println("mysql"+" 加密后 ：" + encrypt("mysql"));
         System.out.println("解密后：" + decrypt("mysql"));
+        System.out.println("mysql"+" 解密 ：" + decrypt(decrypt("/2cjqzLlbMT2qlTFHYg0E/SOCFGeYtZRudc9WrsEP9g=")));
     }
 }

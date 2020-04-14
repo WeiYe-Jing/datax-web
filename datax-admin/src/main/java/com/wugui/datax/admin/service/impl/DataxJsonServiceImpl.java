@@ -42,8 +42,7 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         dataxJsonHelper.initWriter(dataxJsonDto, writerDatasource);
 
 
-        BaseQueryTool queryTool = QueryToolFactory.getByDbType(writerDatasource);
-        queryTool.execeBuildTableSql(ClickHouseConstant.create_sql);
+
         return JSON.toJSONString(dataxJsonHelper.buildJob());
     }
 }

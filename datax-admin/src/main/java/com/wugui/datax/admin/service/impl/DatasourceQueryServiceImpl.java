@@ -54,7 +54,10 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
         } else if (JdbcConstants.MONGODB.equals(datasource.getDatasource())) {
             return new MongoDBQueryTool(datasource).getCollectionNames(datasource.getDatabaseName());
         } else {
+
+
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+            qTool.execeBuildTableSql(ClickHouseConstant.create_sql);
             return qTool.getTableNames();
         }
     }
@@ -158,6 +161,8 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
                         }
                         break;
                     case "INT":
+                    case "TINYINT":
+                    case "BIGINT":
                         if (c.getIsnull() == 0) {
                             str = c.getName() + " UInt16 COMMENT '" + c.getComment() + "',";
 
@@ -175,7 +180,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
                         }
                         break;
                     default:
-                        System.out.println(c.getType());
+                        System.out.println("=============尚未捕获的数据类型"+c.getType());
                         break;
 
 
@@ -187,10 +192,18 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
 
 
         }
-        String afterSQl = String.format(") ENGINE = MergeTree PARTITION BY id ORDER BY id", primatyKey, preSql);
+        String afterSQl = String.format("   ,datacenter_insert_time DateTime DEFAULT now() COMMENT '数据中心数据抽取入库时间' ) ENGINE = MergeTree PARTITION BY id ORDER BY id", primatyKey, preSql);
         stringBuilder.append(afterSQl);
         System.out.println(stringBuilder.toString());
         ClickHouseConstant.create_sql = stringBuilder.toString();
+
+
+
+
+
+
+
+
     }
 
     @Override

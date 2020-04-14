@@ -428,6 +428,9 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
 
     public void  execeBuildTableSql(String querySql) {
+        if(querySql.equals("")){
+            return;
+        }
 
         Statement stmt = null;
         try {

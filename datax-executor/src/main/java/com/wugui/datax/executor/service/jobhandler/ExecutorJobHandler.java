@@ -143,16 +143,17 @@ public class ExecutorJobHandler extends IJobHandler {
 
     private String buildDataXParam(TriggerParam tgParam) {
         StringBuilder doc = new StringBuilder();
-        String jvmParam = tgParam.getJvmParam();
+        String jvmParam = tgParam.getJvmParam().trim();
         String partitionStr = tgParam.getPartitionInfo();
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
         }
         long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
-        if (StringUtils.isNotBlank(tgParam.getReplaceParam())) {
+        String replaceParam = tgParam.getReplaceParam().trim();
+        if (StringUtils.isNotBlank(replaceParam)) {
             long lastTime = tgParam.getStartTime().getTime() / 1000;
             if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
-            doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+            doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
             if (StringUtils.isNotBlank(partitionStr)) {
                 doc.append(DataxOption.SPLIT_SPACE);
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));

@@ -23,4 +23,6 @@ public class HiveReaderDto implements Serializable {
 
     private String readerFieldDelimiter;
 
+    private Boolean readerSkipHeader;
+
 }

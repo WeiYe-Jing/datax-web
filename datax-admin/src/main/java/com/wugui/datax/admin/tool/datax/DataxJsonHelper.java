@@ -225,6 +225,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHivePojo.setReaderFieldDelimiter(hiveReaderDto.getReaderFieldDelimiter());
         dataxHivePojo.setReaderFileType(hiveReaderDto.getReaderFileType());
         dataxHivePojo.setReaderPath(hiveReaderDto.getReaderPath());
+        dataxHivePojo.setSkipHeader(hiveReaderDto.getReaderSkipHeader());
         return readerPlugin.buildHive(dataxHivePojo);
     }
 

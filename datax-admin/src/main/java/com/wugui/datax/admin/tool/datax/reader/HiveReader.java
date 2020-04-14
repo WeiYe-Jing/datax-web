@@ -34,6 +34,7 @@ public class HiveReader extends BaseReaderPlugin implements DataxReaderInterface
         parameterObj.put("defaultFS", plugin.getReaderDefaultFS());
         parameterObj.put("fileType", plugin.getReaderFileType());
         parameterObj.put("fieldDelimiter", plugin.getReaderFieldDelimiter());
+        parameterObj.put("skipHeader", plugin.getSkipHeader());
         parameterObj.put("column", plugin.getColumns());
         readerObj.put("parameter", parameterObj);
         return readerObj;

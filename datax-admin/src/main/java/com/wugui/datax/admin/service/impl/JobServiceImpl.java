@@ -127,7 +127,7 @@ public class JobServiceImpl implements JobService {
 
         // add in db
         jobInfo.setAddTime(new Date());
-        jobInfo.setJobJson(JSONUtils.changeJson(jobInfo.getJobJson(), JSONUtils.encrypt));
+        jobInfo.setJobJson(jobInfo.getJobJson());
         jobInfo.setUpdateTime(new Date());
         jobInfo.setGlueUpdatetime(new Date());
         jobInfoMapper.save(jobInfo);

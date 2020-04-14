@@ -229,6 +229,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHivePojo.setReaderFieldDelimiter(hiveReaderDto.getReaderFieldDelimiter());
         dataxHivePojo.setReaderFileType(hiveReaderDto.getReaderFileType());
         dataxHivePojo.setReaderPath(hiveReaderDto.getReaderPath());
+        dataxHivePojo.setSkipHeader(hiveReaderDto.getReaderSkipHeader());
         return readerPlugin.buildHive(dataxHivePojo);
     }
 
@@ -273,6 +274,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxPluginPojo.setTables(writerTables);
         dataxPluginPojo.setRdbmsColumns(writerColumns);
         dataxPluginPojo.setPreSql(rdbmsWriterDto.getPreSql());
+        dataxPluginPojo.setPostSql(rdbmsWriterDto.getPostSql());
         return writerPlugin.build(dataxPluginPojo);
     }
 

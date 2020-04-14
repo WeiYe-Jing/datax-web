@@ -29,11 +29,12 @@ public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterf
         JobDatasource dataSource = plugin.getJdbcDatasource();
         writerObj.put("name", getName());
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-        String[] addressList;
-        if (dataSource.getJdbcUrl().contains(Constants.SPLIT_COMMA)) {
-            addressList = dataSource.getJdbcUrl().split(Constants.SPLIT_COMMA);
-        } else {
-            addressList = new String[]{dataSource.getJdbcUrl()};
+        String[] addressList = null;
+        String str = dataSource.getJdbcUrl().replace(Constants.MONGO_URL_PREFIX, Constants.STRING_BLANK);
+        if (str.contains(Constants.SPLIT_AT) && str.contains(Constants.SPLIT_DIVIDE)) {
+            addressList = str.substring(str.indexOf(Constants.SPLIT_AT) + 1, str.indexOf(Constants.SPLIT_DIVIDE)).split(Constants.SPLIT_COMMA);
+        } else if (str.contains(Constants.SPLIT_DIVIDE)) {
+            addressList = str.substring(0, str.indexOf(Constants.SPLIT_DIVIDE)).split(Constants.SPLIT_COMMA);
         }
         parameterObj.put("address", addressList);
         parameterObj.put("userName", dataSource.getJdbcUsername() == null ? Constants.STRING_BLANK : dataSource.getJdbcUsername());

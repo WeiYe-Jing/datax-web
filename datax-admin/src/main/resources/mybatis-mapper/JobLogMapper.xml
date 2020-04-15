@@ -165,13 +165,13 @@
 			`handle_code`= #{handleCode},
 			`handle_msg`= #{handleMsg} ,
 
-			`TASK_START_TIME_SUFFIX`= #{TASK_START_TIME_SUFFIX} ,
-			`TASK_END_TIME_SUFFIX`= #{TASK_END_TIME_SUFFIX} ,
-			`TASK_TOTAL_TIME_SUFFIX`= #{TASK_TOTAL_TIME_SUFFIX} ,
-			`TASK_AVERAGE_FLOW_SUFFIX`= #{TASK_AVERAGE_FLOW_SUFFIX} ,
-			`TASK_RECORD_WRITING_SPEED_SUFFIX`= #{TASK_RECORD_WRITING_SPEED_SUFFIX} ,
-			`TASK_RECORD_READER_NUM_SUFFIX`= #{TASK_RECORD_READER_NUM_SUFFIX} ,
-			`TASK_RECORD_WRITING_NUM_SUFFIX`= #{TASK_RECORD_WRITING_NUM_SUFFIX}
+			`TASK_START_TIME_SUFFIX`= #{task_start_time_suffix} ,
+			`TASK_END_TIME_SUFFIX`= #{task_end_time_suffix} ,
+			`TASK_TOTAL_TIME_SUFFIX`= #{task_total_time_suffix} ,
+			`TASK_AVERAGE_FLOW_SUFFIX`= #{task_average_flow_suffix} ,
+			`TASK_RECORD_WRITING_SPEED_SUFFIX`= #{task_record_writing_speed_suffix} ,
+			`TASK_RECORD_READER_NUM_SUFFIX`= #{task_record_reader_num_suffix} ,
+			`TASK_RECORD_WRITING_NUM_SUFFIX`= #{task_record_writing_num_suffix}
 
 
 

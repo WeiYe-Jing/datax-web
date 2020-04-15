@@ -33,8 +33,8 @@ public class JSONUtils {
         JSONObject params = JSONObject.parseObject(keyObj.getString("parameter"));
         String dUsername = null, dPassword = null;
         if (decrypt.equals(changeType)) { //解密
-            dUsername = AESUtil.decrypt(AESUtil.decrypt(params.getString("username")));
-            dPassword = AESUtil.decrypt(AESUtil.decrypt(params.getString("password")));
+            dUsername = AESUtil.decrypt(params.getString("username"));
+            dPassword = AESUtil.decrypt(params.getString("password"));
 
         } else if (encrypt.equals(changeType)) {//加密
 

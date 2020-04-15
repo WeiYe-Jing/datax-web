@@ -69,8 +69,8 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
         currentSchema = getSchema(jobDatasource.getJdbcUsername());
-        ClickHouseConstant.database_name=currentSchema;
-        currentDatabase=jobDatasource.getDatasource();
+        ClickHouseConstant.database_name = currentSchema;
+        currentDatabase = jobDatasource.getDatasource();
         LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
     }
 
@@ -234,47 +234,43 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             }
 
 
-           Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement();
 
 
+            if (currentDatabase.equals(JdbcConstants.MYSQL) || currentDatabase.equals(JdbcConstants.ORACLE)) {
+                DatabaseMetaData databaseMetaData = connection.getMetaData();
 
 
+                ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, tableName);
 
-   if(currentDatabase.equals(JdbcConstants.MYSQL) || currentDatabase.equals(JdbcConstants.ORACLE)){
-       DatabaseMetaData databaseMetaData = connection.getMetaData();
+                while (resultSet.next()) {
+                    String name = resultSet.getString("COLUMN_NAME");
+                    res.forEach(e -> {
+                        if (e.getColumnName().equals(name)) {
+                            e.setIsprimaryKey(true);
 
-
-
-       ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, tableName);
-
-       while (resultSet.next()) {
-           String name = resultSet.getString("COLUMN_NAME");
-           res.forEach(e -> {
-               if (e.getColumnName().equals(name)) {
-                   e.setIsprimaryKey(true);
-
-               } else {
-                   e.setIsprimaryKey(false);
-               }
-           });
-       }
+                        } else {
+                            e.setIsprimaryKey(false);
+                        }
+                    });
+                }
 
 
-       res.forEach(e -> {
-           String sqlQueryComment = sqlBuilder.getSQLQueryComment(currentSchema, tableName, e.getColumnName());
-           //查询字段注释
-           try {
-               ResultSet resultSetComment = statement.executeQuery(sqlQueryComment);
-               while (resultSetComment.next()) {
-                   e.setColumnComment(resultSetComment.getString(1));
-               }
-               JdbcUtils.close(resultSetComment);
-           } catch (SQLException e1) {
-               logger.error("[buildDasColumn executeQuery Exception] --> "
-                       + "the exception message is:" + e1.getMessage());
-           }
-       });
-   }
+                res.forEach(e -> {
+                    String sqlQueryComment = sqlBuilder.getSQLQueryComment(currentSchema, tableName, e.getColumnName());
+                    //查询字段注释
+                    try {
+                        ResultSet resultSetComment = statement.executeQuery(sqlQueryComment);
+                        while (resultSetComment.next()) {
+                            e.setColumnComment(resultSetComment.getString(1));
+                        }
+                        JdbcUtils.close(resultSetComment);
+                    } catch (SQLException e1) {
+                        logger.error("[buildDasColumn executeQuery Exception] --> "
+                                + "the exception message is:" + e1.getMessage());
+                    }
+                });
+            }
 
             JdbcUtils.close(statement);
         } catch (SQLException e) {
@@ -425,10 +421,8 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
 
-
-
-    public void  execeBuildTableSql(String querySql) {
-        if(querySql.equals("")){
+    public void execeBuildTableSql(String querySql) {
+        if (StringUtils.isBlank(querySql)) {
             return;
         }
 

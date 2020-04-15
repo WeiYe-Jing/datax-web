@@ -83,7 +83,9 @@ public class JobExecutor {
         ip = (ip!=null&&ip.trim().length()>0)?ip: IpUtil.getIp();
         initRpcProvider(ip, port, appName, accessToken);
     }
+
     public void destroy(){
+
         // destory executor-server
         stopRpcProvider();
 
@@ -91,11 +93,19 @@ public class JobExecutor {
         if (jobThreadRepository.size() > 0) {
             for (Map.Entry<Integer, JobThread> item: jobThreadRepository.entrySet()) {
                 removeJobThread(item.getKey(), "web container destroy and kill the job.");
+                JobThread oldJobThread = removeJobThread(item.getKey(), "web container destroy and kill the job.");
+                // wait for job thread push result to callback queue
+                if (oldJobThread != null) {
+                    try {
+                        oldJobThread.join();
+                    } catch (InterruptedException e) {
+                        logger.error(">>>>>>>>>>> datax-web, JobThread destroy(join) error, jobId:{}", item.getKey(), e);
+                    }
+                }
             }
             jobThreadRepository.clear();
         }
         jobHandlerRepository.clear();
-
 
         // destory JobLogFileCleanThread
         JobLogFileCleanThread.getInstance().toStop();
@@ -234,12 +244,14 @@ public class JobExecutor {
 
         return newJobThread;
     }
-    public static void removeJobThread(int jobId, String removeOldReason){
+    public static JobThread removeJobThread(int jobId, String removeOldReason){
         JobThread oldJobThread = jobThreadRepository.remove(jobId);
         if (oldJobThread != null) {
             oldJobThread.toStop(removeOldReason);
             oldJobThread.interrupt();
+            return oldJobThread;
         }
+        return null;
     }
     public static JobThread loadJobThread(int jobId){
         JobThread jobThread = jobThreadRepository.get(jobId);

@@ -301,7 +301,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
         dataxHbasePojo.setColumns(columns);
         dataxHbasePojo.setWriterHbaseConfig(writerDatasource.getZkAdress());
-        dataxHbasePojo.setWriterTable(readerTables);
+        dataxHbasePojo.setWriterTable(writerTables);
         dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWriterVersionColumn());
         dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
         dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());

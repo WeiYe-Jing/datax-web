@@ -8,63 +8,72 @@ import java.util.Date;
 
 /**
  * datax-web log, used to track trigger process
+ *
  * @author jingwk  2019-11-17 22:08:11
  */
 @Data
 public class JobLog {
 
-	private long id;
-	
-	// job info
-	@ApiModelProperty("执行器主键ID")
-	private int jobGroup;
-	@ApiModelProperty("任务，主键ID")
-	private int jobId;
-	@ApiModelProperty("任务描述")
-	private String jobDesc;
+    private long id;
 
-	// execute info
-	@ApiModelProperty("执行器地址，本次执行的地址")
-	private String executorAddress;
-	@ApiModelProperty("执行器任务handler")
-	private String executorHandler;
-	@ApiModelProperty("执行器任务参数")
-	private String executorParam;
-	@ApiModelProperty("执行器任务分片参数，格式如 1/2")
-	private String executorShardingParam;
-	@ApiModelProperty("失败重试次数")
-	private int executorFailRetryCount;
-	
-	// trigger info
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-	@ApiModelProperty("调度-时间")
-	private Date triggerTime;
-	@ApiModelProperty("调度-结果")
-	private int triggerCode;
-	@ApiModelProperty("调度-日志")
-	private String triggerMsg;
-	
-	// handle info
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-	@ApiModelProperty("执行-时间")
-	private Date handleTime;
-	@ApiModelProperty("执行-状态")
-	private int handleCode;
-	@ApiModelProperty("执行-日志")
-	private String handleMsg;
+    // job info
+    @ApiModelProperty("执行器主键ID")
+    private int jobGroup;
+    @ApiModelProperty("任务，主键ID")
+    private int jobId;
+    @ApiModelProperty("任务描述")
+    private String jobDesc;
 
-	// alarm info
-	@ApiModelProperty("告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败")
-	private int alarmStatus;
+    // execute info
+    @ApiModelProperty("执行器地址，本次执行的地址")
+    private String executorAddress;
+    @ApiModelProperty("执行器任务handler")
+    private String executorHandler;
+    @ApiModelProperty("执行器任务参数")
+    private String executorParam;
+    @ApiModelProperty("执行器任务分片参数，格式如 1/2")
+    private String executorShardingParam;
+    @ApiModelProperty("失败重试次数")
+    private int executorFailRetryCount;
 
-	@ApiModelProperty("DataX进程Id")
-	private String processId;
-	private   String task_start_time_suffix ;
-	private  String task_end_time_suffix ;
-	private  String task_total_time_suffix ;
-	private  String task_average_flow_suffix ;
-	private  String task_record_writing_speed_suffix ;
-	private  int task_record_reader_num_suffix ;
-	private int task_record_writing_num_suffix ;
+    // trigger info
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty("调度-时间")
+    private Date triggerTime;
+    @ApiModelProperty("调度-结果")
+    private int triggerCode;
+    @ApiModelProperty("调度-日志")
+    private String triggerMsg;
+
+    // handle info
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty("执行-时间")
+    private Date handleTime;
+    @ApiModelProperty("执行-状态")
+    private int handleCode;
+    @ApiModelProperty("执行-日志")
+    private String handleMsg;
+
+    // alarm info
+    @ApiModelProperty("告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败")
+    private int alarmStatus;
+
+    @ApiModelProperty("DataX进程Id")
+    private String processId;
+
+	@ApiModelProperty("DataX任务启动时刻")
+    private String taskStartTimeSuffix;
+	@ApiModelProperty("DataX任务结束时刻")
+    private String taskEndTimeSuffix;
+	@ApiModelProperty("DataX任务总计耗时")
+    private String taskTotalTimeSuffix;
+	@ApiModelProperty("DataX任务平均流量")
+    private String taskAverageFlowSuffix;
+	@ApiModelProperty("DataX记录写入速度")
+    private String taskRecordWritingSpeedSuffix;
+	@ApiModelProperty("DataX读出记录总数")
+    private int taskRecordReaderNumSuffix;
+	@ApiModelProperty("DataX读写失败总数")
+    private int taskRecordWritingNumSuffix;
 
 }

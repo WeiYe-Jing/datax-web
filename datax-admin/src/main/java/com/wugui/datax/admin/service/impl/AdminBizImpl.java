@@ -140,13 +140,13 @@ public class AdminBizImpl implements AdminBiz {
 
         String[] strs = handleMsg.toString().split(",");
         if (strs.length ==7) {
-            log.setTask_start_time_suffix(strs[0]);
-            log.setTask_end_time_suffix(strs[1]);
-            log.setTask_total_time_suffix(strs[2]);
-            log.setTask_average_flow_suffix(strs[3]);
-            log.setTask_record_writing_speed_suffix(strs[4]);
-            log.setTask_record_reader_num_suffix(Integer.parseInt(strs[5]));
-            log.setTask_record_writing_num_suffix(Integer.parseInt(strs[6]));
+            log.setTaskStartTimeSuffix(strs[0]);
+            log.setTaskEndTimeSuffix(strs[1]);
+            log.setTaskTotalTimeSuffix(strs[2]);
+            log.setTaskAverageFlowSuffix(strs[3]);
+            log.setTaskRecordWritingSpeedSuffix(strs[4]);
+            log.setTaskRecordReaderNumSuffix(Integer.parseInt(strs[5]));
+            log.setTaskRecordWritingNumSuffix(Integer.parseInt(strs[6]));
         }
         jobLogMapper.updateHandleInfo(log);
         jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);

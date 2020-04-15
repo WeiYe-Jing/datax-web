@@ -12,8 +12,8 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
+import com.wugui.datax.admin.tool.table.ClickHouse;
 import com.wugui.datax.admin.util.AESUtil;
-import com.wugui.datax.admin.util.ClickHouseConstant;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
@@ -69,7 +69,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
         currentSchema = getSchema(jobDatasource.getJdbcUsername());
-        ClickHouseConstant.database_name = currentSchema;
+        ClickHouse.database_name = currentSchema;
         currentDatabase = jobDatasource.getDatasource();
         LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
     }
@@ -421,25 +421,19 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
 
-    public void execeBuildTableSql(String querySql) {
+    public void executeCreateTableSql(String querySql) {
         if (StringUtils.isBlank(querySql)) {
             return;
         }
-
         Statement stmt = null;
         try {
-
-
             stmt = connection.createStatement();
             stmt.executeUpdate(querySql);
-
-
         } catch (SQLException e) {
-            logger.error("[getColumnsByQuerySql Exception] --> "
+            logger.error("[executeCreateTableSql Exception] --> "
                     + "the exception message is:" + e.getMessage());
         } finally {
             JdbcUtils.close(stmt);
         }
-
     }
 }

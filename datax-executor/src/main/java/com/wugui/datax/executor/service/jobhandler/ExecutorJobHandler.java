@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.wugui.datax.executor.service.jobhandler.DataxOption.DEFAULT_DATAX_PY;
+import static com.wugui.datax.executor.service.jobhandler.DataXOptionConstant.*;
 
 /**
  * DataX任务运行
@@ -41,13 +41,6 @@ public class ExecutorJobHandler extends IJobHandler {
     @Value("${datax.pypath}")
     private String dataXPyPath;
 
-    private static final String TASK_START_TIME_SUFFIX = "任务启动时刻";
-    private static final String TASK_END_TIME_SUFFIX = "任务结束时刻";
-    private static final String TASK_TOTAL_TIME_SUFFIX = "任务总计耗时";
-    private static final String TASK_AVERAGE_FLOW_SUFFIX = "任务平均流量";
-    private static final String TASK_RECORD_WRITING_SPEED_SUFFIX = "记录写入速度";
-    private static final String TASK_RECORD_READER_NUM_SUFFIX = "读出记录总数";
-    private static final String TASK_RECORD_WRITING_NUM_SUFFIX = "读写失败总数";
     private static StringBuilder stringBuilder = new StringBuilder();
 
     @Override
@@ -104,7 +97,6 @@ public class ExecutorJobHandler extends IJobHandler {
             }
         }
         if (exitValue == 0) {
-            //   System.out.println(stringBuilder.toString());
             return new ReturnT<>(200, stringBuilder.toString());
         } else {
             return new ReturnT<>(IJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
@@ -123,7 +115,7 @@ public class ExecutorJobHandler extends IJobHandler {
         cmdArr.add(dataXPyPath);
         String doc = buildDataXParam(tgParam);
         if (StringUtils.isNotBlank(doc)) {
-            cmdArr.add(doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE));
+            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
         }
         cmdArr.add(tmpFilePath);
         return cmdArr.toArray(new String[cmdArr.size()]);
@@ -139,25 +131,24 @@ public class ExecutorJobHandler extends IJobHandler {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            stringBuilder.delete(0,stringBuilder.length());
+            stringBuilder.delete(0, stringBuilder.length());
             while ((line = reader.readLine()) != null) {
 
-                if (line.indexOf(TASK_START_TIME_SUFFIX) != -1) {
-                    stringBuilder.append(subResult(line) + ",");
-                } else if (line.indexOf(TASK_END_TIME_SUFFIX) != -1) {
-                    stringBuilder.append(subResult(line) + ",");
-                } else if (line.indexOf(TASK_TOTAL_TIME_SUFFIX) != -1) {
-                    stringBuilder.append(subResult(line) + ",");
-                } else if (line.indexOf(TASK_AVERAGE_FLOW_SUFFIX) != -1) {
-                    stringBuilder.append(subResult(line) + ",");
-                } else if (line.indexOf(TASK_RECORD_WRITING_SPEED_SUFFIX) != -1) {
-                    stringBuilder.append(subResult(line) + ",");
-                } else if (line.indexOf(TASK_RECORD_READER_NUM_SUFFIX) != -1) {
-                    stringBuilder.append(subResult(line) + ",");
-                } else if (line.indexOf(TASK_RECORD_WRITING_NUM_SUFFIX) != -1) {
+                if (line.contains(TASK_START_TIME_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_END_TIME_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_TOTAL_TIME_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_AVERAGE_FLOW_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_RECORD_WRITING_SPEED_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_RECORD_READER_NUM_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_RECORD_WRITING_NUM_SUFFIX)) {
                     stringBuilder.append(subResult(line));
                 }
-
                 JobLogger.log(line);
             }
             reader.close();
@@ -174,25 +165,25 @@ public class ExecutorJobHandler extends IJobHandler {
         String jvmParam = tgParam.getJvmParam().trim();
         String partitionStr = tgParam.getPartitionInfo();
         if (StringUtils.isNotBlank(jvmParam)) {
-            doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
+            doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
         long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
         String replaceParam = tgParam.getReplaceParam().trim();
         if (StringUtils.isNotBlank(replaceParam)) {
             long lastTime = tgParam.getStartTime().getTime() / 1000;
-            if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
-            doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
+            if (doc.length() > 0) doc.append(SPLIT_SPACE);
+            doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
             if (StringUtils.isNotBlank(partitionStr)) {
-                doc.append(DataxOption.SPLIT_SPACE);
+                doc.append(SPLIT_SPACE);
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                doc.append(String.format(DataxOption.PARAMS_CM_V_PT, buildPartition(partitionInfo)));
+                doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
             }
-            doc.append(DataxOption.TRANSFORM_QUOTES);
+            doc.append(TRANSFORM_QUOTES);
         } else {
             if (StringUtils.isNotBlank(partitionStr)) {
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
-                doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(DataxOption.PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(DataxOption.TRANSFORM_QUOTES);
+                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
             }
         }
         JobLogger.log("------------------命令参数: " + doc);
@@ -211,7 +202,7 @@ public class ExecutorJobHandler extends IJobHandler {
         String tmpFilePath;
         String dataXHomePath = SystemUtils.getDataXHomePath();
         if (StringUtils.isNotEmpty(dataXHomePath)) {
-            jsonPath = dataXHomePath + DataxOption.DEFAULT_JSON;
+            jsonPath = dataXHomePath + DEFAULT_JSON;
         }
         if (!FileUtil.exist(jsonPath)) {
             FileUtil.mkdir(jsonPath);
@@ -227,13 +218,9 @@ public class ExecutorJobHandler extends IJobHandler {
     }
 
     private static String subResult(String line) {
-        if (null == line || "".equals(line)) {
-            return "";
-        }
-        int pos = line.indexOf(":");
-        if (pos > 0) {
-            return line.substring(pos + 1).trim();
-        }
+        if (StringUtils.isBlank(line)) return Constants.STRING_BLANK;
+        int pos = line.indexOf(Constants.SPLIT_SCOLON);
+        if (pos > 0) return line.substring(pos + 1).trim();
         return line;
     }
 }

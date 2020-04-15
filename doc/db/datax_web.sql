@@ -355,3 +355,15 @@ CREATE TABLE `job_permission`  (
  */
 ALTER TABLE `job_log`
 ADD COLUMN `job_desc` VARCHAR(255) NULL AFTER `job_id`;
+
+/**
+DataX 统计信息
+ */
+ALTER TABLE `job_log`
+ADD COLUMN `task_start_time_suffix` DATETIME NULL AFTER `job_desc`,
+ADD COLUMN `task_end_time_suffix` DATETIME NULL AFTER `task_start_time_suffix`,
+ADD COLUMN `task_total_time_suffix` VARCHAR(11) NULL AFTER `task_end_time_suffix`,
+ADD COLUMN `task_average_flow_suffix` VARCHAR(11) NULL AFTER `task_total_time_suffix`,
+ADD COLUMN `task_record_writing_speed_suffix` VARCHAR(11) NULL AFTER `task_average_flow_suffix`,
+ADD COLUMN `task_record_reader_num_suffix` INT(11) NULL AFTER `task_record_writing_speed_suffix`,
+ADD COLUMN `task_record_writing_num_suffix` INT(11) NULL AFTER `task_record_reader_num_suffix`;

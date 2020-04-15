@@ -6,16 +6,8 @@ import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.datax.DataxJsonHelper;
-import com.wugui.datax.admin.tool.query.BaseQueryTool;
-import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.util.ClickHouseConstant;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * com.wugui.datax json构建实现类

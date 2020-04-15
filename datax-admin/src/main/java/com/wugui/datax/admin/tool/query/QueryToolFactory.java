@@ -30,9 +30,7 @@ public class QueryToolFactory {
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             return getHiveQueryToolInstance(jobDatasource);
         } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
-
             return getClickHouseQueryToolInstance(jobDatasource);
-
         }
         throw new UnsupportedOperationException("找不到该类型: ".concat(datasource));
     }

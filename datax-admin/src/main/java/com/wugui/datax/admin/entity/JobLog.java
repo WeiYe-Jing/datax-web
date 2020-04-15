@@ -59,5 +59,12 @@ public class JobLog {
 
 	@ApiModelProperty("DataX进程Id")
 	private String processId;
+	private   String task_start_time_suffix ;
+	private  String task_end_time_suffix ;
+	private  String task_total_time_suffix ;
+	private  String task_average_flow_suffix ;
+	private  String task_record_writing_speed_suffix ;
+	private  int task_record_reader_num_suffix ;
+	private int task_record_writing_num_suffix ;
 
 }

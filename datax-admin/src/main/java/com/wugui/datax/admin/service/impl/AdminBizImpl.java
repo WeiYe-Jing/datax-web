@@ -6,6 +6,7 @@ import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
@@ -136,6 +137,17 @@ public class AdminBizImpl implements AdminBiz {
         log.setHandleTime(new Date());
         log.setHandleCode(resultCode);
         log.setHandleMsg(handleMsg.toString());
+
+        String[] strs = handleMsg.toString().split(",");
+        if (strs.length ==7) {
+            log.setTask_start_time_suffix(strs[0]);
+            log.setTask_end_time_suffix(strs[1]);
+            log.setTask_total_time_suffix(strs[2]);
+            log.setTask_average_flow_suffix(strs[3]);
+            log.setTask_record_writing_speed_suffix(strs[4]);
+            log.setTask_record_reader_num_suffix(Integer.parseInt(strs[5]));
+            log.setTask_record_writing_num_suffix(Integer.parseInt(strs[6]));
+        }
         jobLogMapper.updateHandleInfo(log);
         jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);
 

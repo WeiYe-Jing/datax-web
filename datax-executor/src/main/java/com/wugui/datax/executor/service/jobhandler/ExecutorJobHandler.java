@@ -41,6 +41,15 @@ public class ExecutorJobHandler extends IJobHandler {
     @Value("${datax.pypath}")
     private String dataXPyPath;
 
+    private static final String TASK_START_TIME_SUFFIX = "任务启动时刻";
+    private static final String TASK_END_TIME_SUFFIX = "任务结束时刻";
+    private static final String TASK_TOTAL_TIME_SUFFIX = "任务总计耗时";
+    private static final String TASK_AVERAGE_FLOW_SUFFIX = "任务平均流量";
+    private static final String TASK_RECORD_WRITING_SPEED_SUFFIX = "记录写入速度";
+    private static final String TASK_RECORD_READER_NUM_SUFFIX = "读出记录总数";
+    private static final String TASK_RECORD_WRITING_NUM_SUFFIX = "读写失败总数";
+    private static StringBuilder stringBuilder = new StringBuilder();
+
     @Override
     public ReturnT<String> execute(TriggerParam trigger) {
         int exitValue = -1;
@@ -95,7 +104,8 @@ public class ExecutorJobHandler extends IJobHandler {
             }
         }
         if (exitValue == 0) {
-            return IJobHandler.SUCCESS;
+            //   System.out.println(stringBuilder.toString());
+            return new ReturnT<>(200, stringBuilder.toString());
         } else {
             return new ReturnT<>(IJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
         }
@@ -129,7 +139,25 @@ public class ExecutorJobHandler extends IJobHandler {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+            stringBuilder.delete(0,stringBuilder.length());
             while ((line = reader.readLine()) != null) {
+
+                if (line.indexOf(TASK_START_TIME_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line) + ",");
+                } else if (line.indexOf(TASK_END_TIME_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line) + ",");
+                } else if (line.indexOf(TASK_TOTAL_TIME_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line) + ",");
+                } else if (line.indexOf(TASK_AVERAGE_FLOW_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line) + ",");
+                } else if (line.indexOf(TASK_RECORD_WRITING_SPEED_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line) + ",");
+                } else if (line.indexOf(TASK_RECORD_READER_NUM_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line) + ",");
+                } else if (line.indexOf(TASK_RECORD_WRITING_NUM_SUFFIX) != -1) {
+                    stringBuilder.append(subResult(line));
+                }
+
                 JobLogger.log(line);
             }
             reader.close();
@@ -196,5 +224,16 @@ public class ExecutorJobHandler extends IJobHandler {
             JobLogger.log("JSON 临时文件写入异常：" + e.getMessage());
         }
         return tmpFilePath;
+    }
+
+    private static String subResult(String line) {
+        if (null == line || "".equals(line)) {
+            return "";
+        }
+        int pos = line.indexOf(":");
+        if (pos > 0) {
+            return line.substring(pos + 1).trim();
+        }
+        return line;
     }
 }

@@ -46,4 +46,6 @@ public class DataxHivePojo {
     private String writeMode;
 
     private String writeFieldDelimiter;
+
+    private Boolean skipHeader;
 }

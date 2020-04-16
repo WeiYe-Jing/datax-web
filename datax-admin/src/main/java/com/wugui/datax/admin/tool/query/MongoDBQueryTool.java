@@ -39,13 +39,14 @@ public class MongoDBQueryTool {
 
     private void getDataSource(JobDatasource jobDatasource) throws IOException {
         if (StringUtils.isBlank(jobDatasource.getJdbcUsername()) && StringUtils.isBlank(jobDatasource.getJdbcPassword())) {
-            connection = new MongoClient(jobDatasource.getJdbcUrl());
+            connection = new MongoClient(new MongoClientURI(jobDatasource.getJdbcUrl()));
         } else {
             MongoCredential credential = MongoCredential.createCredential(jobDatasource.getJdbcUsername(), jobDatasource.getDatabaseName(), jobDatasource.getJdbcPassword().toCharArray());
             connection = new MongoClient(parseServerAddress(jobDatasource.getJdbcUrl()), Arrays.asList(credential));
         }
+        collections = connection.getDatabase(jobDatasource.getDatabaseName());
     }
-    
+
 
     // 关闭连接
     public static void sourceClose() {
@@ -98,14 +99,20 @@ public class MongoDBQueryTool {
         MongoCollection<Document> collection = collections.getCollection(collectionName);
         Document document = collection.find(new BasicDBObject()).first();
         List<String> list = new ArrayList<>();
+        if (null == document || document.size() <= 0) {
+            return list;
+        }
         document.forEach((k, v) -> {
-            String type = v.getClass().getSimpleName();
+            if (null != v) {
+                String type = v.getClass().getSimpleName();
+                list.add(k + ":" + type);
+            }
       /*if ("Document".equals(type)) {
         ((Document) v).forEach((k1, v1) -> {
           String simpleName = v1.getClass().getSimpleName();
         });
       } */
-            list.add(k + ":" + type);
+
         });
         return list;
     }

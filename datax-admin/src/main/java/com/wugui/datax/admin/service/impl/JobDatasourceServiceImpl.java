@@ -27,7 +27,7 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobDatasourceMapper, J
     private JobDatasourceMapper datasourceMapper;
 
     @Override
-    public Boolean dataSourceTest(JobDatasource jobDatasource) throws IOException {
+    public Boolean  dataSourceTest(JobDatasource jobDatasource) throws IOException {
         if (JdbcConstants.HBASE.equals(jobDatasource.getDatasource())) {
             return new HBaseQueryTool(jobDatasource).dataSourceTest();
         }

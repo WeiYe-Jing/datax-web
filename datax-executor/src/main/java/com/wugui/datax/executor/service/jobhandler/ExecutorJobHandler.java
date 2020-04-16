@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.wugui.datax.executor.service.jobhandler.DataxOption.DEFAULT_DATAX_PY;
+import static com.wugui.datax.executor.service.jobhandler.DataXOptionConstant.*;
 
 /**
  * DataX任务运行
@@ -40,6 +40,8 @@ public class ExecutorJobHandler extends IJobHandler {
 
     @Value("${datax.pypath}")
     private String dataXPyPath;
+
+    private static StringBuilder stringBuilder = new StringBuilder();
 
     @Override
     public ReturnT<String> execute(TriggerParam trigger) {
@@ -95,7 +97,7 @@ public class ExecutorJobHandler extends IJobHandler {
             }
         }
         if (exitValue == 0) {
-            return IJobHandler.SUCCESS;
+            return new ReturnT<>(200, stringBuilder.toString());
         } else {
             return new ReturnT<>(IJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
         }
@@ -113,7 +115,7 @@ public class ExecutorJobHandler extends IJobHandler {
         cmdArr.add(dataXPyPath);
         String doc = buildDataXParam(tgParam);
         if (StringUtils.isNotBlank(doc)) {
-            cmdArr.add(doc.replaceAll(DataxOption.SPLIT_SPACE, DataxOption.TRANSFORM_SPLIT_SPACE));
+            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
         }
         cmdArr.add(tmpFilePath);
         return cmdArr.toArray(new String[cmdArr.size()]);
@@ -129,7 +131,24 @@ public class ExecutorJobHandler extends IJobHandler {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+            stringBuilder.delete(0, stringBuilder.length());
             while ((line = reader.readLine()) != null) {
+
+                if (line.contains(TASK_START_TIME_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_END_TIME_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_TOTAL_TIME_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_AVERAGE_FLOW_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_RECORD_WRITING_SPEED_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_RECORD_READER_NUM_SUFFIX)) {
+                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                } else if (line.contains(TASK_RECORD_WRITING_NUM_SUFFIX)) {
+                    stringBuilder.append(subResult(line));
+                }
                 JobLogger.log(line);
             }
             reader.close();
@@ -143,27 +162,28 @@ public class ExecutorJobHandler extends IJobHandler {
 
     private String buildDataXParam(TriggerParam tgParam) {
         StringBuilder doc = new StringBuilder();
-        String jvmParam = tgParam.getJvmParam();
+        String jvmParam = tgParam.getJvmParam().trim();
         String partitionStr = tgParam.getPartitionInfo();
         if (StringUtils.isNotBlank(jvmParam)) {
-            doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
+            doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
         long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
-        if (StringUtils.isNotBlank(tgParam.getReplaceParam())) {
+        String replaceParam = tgParam.getReplaceParam().trim();
+        if (StringUtils.isNotBlank(replaceParam)) {
             long lastTime = tgParam.getStartTime().getTime() / 1000;
-            if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
-            doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+            if (doc.length() > 0) doc.append(SPLIT_SPACE);
+            doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
             if (StringUtils.isNotBlank(partitionStr)) {
-                doc.append(DataxOption.SPLIT_SPACE);
+                doc.append(SPLIT_SPACE);
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                doc.append(String.format(DataxOption.PARAMS_CM_V_PT, buildPartition(partitionInfo)));
+                doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
             }
-            doc.append(DataxOption.TRANSFORM_QUOTES);
+            doc.append(TRANSFORM_QUOTES);
         } else {
             if (StringUtils.isNotBlank(partitionStr)) {
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
-                doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(DataxOption.PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(DataxOption.TRANSFORM_QUOTES);
+                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
             }
         }
         JobLogger.log("------------------命令参数: " + doc);
@@ -182,7 +202,7 @@ public class ExecutorJobHandler extends IJobHandler {
         String tmpFilePath;
         String dataXHomePath = SystemUtils.getDataXHomePath();
         if (StringUtils.isNotEmpty(dataXHomePath)) {
-            jsonPath = dataXHomePath + DataxOption.DEFAULT_JSON;
+            jsonPath = dataXHomePath + DEFAULT_JSON;
         }
         if (!FileUtil.exist(jsonPath)) {
             FileUtil.mkdir(jsonPath);
@@ -195,5 +215,12 @@ public class ExecutorJobHandler extends IJobHandler {
             JobLogger.log("JSON 临时文件写入异常：" + e.getMessage());
         }
         return tmpFilePath;
+    }
+
+    private static String subResult(String line) {
+        if (StringUtils.isBlank(line)) return Constants.STRING_BLANK;
+        int pos = line.indexOf(Constants.SPLIT_SCOLON);
+        if (pos > 0) return line.substring(pos + 1).trim();
+        return line;
     }
 }

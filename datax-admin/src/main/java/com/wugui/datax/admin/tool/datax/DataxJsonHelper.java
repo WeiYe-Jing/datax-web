@@ -150,6 +150,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }  else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
             writerPlugin = new ClickHouseWriter();
             buildWriter = buildWriter();
+
+            //执行建表语句
+
+
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
@@ -225,6 +229,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHivePojo.setReaderFieldDelimiter(hiveReaderDto.getReaderFieldDelimiter());
         dataxHivePojo.setReaderFileType(hiveReaderDto.getReaderFileType());
         dataxHivePojo.setReaderPath(hiveReaderDto.getReaderPath());
+        dataxHivePojo.setSkipHeader(hiveReaderDto.getReaderSkipHeader());
         return readerPlugin.buildHive(dataxHivePojo);
     }
 
@@ -269,6 +274,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxPluginPojo.setTables(writerTables);
         dataxPluginPojo.setRdbmsColumns(writerColumns);
         dataxPluginPojo.setPreSql(rdbmsWriterDto.getPreSql());
+        dataxPluginPojo.setPostSql(rdbmsWriterDto.getPostSql());
         return writerPlugin.build(dataxPluginPojo);
     }
 
@@ -307,7 +313,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
         dataxHbasePojo.setColumns(columns);
         dataxHbasePojo.setWriterHbaseConfig(writerDatasource.getZkAdress());
-        dataxHbasePojo.setWriterTable(readerTables);
+        dataxHbasePojo.setWriterTable(writerTables);
         dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWriterVersionColumn());
         dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
         dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());

@@ -6,13 +6,8 @@ import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.datax.DataxJsonHelper;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * com.wugui.datax json构建实现类
@@ -34,9 +29,12 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         // reader
         JobDatasource readerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getReaderDatasourceId());
         // reader plugin init
-        dataxJsonHelper.initReader(dataxJsonDto,readerDatasource);
+        dataxJsonHelper.initReader(dataxJsonDto, readerDatasource);
         JobDatasource writerDatasource = jobJdbcDatasourceService.getById(dataxJsonDto.getWriterDatasourceId());
-        dataxJsonHelper.initWriter(dataxJsonDto,writerDatasource);
+        dataxJsonHelper.initWriter(dataxJsonDto, writerDatasource);
+
+
+
         return JSON.toJSONString(dataxJsonHelper.buildJob());
     }
 }

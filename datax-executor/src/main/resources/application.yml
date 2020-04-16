@@ -12,7 +12,7 @@ datax:
   job:
     admin:
       ### datax-web admin address
-      addresses: http://47.98.125.243:12345
+      addresses: http://172.16.1.26:8080
     executor:
       appname: datax-executor
       ip:
@@ -25,6 +25,6 @@ datax:
     accessToken:
 
   executor:
-    jsonpath: D:\\temp\\executor\\json\\
+    jsonpath: /home/executor/json
 
-  pypath: F:\tools\datax\bin\datax.py
+  pypath: /home/datax-3.0.2/bin/datax.py

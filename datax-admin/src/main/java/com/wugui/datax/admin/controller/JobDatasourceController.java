@@ -53,7 +53,6 @@ public class JobDatasourceController extends ApiController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "ascs", value = "升序字段，多个用逗号分隔"),
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
             })
-    //TODO  不确定该接口哪里用到，但是想把current修改pageNo，size修改为pageSize
     public R<IPage<JobDatasource>> selectAll() {
         BaseForm form = new BaseForm();
         QueryWrapper<JobDatasource> query = (QueryWrapper<JobDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobDatasource>());
@@ -94,10 +93,10 @@ public class JobDatasourceController extends ApiController {
     public R<Boolean> update(@RequestBody JobDatasource entity) {
         LocalCacheUtil.remove(entity.getDatasourceName());
         JobDatasource d = jobJdbcDatasourceService.getById(entity.getId());
-        if (entity.getJdbcUsername().equals(d.getJdbcUsername())) {
+        if (null != d.getJdbcUsername() && entity.getJdbcUsername().equals(d.getJdbcUsername())) {
             entity.setJdbcUsername(null);
         }
-        if (entity.getJdbcPassword().equals(d.getJdbcPassword())) {
+        if (null != entity.getJdbcPassword() && entity.getJdbcPassword().equals(d.getJdbcPassword())) {
             entity.setJdbcPassword(null);
         }
         return success(this.jobJdbcDatasourceService.updateById(entity));

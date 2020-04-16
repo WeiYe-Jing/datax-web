@@ -38,8 +38,7 @@ public class OSUtils {
         double memoryUsage = (memory.getTotal() - memory.getAvailable()) * 1.0 / memory.getTotal();
         DecimalFormat df = new DecimalFormat(TWO_DECIMAL);
         df.setRoundingMode(RoundingMode.HALF_UP);
-        double memoryUsage2 = Double.parseDouble(df.format(memoryUsage)) * 100;
-        return Math.round(memoryUsage2);
+        return Double.parseDouble(df.format(memoryUsage * 100));
     }
 
 
@@ -103,7 +102,7 @@ public class OSUtils {
         DecimalFormat df = new DecimalFormat(TWO_DECIMAL);
         df.setRoundingMode(RoundingMode.HALF_UP);
 
-        return Math.round(Double.parseDouble(df.format(cpuUsage)) * 100);
+        return Double.parseDouble(df.format(cpuUsage*100));
     }
 
 

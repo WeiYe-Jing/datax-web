@@ -349,3 +349,15 @@ CREATE TABLE `job_permission`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
+
+
+ALTER TABLE `job_info`
+ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `last_handle_code`;
+ALTER TABLE `job_template`
+ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `last_handle_code`;
+
+ALTER TABLE `job_user`
+ADD COLUMN `nickname` varchar(255) NULL COMMENT '昵称' AFTER `permission`,
+ADD COLUMN `email` varchar(255) NULL COMMENT '邮箱' AFTER `email`,
+ADD COLUMN `phone` varchar(255) NULL COMMENT '手机号码' AFTER `phone`;
+

@@ -1,0 +1,27 @@
+spring:
+  #数据源
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
+
+# 配置mybatis-plus打印slq日志
+logging:
+  level:
+    com.wugui.datax.admin.mapper: error
+  path: /data/logs/datax-admin/
+
+#datax-job, access token
+datax:
+  job:
+    accessToken: I09I0ZlewDhOmo
+    i18n: zh
+    ## triggerpool max size
+    triggerpool:
+      fast:
+        max: 200
+      slow:
+        max: 100
+      ### log retention days
+    logretentiondays: 30
+

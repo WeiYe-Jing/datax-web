@@ -55,7 +55,7 @@ public class JobDatasource extends Model<JobDatasource> {
      * MyBatis Plus 3.0.7.1之前版本没有typeHandler属性，需要升级到最低3.1.2
      */
     @ApiModelProperty(value = "用户名")
-    @TableField(typeHandler = AESEncryptHandler.class)
+//    @TableField(typeHandler = AESEncryptHandler.class)
     private String jdbcUsername;
 
     /**

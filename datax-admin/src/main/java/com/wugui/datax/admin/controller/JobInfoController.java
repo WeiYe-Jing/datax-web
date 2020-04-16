@@ -44,6 +44,10 @@ public class JobInfoController {
         return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, author));
     }
 
+    @GetMapping("/list")
+    public ReturnT<List<Object>> list(){
+        return new ReturnT<>(jobService.list());
+    }
     @PostMapping("/add")
     @ApiOperation("添加任务")
     public ReturnT<String> add(@RequestBody JobInfo jobInfo) {

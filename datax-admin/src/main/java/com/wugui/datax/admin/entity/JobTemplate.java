@@ -32,6 +32,8 @@ public class JobTemplate {
 	@ApiModelProperty("负责人")
 	private String author;
 
+	private String authorName;
+
 	@ApiModelProperty("报警邮件")
 	private String alarmEmail;
 
@@ -68,6 +70,9 @@ public class JobTemplate {
 	@ApiModelProperty("子任务ID，多个逗号分隔")
 	private String childJobId;
 
+	@ApiModelProperty("父任务ID")
+	private String parentJobId;
+
 	@ApiModelProperty("上次调度时间")
 	private long triggerLastTime;
 
@@ -79,6 +84,9 @@ public class JobTemplate {
 
 	@ApiModelProperty("脚本动态参数")
 	private String replaceParam;
+
+	@ApiModelProperty("时间增量格式")
+	private String replaceParamType;
 
 	@ApiModelProperty("jvm参数")
 	private String jvmParam;

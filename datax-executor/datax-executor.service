@@ -1,0 +1,10 @@
+[Unit]
+Description=datax executor
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /jar存放目录/datax-executor.jar --spring.profiles.active=qa
+
+
+[Install]
+WantedBy=multi-user.target

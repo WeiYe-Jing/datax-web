@@ -18,6 +18,7 @@ import com.wugui.datax.admin.util.JdbcConstants;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +98,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
         // reader 插件
         String datasource = readerDatasource.getDatasource();
+
+        this.readerColumns = this.rewrite(this.readerColumns, datasource);
         if (JdbcConstants.MYSQL.equals(datasource)) {
             readerPlugin = new MysqlReader();
             buildReader = buildReader();
@@ -129,9 +132,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hiveWriterDto = dataxJsonDto.getHiveWriter();
         this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
         this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
-        this.mongoDBWriterDto=dataxJsonDto.getMongoDBWriter();
+        this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
+        this.writerColumns = this.rewrite(this.writerColumns, datasource);
         if (JdbcConstants.MYSQL.equals(datasource)) {
             writerPlugin = new MysqlWriter();
             buildWriter = this.buildWriter();
@@ -150,10 +154,24 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (JdbcConstants.HBASE.equals(datasource)) {
             writerPlugin = new HBaseWriter();
             buildWriter = this.buildHBaseWriter();
-        }else if (JdbcConstants.MONGODB.equals(datasource)) {
+        } else if (JdbcConstants.MONGODB.equals(datasource)) {
             writerPlugin = new MongoDBWriter();
             buildWriter = this.buildMongoDBWriter();
         }
+    }
+
+    public List<String> rewrite(List<?> list, String datasource) {
+        List<String> newLists = new ArrayList<>();
+        if (JdbcConstants.POSTGRESQL.equals(datasource)) {
+            list.forEach((v) -> {
+                newLists.add("\"" + v + "\"");
+            });
+        } else {
+            list.forEach((v) -> {
+                newLists.add("`" + v + "`");
+            });
+        }
+        return newLists;
     }
 
     @Override
@@ -171,7 +189,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> speedMap = Maps.newLinkedHashMap();
         Map<String, Object> errorLimitMap = Maps.newLinkedHashMap();
-        speedMap.putAll(ImmutableMap.of("channel", 3));
+        speedMap.putAll(ImmutableMap.of("channel", 3, "byte", 1048576));
         errorLimitMap.putAll(ImmutableMap.of("record", 0, "percentage", 0.02));
         res.put("speed", speedMap);
         res.put("errorLimit", errorLimitMap);
@@ -294,7 +312,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         List<Map<String, Object>> columns = Lists.newArrayList();
         for (int i = 0; i < writerColumns.size(); i++) {
             Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("index", i+1);
+            column.put("index", i + 1);
             column.put("name", writerColumns.get(i));
             column.put("type", "string");
             columns.add(column);

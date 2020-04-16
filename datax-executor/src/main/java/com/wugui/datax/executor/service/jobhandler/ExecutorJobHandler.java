@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -148,11 +149,21 @@ public class ExecutorJobHandler extends IJobHandler {
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(DataxOption.JVM_CM).append(DataxOption.TRANSFORM_QUOTES).append(jvmParam).append(DataxOption.TRANSFORM_QUOTES);
         }
-        long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
+
         if (StringUtils.isNotBlank(tgParam.getReplaceParam())) {
-            long lastTime = tgParam.getStartTime().getTime() / 1000;
             if (doc.length() > 0) doc.append(DataxOption.SPLIT_SPACE);
-            doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+
+            if (tgParam.getReplaceParamType().isEmpty() || tgParam.getReplaceParamType().equals("UnitTime")) {
+                long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
+                long lastTime = tgParam.getStartTime().getTime() / 1000;
+                doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat(tgParam.getReplaceParamType());
+                String tgSecondTime = sdf.format(tgParam.getTriggerTime());
+                String lastTime = sdf.format(tgParam.getStartTime());
+                doc.append(DataxOption.PARAMS_CM).append(DataxOption.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+            }
+
             if (StringUtils.isNotBlank(partitionStr)) {
                 doc.append(DataxOption.SPLIT_SPACE);
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));

@@ -59,18 +59,22 @@ public class JobServiceImpl implements JobService {
         return maps;
     }
 
+    public List<Object> list() {
+        return jobInfoMapper.findAll();
+    }
+
     @Override
     public ReturnT<String> add(JobInfo jobInfo) {
         // valid
         JobGroup group = jobGroupMapper.load(jobInfo.getJobGroup());
         if (group == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_jobgroup")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_temp")));
         }
         if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_build")));
         }
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
@@ -89,6 +93,16 @@ public class JobServiceImpl implements JobService {
         }
         if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
+        }
+
+        List<String> ReplaceParamTypeList = new ArrayList<>();
+        ReplaceParamTypeList.add("yyyy/MM/dd");
+        ReplaceParamTypeList.add("HH:mm:ss");
+        ReplaceParamTypeList.add("yyyy/MM/dd HH:mm:ss");
+        ReplaceParamTypeList.add("UnitTime");
+
+        if (jobInfo.getReplaceParamType() == null || jobInfo.getReplaceParamType().isEmpty() || !ReplaceParamTypeList.contains(jobInfo.getReplaceParamType())) {
+            jobInfo.setReplaceParamType("UnitTime");
         }
 
         // fix "\r" in shell
@@ -224,6 +238,9 @@ public class JobServiceImpl implements JobService {
             }
         }
 
+        if (jobInfo.getReplaceParamType() != null || jobInfo.getReplaceParamType().isEmpty()) {
+            jobInfo.setReplaceParamType("UnitTime");
+        }
         exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
         exists_jobInfo.setJobCron(jobInfo.getJobCron());
         exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
@@ -236,6 +253,8 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
         exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
         exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
+        exists_jobInfo.setParentJobId(jobInfo.getParentJobId());
+        exists_jobInfo.setReplaceParamType(jobInfo.getReplaceParamType());
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
         exists_jobInfo.setJvmParam(jobInfo.getJvmParam());

@@ -1,0 +1,10 @@
+[Unit]
+Description=Datax Admin
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /jar存放目录/datax-admin.2.1.1.jar --spring.profiles.active=qa
+
+
+[Install]
+WantedBy=multi-user.target

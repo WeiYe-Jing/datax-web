@@ -36,7 +36,7 @@ public class UserController {
 
     @GetMapping("/pageList")
     @ApiOperation("用户列表")
-    public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
+    public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "1") int current,
                                                  @RequestParam(required = false, defaultValue = "10") int size,
                                                  String username) {
 
@@ -50,6 +50,15 @@ public class UserController {
         maps.put("recordsFiltered", recordsTotal);    // 过滤后的总记录数
         maps.put("data", list);                    // 分页列表
         return new ReturnT<>(maps);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("用户列表")
+    public ReturnT<List<JobUser>> list(String username) {
+
+        // page list
+        List<JobUser> list = jobUserMapper.findAll(username);
+        return new ReturnT<>(list);
     }
 
     @GetMapping("/getUserById")
@@ -79,6 +88,7 @@ public class UserController {
             return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
         jobUser.setPassword(bCryptPasswordEncoder.encode(jobUser.getPassword()));
+
 
         // check repeat
         JobUser existUser = jobUserMapper.loadByUserName(jobUser.getUsername());

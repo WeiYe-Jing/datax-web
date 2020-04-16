@@ -1,11 +1,14 @@
 package com.wugui.datax.admin.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.springframework.util.StringUtils;
 
 /**
  * @author xuxueli 2019-05-04 16:43:12
  */
+@Data
 public class JobUser {
 
     private int id;
@@ -18,48 +21,21 @@ public class JobUser {
     @ApiModelProperty("权限：执行器ID列表，多个逗号分割")
     private String permission;
 
-    public int getId() {
-        return id;
-    }
+    @ApiModelProperty("邮件地址")
+    @Required
+    private String email;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @ApiModelProperty("手机号码")
+    @Required
+    private String phone;
 
-    public String getUsername() {
-        return username;
-    }
+    @ApiModelProperty("昵称")
+    @Required
+    private String nickname;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
 
     // plugin
-    public boolean validPermission(int jobGroup){
+    public boolean validPermission(int jobGroup) {
         if ("1".equals(this.role)) {
             return true;
         } else {

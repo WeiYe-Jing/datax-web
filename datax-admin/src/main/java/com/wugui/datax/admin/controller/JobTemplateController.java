@@ -40,6 +40,11 @@ public class JobTemplateController {
         return new ReturnT<>(xxlJobTemplateService.pageList((current-1)*size, size, jobGroup, jobDesc, executorHandler, author));
     }
 
+    @GetMapping("/list")
+    public ReturnT<List<JobTemplate>> list(){
+        return new ReturnT<>(xxlJobTemplateService.findAll());
+    }
+
     @PostMapping("/add")
     @ApiOperation("添加任务")
     public ReturnT<String> add(@RequestBody JobTemplate jobTemplate) {

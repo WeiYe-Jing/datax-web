@@ -1,0 +1,25 @@
+# log config
+logging:
+  path: ./logs/executor
+
+### datax admin address list, such as "http://address" or "http://address01,http://address02"
+datax:
+  job:
+    admin:
+      ### datax-web admin address
+      addresses: http://127.0.0.1:8080
+    executor:
+      appname: datax-executor
+      ip:
+      port: 9999
+      ### job log path
+      logpath: ./logs/executor
+      ### job log retention days
+      logretentiondays: 30
+    ### job, access token
+    accessToken:
+
+  executor:
+    jsonpath: ./logs/
+
+  pypath: /data/app/datax/bin/datax.py

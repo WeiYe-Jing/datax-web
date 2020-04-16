@@ -1,13 +1,11 @@
 server:
   port: 8080
 spring:
+  profiles:
+    active: local
   #数据源
   datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
-
 
     hikari:
       ## 最小空闲连接数量
@@ -83,22 +81,13 @@ mybatis-plus:
 logging:
   level:
     com.wugui.datax.admin.mapper: error
-  path: /data/applogs/admin
 #  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
 
+yoozoo:
+  notice:
+    base-url: http://notice.uuzu.com
+    api-key: kqYzSh=vJ*brWKUwcGV2e+0xs!5LTR
+    username: tianly
 
-
-#datax-job, access token
-datax:
-  job:
-    accessToken:
-    #i18n (default empty as chinese, "en" as english)
-    i18n:
-    ## triggerpool max size
-    triggerpool:
-      fast:
-        max: 200
-      slow:
-        max: 100
-      ### log retention days
-    logretentiondays: 30
+swagger:
+  enabled: true

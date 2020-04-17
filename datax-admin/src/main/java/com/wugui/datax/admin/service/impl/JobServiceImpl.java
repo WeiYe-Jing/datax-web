@@ -238,9 +238,10 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        if (jobInfo.getReplaceParamType() != null || jobInfo.getReplaceParamType().isEmpty()) {
+        if (jobInfo.getReplaceParamType() == null || jobInfo.getReplaceParamType().isEmpty()) {
             jobInfo.setReplaceParamType("UnitTime");
         }
+
         exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
         exists_jobInfo.setJobCron(jobInfo.getJobCron());
         exists_jobInfo.setJobDesc(jobInfo.getJobDesc());

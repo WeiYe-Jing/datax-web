@@ -2,9 +2,11 @@ package com.wugui.datax.admin.tool.table;
 
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class ClickHouse {
 
     public static String database_name = "";
@@ -53,7 +55,7 @@ public class ClickHouse {
                         }
                         break;
                     default:
-                        System.out.println(c.getType());
+                        log.info(c.getType());
                         break;
                 }
             } else {
@@ -87,7 +89,7 @@ public class ClickHouse {
                         }
                         break;
                     default:
-                        System.out.println("=============尚未捕获的数据类型" + c.getType());
+                        log.info("=============尚未捕获的数据类型{}",c.getType());
                         break;
                 }
             }
@@ -95,7 +97,7 @@ public class ClickHouse {
         }
         String afterSQl = String.format("   ,datacenter_insert_time DateTime DEFAULT now() COMMENT '数据中心数据抽取入库时间' ) ENGINE = MergeTree PARTITION BY id ORDER BY id", primatyKey, preSql);
         stringBuilder.append(afterSQl);
-        System.out.println(stringBuilder.toString());
+        log.info(stringBuilder.toString());
         return stringBuilder.toString();
     }
 }

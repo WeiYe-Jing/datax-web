@@ -100,4 +100,7 @@ public class JobInfo {
 
 	@ApiModelProperty("最近一次执行状态")
 	private int lastHandleCode;
+
+	@ApiModelProperty("所属项目")
+	private String jobProject;
 }

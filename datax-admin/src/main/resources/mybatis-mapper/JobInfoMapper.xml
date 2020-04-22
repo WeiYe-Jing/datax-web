@@ -3,6 +3,9 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobInfoMapper">
 
+	<resultMap id="JobProject" type="com.wugui.datax.admin.entity.JobInfo">
+		<result column="job_project" property="jobProject"/>
+	</resultMap>
 	<resultMap id="JobInfo" type="com.wugui.datax.admin.entity.JobInfo" >
 		<result column="id" property="id" />
 
@@ -43,6 +46,7 @@
 
 		<result column="last_handle_code" property="lastHandleCode" />
 		<result column="replace_param_type" property="replaceParamType" />
+		<result column="job_project" property="jobProject"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -75,7 +79,8 @@
 		t.partition_info,
 		t.last_handle_code,
 		t.parent_jobid,
-		t.replace_param_type
+		t.replace_param_type,
+		t.job_project
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
@@ -94,8 +99,17 @@
 			<if test="glueType != null and glueType != ''">
 				AND t.glue_type like CONCAT(CONCAT('%', #{glueType}), '%')
 			</if>
-			<if test="author != null and author != ''">
-				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
+			<if test="authors != null">
+				AND 1=1 AND
+				<foreach collection="authors" index="index" item="author" open="(" close=")" separator=" OR ">
+					FIND_IN_SET(#{author},t.author)
+				</foreach>
+			</if>
+			<if test="jobProjects != null">
+				AND t.jop_project IN
+				<foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
+					#{jobProject}
+				</foreach>
 			</if>
 		</trim>
 		ORDER BY id DESC
@@ -105,7 +119,14 @@
 	<select id="findAll" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM job_info AS t
-		ORDER BY id DESC
+		ORDER BY job_desc ASC
+	</select>
+
+	<select id="projects" parameterType="java.util.HashMap" resultMap="JobProject">
+		SELECT distinct(job_project) as job_project
+		FROM job_info AS t
+		WHERE  job_project IS NOT NULL
+		ORDER BY job_project ASC
 	</select>
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
@@ -160,7 +181,8 @@
 			partition_info,
 			last_handle_code,
 			parent_jobid,
-		replace_param_type
+		replace_param_type,
+		job_project
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -190,7 +212,8 @@
 			#{partitionInfo},
 			#{lastHandleCode},
 			#{parentJobId},
-			#{replaceParamType}
+			#{replaceParamType},
+			#{jobProject}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -234,7 +257,8 @@
 			partition_info=#{partitionInfo},
 			last_handle_code=#{lastHandleCode},
 			parent_jobid=#{parentJobId},
-			replace_param_type=#{replaceParamType}
+			replace_param_type=#{replaceParamType},
+			job_project=#{jobProject}
 		WHERE id = #{id}
 	</update>
 

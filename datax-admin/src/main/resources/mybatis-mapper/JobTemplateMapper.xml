@@ -41,6 +41,7 @@
 		<result column="inc_start_time" property="incStartTime" />
 
 		<result column="partition_info" property="partitionInfo" />
+		<result column="job_project" property="jobProject"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -71,7 +72,8 @@
 		t.jvm_param,
 		t.inc_start_time,
 		t.partition_info,
-		t.parent_jobid
+		t.parent_jobid,
+		t.job_project
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobTemplate">
@@ -162,7 +164,8 @@
 			jvm_param,
 			inc_start_time,
 			partition_info,
-			parent_jobid
+			parent_jobid,
+			job_project
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -190,7 +193,8 @@
 			#{jvmParam},
 			#{incStartTime},
 			#{partitionInfo},
-			#{parentJobId}
+			#{parentJobId},
+			#{jobProject}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -232,7 +236,8 @@
 			jvm_param=#{jvmParam},
 			inc_start_time=#{incStartTime},
 			partition_info=#{partitionInfo},
-			parent_jobid=#{parentJobId}
+			parent_jobid=#{parentJobId},
+			job_project=#{jobProject}
 		WHERE id = #{id}
 	</update>
 

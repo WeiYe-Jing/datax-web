@@ -26,9 +26,11 @@ public interface JobService {
      * @param author
      * @return
      */
-    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author);
+    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author,String jobProject);
 
     List<Object> list();
+
+    List<Object> projects();
 
     /**
      * add job

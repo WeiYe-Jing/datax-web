@@ -8,7 +8,7 @@ spring:
 # 配置mybatis-plus打印slq日志
 logging:
   level:
-    com.wugui.datax.admin.mapper: error
+    com.wugui.datax.admin.mapper: debug
   path: ./logs/datax-admin/
 
 #datax-job, access token

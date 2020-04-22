@@ -361,3 +361,9 @@ ADD COLUMN `nickname` varchar(255) NULL COMMENT '昵称' AFTER `permission`,
 ADD COLUMN `email` varchar(255) NULL COMMENT '邮箱' AFTER `email`,
 ADD COLUMN `phone` varchar(255) NULL COMMENT '手机号码' AFTER `phone`;
 
+ALTER TABLE `job_info`
+ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `job_desc`;
+
+ALTER TABLE `job_template`
+ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `parent_jobid`;
+

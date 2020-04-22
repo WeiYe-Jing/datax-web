@@ -166,6 +166,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
             list.forEach((v) -> {
                 newLists.add("\"" + v + "\"");
             });
+        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
+            list.forEach((v) -> {
+                newLists.add("[" + v + "]");
+            });
         } else {
             list.forEach((v) -> {
                 newLists.add("`" + v + "`");

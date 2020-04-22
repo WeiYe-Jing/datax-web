@@ -12,7 +12,7 @@ import com.wugui.datax.admin.entity.JobTemplate;
 import com.wugui.datax.admin.entity.JobUser;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.JobTemplateService;
-import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -67,7 +67,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             for (String au : authors) {
                 authorNames.add(mapUsers.get(Integer.parseInt(au)));
             }
-            jobTemplate.setAuthorName(StringUtil.join(authorNames, "、"));
+            jobTemplate.setAuthorName(StringUtils.join(authorNames, "、"));
         });
 
         // package result
@@ -142,6 +142,10 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             temp = temp.substring(0, temp.length() - 1);
 
             jobTemplate.setChildJobId(temp);
+        }
+
+        if(jobTemplate.getJobProject()==null || jobTemplate.getJobProject().isEmpty()){
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
 
         // add in db
@@ -249,6 +253,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         exists_jobTemplate.setIncStartTime(jobTemplate.getIncStartTime());
         exists_jobTemplate.setPartitionInfo(jobTemplate.getPartitionInfo());
         exists_jobTemplate.setReplaceParamType(jobTemplate.getReplaceParamType());
+        exists_jobTemplate.setJobProject(jobTemplate.getJobProject());
         exists_jobTemplate.setUpdateTime(new Date());
         jobTemplateMapper.update(exists_jobTemplate);
 

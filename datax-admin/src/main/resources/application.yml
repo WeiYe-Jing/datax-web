@@ -77,12 +77,6 @@ mybatis-plus:
     jdbc-type-for-null: 'null'
     type-handlers-package: com.wugui.datax.admin.core.handler
 
-# 配置mybatis-plus打印slq日志
-logging:
-  level:
-    com.wugui.datax.admin.mapper: error
-#  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
-
 yoozoo:
   notice:
     base-url: http://notice.uuzu.com

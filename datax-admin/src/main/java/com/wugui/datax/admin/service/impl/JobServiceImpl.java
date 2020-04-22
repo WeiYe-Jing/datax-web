@@ -60,7 +60,7 @@ public class JobServiceImpl implements JobService {
 
         // page list
         List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, authors, jobProjects);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, authors, jobProjects);
 
         // package result
         Map<String, Object> maps = new HashMap<String, Object>();

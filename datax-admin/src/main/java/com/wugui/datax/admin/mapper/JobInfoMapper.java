@@ -31,7 +31,8 @@ public interface JobInfoMapper {
                       @Param("triggerStatus") int triggerStatus,
                       @Param("jobDesc") String jobDesc,
                       @Param("glueType") String glueType,
-                      @Param("author") String author);
+                      @Param("authors") String[] authors,
+                      @Param("jobProjects") String[] jobProjects);
 
     List<Object> findAll();
 

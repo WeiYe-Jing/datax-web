@@ -137,7 +137,7 @@ public class JobGroupController {
     public ReturnT<String> remove(int id) {
 
         // valid
-        int count = jobInfoMapper.pageListCount(0, 10, id, -1, null, null, null);
+        int count = jobInfoMapper.pageListCount(0, 10, id, -1, null, null, null,null);
         if (count > 0) {
             return new ReturnT<>(500, I18nUtil.getString("jobgroup_del_limit_0"));
         }

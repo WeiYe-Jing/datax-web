@@ -145,8 +145,17 @@
 			<if test="glueType != null and glueType != ''">
 				AND t.glue_type like CONCAT(CONCAT('%', #{glueType}), '%')
 			</if>
-			<if test="author != null and author != ''">
-				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
+			<if test="authors != null">
+				AND 1=1 AND
+				<foreach collection="authors" index="index" item="author" open="(" close=")" separator=" OR ">
+					FIND_IN_SET(#{author},t.author)
+				</foreach>
+			</if>
+			<if test="jobProjects != null">
+				AND t.job_project IN
+				<foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
+					#{jobProject}
+				</foreach>
 			</if>
 		</trim>
 	</select>

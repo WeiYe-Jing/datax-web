@@ -106,7 +106,7 @@
 				</foreach>
 			</if>
 			<if test="jobProjects != null">
-				AND t.jop_project IN
+				AND t.job_project IN
 				<foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
 					#{jobProject}
 				</foreach>

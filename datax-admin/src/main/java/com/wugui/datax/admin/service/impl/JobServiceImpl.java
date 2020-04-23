@@ -15,6 +15,8 @@ import com.wugui.datax.admin.entity.JobLogReport;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.JobService;
 import com.wugui.datax.admin.util.CronUtil;
+import com.wugui.datax.admin.util.DateFormatUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -96,14 +98,9 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
 
-        List<String> ReplaceParamTypeList = new ArrayList<>();
-        ReplaceParamTypeList.add("yyyy/MM/dd");
-        ReplaceParamTypeList.add("HH:mm:ss");
-        ReplaceParamTypeList.add("yyyy/MM/dd HH:mm:ss");
-        ReplaceParamTypeList.add("UnitTime");
 
-        if (jobInfo.getReplaceParamType() == null || jobInfo.getReplaceParamType().isEmpty() || !ReplaceParamTypeList.contains(jobInfo.getReplaceParamType())) {
-            jobInfo.setReplaceParamType("UnitTime");
+        if (StringUtils.isBlank(jobInfo.getReplaceParamType()) || !DateFormatUtils.formatList().contains(jobInfo.getReplaceParamType())) {
+            jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
 
         // fix "\r" in shell
@@ -242,7 +239,7 @@ public class JobServiceImpl implements JobService {
 
         BeanUtils.copyProperties(jobInfo,exists_jobInfo);
         if (jobInfo.getReplaceParamType() != null || jobInfo.getReplaceParamType().isEmpty()) {
-            jobInfo.setReplaceParamType("UnitTime");
+            jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
         exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
         exists_jobInfo.setJobCron(jobInfo.getJobCron());

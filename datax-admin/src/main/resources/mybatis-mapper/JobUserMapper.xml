@@ -66,6 +66,28 @@
         WHERE t.username = #{username}
     </select>
 
+    <select id="getUsersByIds" parameterType="java.util.HashMap" resultMap="JobUser">
+        SELECT <include refid="Base_Column_List" />
+        FROM job_user AS t
+        WHERE t.username = #{username}
+        WHERE t.id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getRoleByUserId" parameterType="java.util.HashMap" resultMap="JobRole">
+        SELECT
+        a.id,
+        a.NAME
+        FROM
+        job_role a
+        LEFT JOIN role_user b ON a.id = b.role_id
+        LEFT JOIN job_user c ON b.user_id = c.id
+        WHERE
+        b.user_id = #{userId}
+    </select>
+
     <select id="getUserById" parameterType="java.util.HashMap" resultMap="JobUser">
         SELECT
         t.id,

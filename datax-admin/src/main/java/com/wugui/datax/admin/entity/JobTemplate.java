@@ -65,7 +65,7 @@ public class JobTemplate {
 	@ApiModelProperty("GLUE更新时间")
 	private Date glueUpdatetime;
 
-	@ApiModelProperty("子任务ID，多个逗号分隔")
+	@ApiModelProperty("子任务ID")
 	private String childJobId;
 
 	@ApiModelProperty("上次调度时间")
@@ -79,6 +79,9 @@ public class JobTemplate {
 
 	@ApiModelProperty("脚本动态参数")
 	private String replaceParam;
+
+	@ApiModelProperty("时间增量格式")
+	private String replaceParamType;
 
 	@ApiModelProperty("jvm参数")
 	private String jvmParam;

@@ -41,6 +41,7 @@
 		<result column="partition_info" property="partitionInfo" />
 
 		<result column="last_handle_code" property="lastHandleCode" />
+		<result column="replace_param_type" property="replaceParamType" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -71,7 +72,8 @@
 		t.jvm_param,
 		t.inc_start_time,
 		t.partition_info,
-		t.last_handle_code
+		t.last_handle_code,
+		t.replace_param_type
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
@@ -96,6 +98,12 @@
 		</trim>
 		ORDER BY id DESC
 		LIMIT #{offset}, #{pagesize}
+	</select>
+
+	<select id="findAll" parameterType="java.util.HashMap" resultMap="JobInfo">
+		SELECT <include refid="Base_Column_List" />
+		FROM job_info AS t
+		ORDER BY id DESC
 	</select>
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
@@ -148,7 +156,8 @@
 			jvm_param,
 			inc_start_time,
 			partition_info,
-			last_handle_code
+			last_handle_code,
+		    replace_param_type
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -176,7 +185,8 @@
 			#{jvmParam},
 			#{incStartTime},
 			#{partitionInfo},
-			#{lastHandleCode}
+			#{lastHandleCode},
+			#{replaceParamType}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -218,7 +228,8 @@
 			jvm_param=#{jvmParam},
 			inc_start_time=#{incStartTime},
 			partition_info=#{partitionInfo},
-			last_handle_code=#{lastHandleCode}
+			last_handle_code=#{lastHandleCode},
+			replace_param_type=#{replaceParamType}
 		WHERE id = #{id}
 	</update>
 

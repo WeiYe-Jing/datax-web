@@ -367,3 +367,9 @@ ADD COLUMN `task_average_flow_suffix` VARCHAR(11) NULL AFTER `task_total_time_su
 ADD COLUMN `task_record_writing_speed_suffix` VARCHAR(11) NULL AFTER `task_average_flow_suffix`,
 ADD COLUMN `task_record_reader_num_suffix` INT(11) NULL AFTER `task_record_writing_speed_suffix`,
 ADD COLUMN `task_record_writing_num_suffix` INT(11) NULL AFTER `task_record_reader_num_suffix`;
+
+ALTER TABLE `job_info`
+ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `last_handle_code`;
+
+ALTER TABLE `job_template`
+ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `replace_param`;

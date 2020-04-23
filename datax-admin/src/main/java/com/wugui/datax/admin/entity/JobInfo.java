@@ -65,7 +65,7 @@ public class JobInfo {
 	@ApiModelProperty("GLUE更新时间")
 	private Date glueUpdatetime;
 
-	@ApiModelProperty("子任务ID，多个逗号分隔")
+	@ApiModelProperty("子任务ID")
 	private String childJobId;
 
 	@ApiModelProperty("调度状态：0-停止，1-运行")
@@ -82,6 +82,9 @@ public class JobInfo {
 
 	@ApiModelProperty("脚本动态参数")
 	private String replaceParam;
+
+	@ApiModelProperty("增量日期格式")
+	private String replaceParamType;
 
 	@ApiModelProperty("jvm参数")
 	private String jvmParam;

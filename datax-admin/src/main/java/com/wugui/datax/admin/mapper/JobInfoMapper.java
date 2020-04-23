@@ -32,6 +32,8 @@ public interface JobInfoMapper {
                       @Param("glueType") String glueType,
                       @Param("author") String author);
 
+    List<Object> findAll();
+
     int save(JobInfo info);
 
     JobInfo loadById(@Param("id") int id);

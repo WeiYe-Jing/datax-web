@@ -37,6 +37,16 @@ public class TriggerParam implements Serializable{
 
     private String partitionInfo;
 
+    public String getReplaceParamType() {
+        return replaceParamType;
+    }
+
+    public void setReplaceParamType(String replaceParamType) {
+        this.replaceParamType = replaceParamType;
+    }
+
+    private String replaceParamType;
+
 
     public int getJobId() {
         return jobId;
@@ -212,6 +222,7 @@ public class TriggerParam implements Serializable{
                 ", startTime=" + startTime +
                 ", triggerTime=" + triggerTime +
                 ", partitionInfo=" + partitionInfo +
+                ", replaceParamType=" + replaceParamType +
                 '}';
     }
 

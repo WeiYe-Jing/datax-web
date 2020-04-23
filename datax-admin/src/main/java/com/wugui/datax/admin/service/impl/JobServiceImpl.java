@@ -15,8 +15,6 @@ import com.wugui.datax.admin.entity.JobLogReport;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.JobService;
 import com.wugui.datax.admin.util.CronUtil;
-import com.wugui.datax.admin.util.JSONUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -62,6 +60,10 @@ public class JobServiceImpl implements JobService {
         return maps;
     }
 
+    public List<Object> list() {
+        return jobInfoMapper.findAll();
+    }
+
     @Override
     public ReturnT<String> add(JobInfo jobInfo) {
         // valid
@@ -92,6 +94,16 @@ public class JobServiceImpl implements JobService {
         }
         if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
+        }
+
+        List<String> ReplaceParamTypeList = new ArrayList<>();
+        ReplaceParamTypeList.add("yyyy/MM/dd");
+        ReplaceParamTypeList.add("HH:mm:ss");
+        ReplaceParamTypeList.add("yyyy/MM/dd HH:mm:ss");
+        ReplaceParamTypeList.add("UnitTime");
+
+        if (jobInfo.getReplaceParamType() == null || jobInfo.getReplaceParamType().isEmpty() || !ReplaceParamTypeList.contains(jobInfo.getReplaceParamType())) {
+            jobInfo.setReplaceParamType("UnitTime");
         }
 
         // fix "\r" in shell
@@ -229,6 +241,23 @@ public class JobServiceImpl implements JobService {
         }
 
         BeanUtils.copyProperties(jobInfo,exists_jobInfo);
+        if (jobInfo.getReplaceParamType() != null || jobInfo.getReplaceParamType().isEmpty()) {
+            jobInfo.setReplaceParamType("UnitTime");
+        }
+        exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
+        exists_jobInfo.setJobCron(jobInfo.getJobCron());
+        exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
+        exists_jobInfo.setAuthor(jobInfo.getAuthor());
+        exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
+        exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
+        exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());
+        exists_jobInfo.setExecutorParam(jobInfo.getExecutorParam());
+        exists_jobInfo.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
+        exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
+        exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
+        exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
+        exists_jobInfo.setReplaceParamType(jobInfo.getReplaceParamType());
+        exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
         exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
         exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -167,23 +168,35 @@ public class ExecutorJobHandler extends IJobHandler {
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
-        long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
         String replaceParam = tgParam.getReplaceParam().trim();
         if (StringUtils.isNotBlank(replaceParam)) {
-            long lastTime = tgParam.getStartTime().getTime() / 1000;
             if (doc.length() > 0) doc.append(SPLIT_SPACE);
-            doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
-            if (StringUtils.isNotBlank(partitionStr)) {
-                doc.append(SPLIT_SPACE);
-                List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
-            }
-            doc.append(TRANSFORM_QUOTES);
-        } else {
-            if (StringUtils.isNotBlank(partitionStr)) {
-                List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                if (doc.length() > 0) doc.append(SPLIT_SPACE);
-                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
+            if (StringUtils.isNotBlank(tgParam.getReplaceParam())) {
+                if (doc.length() > 0) doc.append(DataXOptionConstant.SPLIT_SPACE);
+
+                if (tgParam.getReplaceParamType() == null || tgParam.getReplaceParamType().isEmpty() || tgParam.getReplaceParamType().equals("UnitTime")) {
+                    long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
+                    long lastTime = tgParam.getStartTime().getTime() / 1000;
+                    doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+                } else {
+                    SimpleDateFormat sdf = new SimpleDateFormat(tgParam.getReplaceParamType());
+                    String tgSecondTime = sdf.format(tgParam.getTriggerTime());
+                    String lastTime = sdf.format(tgParam.getStartTime());
+                    doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+                }
+
+                if (StringUtils.isNotBlank(partitionStr)) {
+                    doc.append(SPLIT_SPACE);
+                    List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
+                    doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
+                }
+                doc.append(TRANSFORM_QUOTES);
+            } else {
+                if (StringUtils.isNotBlank(partitionStr)) {
+                    List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
+                    if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
+                }
             }
         }
         JobLogger.log("------------------命令参数: " + doc);

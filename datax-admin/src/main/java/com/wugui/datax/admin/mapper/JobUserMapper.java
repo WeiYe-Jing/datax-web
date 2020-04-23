@@ -19,6 +19,8 @@ public interface JobUserMapper {
                            @Param("pagesize") int pagesize,
                            @Param("username") String username);
 
+    List<JobUser> findAll(@Param("username") String username);
+
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
                       @Param("username") String username);
@@ -27,8 +29,9 @@ public interface JobUserMapper {
 
     JobRole getRoleByUserId(@Param("userId") int userId);
 
-
     JobUser getUserById(@Param("id") int id);
+
+    List<JobUser> getUsersByIds(@Param("ids") String[] ids);
 
     int save(JobUser jobUser);
 

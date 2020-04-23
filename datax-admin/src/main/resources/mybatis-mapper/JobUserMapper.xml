@@ -76,18 +76,6 @@
         </foreach>
     </select>
 
-    <select id="getRoleByUserId" parameterType="java.util.HashMap" resultMap="JobRole">
-        SELECT
-        a.id,
-        a.NAME
-        FROM
-        job_role a
-        LEFT JOIN role_user b ON a.id = b.role_id
-        LEFT JOIN job_user c ON b.user_id = c.id
-        WHERE
-        b.user_id = #{userId}
-    </select>
-
     <select id="getUserById" parameterType="java.util.HashMap" resultMap="JobUser">
         SELECT
         t.id,

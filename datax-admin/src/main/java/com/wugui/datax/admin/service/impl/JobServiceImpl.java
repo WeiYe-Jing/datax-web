@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -48,11 +49,17 @@ public class JobServiceImpl implements JobService {
     private JobLogReportMapper jobLogReportMapper;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author) {
+    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author, String jobProject) {
+
+        String[] jobProjects = null;
+        if (jobProject != null && !jobProject.isEmpty()) {
+            jobProjects = jobProject.split(",");
+        }
+
 
         // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
+        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -64,6 +71,10 @@ public class JobServiceImpl implements JobService {
 
     public List<Object> list() {
         return jobInfoMapper.findAll();
+    }
+
+    public List<Object> projects() {
+        return jobInfoMapper.projects();
     }
 
     @Override
@@ -174,6 +185,10 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
+
+        if (jobInfo.getJobProject() == null || jobInfo.getJobProject().isEmpty()) {
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
+        }
         if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
@@ -262,6 +277,7 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setUpdateTime(new Date());
         exists_jobInfo.setGlueType(jobInfo.getGlueType());
         exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
+        exists_jobInfo.setJobProject(jobInfo.getJobProject());
 
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());

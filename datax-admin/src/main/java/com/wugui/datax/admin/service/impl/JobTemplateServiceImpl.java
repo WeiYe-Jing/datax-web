@@ -15,6 +15,9 @@ import com.wugui.datax.admin.mapper.JobLogMapper;
 import com.wugui.datax.admin.mapper.JobTemplateMapper;
 import com.wugui.datax.admin.service.JobTemplateService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -122,6 +125,10 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             jobTemplate.setChildJobId(temp);
         }
 
+        if(jobTemplate.getJobProject()==null || jobTemplate.getJobProject().isEmpty()){
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
+        }
+
         // add in db
         jobTemplate.setAddTime(new Date());
         jobTemplate.setUpdateTime(new Date());
@@ -226,6 +233,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         exists_jobTemplate.setIncStartTime(jobTemplate.getIncStartTime());
         exists_jobTemplate.setPartitionInfo(jobTemplate.getPartitionInfo());
         exists_jobTemplate.setReplaceParamType(jobTemplate.getReplaceParamType());
+        exists_jobTemplate.setJobProject(jobTemplate.getJobProject());
         exists_jobTemplate.setUpdateTime(new Date());
         jobTemplateMapper.update(exists_jobTemplate);
 

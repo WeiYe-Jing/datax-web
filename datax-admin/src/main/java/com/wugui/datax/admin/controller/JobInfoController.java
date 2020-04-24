@@ -39,14 +39,19 @@ public class JobInfoController {
     @ApiOperation("任务列表")
     public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
                                         @RequestParam(required = false, defaultValue = "10") int size,
-                                        int jobGroup, int triggerStatus, String jobDesc, String glueType, String author) {
+                                        int jobGroup, int triggerStatus, String jobDesc, String glueType, String author, String jobProject) {
 
-        return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, author));
+        return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, author, jobProject));
     }
 
     @GetMapping("/list")
     public ReturnT<List<Object>> list(){
         return new ReturnT<>(jobService.list());
+    }
+
+    @GetMapping("/projects")
+    public ReturnT<List<Object>> projects(){
+        return new ReturnT<>(jobService.projects());
     }
     @PostMapping("/add")
     @ApiOperation("添加任务")

@@ -91,4 +91,7 @@ public class JobTemplate {
 
 	@ApiModelProperty("分区信息")
 	private String partitionInfo;
+
+    @ApiModelProperty("所属项目")
+    private String jobProject;
 }

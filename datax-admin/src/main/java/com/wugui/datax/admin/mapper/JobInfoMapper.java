@@ -22,7 +22,8 @@ public interface JobInfoMapper {
                            @Param("triggerStatus") int triggerStatus,
                            @Param("jobDesc") String jobDesc,
                            @Param("glueType") String glueType,
-                           @Param("author") String author);
+                           @Param("author") String author,
+                           @Param("jobProjects") String[] jobProjects);
 
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
@@ -30,9 +31,12 @@ public interface JobInfoMapper {
                       @Param("triggerStatus") int triggerStatus,
                       @Param("jobDesc") String jobDesc,
                       @Param("glueType") String glueType,
-                      @Param("author") String author);
+                      @Param("author") String author,
+                      @Param("jobProjects") String[] jobProjects);
 
     List<Object> findAll();
+
+    List<Object> projects();
 
     int save(JobInfo info);
 

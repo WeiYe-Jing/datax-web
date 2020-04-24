@@ -373,3 +373,12 @@ ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' A
 
 ALTER TABLE `job_template`
 ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `replace_param`;
+
+ALTER TABLE `job_info`
+ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `job_desc`;
+
+ALTER TABLE `job_template`
+ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `partition_info`;
+
+
+

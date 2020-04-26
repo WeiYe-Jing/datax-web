@@ -87,7 +87,7 @@ public class JobFailMonitorHelper {
 
 					} catch (Exception e) {
 						if (!toStop) {
-							logger.error(">>>>>>>>>>> datax-web, job fail monitor thread error:{}", e);
+							logger.error(">>>>>>>>>>> datax-web, job fail monitor thread error:{0}", e);
 						}
 					}
 

@@ -253,7 +253,7 @@ public class JobServiceImpl implements JobService {
         }
 
         BeanUtils.copyProperties(jobInfo,exists_jobInfo);
-        if (jobInfo.getReplaceParamType() != null || jobInfo.getReplaceParamType().isEmpty()) {
+        if (StringUtils.isBlank(jobInfo.getReplaceParamType())) {
             jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
         exists_jobInfo.setJobGroup(jobInfo.getJobGroup());

@@ -180,7 +180,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
             list.forEach((v) -> {
                 newLists.add("[" + v + "]");
             });
-        } else {
+        } else if(JdbcConstants.MYSQL.equals(datasource)){
             list.forEach((v) -> {
                 newLists.add("`" + v + "`");
             });

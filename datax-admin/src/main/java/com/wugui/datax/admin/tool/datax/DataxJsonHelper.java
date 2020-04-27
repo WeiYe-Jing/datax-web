@@ -165,7 +165,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
-    public List<String> rewrite(List<?> list, String datasource) {
+    public List<String> rewrite(List<String> list, String datasource) {
         List<String> newLists = new ArrayList<>();
         if (JdbcConstants.POSTGRESQL.equals(datasource)) {
             list.forEach((v) -> {
@@ -179,6 +179,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
             list.forEach((v) -> {
                 newLists.add("`" + v + "`");
             });
+        }else {
+            return list;
         }
         return newLists;
     }

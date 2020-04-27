@@ -127,7 +127,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
-
     public void initWriter(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
         this.writerDatasource = readerDatasource;
         this.writerTables = dataxJsonDto.getWriterTables();
@@ -154,10 +153,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }  else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
             writerPlugin = new ClickHouseWriter();
             buildWriter = buildWriter();
-
-            //执行建表语句
-
-
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
@@ -273,7 +268,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
         return readerPlugin.buildHbase(dataxHbasePojo);
     }
-
 
     @Override
     public Map<String, Object> buildMongoDBReader() {

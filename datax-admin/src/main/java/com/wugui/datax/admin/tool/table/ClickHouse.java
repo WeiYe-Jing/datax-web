@@ -32,7 +32,6 @@ public class ClickHouse {
                     case "CHAR":
                         if (c.getIsnull() == 0) {
                             str = c.getName() + " String COMMENT '" + c.getComment() + "'";
-
                         } else {
                             str = c.getName() + " Nullable(String) COMMENT '" + c.getComment() + "'";
                         }
@@ -49,7 +48,6 @@ public class ClickHouse {
                     case "DATETIME":
                         if (c.getIsnull() == 0) {
                             str = c.getName() + " datetime COMMENT '" + c.getComment() + "'";
-
                         } else {
                             str = c.getName() + " Nullable(datetime) COMMENT '" + c.getComment() + "'";
                         }
@@ -89,7 +87,7 @@ public class ClickHouse {
                         }
                         break;
                     default:
-                        log.info("=============尚未捕获的数据类型{}",c.getType());
+                        log.info("尚未捕获的数据类型{}",c.getType());
                         break;
                 }
             }

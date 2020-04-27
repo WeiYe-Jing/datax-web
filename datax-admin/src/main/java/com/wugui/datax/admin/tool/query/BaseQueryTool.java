@@ -388,6 +388,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         Statement stmt = null;
         ResultSet rs = null;
         try {
+            querySql = querySql.replace(";", "");
             //拼装sql语句，在后面加上 where 1=0 即可
             String sql = querySql.concat(" where 1=0");
             //判断是否已有where，如果是，则加 and 1=0

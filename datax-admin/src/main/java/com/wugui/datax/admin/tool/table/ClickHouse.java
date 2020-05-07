@@ -9,7 +9,6 @@ import java.util.List;
 @Slf4j
 public class ClickHouse {
 
-    public static String database_name = "";
 
     public String buildMysql2ClickHouseCreateTbSQL(String tableName, BaseQueryTool queryTool) {
         List<ColumnInfo> columnInfos = queryTool.getColumns(tableName);
@@ -17,7 +16,7 @@ public class ClickHouse {
          * 构建建表语句
          */
         StringBuilder stringBuilder = new StringBuilder();
-        String preSql = String.format("CREATE TABLE IF NOT EXISTS %s (", database_name + "_" + tableName);
+        String preSql = String.format("CREATE TABLE IF NOT EXISTS %s (",  tableName);
         stringBuilder.append(preSql);
         String primatyKey = "";
         for (int i = 0; i < columnInfos.size(); i++) {

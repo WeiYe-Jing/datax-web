@@ -12,7 +12,6 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
-import com.wugui.datax.admin.tool.table.ClickHouse;
 import com.wugui.datax.admin.util.AESUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
@@ -69,7 +68,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
         currentSchema = getSchema(jobDatasource.getJdbcUsername());
-        ClickHouse.database_name = currentSchema;
         currentDatabase = jobDatasource.getDatasource();
         LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
     }

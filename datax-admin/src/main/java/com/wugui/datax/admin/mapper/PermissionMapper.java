@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface PermissionDao {
+public interface PermissionMapper {
 
     List<JobPermission> findAll();
 

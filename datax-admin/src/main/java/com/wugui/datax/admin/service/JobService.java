@@ -2,9 +2,11 @@ package com.wugui.datax.admin.service;
 
 
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobInfo;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -95,4 +97,11 @@ public interface JobService {
      * @return
      */
     ReturnT<Map<String, Object>> chartInfo();
+
+    /**
+     * batch add
+     * @param dto
+     * @return
+     */
+    ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException;
 }

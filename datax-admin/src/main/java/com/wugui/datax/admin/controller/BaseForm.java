@@ -6,7 +6,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wugui.datax.admin.entity.DataxPlugin;
 import com.wugui.datax.admin.util.PageUtils;
 import com.wugui.datax.admin.util.ServletUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -86,12 +86,6 @@ logging:
   path: /data/applogs/admin
 #  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
 
-yoozoo:
-  notice:
-    base-url: http://notice.uuzu.com
-    api-key: kqYzSh=vJ*brWKUwcGV2e+0xs!5LTR
-    username: tianly
-
 
 #datax-job, access token
 datax:

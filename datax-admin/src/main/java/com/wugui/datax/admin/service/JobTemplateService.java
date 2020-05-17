@@ -27,6 +27,10 @@ public interface JobTemplateService {
 	 */
 	Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String author);
 
+	/**
+	 * find all template
+	 * @return
+	 */
 	List<JobTemplate> findAll();
 	/**
 	 * add job

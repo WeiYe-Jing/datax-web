@@ -7,6 +7,7 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.TriggerJobDto;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.service.JobService;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +47,7 @@ public class JobInfoController {
     }
 
     @GetMapping("/list")
+    @ApiOperation("全部任务列表")
     public ReturnT<List<Object>> list(){
         return new ReturnT<>(jobService.list());
     }
@@ -114,5 +117,11 @@ public class JobInfoController {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
         }
         return new ReturnT<>(result);
+    }
+
+    @PostMapping("/batchAdd")
+    @ApiOperation("批量创建任务")
+    public ReturnT<String> batchAdd(@RequestBody DataXBatchJsonBuildDto dto) throws IOException {
+        return jobService.batchAdd(dto);
     }
 }

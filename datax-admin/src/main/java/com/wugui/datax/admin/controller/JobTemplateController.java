@@ -32,7 +32,7 @@ public class JobTemplateController {
     private JobTemplateService jobTemplateService;
 
     @GetMapping("/pageList")
-    @ApiOperation("任务列表")
+    @ApiOperation("任务模板列表")
     public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
                                         @RequestParam(required = false, defaultValue = "10") int size,
                                         int jobGroup, String jobDesc, String executorHandler, String author) {
@@ -41,12 +41,13 @@ public class JobTemplateController {
     }
 
     @GetMapping("/list")
+    @ApiOperation("获取所有任务模板列表")
     public ReturnT<List<JobTemplate>> list(){
         return new ReturnT<>(jobTemplateService.findAll());
     }
 
     @PostMapping("/add")
-    @ApiOperation("添加任务")
+    @ApiOperation("添加任务模板")
     public ReturnT<String> add(@RequestBody JobTemplate jobTemplate) {
         return jobTemplateService.add(jobTemplate);
     }
@@ -58,7 +59,7 @@ public class JobTemplateController {
     }
 
     @PostMapping(value = "/remove/{id}")
-    @ApiOperation("移除任务")
+    @ApiOperation("移除任务模板")
     public ReturnT<String> remove(@PathVariable(value = "id") int id) {
         return jobTemplateService.remove(id);
     }

@@ -51,11 +51,4 @@ public interface DatasourceQueryService {
      * @return
      */
     List<String> getColumnsByQuerySql(Long datasourceId, String querySql);
-
-    /**
-     * 创建表
-     * @param id data source id
-     * @param tableName
-     */
-    Boolean createTable(Long id, String tableName);
 }

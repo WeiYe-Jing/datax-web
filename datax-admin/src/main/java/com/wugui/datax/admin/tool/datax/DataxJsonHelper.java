@@ -88,7 +88,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
 
-    public void initReader(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
+    public void initReader(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
 
         this.readerDatasource = readerDatasource;
         this.readerTables = dataxJsonDto.getReaderTables();
@@ -127,7 +127,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
-    public void initWriter(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
+    public void initWriter(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
         this.writerDatasource = readerDatasource;
         this.writerTables = dataxJsonDto.getWriterTables();
         this.writerColumns = dataxJsonDto.getWriterColumns();

@@ -155,10 +155,6 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ![](http://q7vnain67.bkt.clouddn.com/user.png)
 
-### 10.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
-
-![](http://q7vnain67.bkt.clouddn.com/json_demo.png)
-
 # UI
 
 [前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
@@ -177,7 +173,7 @@ Copyright (c) 2020 WeiYe
 
 产品开源免费，并且将持续提供免费的社区技术支持。个人或企业内部可自由的接入和使用。
 
-> 欢迎在 [登记地址](https://github.com/WeiYe-Jing/datax-web/issues/14 ) 登记，登记仅仅为了产品推广和提升社区开发的动力。
+> 欢迎在 [登记地址](https://github.com/WeiYe-Jing/datax-web/issues/93 ) 登记，登记仅仅为了产品推广和提升社区开发的动力。
 
 
 # v-2.1.1

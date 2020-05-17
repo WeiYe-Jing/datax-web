@@ -9,7 +9,6 @@ import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.HBaseQueryTool;
 import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.tool.table.ClickHouse;
 import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,15 +54,6 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
             return qTool.getTableNames();
         }
-    }
-
-    @Override
-    public Boolean createTable(Long id, String tableName) {
-        //获取数据源对象
-        JobDatasource datasource = jobDatasourceService.getById(id);
-        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-        qTool.executeCreateTableSql(new ClickHouse().buildMysql2ClickHouseCreateTbSQL(tableName, qTool));
-        return true;
     }
 
     @Override

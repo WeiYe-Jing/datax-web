@@ -163,13 +163,13 @@ public class ExecutorJobHandler extends IJobHandler {
 
     private String buildDataXParam(TriggerParam tgParam) {
         StringBuilder doc = new StringBuilder();
-        String jvmParam = tgParam.getJvmParam().trim();
+        String jvmParam = StringUtils.isNotBlank(tgParam.getJvmParam()) ? tgParam.getJvmParam().trim() : tgParam.getJvmParam();
         String partitionStr = tgParam.getPartitionInfo();
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
         String replaceParam = tgParam.getReplaceParam().trim();
-        if (StringUtils.isNotBlank(replaceParam)) {
+        if (StringUtils.isNotBlank(replaceParam)  && tgParam.getIncrementType() == 2) {
             if (doc.length() > 0) doc.append(SPLIT_SPACE);
             if (StringUtils.isNotBlank(tgParam.getReplaceParam())) {
                 if (doc.length() > 0) doc.append(DataXOptionConstant.SPLIT_SPACE);
@@ -191,6 +191,21 @@ public class ExecutorJobHandler extends IJobHandler {
                     doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
                 }
                 doc.append(TRANSFORM_QUOTES);
+            } else if(StringUtils.isNotBlank(tgParam.getReplaceParam()) && tgParam.getIncrementType() == 1){
+                long startId = tgParam.getStartId();
+                long endId = tgParam.getEndId();
+                if (doc.length() > 0) {
+                    doc.append(DataXOptionConstant.SPLIT_SPACE);
+                }
+
+                doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), startId, endId));
+                if (StringUtils.isNotBlank(partitionStr)) {
+                    doc.append(DataXOptionConstant.SPLIT_SPACE);
+                    List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
+                    doc.append(String.format(DataXOptionConstant.PARAMS_CM_V_PT, buildPartition(partitionInfo)));
+                }
+                doc.append(DataXOptionConstant.TRANSFORM_QUOTES);
+
             } else {
                 if (StringUtils.isNotBlank(partitionStr)) {
                     List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));

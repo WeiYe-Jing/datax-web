@@ -1,7 +1,7 @@
 package com.wugui.datatx.core.util;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.registry.util.json.BasicJson;
+import com.wugui.datax.rpc.util.json.BasicJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

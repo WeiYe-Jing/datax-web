@@ -18,33 +18,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for datax_plugin
--- ----------------------------
-DROP TABLE IF EXISTS `datax_plugin`;
-CREATE TABLE `datax_plugin`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `plugin_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '插件类型，reader writer',
-  `plugin_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '插件名，用作主键',
-  `template_json` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'json模板',
-  `comments` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '注释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'datax插件信息' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of datax_plugin
--- ----------------------------
-INSERT INTO `datax_plugin` VALUES (1, 'reader', 'streamreader', '', '内存读取');
-INSERT INTO `datax_plugin` VALUES (2, 'writer', 'streamwriter', NULL, '内存写');
-INSERT INTO `datax_plugin` VALUES (3, 'reader', 'mysqlreader', NULL, 'mysql读取');
-INSERT INTO `datax_plugin` VALUES (4, 'writer', 'mysqlwriter', NULL, 'myysql写');
-INSERT INTO `datax_plugin` VALUES (5, 'reader', 'oraclereader', NULL, 'oracle读取');
-INSERT INTO `datax_plugin` VALUES (15, 'writer', 'oraclewriter', NULL, 'oracle写');
-INSERT INTO `datax_plugin` VALUES (16, 'reader', 'sqlserverreader', NULL, 'sqlserver读');
-INSERT INTO `datax_plugin` VALUES (17, 'writer', 'sqlserverwriter', NULL, 'sqlserver写');
-INSERT INTO `datax_plugin` VALUES (18, 'reader', 'postgresqlreader', NULL, 'postgresql读');
-INSERT INTO `datax_plugin` VALUES (19, 'writer', 'postgresqlwriter', NULL, 'postgresql写');
-
--- ----------------------------
 -- Table structure for job_group
 -- ----------------------------
 DROP TABLE IF EXISTS `job_group`;
@@ -367,3 +340,24 @@ ADD COLUMN `task_average_flow_suffix` VARCHAR(11) NULL AFTER `task_total_time_su
 ADD COLUMN `task_record_writing_speed_suffix` VARCHAR(11) NULL AFTER `task_average_flow_suffix`,
 ADD COLUMN `task_record_reader_num_suffix` INT(11) NULL AFTER `task_record_writing_speed_suffix`,
 ADD COLUMN `task_record_writing_num_suffix` INT(11) NULL AFTER `task_record_reader_num_suffix`;
+
+ALTER TABLE `job_info`
+ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `last_handle_code`;
+
+ALTER TABLE `job_template`
+ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `replace_param`;
+
+ALTER TABLE `job_info`
+ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `job_desc`;
+
+ALTER TABLE `job_template`
+ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `partition_info`;
+
+
+ALTER TABLE `job_info`
+ADD COLUMN `reader_table` VARCHAR(255) NULL COMMENT 'reader表名称' AFTER `replace_param_type`,
+ADD COLUMN `primary_key` VARCHAR(50) NULL COMMENT '增量表主键' AFTER `reader_table`,
+ADD COLUMN `inc_start_id` VARCHAR(20) NULL COMMENT '增量初始id' AFTER `primary_key`,
+ADD COLUMN `increment_type` TINYINT(4) NULL COMMENT '增量类型' AFTER `inc_start_id`,
+ADD COLUMN `datasource_id` BIGINT(11) NULL COMMENT '数据源id' AFTER `increment_type`;
+

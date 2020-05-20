@@ -83,15 +83,55 @@ public class AESUtil {
         } catch (Exception e) {
             log.warn("content decrypt error {}",e.getMessage());
         }
-        return null;
+        return content;
     }
 
     public static void main(String[] args) throws Exception {
-        String s = "default";
+        String s = "root";
         String encryptResultStr = encrypt(s);
-        System.out.println(s+" 加密后 ：" + encryptResultStr);
-        System.out.println("mysql"+" 加密后 ：" + encrypt("mysql"));
-        System.out.println("解密后：" + decrypt("mysql"));
-        System.out.println("mysql"+" 解密 ：" + decrypt(decrypt("/2cjqzLlbMT2qlTFHYg0E/SOCFGeYtZRudc9WrsEP9g=")));
+        System.out.println(s + " 加密后 ：" + encryptResultStr);
+        System.out.println("mysql" + " 加密后 ：" + encrypt("mysql"));
+        System.out.println("解密后：" + decrypt(encryptResultStr));
+    }
+
+    /**
+     * 将16进制转换为二进制
+     *
+     * @param hexStr
+     * @return
+     */
+    public static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1)
+            return null;
+        byte[] result = new byte[hexStr.length() / 2];
+        try {
+            for (int i = 0; i < hexStr.length() / 2; i++) {
+                int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+                int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
+                result[i] = (byte) (high * 16 + low);
+            }
+            return result;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将二进制转换成16进制
+     *
+     * @param buf
+     * @return
+     */
+    public static String parseByte2HexStr(byte[] buf) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : buf) {
+            String hex = Integer.toHexString(b & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append(hex.toUpperCase());
+        }
+        return sb.toString();
     }
 }

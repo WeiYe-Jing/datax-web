@@ -35,11 +35,10 @@ public class OSUtils {
      */
     public static double memoryUsage() {
         GlobalMemory memory = hal.getMemory();
-        double memoryUsage = (memory.getTotal() - memory.getAvailable() - memory.getSwapUsed()) * 0.1 / memory.getTotal() * 10;
-
+        double memoryUsage = (memory.getTotal() - memory.getAvailable()) * 1.0 / memory.getTotal();
         DecimalFormat df = new DecimalFormat(TWO_DECIMAL);
         df.setRoundingMode(RoundingMode.HALF_UP);
-        return Double.parseDouble(df.format(memoryUsage)) * 100;
+        return Double.parseDouble(df.format(memoryUsage * 100));
     }
 
 
@@ -103,7 +102,7 @@ public class OSUtils {
         DecimalFormat df = new DecimalFormat(TWO_DECIMAL);
         df.setRoundingMode(RoundingMode.HALF_UP);
 
-        return Double.parseDouble(df.format(cpuUsage)) * 100;
+        return Double.parseDouble(df.format(cpuUsage*100));
     }
 
 

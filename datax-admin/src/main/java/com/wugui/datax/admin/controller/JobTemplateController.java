@@ -29,33 +29,39 @@ import java.util.Map;
 public class JobTemplateController {
 
     @Resource
-    private JobTemplateService xxlJobTemplateService;
+    private JobTemplateService jobTemplateService;
 
     @GetMapping("/pageList")
-    @ApiOperation("任务列表")
+    @ApiOperation("任务模板列表")
     public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
                                         @RequestParam(required = false, defaultValue = "10") int size,
                                         int jobGroup, String jobDesc, String executorHandler, String author) {
 
-        return new ReturnT<>(xxlJobTemplateService.pageList((current-1)*size, size, jobGroup, jobDesc, executorHandler, author));
+        return new ReturnT<>(jobTemplateService.pageList((current-1)*size, size, jobGroup, jobDesc, executorHandler, author));
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("获取所有任务模板列表")
+    public ReturnT<List<JobTemplate>> list(){
+        return new ReturnT<>(jobTemplateService.findAll());
     }
 
     @PostMapping("/add")
-    @ApiOperation("添加任务")
+    @ApiOperation("添加任务模板")
     public ReturnT<String> add(@RequestBody JobTemplate jobTemplate) {
-        return xxlJobTemplateService.add(jobTemplate);
+        return jobTemplateService.add(jobTemplate);
     }
 
     @PostMapping("/update")
     @ApiOperation("更新任务")
     public ReturnT<String> update(@RequestBody JobTemplate jobTemplate) {
-        return xxlJobTemplateService.update(jobTemplate);
+        return jobTemplateService.update(jobTemplate);
     }
 
     @PostMapping(value = "/remove/{id}")
-    @ApiOperation("移除任务")
+    @ApiOperation("移除任务模板")
     public ReturnT<String> remove(@PathVariable(value = "id") int id) {
-        return xxlJobTemplateService.remove(id);
+        return jobTemplateService.remove(id);
     }
 
     @GetMapping("/nextTriggerTime")

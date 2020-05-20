@@ -82,7 +82,8 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
     private JavaMailSender mailSender;
     @Resource
     private DataSource dataSource;
-
+    @Resource
+    private JobDatasourceMapper jobDatasourceMapper;
 
     public String getI18n() {
         return i18n;
@@ -136,4 +137,7 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
         return dataSource;
     }
 
+    public JobDatasourceMapper getJobDatasourceMapper() {
+        return jobDatasourceMapper;
+    }
 }

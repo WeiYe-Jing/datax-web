@@ -14,7 +14,6 @@
         <module>datax-core</module>
         <module>datax-executor</module>
         <module>datax-rpc</module>
-        <module>datax-registry</module>
     </modules>
 
     <properties>

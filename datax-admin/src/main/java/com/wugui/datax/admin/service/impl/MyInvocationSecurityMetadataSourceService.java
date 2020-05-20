@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.service.impl;
 
 import com.wugui.datax.admin.entity.JobPermission;
-import com.wugui.datax.admin.mapper.PermissionDao;
+import com.wugui.datax.admin.mapper.PermissionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -21,7 +21,7 @@ public class MyInvocationSecurityMetadataSourceService implements
         FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private PermissionDao permissionDao;
+    private PermissionMapper permissionMapper;
 
     private HashMap<String, Collection<ConfigAttribute>> map = null;
 
@@ -32,7 +32,7 @@ public class MyInvocationSecurityMetadataSourceService implements
         map = new HashMap<>();
         Collection<ConfigAttribute> array;
         ConfigAttribute cfg;
-        List<JobPermission> permissions = permissionDao.findAll();
+        List<JobPermission> permissions = permissionMapper.findAll();
         for (JobPermission permission : permissions) {
             array = new ArrayList<>();
             cfg = new SecurityConfig(permission.getName());

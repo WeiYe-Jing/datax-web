@@ -37,6 +37,21 @@ public class TriggerParam implements Serializable{
 
     private String partitionInfo;
 
+    private long startId;
+    private long endId;
+
+    private int incrementType;
+
+    public String getReplaceParamType() {
+        return replaceParamType;
+    }
+
+    public void setReplaceParamType(String replaceParamType) {
+        this.replaceParamType = replaceParamType;
+    }
+
+    private String replaceParamType;
+
 
     public int getJobId() {
         return jobId;
@@ -190,6 +205,30 @@ public class TriggerParam implements Serializable{
         this.partitionInfo = partitionInfo;
     }
 
+    public long getStartId() {
+        return startId;
+    }
+
+    public void setStartId(long startId) {
+        this.startId = startId;
+    }
+
+    public long getEndId() {
+        return endId;
+    }
+
+    public void setEndId(long endId) {
+        this.endId = endId;
+    }
+
+    public int getIncrementType() {
+        return incrementType;
+    }
+
+    public void setIncrementType(int incrementType) {
+        this.incrementType = incrementType;
+    }
+
     @Override
     public String toString() {
         return "TriggerParam{" +
@@ -212,6 +251,10 @@ public class TriggerParam implements Serializable{
                 ", startTime=" + startTime +
                 ", triggerTime=" + triggerTime +
                 ", partitionInfo=" + partitionInfo +
+                ", replaceParamType=" + replaceParamType +
+                ", startId=" + startId +
+                ", endId=" + endId +
+                ", incrementType=" + incrementType +
                 '}';
     }
 

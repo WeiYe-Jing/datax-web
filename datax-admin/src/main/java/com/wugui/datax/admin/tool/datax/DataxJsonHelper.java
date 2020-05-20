@@ -18,6 +18,7 @@ import com.wugui.datax.admin.util.JdbcConstants;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +88,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
 
-    public void initReader(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
+    public void initReader(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
 
         this.readerDatasource = readerDatasource;
         this.readerTables = dataxJsonDto.getReaderTables();
@@ -97,6 +98,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
         // reader 插件
         String datasource = readerDatasource.getDatasource();
+
+        this.readerColumns = this.rewrite(this.readerColumns, datasource);
         if (JdbcConstants.MYSQL.equals(datasource)) {
             readerPlugin = new MysqlReader();
             buildReader = buildReader();
@@ -124,8 +127,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
-
-    public void initWriter(DataxJsonDto dataxJsonDto, JobDatasource readerDatasource) {
+    public void initWriter(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
         this.writerDatasource = readerDatasource;
         this.writerTables = dataxJsonDto.getWriterTables();
         this.writerColumns = dataxJsonDto.getWriterColumns();
@@ -135,6 +137,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
+        this.writerColumns = this.rewrite(this.writerColumns, datasource);
         if (JdbcConstants.MYSQL.equals(datasource)) {
             writerPlugin = new MysqlWriter();
             buildWriter = this.buildWriter();
@@ -150,10 +153,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }  else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
             writerPlugin = new ClickHouseWriter();
             buildWriter = buildWriter();
-
-            //执行建表语句
-
-
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
@@ -164,6 +163,26 @@ public class DataxJsonHelper implements DataxJsonInterface {
             writerPlugin = new MongoDBWriter();
             buildWriter = this.buildMongoDBWriter();
         }
+    }
+
+    public List<String> rewrite(List<String> list, String datasource) {
+        List<String> newLists = new ArrayList<>();
+        if (JdbcConstants.POSTGRESQL.equals(datasource)) {
+            list.forEach((v) -> {
+                newLists.add("\"" + v + "\"");
+            });
+        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
+            list.forEach((v) -> {
+                newLists.add("[" + v + "]");
+            });
+        } else if(JdbcConstants.MYSQL.equals(datasource)){
+            list.forEach((v) -> {
+                newLists.add("`" + v + "`");
+            });
+        }else {
+            return list;
+        }
+        return newLists;
     }
 
     @Override
@@ -181,7 +200,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> speedMap = Maps.newLinkedHashMap();
         Map<String, Object> errorLimitMap = Maps.newLinkedHashMap();
-        speedMap.putAll(ImmutableMap.of("channel", 3));
+        speedMap.putAll(ImmutableMap.of("channel", 3, "byte", 1048576));
         errorLimitMap.putAll(ImmutableMap.of("record", 0, "percentage", 0.02));
         res.put("speed", speedMap);
         res.put("errorLimit", errorLimitMap);
@@ -251,7 +270,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
         return readerPlugin.buildHbase(dataxHbasePojo);
     }
-
 
     @Override
     public Map<String, Object> buildMongoDBReader() {

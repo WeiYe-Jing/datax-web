@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class JobFailMonitorHelper {
 	private static Logger logger = LoggerFactory.getLogger(JobFailMonitorHelper.class);
-	
+
 	private static JobFailMonitorHelper instance = new JobFailMonitorHelper();
 	public static JobFailMonitorHelper getInstance(){
 		return instance;
@@ -87,7 +87,7 @@ public class JobFailMonitorHelper {
 
 					} catch (Exception e) {
 						if (!toStop) {
-							logger.error(">>>>>>>>>>> datax-web, job fail monitor thread error:{}", e);
+							logger.error(">>>>>>>>>>> datax-web, job fail monitor thread error:{0}", e);
 						}
 					}
 

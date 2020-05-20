@@ -8,25 +8,25 @@ public interface DatabaseInterface {
      * @param tableName The name of the table to determine the layout for
      * @return The SQL to launch.
      */
-    public String getSQLQueryFields(String tableName);
+    String getSQLQueryFields(String tableName);
 
     /**
      * 获取主键字段
      *
      * @return
      */
-    public String getSQLQueryPrimaryKey();
+    String getSQLQueryPrimaryKey();
 
-    public String getSQLQueryTableNameComment();
+    String getSQLQueryTableNameComment();
 
-    public String getSQLQueryTablesNameComments();
+    String getSQLQueryTablesNameComments();
 
     /**
      * 获取所有表名的sql
      *
      * @return
      */
-    public String getSQLQueryTables(String... args);
+    String getSQLQueryTables(String... args);
 
 
     /**
@@ -34,18 +34,21 @@ public interface DatabaseInterface {
      *
      * @return
      */
-    public String getSQLQueryColumns(String... args);
+    String getSQLQueryColumns(String... args);
 
     /**
      * 获取表和字段注释的sql语句
      *
      * @return The SQL to launch.
      */
-    public String getSQLQueryComment(String schemaName, String tableName, String columnName);
+    String getSQLQueryComment(String schemaName, String tableName, String columnName);
 
-//    /**
-//     * 查询表名所有字段信息
-//     * @return
-//     */
-//    public String getSQLQueryColumnInfos();
+
+    /**
+     * 获取当前表maxId
+     * @param tableName
+     * @param primaryKey
+     * @return
+     */
+    String getMaxId(String tableName,String primaryKey);
 }

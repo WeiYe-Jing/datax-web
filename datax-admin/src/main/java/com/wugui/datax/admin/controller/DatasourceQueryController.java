@@ -89,16 +89,4 @@ public class DatasourceQueryController extends ApiController {
     public R<List<String>> getColumnsByQuerySql(Long datasourceId, String querySql) {
         return success(datasourceQueryService.getColumnsByQuerySql(datasourceId, querySql));
     }
-
-    /**
-     * 创建表
-     * @param datasourceId
-     * @param tableName
-     */
-    @PostMapping("/createTable")
-    @ApiOperation("根据数据源id和sql语句获取所有字段")
-    public R<Boolean> createTable(@RequestParam(value = "datasourceId") Long datasourceId,
-                                  @RequestParam(value = "tableName") String tableName) {
-        return success(datasourceQueryService.createTable(datasourceId, tableName));
-    }
 }

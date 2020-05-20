@@ -3,6 +3,9 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobInfoMapper">
 
+	<resultMap id="JobProject" type="com.wugui.datax.admin.entity.JobInfo">
+		<result column="job_project" property="jobProject"/>
+	</resultMap>
 	<resultMap id="JobInfo" type="com.wugui.datax.admin.entity.JobInfo" >
 		<result column="id" property="id" />
 
@@ -41,6 +44,8 @@
 		<result column="partition_info" property="partitionInfo" />
 
 		<result column="last_handle_code" property="lastHandleCode" />
+		<result column="replace_param_type" property="replaceParamType" />
+		<result column="job_project" property="jobProject"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -71,7 +76,9 @@
 		t.jvm_param,
 		t.inc_start_time,
 		t.partition_info,
-		t.last_handle_code
+		t.last_handle_code,
+		t.replace_param_type,
+		t.job_project
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
@@ -93,9 +100,28 @@
 			<if test="author != null and author != ''">
 				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
 			</if>
+            <if test="jobProjects != null">
+                AND t.job_project IN
+                <foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
+                    #{jobProject}
+                </foreach>
+            </if>
 		</trim>
 		ORDER BY id DESC
 		LIMIT #{offset}, #{pagesize}
+	</select>
+
+	<select id="findAll" parameterType="java.util.HashMap" resultMap="JobInfo">
+		SELECT <include refid="Base_Column_List" />
+		FROM job_info AS t
+		ORDER BY job_desc ASC
+	</select>
+
+	<select id="projects" parameterType="java.util.HashMap" resultMap="JobProject">
+		SELECT distinct(job_project) as job_project
+		FROM job_info AS t
+		WHERE  job_project IS NOT NULL
+		ORDER BY job_project ASC
 	</select>
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
@@ -117,6 +143,12 @@
 			<if test="author != null and author != ''">
 				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
 			</if>
+            <if test="jobProjects != null">
+                AND t.job_project IN
+                <foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
+                    #{jobProject}
+                </foreach>
+            </if>
 		</trim>
 	</select>
 
@@ -148,7 +180,9 @@
 			jvm_param,
 			inc_start_time,
 			partition_info,
-			last_handle_code
+			last_handle_code,
+		    replace_param_type,
+		    job_project
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -176,7 +210,9 @@
 			#{jvmParam},
 			#{incStartTime},
 			#{partitionInfo},
-			#{lastHandleCode}
+			#{lastHandleCode},
+			#{replaceParamType},
+			#{jobProject}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -218,7 +254,9 @@
 			jvm_param=#{jvmParam},
 			inc_start_time=#{incStartTime},
 			partition_info=#{partitionInfo},
-			last_handle_code=#{lastHandleCode}
+			last_handle_code=#{lastHandleCode},
+			replace_param_type=#{replaceParamType},
+			job_project=#{jobProject}
 		WHERE id = #{id}
 	</update>
 

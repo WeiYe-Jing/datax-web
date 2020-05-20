@@ -1,4 +1,4 @@
-package com.wugui.datax.registry.util.json;
+package com.wugui.datax.rpc.util.json;
 
 import java.util.Arrays;
 import java.util.HashMap;

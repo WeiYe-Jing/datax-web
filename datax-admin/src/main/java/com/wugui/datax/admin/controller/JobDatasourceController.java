@@ -1,26 +1,22 @@
 package com.wugui.datax.admin.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.service.JobDatasourceService;
-import com.wugui.datax.admin.util.PageUtils;
 import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.service.JobDatasourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * jdbc数据源配置控制器层

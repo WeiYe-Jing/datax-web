@@ -12,7 +12,6 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
-import com.wugui.datax.admin.tool.table.ClickHouse;
 import com.wugui.datax.admin.util.AESUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
@@ -69,7 +68,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
         currentSchema = getSchema(jobDatasource.getJdbcUsername());
-        ClickHouse.database_name = currentSchema;
         currentDatabase = jobDatasource.getDatasource();
         LocalCacheUtil.set(jobDatasource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000);
     }
@@ -388,6 +386,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         Statement stmt = null;
         ResultSet rs = null;
         try {
+            querySql = querySql.replace(";", "");
             //拼装sql语句，在后面加上 where 1=0 即可
             String sql = querySql.concat(" where 1=0");
             //判断是否已有where，如果是，则加 and 1=0
@@ -420,6 +419,33 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return res;
     }
 
+    @Override
+    public long getMaxIdVal(String tableName,String primaryKey) {
+        Statement stmt = null;
+        ResultSet rs = null;
+        long maxVal = 0;
+        try {
+            stmt = connection.createStatement();
+            //获取sql
+            String sql = getSQLMaxID(tableName,primaryKey);
+            rs = stmt.executeQuery(sql);
+            rs.next();
+            maxVal = rs.getLong(1);
+        } catch (SQLException e) {
+            logger.error("[getMaxIdVal Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        } finally {
+            JdbcUtils.close(rs);
+            JdbcUtils.close(stmt);
+        }
+
+
+        return maxVal;
+    }
+
+    private String getSQLMaxID(String tableName,String primaryKey) {
+        return sqlBuilder.getMaxId(tableName,primaryKey);
+    }
 
     public void executeCreateTableSql(String querySql) {
         if (StringUtils.isBlank(querySql)) {

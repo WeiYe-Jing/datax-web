@@ -32,14 +32,6 @@
             <version>${hessian.version}</version>
         </dependency>
 
-        <!-- xxl-registry-client -->
-       <dependency>
-            <groupId>com.wugui</groupId>
-            <artifactId>datax-registry</artifactId>
-           <version>${project.parent.version}</version>
-        </dependency>
-
-
         <!-- ********************** base ********************** -->
 
         <!-- slf4j -->

@@ -1,4 +1,4 @@
-package com.wugui.datax.registry.util.json;
+package com.wugui.datax.rpc.util.json;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

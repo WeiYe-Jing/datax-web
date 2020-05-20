@@ -12,11 +12,11 @@ datax:
   job:
     admin:
       ### datax-web admin address
-      addresses: http://172.16.1.26:8080
+      addresses: http://127.0.0.1:8080
     executor:
       appname: datax-executor
       ip:
-      port: 9998
+      port: 9999
       ### job log path
       logpath: /data/applogs/executor/jobhandler
       ### job log retention days
@@ -25,6 +25,6 @@ datax:
     accessToken:
 
   executor:
-    jsonpath: /home/executor/json
+    jsonpath: D:\\temp\\executor\\json\\
 
-  pypath: /home/datax-3.0.2/bin/datax.py
+  pypath: F:\tools\datax\bin\datax.py

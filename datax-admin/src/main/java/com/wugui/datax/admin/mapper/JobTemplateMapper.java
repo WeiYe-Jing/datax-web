@@ -34,7 +34,7 @@ public interface JobTemplateMapper {
 
 	public JobTemplate loadById(@Param("id") int id);
 
-	public int update(JobTemplate xxlJobTemplate);
+	public int update(JobTemplate jobTemplate);
 
 	public int delete(@Param("id") long id);
 

@@ -26,7 +26,7 @@ public interface DatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getTables(Long id) throws IOException;
+    List<String> getTables(Long id,String tableSchema) throws IOException;
 
     /**
      * 获取CollectionNames
@@ -51,4 +51,11 @@ public interface DatasourceQueryService {
      * @return
      */
     List<String> getColumnsByQuerySql(Long datasourceId, String querySql);
+
+    /**
+     * 获取PG table schema
+     * @param id
+     * @return
+     */
+    List<String> getPgTableSchema(Long id);
 }

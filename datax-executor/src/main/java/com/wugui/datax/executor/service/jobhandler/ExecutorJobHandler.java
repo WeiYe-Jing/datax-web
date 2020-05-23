@@ -175,9 +175,9 @@ public class ExecutorJobHandler extends IJobHandler {
                 if (doc.length() > 0) doc.append(DataXOptionConstant.SPLIT_SPACE);
 
                 if (tgParam.getReplaceParamType() == null || tgParam.getReplaceParamType().isEmpty() || tgParam.getReplaceParamType().equals("UnitTime")) {
-                    long tgSecondTime = tgParam.getTriggerTime().getTime() / 1000;
-                    long lastTime = tgParam.getStartTime().getTime() / 1000;
-                    doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+                    long startTime = tgParam.getStartTime().getTime() / 1000;
+                    long endTime = tgParam.getTriggerTime().getTime() / 1000;
+                    doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), startTime, endTime));
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat(tgParam.getReplaceParamType());
                     String tgSecondTime = sdf.format(tgParam.getTriggerTime());

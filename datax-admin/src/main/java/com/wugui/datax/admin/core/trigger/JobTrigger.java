@@ -121,19 +121,11 @@ public class JobTrigger {
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(triggerTime);
         jobLog.setJobDesc(jobInfo.getJobDesc());
-        if(jobInfo.getIncrementType() == 1 &&  StringUtils.isNotBlank(jobInfo.getReplaceParam())){
-            JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
-            BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-            long maxId = qTool.getMaxIdVal(jobInfo.getReaderTable(),jobInfo.getPrimaryKey());
-            jobLog.setMaxId(maxId);
-            triggerParam.setStartId(jobInfo.getIncStartId());
-            triggerParam.setEndId(maxId);
-        }
+
         JobAdminConfig.getAdminConfig().getJobLogMapper().save(jobLog);
         logger.debug(">>>>>>>>>>> datax-web trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
-
         triggerParam.setJobId(jobInfo.getId());
         triggerParam.setExecutorHandler(jobInfo.getExecutorHandler());
         triggerParam.setExecutorParams(jobInfo.getExecutorParam());
@@ -147,12 +139,21 @@ public class JobTrigger {
         triggerParam.setBroadcastIndex(index);
         triggerParam.setBroadcastTotal(total);
         triggerParam.setJobJson(jobInfo.getJobJson());
-        triggerParam.setJvmParam(jobInfo.getJvmParam());
+
+        //increment parameter
+        if (IncrementTypeEnum.ID.getCode() == jobInfo.getIncrementType()) {
+            triggerParam.setEndId(getMaxId(jobInfo));
+            triggerParam.setStartId(jobInfo.getIncStartId());
+        } else if (IncrementTypeEnum.TIME.getCode() == jobInfo.getIncrementType()) {
+            triggerParam.setStartTime(jobInfo.getIncStartTime());
+            triggerParam.setTriggerTime(triggerTime);
+            triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
+        } else if (IncrementTypeEnum.PARTITION.getCode() == jobInfo.getIncrementType()) {
+            triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
+        }
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
-        triggerParam.setStartTime(jobInfo.getIncStartTime());
-        triggerParam.setTriggerTime(triggerTime);
-        triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
-        triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
+        //jvm parameter
+        triggerParam.setJvmParam(jobInfo.getJvmParam());
 
         // 3、init address
         String address = null;
@@ -212,6 +213,12 @@ public class JobTrigger {
         JobAdminConfig.getAdminConfig().getJobLogMapper().updateTriggerInfo(jobLog);
 
         logger.debug(">>>>>>>>>>> datax-web trigger end, jobId:{}", jobLog.getId());
+    }
+
+    private static long getMaxId(JobInfo jobInfo) {
+        JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        return qTool.getMaxIdVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
     }
 
     /**

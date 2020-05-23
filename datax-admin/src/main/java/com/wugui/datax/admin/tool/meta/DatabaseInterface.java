@@ -26,9 +26,14 @@ public interface DatabaseInterface {
      *
      * @return
      */
-    String getSQLQueryTables(String... args);
+    String getSQLQueryTables(String... tableSchema);
 
-
+    /**
+     * 获取 Table schema
+     *
+     * @return
+     */
+    String getSQLQueryTableSchema(String... args);
     /**
      * 获取所有的字段的sql
      *

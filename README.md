@@ -60,14 +60,14 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 1.执行器配置(使用开源项目xxl-job)
 
-![](http://q7vnain67.bkt.clouddn.com/executor.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
 
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;
 
 #### 执行器属性说明
 
-![](http://q7vnain67.bkt.clouddn.com/add_executor.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_executor.png)
 
 ```
 1、AppName: （与datax-executor中application.yml的datax.job.executor.appname保持一致）
@@ -82,13 +82,13 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 2.创建数据源
 
-![](http://q7vnain67.bkt.clouddn.com/add_datasource.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_datasource.png)
 
 第四步使用
 
 ### 3.创建任务模版
 
-![](http://q7vnain67.bkt.clouddn.com/template_list.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/template_list.png)
 
 第四步使用
 
@@ -98,35 +98,35 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 - 1.步骤一，步骤二，选择第二步中创建的数据源，JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb其它数据源的JSON构建正在开发中,暂时需要手动编写。
 
-![](http://q7vnain67.bkt.clouddn.com/build.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
 
 - 2.字段映射
 
 
-![](http://q7vnain67.bkt.clouddn.com/mapping.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/mapping.png)
 
 - 3.点击构建，生成json,此时可以选择复制json然后创建任务，选择datax任务，将json粘贴到文本框。也可以点击选择模版，直接生成任务。
 
-![](http://q7vnain67.bkt.clouddn.com/select_template.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/select_template.png)
 
 
 ### 5.任务创建介绍（关联模版创建任务不再介绍，具体参考4. 构建JSON脚本）
 
 #### DataX任务
 
-![](http://q7vnain67.bkt.clouddn.com/datax.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/datax.png)
 
 #### Shell任务
 
-![](http://q7vnain67.bkt.clouddn.com/shell.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/shell.png)
 
 #### Python任务
 
-![](http://q7vnain67.bkt.clouddn.com/python.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/python.png)
 
 #### PowerShell任务
 
-![](http://q7vnain67.bkt.clouddn.com/powershell.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/powershell.png)
 
 - 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
@@ -140,24 +140,24 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 6. 任务列表
 
-![](http://q7vnain67.bkt.clouddn.com/job.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
 
 ### 7. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
 
-![](http://q7vnain67.bkt.clouddn.com/job_log.png)
-![](http://q7vnain67.bkt.clouddn.com/log_detail.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
 
 ### 8.任务资源监控
 
-![](http://q7vnain67.bkt.clouddn.com/monitor.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/monitor.png)
 
 ### 9. admin可以创建用户，编辑用户信息
 
-![](http://q7vnain67.bkt.clouddn.com/user.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
 
 ### 10.DataX JSON样例([样例地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/doc/db/demo_job_info.sql))
 
-![](http://q7vnain67.bkt.clouddn.com/json_demo.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/json_demo.png)
 
 # UI
 
@@ -206,7 +206,7 @@ Copyright (c) 2020 WeiYe
 
 # 项目规划
 
-![](http://q7vnain67.bkt.clouddn.com/plan.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/plan.png)
 
 # Contact us
 

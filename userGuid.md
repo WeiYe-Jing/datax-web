@@ -265,7 +265,7 @@ datax:
 - 1.运行datax_admin下 DataXAdminApplication
 - 2.运行datax_executor下 DataXExecutorApplication
 
-![](http://q7vnain67.bkt.clouddn.com/admin_start_log.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/admin_start_log.png)
 
 admin启动成功后日志会输出三个地址，两个接口文档地址，一个前端页面地址
 
@@ -283,7 +283,7 @@ admin启动成功后日志会输出三个地址，两个接口文档地址，一
 
 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
 http://localhost:8080/index.html#/dashboard
-![](http://q7vnain67.bkt.clouddn.com/dashboard.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
 
 # 七、集群部署
 

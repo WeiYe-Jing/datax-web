@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
+import com.wugui.datatx.core.enums.IncrementTypeEnum;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.wugui.datatx.core.util.Constants.SPLIT_COMMA;
 import static com.wugui.datax.executor.service.jobhandler.DataXOptionConstant.*;
 
 /**
@@ -136,17 +138,17 @@ public class ExecutorJobHandler extends IJobHandler {
             while ((line = reader.readLine()) != null) {
 
                 if (line.contains(TASK_START_TIME_SUFFIX)) {
-                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                    stringBuilder.append(subResult(line)).append(SPLIT_COMMA);
                 } else if (line.contains(TASK_END_TIME_SUFFIX)) {
-                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                    stringBuilder.append(subResult(line)).append(SPLIT_COMMA);
                 } else if (line.contains(TASK_TOTAL_TIME_SUFFIX)) {
-                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                    stringBuilder.append(subResult(line)).append(SPLIT_COMMA);
                 } else if (line.contains(TASK_AVERAGE_FLOW_SUFFIX)) {
-                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                    stringBuilder.append(subResult(line)).append(SPLIT_COMMA);
                 } else if (line.contains(TASK_RECORD_WRITING_SPEED_SUFFIX)) {
-                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                    stringBuilder.append(subResult(line)).append(SPLIT_COMMA);
                 } else if (line.contains(TASK_RECORD_READER_NUM_SUFFIX)) {
-                    stringBuilder.append(subResult(line)).append(Constants.SPLIT_COMMA);
+                    stringBuilder.append(subResult(line)).append(SPLIT_COMMA);
                 } else if (line.contains(TASK_RECORD_WRITING_NUM_SUFFIX)) {
                     stringBuilder.append(subResult(line));
                 }
@@ -168,54 +170,56 @@ public class ExecutorJobHandler extends IJobHandler {
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
-        String replaceParam = tgParam.getReplaceParam().trim();
-        if (StringUtils.isNotBlank(replaceParam)  && tgParam.getIncrementType() == 2) {
-            if (doc.length() > 0) doc.append(SPLIT_SPACE);
-            if (StringUtils.isNotBlank(tgParam.getReplaceParam())) {
-                if (doc.length() > 0) doc.append(DataXOptionConstant.SPLIT_SPACE);
 
-                if (tgParam.getReplaceParamType() == null || tgParam.getReplaceParamType().isEmpty() || tgParam.getReplaceParamType().equals("UnitTime")) {
+        String replaceParam = tgParam.getReplaceParam().trim();
+
+        if (IncrementTypeEnum.TIME.getCode() == tgParam.getIncrementType()) {
+
+            if (doc.length() > 0) doc.append(SPLIT_SPACE);
+
+            if (StringUtils.isNotBlank(replaceParam)) {
+                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+
+                String replaceParamType = tgParam.getReplaceParamType();
+
+                if (StringUtils.isBlank(replaceParamType) || replaceParamType.equals("UnitTime")) {
                     long startTime = tgParam.getStartTime().getTime() / 1000;
                     long endTime = tgParam.getTriggerTime().getTime() / 1000;
-                    doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), startTime, endTime));
+                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
                 } else {
-                    SimpleDateFormat sdf = new SimpleDateFormat(tgParam.getReplaceParamType());
+                    SimpleDateFormat sdf = new SimpleDateFormat(replaceParamType);
                     String tgSecondTime = sdf.format(tgParam.getTriggerTime());
                     String lastTime = sdf.format(tgParam.getStartTime());
-                    doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), lastTime, tgSecondTime));
+                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
                 }
-
-                if (StringUtils.isNotBlank(partitionStr)) {
-                    doc.append(SPLIT_SPACE);
-                    List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                    doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
-                }
+                //buildPartitionCM(doc, partitionStr);
                 doc.append(TRANSFORM_QUOTES);
-            } else if(StringUtils.isNotBlank(tgParam.getReplaceParam()) && tgParam.getIncrementType() == 1){
-                long startId = tgParam.getStartId();
-                long endId = tgParam.getEndId();
-                if (doc.length() > 0) {
-                    doc.append(DataXOptionConstant.SPLIT_SPACE);
-                }
+            }
+        } else if (IncrementTypeEnum.ID.getCode() == tgParam.getIncrementType()) {
+            long startId = tgParam.getStartId();
+            long endId = tgParam.getEndId();
+            if (doc.length() > 0) doc.append(SPLIT_SPACE);
+            doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startId, endId));
+            doc.append(TRANSFORM_QUOTES);
 
-                doc.append(DataXOptionConstant.PARAMS_CM).append(DataXOptionConstant.TRANSFORM_QUOTES).append(String.format(tgParam.getReplaceParam(), startId, endId));
-                if (StringUtils.isNotBlank(partitionStr)) {
-                    doc.append(DataXOptionConstant.SPLIT_SPACE);
-                    List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                    doc.append(String.format(DataXOptionConstant.PARAMS_CM_V_PT, buildPartition(partitionInfo)));
-                }
-                doc.append(DataXOptionConstant.TRANSFORM_QUOTES);
-
-            } else {
-                if (StringUtils.isNotBlank(partitionStr)) {
-                    List<String> partitionInfo = Arrays.asList(partitionStr.split(Constants.SPLIT_COMMA));
-                    if (doc.length() > 0) doc.append(SPLIT_SPACE);
-                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
-                }
+        } else if (IncrementTypeEnum.PARTITION.getCode() == tgParam.getIncrementType()) {
+            if (StringUtils.isNotBlank(partitionStr)) {
+                List<String> partitionInfo = Arrays.asList(partitionStr.split(SPLIT_COMMA));
+                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
             }
         }
+
         JobLogger.log("------------------命令参数: " + doc);
         return doc.toString();
+    }
+
+    private void buildPartitionCM(StringBuilder doc, String partitionStr) {
+        if (StringUtils.isNotBlank(partitionStr)) {
+            doc.append(SPLIT_SPACE);
+            List<String> partitionInfo = Arrays.asList(partitionStr.split(SPLIT_COMMA));
+            doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
+        }
     }
 
     private String buildPartition(List<String> partitionInfo) {

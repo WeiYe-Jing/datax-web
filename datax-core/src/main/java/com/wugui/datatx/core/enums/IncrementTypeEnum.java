@@ -1,6 +1,4 @@
-package com.wugui.datax.admin.core.trigger;
-
-import com.baomidou.mybatisplus.annotation.EnumValue;
+package com.wugui.datatx.core.enums;
 
 /**
  * increment type
@@ -20,7 +18,6 @@ public enum IncrementTypeEnum {
         this.descp = descp;
     }
 
-    @EnumValue
     private final int code;
     private final String descp;
 

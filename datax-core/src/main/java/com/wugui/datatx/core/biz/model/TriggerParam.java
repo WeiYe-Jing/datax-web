@@ -42,14 +42,6 @@ public class TriggerParam implements Serializable{
 
     private int incrementType;
 
-    public String getReplaceParamType() {
-        return replaceParamType;
-    }
-
-    public void setReplaceParamType(String replaceParamType) {
-        this.replaceParamType = replaceParamType;
-    }
-
     private String replaceParamType;
 
 
@@ -229,6 +221,13 @@ public class TriggerParam implements Serializable{
         this.incrementType = incrementType;
     }
 
+    public String getReplaceParamType() {
+        return replaceParamType;
+    }
+
+    public void setReplaceParamType(String replaceParamType) {
+        this.replaceParamType = replaceParamType;
+    }
     @Override
     public String toString() {
         return "TriggerParam{" +

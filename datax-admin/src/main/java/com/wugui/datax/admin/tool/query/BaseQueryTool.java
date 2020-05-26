@@ -1,7 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
 import cn.hutool.core.util.StrUtil;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.wugui.datatx.core.util.Constants;
@@ -334,14 +333,14 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getTableNames() {
+    public List<String> getTableNames(String tableSchema) {
         List<String> tables = new ArrayList<String>();
         Statement stmt = null;
         ResultSet rs = null;
         try {
             stmt = connection.createStatement();
             //获取sql
-            String sql = getSQLQueryTables();
+            String sql = getSQLQueryTables(tableSchema);
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String tableName = rs.getString(1);
@@ -375,8 +374,8 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      *
      * @return
      */
-    protected String getSQLQueryTables() {
-        return sqlBuilder.getSQLQueryTables();
+    protected String getSQLQueryTables(String tableSchema) {
+        return sqlBuilder.getSQLQueryTables(tableSchema);
     }
 
     @Override
@@ -420,14 +419,14 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public long getMaxIdVal(String tableName,String primaryKey) {
+    public long getMaxIdVal(String tableName, String primaryKey) {
         Statement stmt = null;
         ResultSet rs = null;
         long maxVal = 0;
         try {
             stmt = connection.createStatement();
             //获取sql
-            String sql = getSQLMaxID(tableName,primaryKey);
+            String sql = getSQLMaxID(tableName, primaryKey);
             rs = stmt.executeQuery(sql);
             rs.next();
             maxVal = rs.getLong(1);
@@ -443,8 +442,8 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return maxVal;
     }
 
-    private String getSQLMaxID(String tableName,String primaryKey) {
-        return sqlBuilder.getMaxId(tableName,primaryKey);
+    private String getSQLMaxID(String tableName, String primaryKey) {
+        return sqlBuilder.getMaxId(tableName, primaryKey);
     }
 
     public void executeCreateTableSql(String querySql) {
@@ -461,5 +460,32 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         } finally {
             JdbcUtils.close(stmt);
         }
+    }
+
+    public List<String> getTableSchema() {
+        List<String> schemas = new ArrayList<>();
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            //获取sql
+            String sql = getSQLQueryTableSchema();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String tableName = rs.getString(1);
+                schemas.add(tableName);
+            }
+        } catch (SQLException e) {
+            logger.error("[getTableNames Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        } finally {
+            JdbcUtils.close(rs);
+            JdbcUtils.close(stmt);
+        }
+        return schemas;
+    }
+
+    protected String getSQLQueryTableSchema(){
+        return sqlBuilder.getSQLQueryTableSchema();
     }
 }

@@ -59,7 +59,7 @@ public interface QueryToolInterface {
      *
      * @return2
      */
-    List<String> getTableNames();
+    List<String> getTableNames(String schema);
 
     /**
      * 通过查询sql获取columns

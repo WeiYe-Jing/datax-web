@@ -48,8 +48,20 @@ public class DatasourceQueryController extends ApiController {
      */
     @GetMapping("/collectionNames")
     @ApiOperation("根据数据源id,dbname获取CollectionNames")
-    public R<List<String>> getTableNames(Long datasourceId,String dbName) throws IOException {
+    public R<List<String>> getCollectionNames(Long datasourceId,String dbName) throws IOException {
         return success(datasourceQueryService.getCollectionNames(datasourceId,dbName));
+    }
+
+    /**
+     * 获取PG table schema
+     *
+     * @param datasourceId
+     * @return
+     */
+    @GetMapping("/pgTableSchema")
+    @ApiOperation("根据数据源id获取PG table schema")
+    public R<List<String>> getPgTableSchema(Long datasourceId) {
+        return success(datasourceQueryService.getPgTableSchema(datasourceId));
     }
 
     /**
@@ -60,8 +72,8 @@ public class DatasourceQueryController extends ApiController {
      */
     @GetMapping("/getTables")
     @ApiOperation("根据数据源id获取可用表名")
-    public R<List<String>> getTableNames(Long datasourceId) throws IOException {
-        return success(datasourceQueryService.getTables(datasourceId));
+    public R<List<String>> getTableNames(Long datasourceId,String tableSchema) throws IOException {
+        return success(datasourceQueryService.getTables(datasourceId,tableSchema));
     }
 
     /**

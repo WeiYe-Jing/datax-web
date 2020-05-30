@@ -4,7 +4,7 @@
 <mapper namespace="com.wugui.datax.admin.mapper.JobInfoMapper">
 
 	<resultMap id="JobProject" type="com.wugui.datax.admin.entity.JobInfo">
-		<result column="job_project" property="jobProject"/>
+		<result column="project_id" property="projectId"/>
 	</resultMap>
 	<resultMap id="JobInfo" type="com.wugui.datax.admin.entity.JobInfo" >
 		<result column="id" property="id" />
@@ -45,7 +45,13 @@
 
 		<result column="last_handle_code" property="lastHandleCode" />
 		<result column="replace_param_type" property="replaceParamType" />
-		<result column="job_project" property="jobProject"/>
+		<result column="project_id" property="projectId"/>
+
+		<result column="reader_table" property="readerTable" />
+		<result column="primary_key" property="primaryKey" />
+		<result column="inc_start_id" property="incStartId" />
+		<result column="increment_type" property="incrementType" />
+		<result column="datasource_id" property="datasourceId" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -78,7 +84,12 @@
 		t.partition_info,
 		t.last_handle_code,
 		t.replace_param_type,
-		t.job_project
+		t.project_id,
+		t.reader_table,
+		t.primary_key,
+		t.inc_start_id,
+		t.increment_type,
+		t.datasource_id
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
@@ -100,10 +111,10 @@
 			<if test="author != null and author != ''">
 				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
 			</if>
-            <if test="jobProjects != null">
-                AND t.job_project IN
-                <foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
-                    #{jobProject}
+            <if test="projectIds != null">
+                AND t.project_id IN
+                <foreach collection="projectIds" item="projectId" index="index" open="(" close=")" separator=",">
+                    #{projectId}
                 </foreach>
             </if>
 		</trim>
@@ -118,10 +129,10 @@
 	</select>
 
 	<select id="projects" parameterType="java.util.HashMap" resultMap="JobProject">
-		SELECT distinct(job_project) as job_project
+		SELECT distinct(project_id) as project_id
 		FROM job_info AS t
-		WHERE  job_project IS NOT NULL
-		ORDER BY job_project ASC
+		WHERE  project_id IS NOT NULL
+		ORDER BY project_id ASC
 	</select>
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
@@ -143,10 +154,10 @@
 			<if test="author != null and author != ''">
 				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
 			</if>
-            <if test="jobProjects != null">
-                AND t.job_project IN
-                <foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
-                    #{jobProject}
+            <if test="projectIds != null">
+                AND t.project_id IN
+                <foreach collection="projectIds" item="projectId" index="index" open="(" close=")" separator=",">
+                    #{projectId}
                 </foreach>
             </if>
 		</trim>
@@ -182,7 +193,12 @@
 			partition_info,
 			last_handle_code,
 		    replace_param_type,
-		    job_project
+		    project_id,
+			reader_table,
+			primary_key,
+			inc_start_id,
+			increment_type,
+			datasource_id
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -212,7 +228,12 @@
 			#{partitionInfo},
 			#{lastHandleCode},
 			#{replaceParamType},
-			#{jobProject}
+			#{projectId},
+			#{readerTable},
+			#{primaryKey},
+			#{incStartId},
+			#{incrementType},
+			#{datasourceId}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -256,7 +277,11 @@
 			partition_info=#{partitionInfo},
 			last_handle_code=#{lastHandleCode},
 			replace_param_type=#{replaceParamType},
-			job_project=#{jobProject}
+			project_id=#{projectId},
+			reader_table = #{readerTable},
+		    primary_key = #{primaryKey},
+		    inc_start_id = #{incStartId},
+		    increment_type = #{incrementType}
 		WHERE id = #{id}
 	</update>
 
@@ -307,6 +332,13 @@
 		UPDATE job_info
 		SET
 			last_handle_code = #{lastHandleCode}
+		WHERE id = #{id}
+	</update>
+
+	<update id="incrementIdUpdate" parameterType="java.util.HashMap">
+		UPDATE job_info
+		SET
+		inc_start_id = #{incStartId}
 		WHERE id = #{id}
 	</update>
 </mapper>

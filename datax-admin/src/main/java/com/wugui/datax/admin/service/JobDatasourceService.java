@@ -20,5 +20,10 @@ public interface JobDatasourceService extends IService<JobDatasource> {
      */
     Boolean dataSourceTest(JobDatasource jdbcDatasource) throws IOException;
 
+    /**
+     *更新数据源信息
+     * @param datasource
+     * @return
+     */
     int update(JobDatasource datasource);
 }

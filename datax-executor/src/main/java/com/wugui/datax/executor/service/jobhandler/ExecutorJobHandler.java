@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,7 +133,7 @@ public class ExecutorJobHandler extends IJobHandler {
      */
     private static void reader(InputStream inputStream) throws IOException {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String line;
             stringBuilder.delete(0, stringBuilder.length());
             while ((line = reader.readLine()) != null) {

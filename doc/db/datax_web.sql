@@ -348,10 +348,10 @@ ALTER TABLE `job_template`
 ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `replace_param`;
 
 ALTER TABLE `job_info`
-ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `job_desc`;
+ADD COLUMN `project_id` int(11) NULL COMMENT '所属项目id' AFTER `job_desc`;
 
 ALTER TABLE `job_template`
-ADD COLUMN `job_project` varchar(255) NULL COMMENT '所属项目' AFTER `partition_info`;
+ADD COLUMN `project_id` int(11) NULL COMMENT '所属项目id' AFTER `partition_info`;
 
 
 ALTER TABLE `job_info`
@@ -361,3 +361,18 @@ ADD COLUMN `inc_start_id` VARCHAR(20) NULL COMMENT '增量初始id' AFTER `prima
 ADD COLUMN `increment_type` TINYINT(4) NULL COMMENT '增量类型' AFTER `inc_start_id`,
 ADD COLUMN `datasource_id` BIGINT(11) NULL COMMENT '数据源id' AFTER `increment_type`;
 
+ALTER TABLE `job_log`
+ADD COLUMN `max_id` BIGINT(20) NULL COMMENT '增量表max id' AFTER `process_id`;
+
+
+
+CREATE TABLE `job_project`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'key',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'project name',
+  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `user_id` int(11) NULL DEFAULT NULL COMMENT 'creator id',
+  `flag` tinyint(4) NULL DEFAULT 1 COMMENT '0 not available, 1 available',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT 'create time',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT 'update time',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;

@@ -143,7 +143,12 @@ public class JobTrigger {
 
         //increment parameter
         if (IncrementTypeEnum.ID.getCode() == jobInfo.getIncrementType()) {
-            triggerParam.setEndId(getMaxId(jobInfo));
+
+            long maxId=getMaxId(jobInfo);
+
+            jobLog.setMaxId(maxId);
+
+            triggerParam.setEndId(maxId);
             triggerParam.setStartId(jobInfo.getIncStartId());
         } else if (IncrementTypeEnum.TIME.getCode() == jobInfo.getIncrementType()) {
             triggerParam.setStartTime(jobInfo.getIncStartTime());

@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/jdbcDatasourceQuery")
 @Api(tags = "jdbc数据库查询控制器")
-public class DatasourceQueryController extends ApiController {
+public class DatasourceQueryController extends BaseController {
 
     @Autowired
     private DatasourceQueryService datasourceQueryService;

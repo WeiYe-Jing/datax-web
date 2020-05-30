@@ -25,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/jobRegistry")
 @Api(tags = "执行器资源监控")
-public class JobRegistryController extends ApiController {
+public class JobRegistryController extends BaseController {
 
 	@Autowired
 	private JobRegistryService jobRegistryService;

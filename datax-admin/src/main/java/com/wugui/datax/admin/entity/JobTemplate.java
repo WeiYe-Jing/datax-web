@@ -93,5 +93,5 @@ public class JobTemplate {
 	private String partitionInfo;
 
     @ApiModelProperty("所属项目")
-    private String jobProject;
+	private int projectId;
 }

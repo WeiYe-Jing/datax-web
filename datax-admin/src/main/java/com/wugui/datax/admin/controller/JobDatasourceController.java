@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/jobJdbcDatasource")
 @Api(tags = "jdbc数据源配置接口")
-public class JobDatasourceController extends ApiController {
+public class JobDatasourceController extends BaseController {
     /**
      * 服务对象
      */

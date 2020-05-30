@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/dataxJson")
 @Api(tags = "组装datax  json的控制器")
-public class DataxJsonController extends ApiController {
+public class DataxJsonController extends BaseController {
 
     @Autowired
     private DataxJsonService dataxJsonService;

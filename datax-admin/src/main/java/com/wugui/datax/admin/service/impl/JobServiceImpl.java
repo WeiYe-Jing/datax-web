@@ -197,7 +197,7 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
 
-        if (jobInfo.getJobProject() == null || jobInfo.getJobProject().isEmpty()) {
+        if (jobInfo.getProjectId() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
         if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
@@ -263,7 +263,7 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        BeanUtils.copyProperties(jobInfo,exists_jobInfo);
+        BeanUtils.copyProperties(jobInfo, exists_jobInfo);
         if (StringUtils.isBlank(jobInfo.getReplaceParamType())) {
             jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
@@ -288,7 +288,7 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setUpdateTime(new Date());
         exists_jobInfo.setGlueType(jobInfo.getGlueType());
         exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
-        exists_jobInfo.setJobProject(jobInfo.getJobProject());
+        exists_jobInfo.setProjectId(jobInfo.getProjectId());
 
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());
@@ -455,7 +455,7 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_writerDataSource"));
         }
         if (rdTables.size() != wrTables.size()) {
-            return new ReturnT<>(ReturnT.FAIL_CODE,  I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
         }
 
         DataXJsonBuildDto jsonBuild = new DataXJsonBuildDto();
@@ -483,7 +483,7 @@ public class JobServiceImpl implements JobService {
             wdTable.add(wrTables.get(i));
             jsonBuild.setWriterTables(wdTable);
 
-            String json=dataxJsonService.buildJobJson(jsonBuild);
+            String json = dataxJsonService.buildJobJson(jsonBuild);
 
             JobTemplate jobTemplate = jobTemplateMapper.loadById(19);
             JobInfo jobInfo = new JobInfo();

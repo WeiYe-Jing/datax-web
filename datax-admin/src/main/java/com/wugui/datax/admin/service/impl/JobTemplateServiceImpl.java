@@ -125,7 +125,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             jobTemplate.setChildJobId(temp);
         }
 
-        if(jobTemplate.getJobProject()==null || jobTemplate.getJobProject().isEmpty()){
+        if(jobTemplate.getProjectId()==0){
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
 
@@ -233,7 +233,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         exists_jobTemplate.setIncStartTime(jobTemplate.getIncStartTime());
         exists_jobTemplate.setPartitionInfo(jobTemplate.getPartitionInfo());
         exists_jobTemplate.setReplaceParamType(jobTemplate.getReplaceParamType());
-        exists_jobTemplate.setJobProject(jobTemplate.getJobProject());
+        exists_jobTemplate.setProjectId(jobTemplate.getProjectId());
         exists_jobTemplate.setUpdateTime(new Date());
         jobTemplateMapper.update(exists_jobTemplate);
 

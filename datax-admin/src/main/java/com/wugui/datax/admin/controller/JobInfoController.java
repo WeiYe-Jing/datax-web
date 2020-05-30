@@ -56,6 +56,7 @@ public class JobInfoController {
     public ReturnT<List<Object>> projects(){
         return new ReturnT<>(jobService.projects());
     }
+
     @PostMapping("/add")
     @ApiOperation("添加任务")
     public ReturnT<String> add(@RequestBody JobInfo jobInfo) {

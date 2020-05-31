@@ -83,7 +83,7 @@ mybatis-plus:
 logging:
   level:
     com.wugui.datax.admin.mapper: error
-  path: /data/applogs/admin
+  path: ./data/applogs/admin
 #  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
 
 

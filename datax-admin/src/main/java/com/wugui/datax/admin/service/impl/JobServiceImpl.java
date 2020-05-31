@@ -60,17 +60,11 @@ public class JobServiceImpl implements JobService {
     private DataxJsonService dataxJsonService;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author, String jobProject) {
-
-        String[] jobProjects = null;
-        if (jobProject != null && !jobProject.isEmpty()) {
-            jobProjects = jobProject.split(",");
-        }
-
+    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
 
         // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
+        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -82,10 +76,6 @@ public class JobServiceImpl implements JobService {
 
     public List<Object> list() {
         return jobInfoMapper.findAll();
-    }
-
-    public List<Object> projects() {
-        return jobInfoMapper.projects();
     }
 
     @Override
@@ -104,7 +94,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfo.getUserId() == 0 ) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -200,7 +190,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getProjectId() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfo.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -270,7 +260,7 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
         exists_jobInfo.setJobCron(jobInfo.getJobCron());
         exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
-        exists_jobInfo.setAuthor(jobInfo.getAuthor());
+        exists_jobInfo.setUserId(jobInfo.getUserId());
         exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
         exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
         exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());

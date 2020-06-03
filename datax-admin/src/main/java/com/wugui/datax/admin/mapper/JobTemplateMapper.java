@@ -19,7 +19,8 @@ public interface JobTemplateMapper {
 									  @Param("jobGroup") int jobGroup,
 									  @Param("jobDesc") String jobDesc,
 									  @Param("executorHandler") String executorHandler,
-									  @Param("author") String author);
+									  @Param("userId") int userId,
+									  @Param("projectIds") Integer[] projectIds);
 
 	public List<JobTemplate> findAll();
 
@@ -28,7 +29,8 @@ public interface JobTemplateMapper {
                              @Param("jobGroup") int jobGroup,
                              @Param("jobDesc") String jobDesc,
                              @Param("executorHandler") String executorHandler,
-                             @Param("author") String author);
+                             @Param("userId") int userId,
+							 @Param("projectIds") Integer[] projectIds);
 
 	public int save(JobTemplate info);
 

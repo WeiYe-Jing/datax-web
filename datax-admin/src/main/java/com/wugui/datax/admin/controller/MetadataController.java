@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.controller;
 
-import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import io.swagger.annotations.Api;
@@ -14,15 +13,15 @@ import java.util.List;
 /**
  * 查询数据库表名，字段的控制器
  *
- * @author zhouhongfa@gz-yibo.com
- * @ClassName DatabaseQueryController
- * @Version 1.0
- * @since 2019/7/31 20:48
+ * @author jingwk
+ * @ClassName MetadataController
+ * @Version 2.1.2
+ * @since 2020/05/31 20:48
  */
 @RestController
-@RequestMapping("api/jdbcDatasourceQuery")
+@RequestMapping("api/metadata")
 @Api(tags = "jdbc数据库查询控制器")
-public class DatasourceQueryController extends BaseController {
+public class MetadataController extends BaseController {
 
     @Autowired
     private DatasourceQueryService datasourceQueryService;

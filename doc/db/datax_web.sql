@@ -378,5 +378,8 @@ CREATE TABLE `job_project`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 
-ALTER TABLE `datax_web`.`job_info`
+ALTER TABLE `job_info`
+CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;
+
+ALTER TABLE `job_template`
 CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;

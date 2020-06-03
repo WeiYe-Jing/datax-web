@@ -115,8 +115,11 @@ public class JobInfo {
 	private  String readerTable;
 
 	@ApiModelProperty("数据源id")
-	private String datasourceId;
+	private int datasourceId;
 
 	@TableField(exist=false)
 	private String projectName;
+
+	@TableField(exist=false)
+	private String userName;
 }

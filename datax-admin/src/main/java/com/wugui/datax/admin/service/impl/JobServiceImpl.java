@@ -257,28 +257,8 @@ public class JobServiceImpl implements JobService {
         if (StringUtils.isBlank(jobInfo.getReplaceParamType())) {
             jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
-        exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
-        exists_jobInfo.setJobCron(jobInfo.getJobCron());
-        exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
-        exists_jobInfo.setUserId(jobInfo.getUserId());
-        exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
-        exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
-        exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());
-        exists_jobInfo.setExecutorParam(jobInfo.getExecutorParam());
-        exists_jobInfo.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
-        exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
-        exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
-        exists_jobInfo.setReplaceParamType(jobInfo.getReplaceParamType());
-        exists_jobInfo.setTriggerNextTime(nextTriggerTime);
-        exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
-        exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
-        exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setUpdateTime(new Date());
-        exists_jobInfo.setGlueType(jobInfo.getGlueType());
-        exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
-        exists_jobInfo.setProjectId(jobInfo.getProjectId());
 
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());
@@ -479,6 +459,7 @@ public class JobServiceImpl implements JobService {
             JobInfo jobInfo = new JobInfo();
             BeanUtils.copyProperties(jobTemplate, jobInfo);
             jobInfo.setJobJson(json);
+            jobInfo.setJobDesc(rdTables.get(i));
             jobInfo.setAddTime(new Date());
             jobInfo.setUpdateTime(new Date());
             jobInfo.setGlueUpdatetime(new Date());

@@ -53,15 +53,15 @@ public class ExecutorJobHandler extends IJobHandler {
         Thread inputThread = null;
         Thread errThread = null;
         String tmpFilePath;
-        //生成Json临时文件
+        //Generate JSON temporary file
         tmpFilePath = generateTemJsonFile(trigger.getJobJson());
         try {
             String[] cmdarrayFinal = buildCmd(trigger, tmpFilePath);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
             String prcsId = ProcessUtil.getProcessId(process);
-            JobLogger.log("------------------DataX运行进程Id: " + prcsId);
+            JobLogger.log("------------------DataX process id: " + prcsId);
             jobTmpFiles.put(prcsId, tmpFilePath);
-            //更新任务进程Id
+            //update datax process id
             HandleProcessCallbackParam prcs = new HandleProcessCallbackParam(trigger.getLogId(), trigger.getLogDateTime(), prcsId);
             ProcessCallbackThread.pushCallBack(prcs);
             // log-thread
@@ -176,8 +176,6 @@ public class ExecutorJobHandler extends IJobHandler {
 
         if (IncrementTypeEnum.TIME.getCode() == tgParam.getIncrementType()) {
 
-            if (doc.length() > 0) doc.append(SPLIT_SPACE);
-
             if (StringUtils.isNotBlank(replaceParam)) {
                 if (doc.length() > 0) doc.append(SPLIT_SPACE);
 
@@ -189,9 +187,9 @@ public class ExecutorJobHandler extends IJobHandler {
                     doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat(replaceParamType);
-                    String tgSecondTime = sdf.format(tgParam.getTriggerTime());
-                    String lastTime = sdf.format(tgParam.getStartTime());
-                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
+                    String endTime = sdf.format(tgParam.getTriggerTime());
+                    String startTime = sdf.format(tgParam.getStartTime());
+                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
                 }
                 //buildPartitionCM(doc, partitionStr);
                 doc.append(TRANSFORM_QUOTES);

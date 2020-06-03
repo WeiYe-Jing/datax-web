@@ -44,11 +44,11 @@ public class JobTemplateServiceImpl implements JobTemplateService {
     private JobLogGlueMapper jobLogGlueMapper;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String author) {
+    public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId,Integer[] projectIds) {
 
         // page list
-        List<JobTemplate> list = jobTemplateMapper.pageList(start, length, jobGroup, jobDesc, executorHandler, author);
-        int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, author);
+        List<JobTemplate> list = jobTemplateMapper.pageList(start, length, jobGroup, jobDesc, executorHandler, userId,projectIds);
+        int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, userId,projectIds);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -75,7 +75,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         if (jobTemplate.getJobDesc() == null || jobTemplate.getJobDesc().trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobTemplate.getAuthor() == null || jobTemplate.getAuthor().trim().length() == 0) {
+        if (jobTemplate.getUserId() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobTemplate.getExecutorRouteStrategy(), null) == null) {
@@ -110,10 +110,6 @@ public class JobTemplateServiceImpl implements JobTemplateService {
                     return new ReturnT<String>(ReturnT.FAIL_CODE,
                             MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_invalid")), childJobIdItem));
                 }
-            }
-
-            if (StringUtils.isBlank(jobTemplate.getReplaceParamType())) {
-                jobTemplate.setReplaceParamType("UnitTime");
             }
             // join , avoid "xxx,,"
             String temp = Constants.STRING_BLANK;
@@ -160,7 +156,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         if (jobTemplate.getJobDesc() == null || jobTemplate.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobTemplate.getAuthor() == null || jobTemplate.getAuthor().trim().length() == 0) {
+        if (jobTemplate.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobTemplate.getExecutorRouteStrategy(), null) == null) {
@@ -208,16 +204,13 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_not_found")));
         }
 
-        if (jobTemplate.getReplaceParamType() == null || jobTemplate.getReplaceParamType().isEmpty()) {
-            jobTemplate.setReplaceParamType("UnitTime");
-        }
         // next trigger time (5s后生效，避开预读周期)
         long nextTriggerTime = exists_jobTemplate.getTriggerNextTime();
 
         exists_jobTemplate.setJobGroup(jobTemplate.getJobGroup());
         exists_jobTemplate.setJobCron(jobTemplate.getJobCron());
         exists_jobTemplate.setJobDesc(jobTemplate.getJobDesc());
-        exists_jobTemplate.setAuthor(jobTemplate.getAuthor());
+        exists_jobTemplate.setUserId(jobTemplate.getUserId());
         exists_jobTemplate.setAlarmEmail(jobTemplate.getAlarmEmail());
         exists_jobTemplate.setExecutorRouteStrategy(jobTemplate.getExecutorRouteStrategy());
         exists_jobTemplate.setExecutorHandler(jobTemplate.getExecutorHandler());
@@ -228,15 +221,10 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         exists_jobTemplate.setChildJobId(jobTemplate.getChildJobId());
         exists_jobTemplate.setTriggerNextTime(nextTriggerTime);
         exists_jobTemplate.setJobJson(jobTemplate.getJobJson());
-        exists_jobTemplate.setReplaceParam(jobTemplate.getReplaceParam());
         exists_jobTemplate.setJvmParam(jobTemplate.getJvmParam());
-        exists_jobTemplate.setIncStartTime(jobTemplate.getIncStartTime());
-        exists_jobTemplate.setPartitionInfo(jobTemplate.getPartitionInfo());
-        exists_jobTemplate.setReplaceParamType(jobTemplate.getReplaceParamType());
         exists_jobTemplate.setProjectId(jobTemplate.getProjectId());
         exists_jobTemplate.setUpdateTime(new Date());
         jobTemplateMapper.update(exists_jobTemplate);
-
 
         return ReturnT.SUCCESS;
     }

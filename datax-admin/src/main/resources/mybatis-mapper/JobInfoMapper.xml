@@ -93,12 +93,14 @@
 	</sql>
 
 	<sql id="Project_Column_List">
-		p.name as project_name
+		p.name as project_name,
+		u.username
 	</sql>
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />,<include refid="Project_Column_List" />
 		FROM job_info AS t
 		INNER JOIN job_project p on t.project_id=p.id
+		INNER JOIN job_user u on t.user_id = u.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -279,7 +281,8 @@
 			reader_table = #{readerTable},
 		    primary_key = #{primaryKey},
 		    inc_start_id = #{incStartId},
-		    increment_type = #{incrementType}
+		    increment_type = #{incrementType},
+		    datasource_id= #{datasourceId}
 		WHERE id = #{id}
 	</update>
 

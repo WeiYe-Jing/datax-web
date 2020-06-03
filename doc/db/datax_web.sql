@@ -234,7 +234,7 @@ CREATE TABLE `job_template`  (
   `job_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `add_time` datetime(0) NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
-  `author` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '作者',
+  `user_id` int(11) NOT NULL COMMENT '修改用户',
   `alarm_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '报警邮件',
   `executor_route_strategy` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行器路由策略',
   `executor_handler` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行器任务handler',
@@ -250,11 +250,10 @@ CREATE TABLE `job_template`  (
   `trigger_last_time` bigint(13) NOT NULL DEFAULT 0 COMMENT '上次调度时间',
   `trigger_next_time` bigint(13) NOT NULL DEFAULT 0 COMMENT '下次调度时间',
   `job_json` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'datax运行脚本',
-  `replace_param` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '动态参数',
   `jvm_param` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'jvm参数',
-  `inc_start_time` datetime(0) NULL DEFAULT NULL COMMENT '增量初始时间',
+  `project_id` int(11) NULL DEFAULT NULL COMMENT '所属项目Id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 /**
 添加数据源字段
@@ -266,9 +265,6 @@ ADD COLUMN `datasource` VARCHAR(45) NOT NULL COMMENT '数据源' AFTER `datasour
 添加分区字段
  */
 ALTER TABLE `job_info`
-ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;
-
-ALTER TABLE `job_template`
 ADD COLUMN `partition_info` VARCHAR(100) NULL DEFAULT NULL COMMENT '分区信息' AFTER `inc_start_time`;
 
 /**
@@ -344,15 +340,9 @@ ADD COLUMN `task_record_writing_num_suffix` INT(11) NULL AFTER `task_record_read
 ALTER TABLE `job_info`
 ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `last_handle_code`;
 
-ALTER TABLE `job_template`
-ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `replace_param`;
 
 ALTER TABLE `job_info`
 ADD COLUMN `project_id` int(11) NULL COMMENT '所属项目id' AFTER `job_desc`;
-
-ALTER TABLE `job_template`
-ADD COLUMN `project_id` int(11) NULL COMMENT '所属项目id' AFTER `partition_info`;
-
 
 ALTER TABLE `job_info`
 ADD COLUMN `reader_table` VARCHAR(255) NULL COMMENT 'reader表名称' AFTER `replace_param_type`,
@@ -379,7 +369,4 @@ CREATE TABLE `job_project`  (
 
 
 ALTER TABLE `job_info`
-CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;
-
-ALTER TABLE `job_template`
 CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;

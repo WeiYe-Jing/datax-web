@@ -82,7 +82,7 @@ mybatis-plus:
 # 配置mybatis-plus打印sql日志
 logging:
   level:
-    com.wugui.datax.admin.mapper: debug
+    com.wugui.datax.admin.mapper: info
   path: ./data/applogs/admin
 #  config: classpath:logback.xml  TODO 有这个就无法打印sql。后面排查原因
 

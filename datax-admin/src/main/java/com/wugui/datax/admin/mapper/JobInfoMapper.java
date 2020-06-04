@@ -34,7 +34,7 @@ public interface JobInfoMapper {
                       @Param("userId") int userId,
                       @Param("projectIds") Integer[] projectIds);
 
-    List<Object> findAll();
+    List<JobInfo> findAll();
 
     int save(JobInfo info);
 

@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +27,7 @@ import java.util.Map;
 @Api(tags = "任务配置接口")
 @RestController
 @RequestMapping("/api/jobTemplate")
-public class JobTemplateController {
+public class JobTemplateController extends BaseController{
 
     @Resource
     private JobTemplateService jobTemplateService;
@@ -40,21 +41,17 @@ public class JobTemplateController {
         return new ReturnT<>(jobTemplateService.pageList((current-1)*size, size, jobGroup, jobDesc, executorHandler, userId, projectIds));
     }
 
-    @GetMapping("/list")
-    @ApiOperation("获取所有任务模板列表")
-    public ReturnT<List<JobTemplate>> list(){
-        return new ReturnT<>(jobTemplateService.findAll());
-    }
-
     @PostMapping("/add")
     @ApiOperation("添加任务模板")
-    public ReturnT<String> add(@RequestBody JobTemplate jobTemplate) {
+    public ReturnT<String> add(HttpServletRequest request, @RequestBody JobTemplate jobTemplate) {
+        jobTemplate.setUserId(getCurrentUserId(request));
         return jobTemplateService.add(jobTemplate);
     }
 
     @PostMapping("/update")
     @ApiOperation("更新任务")
-    public ReturnT<String> update(@RequestBody JobTemplate jobTemplate) {
+    public ReturnT<String> update(HttpServletRequest request,@RequestBody JobTemplate jobTemplate) {
+        jobTemplate.setUserId(getCurrentUserId(request));
         return jobTemplateService.update(jobTemplate);
     }
 

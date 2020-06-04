@@ -8,16 +8,10 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobGroup;
+import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobTemplate;
-import com.wugui.datax.admin.mapper.JobGroupMapper;
-import com.wugui.datax.admin.mapper.JobLogGlueMapper;
-import com.wugui.datax.admin.mapper.JobLogMapper;
-import com.wugui.datax.admin.mapper.JobTemplateMapper;
+import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.JobTemplateService;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,6 +36,8 @@ public class JobTemplateServiceImpl implements JobTemplateService {
     private JobLogMapper jobLogMapper;
     @Resource
     private JobLogGlueMapper jobLogGlueMapper;
+    @Resource
+    private JobInfoMapper jobInfoMapper;
 
     @Override
     public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId,Integer[] projectIds) {
@@ -56,10 +52,6 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
         maps.put("data", list);                    // 分页列表
         return maps;
-    }
-
-    public List<JobTemplate> findAll() {
-        return jobTemplateMapper.findAll();
     }
 
     @Override
@@ -101,8 +93,8 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             String[] childJobIds = jobTemplate.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    JobTemplate childJobTemplate = jobTemplateMapper.loadById(Integer.parseInt(childJobIdItem));
-                    if (childJobTemplate == null) {
+                    JobInfo jobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
+                    if (jobInfo == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
                     }

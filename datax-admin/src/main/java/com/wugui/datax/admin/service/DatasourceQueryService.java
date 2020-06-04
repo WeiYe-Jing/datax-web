@@ -57,5 +57,5 @@ public interface DatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getPgTableSchema(Long id);
+    List<String> getTableSchema(Long id);
 }

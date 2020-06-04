@@ -49,7 +49,7 @@ public class JobInfoController extends BaseController{
 
     @GetMapping("/list")
     @ApiOperation("全部任务列表")
-    public ReturnT<List<Object>> list(){
+    public ReturnT<List<JobInfo>> list(){
         return new ReturnT<>(jobService.list());
     }
 

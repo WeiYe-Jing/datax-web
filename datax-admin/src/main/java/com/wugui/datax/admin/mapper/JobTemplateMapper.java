@@ -22,8 +22,6 @@ public interface JobTemplateMapper {
 									  @Param("userId") int userId,
 									  @Param("projectIds") Integer[] projectIds);
 
-	public List<JobTemplate> findAll();
-
 	public int pageListCount(@Param("offset") int offset,
                              @Param("pagesize") int pagesize,
                              @Param("jobGroup") int jobGroup,

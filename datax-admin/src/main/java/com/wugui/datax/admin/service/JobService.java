@@ -30,7 +30,7 @@ public interface JobService {
      */
     Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId,Integer[] projectIds);
 
-    List<Object> list();
+    List<JobInfo> list();
 
     /**
      * add job

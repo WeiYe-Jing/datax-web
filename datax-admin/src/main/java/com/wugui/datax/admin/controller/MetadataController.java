@@ -57,10 +57,10 @@ public class MetadataController extends BaseController {
      * @param datasourceId
      * @return
      */
-    @GetMapping("/pgTableSchema")
-    @ApiOperation("根据数据源id获取PG table schema")
-    public R<List<String>> getPgTableSchema(Long datasourceId) {
-        return success(datasourceQueryService.getPgTableSchema(datasourceId));
+    @GetMapping("/getDBSchema")
+    @ApiOperation("根据数据源id获取 db schema")
+    public R<List<String>> getTableSchema(Long datasourceId) {
+        return success(datasourceQueryService.getTableSchema(datasourceId));
     }
 
     /**

@@ -4,7 +4,6 @@ package com.wugui.datax.admin.service;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.entity.JobTemplate;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,12 +25,6 @@ public interface JobTemplateService {
 	 * @return
 	 */
 	Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId,Integer[] projectIds);
-
-	/**
-	 * find all template
-	 * @return
-	 */
-	List<JobTemplate> findAll();
 	/**
 	 * add job
 	 *

@@ -74,7 +74,7 @@ public class JobServiceImpl implements JobService {
         return maps;
     }
 
-    public List<Object> list() {
+    public List<JobInfo> list() {
         return jobInfoMapper.findAll();
     }
 

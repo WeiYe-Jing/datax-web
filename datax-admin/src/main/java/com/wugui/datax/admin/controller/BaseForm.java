@@ -221,13 +221,8 @@ public class BaseForm {
     protected QueryWrapper<?> pageQueryWrapperCustom(Map<String, Object> map, QueryWrapper<?> queryWrapper) {
         // mybatis plus 分页相关的参数
         Map<String, Object> pageParams = PageUtils.filterPageParams(map);
-        log.info("分页相关的参数: {}", pageParams);
         //过滤空值，分页查询相关的参数
         Map<String, Object> colQueryMap = PageUtils.filterColumnQueryParams(map);
-        log.info("字段查询条件参数为: {}", colQueryMap);
-
-//        QueryWrapper<DataxPlugin> queryWrapper = new QueryWrapper<>();
-
         //排序 操作
         pageParams.forEach((k, v) -> {
             switch (k) {

@@ -57,10 +57,8 @@ public class JobRegistryController extends BaseController {
 	protected QueryWrapper<JobRegistry> pageQueryWrapperCustom(Map<String, Object> map) {
 		// mybatis plus 分页相关的参数
 		Map<String, Object> pageHelperParams = PageUtils.filterPageParams(map);
-		logger.info("分页相关的参数: {}", pageHelperParams);
 		//过滤空值，分页查询相关的参数
 		Map<String, Object> columnQueryMap = PageUtils.filterColumnQueryParams(map);
-		logger.info("字段查询条件参数为: {}", columnQueryMap);
 
 		QueryWrapper<JobRegistry> queryWrapper = new QueryWrapper<>();
 

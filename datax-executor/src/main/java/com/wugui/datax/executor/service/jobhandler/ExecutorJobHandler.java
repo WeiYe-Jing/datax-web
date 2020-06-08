@@ -135,7 +135,10 @@ public class ExecutorJobHandler extends IJobHandler {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String line;
-            stringBuilder.delete(0, stringBuilder.length());
+
+            if (stringBuilder.length() > 0) {
+                stringBuilder.delete(0, stringBuilder.length());
+            }
             while ((line = reader.readLine()) != null) {
 
                 if (line.contains(TASK_START_TIME_SUFFIX)) {

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,15 +53,15 @@ public class ExecutorJobHandler extends IJobHandler {
         Thread inputThread = null;
         Thread errThread = null;
         String tmpFilePath;
-        //生成Json临时文件
+        //Generate JSON temporary file
         tmpFilePath = generateTemJsonFile(trigger.getJobJson());
         try {
             String[] cmdarrayFinal = buildCmd(trigger, tmpFilePath);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
             String prcsId = ProcessUtil.getProcessId(process);
-            JobLogger.log("------------------DataX运行进程Id: " + prcsId);
+            JobLogger.log("------------------DataX process id: " + prcsId);
             jobTmpFiles.put(prcsId, tmpFilePath);
-            //更新任务进程Id
+            //update datax process id
             HandleProcessCallbackParam prcs = new HandleProcessCallbackParam(trigger.getLogId(), trigger.getLogDateTime(), prcsId);
             ProcessCallbackThread.pushCallBack(prcs);
             // log-thread
@@ -132,9 +133,12 @@ public class ExecutorJobHandler extends IJobHandler {
      */
     private static void reader(InputStream inputStream) throws IOException {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String line;
-            stringBuilder.delete(0, stringBuilder.length());
+
+            if (stringBuilder.length() > 0) {
+                stringBuilder.delete(0, stringBuilder.length());
+            }
             while ((line = reader.readLine()) != null) {
 
                 if (line.contains(TASK_START_TIME_SUFFIX)) {
@@ -171,15 +175,13 @@ public class ExecutorJobHandler extends IJobHandler {
             doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
 
-        String replaceParam = tgParam.getReplaceParam().trim();
+        Integer incrementType = tgParam.getIncrementType();
+        String replaceParam = StringUtils.isNotBlank(tgParam.getReplaceParam()) ? tgParam.getReplaceParam().trim() : null;
 
-        if (IncrementTypeEnum.TIME.getCode() == tgParam.getIncrementType()) {
+        if (incrementType != null && replaceParam != null) {
 
-            if (doc.length() > 0) doc.append(SPLIT_SPACE);
-
-            if (StringUtils.isNotBlank(replaceParam)) {
+            if (IncrementTypeEnum.TIME.getCode() == incrementType) {
                 if (doc.length() > 0) doc.append(SPLIT_SPACE);
-
                 String replaceParamType = tgParam.getReplaceParamType();
 
                 if (StringUtils.isBlank(replaceParamType) || replaceParamType.equals("UnitTime")) {
@@ -188,21 +190,23 @@ public class ExecutorJobHandler extends IJobHandler {
                     doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat(replaceParamType);
-                    String tgSecondTime = sdf.format(tgParam.getTriggerTime());
-                    String lastTime = sdf.format(tgParam.getStartTime());
-                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, lastTime, tgSecondTime));
+                    String endTime = sdf.format(tgParam.getTriggerTime());
+                    String startTime = sdf.format(tgParam.getStartTime());
+                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
                 }
                 //buildPartitionCM(doc, partitionStr);
                 doc.append(TRANSFORM_QUOTES);
-            }
-        } else if (IncrementTypeEnum.ID.getCode() == tgParam.getIncrementType()) {
-            long startId = tgParam.getStartId();
-            long endId = tgParam.getEndId();
-            if (doc.length() > 0) doc.append(SPLIT_SPACE);
-            doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startId, endId));
-            doc.append(TRANSFORM_QUOTES);
 
-        } else if (IncrementTypeEnum.PARTITION.getCode() == tgParam.getIncrementType()) {
+            } else if (IncrementTypeEnum.ID.getCode() == incrementType) {
+                long startId = tgParam.getStartId();
+                long endId = tgParam.getEndId();
+                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startId, endId));
+                doc.append(TRANSFORM_QUOTES);
+            }
+        }
+
+        if (incrementType != null && IncrementTypeEnum.PARTITION.getCode() == incrementType) {
             if (StringUtils.isNotBlank(partitionStr)) {
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(SPLIT_COMMA));
                 if (doc.length() > 0) doc.append(SPLIT_SPACE);
@@ -210,7 +214,7 @@ public class ExecutorJobHandler extends IJobHandler {
             }
         }
 
-        JobLogger.log("------------------命令参数: " + doc);
+        JobLogger.log("------------------Command parameters:" + doc);
         return doc.toString();
     }
 

@@ -1,6 +1,8 @@
 package com.wugui.datax.admin.util;
 
-//TODO
+/**
+ * DBUtilErrorCode
+ */
 public enum DBUtilErrorCode implements ErrorCode {
     //连接错误
     MYSQL_CONN_USERPWD_ERROR("MYSQLErrCode-01","数据库用户名或者密码错误，请检查填写的账号密码或者联系DBA确认账号和密码是否正确"),

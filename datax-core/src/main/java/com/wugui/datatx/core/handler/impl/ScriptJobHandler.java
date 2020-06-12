@@ -80,7 +80,7 @@ public class ScriptJobHandler extends IJobHandler {
 
         // invoke
         JobLogger.log("----------- script file:"+ scriptFileName +" -----------");
-        int exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName, scriptParams);
+        int exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName,tgParam.getLogId(),tgParam.getLogDateTime(), scriptParams);
 
         if (exitValue == 0) {
             return IJobHandler.SUCCESS;

@@ -2,7 +2,6 @@ package com.wugui.datax.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
@@ -28,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/jobJdbcDatasource")
 @Api(tags = "jdbc数据源配置接口")
-public class JobDatasourceController extends ApiController {
+public class JobDatasourceController extends BaseController {
     /**
      * 服务对象
      */
@@ -54,6 +53,17 @@ public class JobDatasourceController extends ApiController {
         QueryWrapper<JobDatasource> query = (QueryWrapper<JobDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobDatasource>());
         return success(jobJdbcDatasourceService.page(form.getPlusPagingQueryEntity(), query));
     }
+
+    /**
+     * 获取所有数据源
+     * @return
+     */
+    @ApiOperation("获取所有数据源")
+    @GetMapping("/all")
+    public R<List<JobDatasource>> selectAllDatasource() {
+        return success(this.jobJdbcDatasourceService.selectAllDatasource());
+    }
+
     /**
      * 通过主键查询单条数据
      *

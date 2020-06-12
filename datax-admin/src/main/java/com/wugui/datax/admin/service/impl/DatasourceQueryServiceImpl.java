@@ -57,7 +57,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     }
 
     @Override
-    public List<String> getPgTableSchema(Long id) {
+    public List<String> getTableSchema(Long id) {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装

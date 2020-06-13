@@ -104,3 +104,7 @@ datax:
         max: 100
       ### log retention days
     logretentiondays: 30
+
+datasource:
+  aes:
+    key: AD42F6697B035B75

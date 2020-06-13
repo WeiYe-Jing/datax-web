@@ -230,13 +230,10 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                 res.add(dasColumn);
             }
 
-
             Statement statement = connection.createStatement();
-
 
             if (currentDatabase.equals(JdbcConstants.MYSQL) || currentDatabase.equals(JdbcConstants.ORACLE)) {
                 DatabaseMetaData databaseMetaData = connection.getMetaData();
-
 
                 ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, tableName);
 
@@ -251,7 +248,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                         }
                     });
                 }
-
 
                 res.forEach(e -> {
                     String sqlQueryComment = sqlBuilder.getSQLQueryComment(currentSchema, tableName, e.getColumnName());
@@ -379,7 +375,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnsByQuerySql(String querySql) {
+    public List<String> getColumnsByQuerySql(String querySql) throws SQLException {
 
         List<String> res = Lists.newArrayList();
         Statement stmt = null;
@@ -408,9 +404,6 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             for (int i = 1; i <= columnCount; i++) {
                 res.add(metaData.getColumnName(i));
             }
-        } catch (SQLException e) {
-            logger.error("[getColumnsByQuerySql Exception] --> "
-                    + "the exception message is:" + e.getMessage());
         } finally {
             JdbcUtils.close(rs);
             JdbcUtils.close(stmt);
@@ -485,7 +478,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return schemas;
     }
 
-    protected String getSQLQueryTableSchema(){
+    protected String getSQLQueryTableSchema() {
         return sqlBuilder.getSQLQueryTableSchema();
     }
 }

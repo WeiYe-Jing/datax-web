@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -99,7 +100,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     }
 
     @Override
-    public List<String> getColumnsByQuerySql(Long datasourceId, String querySql) {
+    public List<String> getColumnsByQuerySql(Long datasourceId, String querySql) throws SQLException {
         //获取数据源对象
         JobDatasource jdbcDatasource = jobDatasourceService.getById(datasourceId);
         //queryTool组装

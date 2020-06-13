@@ -116,4 +116,9 @@ public interface JdbcConstants {
 
     String CLICKHOUSE                 = "clickhouse";
     String CLICKHOUSE_DRIVER          = "ru.yandex.clickhouse.ClickHouseDriver";
+
+    // for HBase2.X and Phoenix5.X
+    String HBASE20XSQL = "hbase20xsql";
+    String HBASE20XSQL_DRIVER = "org.apache.phoenix.jdbc.PhoenixDriver";
+
 }

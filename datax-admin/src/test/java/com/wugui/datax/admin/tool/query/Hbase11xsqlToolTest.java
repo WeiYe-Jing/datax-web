@@ -6,6 +6,7 @@ import org.apache.phoenix.compile.ColumnProjector;
 import org.apache.phoenix.compile.RowProjector;
 import org.apache.phoenix.util.SchemaUtil;
 import sqlline.SqlLine;
+import org.apache.phoenix.jdbc.PhoenixDriver;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
@@ -54,21 +55,12 @@ public class Hbase11xsqlToolTest {
         ResultSet columns = metaData.getColumns(conn.getCatalog(), null, tableName, "%");
 
 
-
             try {
                 int total = getSize(columns);
                 int index = 0;
 
                 while (columns.next()) {
-                    // add the following strings:
-                    // 1. column name
-                    // 2. table name
-                    // 3. tablename.columnname
 
-//                    final String tableName = columns.getString("TABLE_NAME");
-//                    ResultSet columns1 = columns;
-
-//                    String columnName = columns.getString("COLUMN_NAME");
                     System.out.println(columns.getString("COLUMN_NAME")+"  "+columns.getString("TYPE_NAME"));
                 }
 
@@ -106,11 +98,9 @@ public class Hbase11xsqlToolTest {
     private static void showFields(String connectionString,String tableName) throws SQLException, NoSuchFieldException, IllegalAccessException {
 
         Connection conn = DriverManager.getConnection(connectionString);
-        Properties props = new Properties();
 
 
 
-//        conn.setSchema("SYSTEM");
         Statement stat = conn.createStatement();
         ResultSet rs = stat.executeQuery("select * from   LKY_STOCK_SYMBOL limit 1");
         RowProjector row = (RowProjector) ReflectionUtil.getPrivateField(rs, "rowProjector");

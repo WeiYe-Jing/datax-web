@@ -11,6 +11,7 @@
     <packaging>jar</packaging>
     <properties>
         <java.version>1.8</java.version>
+        <phoenix.version>4.15.0-HBase-1.4</phoenix.version>
     </properties>
 
     <dependencyManagement>
@@ -26,6 +27,19 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>5.0.0-HBase-2.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -191,11 +205,33 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.hive</groupId>
-            <artifactId>hive-jdbc</artifactId>
-            <version>${hive.jdbc.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hive</groupId>-->
+<!--            <artifactId>hive-jdbc</artifactId>-->
+<!--            <version>${hive.jdbc.version}</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>hbase-hadoop-compat</artifactId>-->
+<!--                    <groupId>org.apache.hbase</groupId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>hbase-server</artifactId>-->
+<!--                    <groupId>org.apache.hbase</groupId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>hbase-common</artifactId>-->
+<!--                    <groupId>org.apache.hbase</groupId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>hbase-client</artifactId>-->
+<!--                    <groupId>org.apache.hbase</groupId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>hbase-hadoop2-compat</artifactId>-->
+<!--                    <groupId>org.apache.hbase</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -203,11 +239,11 @@
             <version>${hadoop.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>${hbase.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.hbase</groupId>-->
+<!--            <artifactId>hbase-client</artifactId>-->
+<!--            <version>${hbase.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -267,5 +303,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
+
+
 </project>

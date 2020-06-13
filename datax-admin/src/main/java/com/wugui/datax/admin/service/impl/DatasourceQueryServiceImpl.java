@@ -5,10 +5,7 @@ import com.google.common.collect.Lists;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.JobDatasourceService;
-import com.wugui.datax.admin.tool.query.BaseQueryTool;
-import com.wugui.datax.admin.tool.query.HBaseQueryTool;
-import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
-import com.wugui.datax.admin.tool.query.QueryToolFactory;
+import com.wugui.datax.admin.tool.query.*;
 import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +37,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
 
 
     @Override
-    public List<String> getTables(Long id,String tableSchema) throws IOException {
+    public List<String> getTables(Long id, String tableSchema) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装

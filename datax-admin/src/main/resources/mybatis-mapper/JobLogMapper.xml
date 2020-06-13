@@ -28,6 +28,7 @@
 		<result column="alarm_status" property="alarmStatus" />
 
 		<result column="process_id" property="processId" />
+		<result column="max_id" property="maxId" />
 
 		<result column="job_desc" property="jobDesc" />
 
@@ -57,6 +58,7 @@
 		t.handle_msg,
 		t.alarm_status,
 		t.process_id,
+		t.max_id,
 		t.job_desc,
 		t.task_start_time_suffix,
 		t.task_end_time_suffix,
@@ -147,14 +149,16 @@
 			`job_desc`,
 			`trigger_time`,
 			`trigger_code`,
-			`handle_code`
+			`handle_code`,
+			`max_id`
 		) VALUES (
 			#{jobGroup},
 			#{jobId},
 			#{jobDesc},
 			#{triggerTime},
 			#{triggerCode},
-			#{handleCode}
+			#{handleCode},
+			#{maxId}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID() 

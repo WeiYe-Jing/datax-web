@@ -61,7 +61,10 @@ public class JobLog {
     @ApiModelProperty("DataX进程Id")
     private String processId;
 
-	@ApiModelProperty("DataX任务启动时刻")
+    @ApiModelProperty("增量最大id")
+    private Long maxId;
+
+    @ApiModelProperty("DataX任务启动时刻")
     private String taskStartTimeSuffix;
 	@ApiModelProperty("DataX任务结束时刻")
     private String taskEndTimeSuffix;

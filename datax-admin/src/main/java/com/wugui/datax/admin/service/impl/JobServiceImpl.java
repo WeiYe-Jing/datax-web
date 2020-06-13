@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -9,11 +8,16 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
+import com.wugui.datax.admin.dto.DataXJsonBuildDto;
 import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLogReport;
+import com.wugui.datax.admin.entity.JobTemplate;
 import com.wugui.datax.admin.mapper.*;
+import com.wugui.datax.admin.service.DatasourceQueryService;
+import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobService;
 import com.wugui.datax.admin.util.CronUtil;
 import com.wugui.datax.admin.util.DateFormatUtils;
@@ -24,6 +28,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -47,19 +52,19 @@ public class JobServiceImpl implements JobService {
     private JobLogGlueMapper jobLogGlueMapper;
     @Resource
     private JobLogReportMapper jobLogReportMapper;
+    @Resource
+    private DatasourceQueryService datasourceQueryService;
+    @Resource
+    private JobTemplateMapper jobTemplateMapper;
+    @Resource
+    private DataxJsonService dataxJsonService;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author, String jobProject) {
-
-        String[] jobProjects = null;
-        if (jobProject != null && !jobProject.isEmpty()) {
-            jobProjects = jobProject.split(",");
-        }
-
+    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
 
         // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
+        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -69,12 +74,8 @@ public class JobServiceImpl implements JobService {
         return maps;
     }
 
-    public List<Object> list() {
+    public List<JobInfo> list() {
         return jobInfoMapper.findAll();
-    }
-
-    public List<Object> projects() {
-        return jobInfoMapper.projects();
     }
 
     @Override
@@ -93,7 +94,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfo.getUserId() == 0 ) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -186,10 +187,10 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
 
-        if (jobInfo.getJobProject() == null || jobInfo.getJobProject().isEmpty()) {
+        if (jobInfo.getProjectId() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfo.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -252,32 +253,12 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        BeanUtils.copyProperties(jobInfo,exists_jobInfo);
+        BeanUtils.copyProperties(jobInfo, exists_jobInfo);
         if (StringUtils.isBlank(jobInfo.getReplaceParamType())) {
             jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
-        exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
-        exists_jobInfo.setJobCron(jobInfo.getJobCron());
-        exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
-        exists_jobInfo.setAuthor(jobInfo.getAuthor());
-        exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
-        exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
-        exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());
-        exists_jobInfo.setExecutorParam(jobInfo.getExecutorParam());
-        exists_jobInfo.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
-        exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
-        exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
-        exists_jobInfo.setReplaceParamType(jobInfo.getReplaceParamType());
-        exists_jobInfo.setTriggerNextTime(nextTriggerTime);
-        exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
-        exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
-        exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setUpdateTime(new Date());
-        exists_jobInfo.setGlueType(jobInfo.getGlueType());
-        exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
-        exists_jobInfo.setJobProject(jobInfo.getJobProject());
 
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());
@@ -334,14 +315,14 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public ReturnT<String> stop(int id) {
-        JobInfo xxlJobInfo = jobInfoMapper.loadById(id);
+        JobInfo jobInfo = jobInfoMapper.loadById(id);
 
-        xxlJobInfo.setTriggerStatus(0);
-        xxlJobInfo.setTriggerLastTime(0);
-        xxlJobInfo.setTriggerNextTime(0);
+        jobInfo.setTriggerStatus(0);
+        jobInfo.setTriggerLastTime(0);
+        jobInfo.setTriggerNextTime(0);
 
-        xxlJobInfo.setUpdateTime(new Date());
-        jobInfoMapper.update(xxlJobInfo);
+        jobInfo.setUpdateTime(new Date());
+        jobInfoMapper.update(jobInfo);
         return ReturnT.SUCCESS;
     }
 
@@ -430,4 +411,60 @@ public class JobServiceImpl implements JobService {
         return new ReturnT<>(result);
     }
 
+
+    @Override
+    public ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException {
+
+        String key = "system_please_choose";
+        List<String> rdTables = dto.getReaderTables();
+        List<String> wrTables = dto.getWriterTables();
+        if (dto.getReaderDatasourceId() == null) {
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_readerDataSource"));
+        }
+        if (dto.getWriterDatasourceId() == null) {
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_writerDataSource"));
+        }
+        if (rdTables.size() != wrTables.size()) {
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
+        }
+
+        DataXJsonBuildDto jsonBuild = new DataXJsonBuildDto();
+
+        List<String> rColumns;
+        List<String> wColumns;
+        for (int i = 0; i < rdTables.size(); i++) {
+            rColumns = datasourceQueryService.getColumns(dto.getReaderDatasourceId(), rdTables.get(i));
+            wColumns = datasourceQueryService.getColumns(dto.getWriterDatasourceId(), wrTables.get(i));
+
+            jsonBuild.setReaderDatasourceId(dto.getReaderDatasourceId());
+            jsonBuild.setWriterDatasourceId(dto.getWriterDatasourceId());
+
+            jsonBuild.setReaderColumns(rColumns);
+            jsonBuild.setWriterColumns(wColumns);
+
+            jsonBuild.setRdbmsReader(dto.getRdbmsReader());
+            jsonBuild.setRdbmsWriter(dto.getRdbmsWriter());
+
+            List<String> rdTable = new ArrayList<>();
+            rdTable.add(rdTables.get(i));
+            jsonBuild.setReaderTables(rdTable);
+
+            List<String> wdTable = new ArrayList<>();
+            wdTable.add(wrTables.get(i));
+            jsonBuild.setWriterTables(wdTable);
+
+            String json = dataxJsonService.buildJobJson(jsonBuild);
+
+            JobTemplate jobTemplate = jobTemplateMapper.loadById(19);
+            JobInfo jobInfo = new JobInfo();
+            BeanUtils.copyProperties(jobTemplate, jobInfo);
+            jobInfo.setJobJson(json);
+            jobInfo.setJobDesc(rdTables.get(i));
+            jobInfo.setAddTime(new Date());
+            jobInfo.setUpdateTime(new Date());
+            jobInfo.setGlueUpdatetime(new Date());
+            jobInfoMapper.save(jobInfo);
+        }
+        return ReturnT.SUCCESS;
+    }
 }

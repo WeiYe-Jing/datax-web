@@ -1,12 +1,17 @@
 package com.wugui.datax.admin.util;
 
+import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import static com.wugui.datatx.core.util.Constants.SPLIT_COMMA;
 
 /**
  * Created by jingwk on 2019/12/01
@@ -17,7 +22,7 @@ public class JwtTokenUtils {
     public static final String TOKEN_PREFIX = "Bearer ";
 
     private static final String SECRET = "datax_admin";
-    private static final String ISS = "jingwk";
+    private static final String ISS = "admin";
 
     // 角色的key
     private static final String ROLE_CLAIMS = "rol";
@@ -29,7 +34,7 @@ public class JwtTokenUtils {
     private static final long EXPIRATION_REMEMBER = 7 * EXPIRATION;
 
     // 创建token
-    public static String createToken(String username, String role, boolean isRememberMe) {
+    public static String createToken(Integer id, String username, String role, boolean isRememberMe) {
         long expiration = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
         HashMap<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, role);
@@ -37,7 +42,7 @@ public class JwtTokenUtils {
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .setClaims(map)
                 .setIssuer(ISS)
-                .setSubject(username)
+                .setSubject(id + SPLIT_COMMA + username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .compact();
@@ -45,7 +50,15 @@ public class JwtTokenUtils {
 
     // 从token中获取用户名
     public static String getUsername(String token) {
-        return getTokenBody(token).getSubject();
+        List<String> userInfo = Arrays.asList(getTokenBody(token).getSubject().split(SPLIT_COMMA));
+        return userInfo.get(1);
+    }
+
+    // 从token中获取用户名
+    public static Integer getUserId(String token) {
+        String s= JSON.toJSONString(getTokenBody(token).getSubject());
+        List<String> userInfo = Arrays.asList(getTokenBody(token).getSubject().split(SPLIT_COMMA));
+        return Integer.parseInt(userInfo.get(0));
     }
 
     // 获取用户角色

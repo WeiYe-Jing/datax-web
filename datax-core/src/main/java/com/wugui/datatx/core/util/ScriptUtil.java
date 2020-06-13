@@ -1,7 +1,9 @@
 
 package com.wugui.datatx.core.util;
 
+import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.log.JobLogger;
+import com.wugui.datatx.core.thread.ProcessCallbackThread;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,7 +54,7 @@ public class ScriptUtil {
      * @param params
      * @return
      */
-    public static int execToFile(String command, String scriptFile, String logFile, String... params) {
+    public static int execToFile(String command, String scriptFile, String logFile,long logId,long logDateTime, String... params) {
 
         FileOutputStream fileOutputStream = null;
         Thread inputThread = null;
@@ -75,6 +77,11 @@ public class ScriptUtil {
             // process-exec
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
 
+            String prcsId = ProcessUtil.getProcessId(process);
+            JobLogger.log("------------------Process id: " + prcsId);
+            //update task process id
+            HandleProcessCallbackParam prcs = new HandleProcessCallbackParam(logId, logDateTime, prcsId);
+            ProcessCallbackThread.pushCallBack(prcs);
             // log-thread
             final FileOutputStream finalFileOutputStream = fileOutputStream;
             inputThread = new Thread(() -> {

@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -29,8 +30,8 @@ public class JobInfo {
 
 	private Date updateTime;
 
-	@ApiModelProperty("负责人")
-	private String author;
+	@ApiModelProperty("修改用户")
+	private int userId;
 
 	@ApiModelProperty("报警邮件")
 	private String alarmEmail;
@@ -98,6 +99,27 @@ public class JobInfo {
 	@ApiModelProperty("最近一次执行状态")
 	private int lastHandleCode;
 
-	@ApiModelProperty("所属项目")
-	private String jobProject;
+	@ApiModelProperty("所属项目Id")
+	private int projectId;
+
+	@ApiModelProperty("主键字段")
+	private String primaryKey;
+
+	@ApiModelProperty("增量初始id")
+	private Long incStartId;
+
+	@ApiModelProperty("增量方式")
+	private Integer incrementType;
+
+	@ApiModelProperty("datax的读表")
+	private  String readerTable;
+
+	@ApiModelProperty("数据源id")
+	private int datasourceId;
+
+	@TableField(exist=false)
+	private String projectName;
+
+	@TableField(exist=false)
+	private String userName;
 }

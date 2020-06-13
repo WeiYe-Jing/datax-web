@@ -75,13 +75,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             role = authority.getAuthority();
         }
 
-        String token = JwtTokenUtils.createToken(jwtUser.getUsername(), role, isRemember);
+        String token = JwtTokenUtils.createToken(jwtUser.getId(),jwtUser.getUsername(), role, isRemember);
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
         response.setCharacterEncoding("UTF-8");
         Map<String, Object> maps = new HashMap<>();
         maps.put("data", JwtTokenUtils.TOKEN_PREFIX + token);
         maps.put("roles", role.split(SPLIT_COMMA));
-        response.getWriter().write(JSON.toJSON(new ReturnT<>(maps)).toString());
+        response.getWriter().write(JSON.toJSONString(new ReturnT<>(maps)));
     }
 
     @Override

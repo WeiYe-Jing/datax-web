@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>dist</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>datax-executor/lib</outputDirectory>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <lineEnding>unix</lineEnding>
+            <directory>./src/main/bin</directory>
+            <outputDirectory>datax-executor/bin</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>./src/main/logs</directory>
+            <outputDirectory>datax-executor/logs</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>./src/main/resources</directory>
+            <includes>
+                <include>logback.xml</include>
+                <include>application.yml</include>
+            </includes>
+            <outputDirectory>datax-executor/conf</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

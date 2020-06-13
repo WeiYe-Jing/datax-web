@@ -4,7 +4,6 @@ package com.wugui.datax.admin.config;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.filter.JWTAuthenticationFilter;
 import com.wugui.datax.admin.filter.JWTAuthorizationFilter;
-import com.wugui.datax.admin.service.impl.MyFilterSecurityInterceptor;
 import com.wugui.datax.admin.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,11 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
-    @Autowired
-    private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
-
-
 
     @Bean
     UserDetailsService customUserService(){ //注册UserDetailsService 的bean

@@ -9,7 +9,6 @@ import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.HBaseQueryTool;
 import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.tool.table.ClickHouse;
 import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
 
 
     @Override
-    public List<String> getTables(Long id) throws IOException {
+    public List<String> getTables(Long id,String tableSchema) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装
@@ -53,17 +52,20 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             return new MongoDBQueryTool(datasource).getCollectionNames(datasource.getDatabaseName());
         } else {
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-            return qTool.getTableNames();
+            return qTool.getTableNames(tableSchema);
         }
     }
 
     @Override
-    public Boolean createTable(Long id, String tableName) {
+    public List<String> getTableSchema(Long id) {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
+        //queryTool组装
+        if (ObjectUtil.isNull(datasource)) {
+            return Lists.newArrayList();
+        }
         BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-        qTool.executeCreateTableSql(new ClickHouse().buildMysql2ClickHouseCreateTbSQL(tableName, qTool));
-        return true;
+        return qTool.getTableSchema();
     }
 
     @Override

@@ -30,7 +30,7 @@ public class MySQLQueryToolTest {
 
     @Test
     public void getTableNames() {
-        List<String> tableNames = queryTool.getTableNames();
+        List<String> tableNames = queryTool.getTableNames(null);
         tableNames.forEach(System.out::println);
     }
 

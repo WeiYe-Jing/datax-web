@@ -7,7 +7,7 @@ import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -18,12 +18,12 @@ import java.util.Map;
  *
  * @author xuxueli 2018-11-01 09:24:52
  */
-public class JobSpringExecutor extends JobExecutor implements ApplicationContextAware, InitializingBean, DisposableBean {
+public class JobSpringExecutor extends JobExecutor implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
 
 
     // start
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterSingletonsInstantiated() {
 
         // init JobHandler Repository
         initJobHandlerRepository(applicationContext);
@@ -33,7 +33,11 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
 
 
         // super start
-        super.start();
+        try {
+            super.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // destroy

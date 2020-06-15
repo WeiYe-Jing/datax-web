@@ -3,10 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobUserMapper">
 
-    <resultMap id="JobUser" type="com.wugui.datax.admin.entity.JobUser" >
-        <result column="id" property="id" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
+    <resultMap id="JobUser" type="com.wugui.datax.admin.entity.JobUser">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
         <result column="role" property="role" />
         <result column="permission" property="permission" />
     </resultMap>
@@ -19,10 +19,17 @@
 		t.permission
 	</sql>
 
+    <sql id="Show_Column_List">
+		t.id,
+		t.username,
+		t.role,
+		t.permission
+	</sql>
+
     <select id="pageList" parameterType="java.util.HashMap" resultMap="JobUser">
-        SELECT <include refid="Base_Column_List" />
+        SELECT <include refid="Show_Column_List" />
         FROM job_user AS t
-        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="username != null and username != ''">
                 AND t.username like CONCAT(CONCAT('%', #{username}), '%')
             </if>
@@ -31,10 +38,21 @@
         LIMIT #{offset}, #{pagesize}
     </select>
 
+    <select id="findAll" parameterType="java.util.HashMap" resultMap="JobUser">
+        SELECT <include refid="Show_Column_List" />
+        FROM job_user AS t
+        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+            <if test="username != null and username != ''">
+                AND t.username like CONCAT(CONCAT('%', #{username}), '%')
+            </if>
+        </trim>
+        ORDER BY id ASC
+    </select>
+
     <select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
         SELECT count(1)
         FROM job_user AS t
-        <trim prefix="WHERE" prefixOverrides="AND | OR" >
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="username != null and username != ''">
                 AND t.username like CONCAT(CONCAT('%', #{username}), '%')
             </if>
@@ -42,9 +60,28 @@
     </select>
 
     <select id="loadByUserName" parameterType="java.util.HashMap" resultMap="JobUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM job_user AS t
+        WHERE t.username = #{username}
+    </select>
+
+    <select id="getUsersByIds" parameterType="java.util.HashMap" resultMap="JobUser">
         SELECT <include refid="Base_Column_List" />
         FROM job_user AS t
         WHERE t.username = #{username}
+        WHERE t.id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getUserById" parameterType="java.util.HashMap" resultMap="JobUser">
+        SELECT
+        t.id,
+        t.username
+        FROM job_user AS t
+        WHERE t.id = #{userId}
     </select>
 
     <insert id="save" parameterType="com.wugui.datax.admin.entity.JobUser" useGeneratedKeys="true" keyProperty="id" >

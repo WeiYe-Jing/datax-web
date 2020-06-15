@@ -1,63 +1,37 @@
 package com.wugui.datax.admin.util;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
+import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 @Slf4j
 public class AESUtil {
-    // 密钥
-    public static String key = "AD42F6697B035B7580E4FEF93BE20BAD";
-    private static String charset = "utf-8";
-    // 偏移量
-    private static int offset = 16;
-    private static String transformation = "AES/CBC/PKCS5Padding";
-    private static String algorithm = "AES";
+
+    private static String DEFAULT_CIPHER_ALGORITHM = "SHA1PRNG";
+    private static String KEY_ALGORITHM = "AES";
 
     /**
      * 加密
      *
-     * @param content
+     * @param key
+     * @param messBytes
      * @return
      */
-    public static String encrypt(String content) {
-        return encrypt(content, key);
-    }
+    private static byte[] encrypt(Key key, byte[] messBytes) throws Exception {
+        if (key != null) {
 
-    /**
-     * 解密
-     *
-     * @param content
-     * @return
-     */
-    public static String decrypt(String content) {
-        return decrypt(content, key);
-    }
-
-    /**
-     * 加密
-     *
-     * @param content 需要加密的内容
-     * @param key     加密密码
-     * @return
-     */
-    public static String encrypt(String content, String key) {
-        try {
-            if(StringUtils.isNotBlank(content)) {
-                SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
-                IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
-                Cipher cipher = Cipher.getInstance(transformation);
-                byte[] byteContent = content.getBytes(charset);
-                cipher.init(Cipher.ENCRYPT_MODE, skey, iv);// 初始化
-                byte[] result = cipher.doFinal(byteContent);
-                return new Base64().encodeToString(result); // 加密
-            }
-        } catch (Exception e) {
-            log.warn("content encrypt error {}",e.getMessage());
+            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return cipher.doFinal(messBytes);
         }
         return null;
     }
@@ -65,32 +39,72 @@ public class AESUtil {
     /**
      * AES（256）解密
      *
-     * @param content 待解密内容
-     * @param key     解密密钥
-     * @return 解密之后
-     * @throws Exception
+     * @param key
+     * @param cipherBytes
+     * @return
      */
-    public static String decrypt(String content, String key) {
-        try {
-            if(StringUtils.isNotBlank(content)){
-                SecretKeySpec skey = new SecretKeySpec(key.getBytes(), algorithm);
-                IvParameterSpec iv = new IvParameterSpec(key.getBytes(), 0, offset);
-                Cipher cipher = Cipher.getInstance(transformation);
-                cipher.init(Cipher.DECRYPT_MODE, skey, iv);// 初始化
-                byte[] result = cipher.doFinal(new Base64().decode(content));
-                return new String(result); // 解密
-            }
-        } catch (Exception e) {
-            log.warn("content decrypt error {}",e.getMessage());
+    private static byte[] decrypt(Key key, byte[] cipherBytes) throws Exception {
+        if (key != null) {
+
+            Cipher cipher = Cipher.getInstance(KEY_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            return cipher.doFinal(cipherBytes);
         }
         return null;
     }
 
-    public static void main(String[] args) throws Exception {
-        String s = "root";
-        String encryptResultStr = encrypt(s);
-        System.out.println(s+" 加密后 ：" + encryptResultStr);
-        System.out.println("mysql"+" 加密后 ：" + encrypt("mysql"));
-        System.out.println("解密后：" + decrypt("mysql"));
+
+    /**
+     * 生成加密秘钥
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
+    private static KeyGenerator getKeyGenerator() {
+
+        String key = JobAdminConfig.getAdminConfig().getDataSourceAESKey();
+
+        KeyGenerator keygen = null;
+        try {
+            keygen = KeyGenerator.getInstance(KEY_ALGORITHM);
+            SecureRandom secureRandom = SecureRandom.getInstance(DEFAULT_CIPHER_ALGORITHM);
+            secureRandom.setSeed(key.getBytes());
+            keygen.init(128, secureRandom);
+        } catch (NoSuchAlgorithmException e) {
+            log.warn("Get key generator error {}", e.getMessage());
+        }
+
+        return keygen;
     }
+
+    public static String encrypt(String message) {
+        try {
+            KeyGenerator keygen = getKeyGenerator();
+            SecretKey secretKey = new SecretKeySpec(keygen.generateKey().getEncoded(), KEY_ALGORITHM);
+            return Base64.getEncoder().encodeToString(encrypt(secretKey, message.getBytes(StandardCharsets.UTF_8)));
+        } catch (Exception e) {
+            log.warn("content encrypt error {}", e.getMessage());
+        }
+        return null;
+    }
+
+    public static String decrypt(String ciphertext) {
+        try {
+            KeyGenerator keygen = getKeyGenerator();
+            SecretKey secretKey = new SecretKeySpec(keygen.generateKey().getEncoded(), KEY_ALGORITHM);
+            return new String(decrypt(secretKey, Base64.getDecoder().decode(ciphertext)), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            log.warn("content decrypt error {}", e.getMessage());
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String message = "root";
+        String ciphertext = encrypt(message);
+
+        System.out.println("加密后密文为: " + ciphertext);
+        System.out.println("解密后明文为:" + decrypt(ciphertext));
+    }
+
 }

@@ -10,14 +10,15 @@ public class HandleProcessCallbackParam implements Serializable {
 
     private long logId;
     private String processId;
-    private long logDateTim;
+    private long logDateTime;
 
 
     public HandleProcessCallbackParam(){}
-    public HandleProcessCallbackParam(long logId,long logDateTim, String processId) {
+
+    public HandleProcessCallbackParam(long logId,long logDateTime, String processId) {
         this.logId = logId;
         this.processId = processId;
-        this.logDateTim=logDateTim;
+        this.logDateTime=logDateTime;
     }
 
     public long getLogId() {
@@ -36,12 +37,12 @@ public class HandleProcessCallbackParam implements Serializable {
         this.processId = processId;
     }
 
-    public long getLogDateTim() {
-        return logDateTim;
+    public long getLogDateTime() {
+        return logDateTime;
     }
 
-    public void setLogDateTim(long logDateTim) {
-        this.logDateTim = logDateTim;
+    public void setLogDateTime(long logDateTime) {
+        this.logDateTime = logDateTime;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class HandleProcessCallbackParam implements Serializable {
         return "HandleCallbackParam{" +
                 "logId=" + logId +
                 ", processId=" + processId +
-                ", logDateTim=" + logDateTim +
+                ", logDateTime=" + logDateTime +
                 '}';
     }
 

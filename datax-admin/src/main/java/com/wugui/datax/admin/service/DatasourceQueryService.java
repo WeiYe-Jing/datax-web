@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.service;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public interface DatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getTables(Long id) throws IOException;
+    List<String> getTables(Long id,String tableSchema) throws IOException;
 
     /**
      * 获取CollectionNames
@@ -50,5 +51,12 @@ public interface DatasourceQueryService {
      * @param querySql
      * @return
      */
-    List<String> getColumnsByQuerySql(Long datasourceId, String querySql);
+    List<String> getColumnsByQuerySql(Long datasourceId, String querySql) throws SQLException;
+
+    /**
+     * 获取PG table schema
+     * @param id
+     * @return
+     */
+    List<String> getTableSchema(Long id);
 }

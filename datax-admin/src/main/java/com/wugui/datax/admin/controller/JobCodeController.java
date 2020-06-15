@@ -8,7 +8,6 @@ import com.wugui.datax.admin.mapper.JobInfoMapper;
 import com.wugui.datax.admin.mapper.JobLogGlueMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,7 +44,7 @@ public class JobCodeController {
         }
         JobInfo existsJobInfo = jobInfoMapper.loadById(id);
         if (existsJobInfo == null) {
-            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("jobinfo_glue_jobid_invalid"));
         }
 
         // update new code

@@ -181,7 +181,7 @@ public class ProcessCallbackThread {
      */
     private void callbackLog(List<HandleProcessCallbackParam> callbackParamList, String logContent) {
         for (HandleProcessCallbackParam callbackParam : callbackParamList) {
-            String logFileName = JobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTim()), callbackParam.getLogId());
+            String logFileName = JobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTime()), callbackParam.getLogId());
             JobFileAppender.contextHolder.set(logFileName);
             JobLogger.log(logContent);
         }

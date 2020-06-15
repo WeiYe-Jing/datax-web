@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.service.impl;
 
-import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.entity.JobUser;
+import com.wugui.datax.admin.entity.JwtUser;
 import com.wugui.datax.admin.mapper.JobUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

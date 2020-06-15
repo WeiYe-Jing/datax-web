@@ -20,8 +20,8 @@ public class JobInfoMapperTest {
 	
 	@Test
 	public void pageList(){
-		List<JobInfo> list = jobInfoMapper.pageList(0, 20, 0, -1, null, null, null);
-		int list_count = jobInfoMapper.pageListCount(0, 20, 0, -1, null, null, null);
+		List<JobInfo> list = jobInfoMapper.pageList(0, 20, 0, -1, null, null, 0,null);
+		int list_count = jobInfoMapper.pageListCount(0, 20, 0, -1, null, null, 0,null);
 		
 		System.out.println(list);
 		System.out.println(list_count);
@@ -35,7 +35,7 @@ public class JobInfoMapperTest {
 		info.setJobGroup(1);
 		info.setJobCron("jobCron");
 		info.setJobDesc("desc");
-		info.setAuthor("setAuthor");
+		info.setUserId(1);
 		info.setAlarmEmail("setAlarmEmail");
 		info.setExecutorRouteStrategy("setExecutorRouteStrategy");
 		info.setExecutorHandler("setExecutorHandler");
@@ -55,7 +55,7 @@ public class JobInfoMapperTest {
 		JobInfo info2 = jobInfoMapper.loadById(info.getId());
 		info2.setJobCron("jobCron2");
 		info2.setJobDesc("desc2");
-		info2.setAuthor("setAuthor2");
+		info2.setUserId(1);
 		info2.setAlarmEmail("setAlarmEmail2");
 		info2.setExecutorRouteStrategy("setExecutorRouteStrategy2");
 		info2.setExecutorHandler("setExecutorHandler2");

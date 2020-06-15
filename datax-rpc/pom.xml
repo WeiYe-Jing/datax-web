@@ -4,10 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>datax-all</artifactId>
+        <artifactId>datax-web</artifactId>
         <groupId>com.wugui</groupId>
         <version>2.1.1</version>
     </parent>
+
     <artifactId>datax-rpc</artifactId>
     <packaging>jar</packaging>
     <properties>
@@ -30,14 +31,6 @@
             <artifactId>hessian</artifactId>
             <version>${hessian.version}</version>
         </dependency>
-
-        <!-- xxl-registry-client -->
-       <dependency>
-            <groupId>com.wugui</groupId>
-            <artifactId>datax-registry</artifactId>
-           <version>${project.parent.version}</version>
-        </dependency>
-
 
         <!-- ********************** base ********************** -->
 

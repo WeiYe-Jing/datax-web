@@ -3,7 +3,6 @@ package com.wugui.datax.admin.controller;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.entity.JobRegistry;
 import com.wugui.datax.admin.service.JobRegistryService;
@@ -25,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/jobRegistry")
 @Api(tags = "执行器资源监控")
-public class JobRegistryController extends ApiController {
+public class JobRegistryController extends BaseController {
 
 	@Autowired
 	private JobRegistryService jobRegistryService;
@@ -58,10 +57,8 @@ public class JobRegistryController extends ApiController {
 	protected QueryWrapper<JobRegistry> pageQueryWrapperCustom(Map<String, Object> map) {
 		// mybatis plus 分页相关的参数
 		Map<String, Object> pageHelperParams = PageUtils.filterPageParams(map);
-		logger.info("分页相关的参数: {}", pageHelperParams);
 		//过滤空值，分页查询相关的参数
 		Map<String, Object> columnQueryMap = PageUtils.filterColumnQueryParams(map);
-		logger.info("字段查询条件参数为: {}", columnQueryMap);
 
 		QueryWrapper<JobRegistry> queryWrapper = new QueryWrapper<>();
 

@@ -187,7 +187,7 @@
 修改数据源配置，目前仅支持mysql
 
 ```
-# 配置mybatis-plus打印slq日志
+# 配置mybatis-plus打印sql日志
 logging:
   level:
     com.wugui.datax.admin.mapper: error
@@ -277,6 +277,7 @@ admin启动成功后日志会输出三个地址，两个接口文档地址，一
 * 4.分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
 * 5.启动命令demo：
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-2.1.1.jar&
+    
     nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-executor-2.1.1.jar&
 
 # 六、启动成功

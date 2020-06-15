@@ -46,8 +46,8 @@ public class JobThread extends Thread {
     public JobThread(int jobId, IJobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
-        this.triggerQueue = new LinkedBlockingQueue<TriggerParam>();
-        this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<Long>());
+        this.triggerQueue = new LinkedBlockingQueue<>();
+        this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<>());
     }
 
     public IJobHandler getHandler() {
@@ -134,7 +134,7 @@ public class JobThread extends Thread {
                         Thread futureThread = null;
                         try {
                             final TriggerParam tgParamT = tgParam;
-                            FutureTask<ReturnT<String>> futureTask = new FutureTask<ReturnT<String>>(() -> handler.execute(tgParamT));
+                            FutureTask<ReturnT<String>> futureTask = new FutureTask<>(() -> handler.execute(tgParamT));
                             futureThread = new Thread(futureTask);
                             futureThread.start();
 

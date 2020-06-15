@@ -22,7 +22,8 @@ public interface JobInfoMapper {
                            @Param("triggerStatus") int triggerStatus,
                            @Param("jobDesc") String jobDesc,
                            @Param("glueType") String glueType,
-                           @Param("author") String author);
+                           @Param("userId") int userId,
+                           @Param("projectIds") Integer[] projectIds);
 
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
@@ -30,7 +31,10 @@ public interface JobInfoMapper {
                       @Param("triggerStatus") int triggerStatus,
                       @Param("jobDesc") String jobDesc,
                       @Param("glueType") String glueType,
-                      @Param("author") String author);
+                      @Param("userId") int userId,
+                      @Param("projectIds") Integer[] projectIds);
+
+    List<JobInfo> findAll();
 
     int save(JobInfo info);
 
@@ -52,4 +56,5 @@ public interface JobInfoMapper {
 
 	public int updateLastHandleCode(@Param("id") int id,@Param("lastHandleCode")int lastHandleCode);
 
+    void incrementIdUpdate(@Param("id") int id, @Param("incStartId")Long incStartId);
 }

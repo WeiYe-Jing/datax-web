@@ -2,9 +2,12 @@ package com.wugui.datax.admin.service;
 
 
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobInfo;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,10 +25,12 @@ public interface JobService {
      * @param jobGroup
      * @param jobDesc
      * @param glueType
-     * @param author
+     * @param userId
      * @return
      */
-    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author);
+    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId,Integer[] projectIds);
+
+    List<JobInfo> list();
 
     /**
      * add job
@@ -34,15 +39,6 @@ public interface JobService {
      * @return
      */
     ReturnT<String> add(JobInfo jobInfo);
-
-
-    /**
-     * create cron
-     *
-     * @param dto
-     * @return
-     */
-    ReturnT<String> createCron(TaskScheduleDto dto);
 
     /**
      * update job
@@ -90,4 +86,11 @@ public interface JobService {
      * @return
      */
     ReturnT<Map<String, Object>> chartInfo();
+
+    /**
+     * batch add
+     * @param dto
+     * @return
+     */
+    ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException;
 }

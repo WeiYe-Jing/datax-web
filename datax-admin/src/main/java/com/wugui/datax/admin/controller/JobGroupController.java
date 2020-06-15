@@ -55,10 +55,10 @@ public class JobGroupController {
             if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
                 return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_addressType_limit"));
             }
-            String[] addresss = jobGroup.getAddressList().split(",");
-            for (String item : addresss) {
+            String[] addresses = jobGroup.getAddressList().split(",");
+            for (String item : addresses) {
                 if (item == null || item.trim().length() == 0) {
-                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_unvalid"));
+                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_invalid"));
                 }
             }
         }
@@ -98,10 +98,10 @@ public class JobGroupController {
             if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
                 return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_addressType_limit"));
             }
-            String[] addresss = jobGroup.getAddressList().split(",");
-            for (String item : addresss) {
+            String[] addresses = jobGroup.getAddressList().split(",");
+            for (String item : addresses) {
                 if (item == null || item.trim().length() == 0) {
-                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_unvalid"));
+                    return new ReturnT<String>(500, I18nUtil.getString("jobgroup_field_registryList_invalid"));
                 }
             }
         }
@@ -137,7 +137,7 @@ public class JobGroupController {
     public ReturnT<String> remove(int id) {
 
         // valid
-        int count = jobInfoMapper.pageListCount(0, 10, id, -1, null, null, null);
+        int count = jobInfoMapper.pageListCount(0, 10, id, -1, null, null, 0,null);
         if (count > 0) {
             return new ReturnT<>(500, I18nUtil.getString("jobgroup_del_limit_0"));
         }

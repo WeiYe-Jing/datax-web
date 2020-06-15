@@ -3,6 +3,7 @@ package com.wugui.datax.admin.tool.query;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.TableInfo;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,21 +21,21 @@ public interface QueryToolInterface {
      * @param tableName 表名
      * @return
      */
-    public TableInfo buildTableInfo(String tableName);
+    TableInfo buildTableInfo(String tableName);
 
     /**
      * 获取指定表信息
      *
      * @return
      */
-    public List<Map<String, Object>> getTableInfo(String tableName);
+    List<Map<String, Object>> getTableInfo(String tableName);
 
     /**
      * 获取当前schema下的所有表
      *
      * @return
      */
-    public List<Map<String, Object>> getTables();
+    List<Map<String, Object>> getTables();
 
     /**
      * 根据表名获取所有字段
@@ -42,7 +43,7 @@ public interface QueryToolInterface {
      * @param tableName
      * @return2
      */
-    public List<ColumnInfo> getColumns(String tableName);
+    List<ColumnInfo> getColumns(String tableName);
 
 
     /**
@@ -51,7 +52,7 @@ public interface QueryToolInterface {
      * @param tableName
      * @return2
      */
-    public List<String> getColumnNames(String tableName,String datasource);
+    List<String> getColumnNames(String tableName,String datasource);
 
 
     /**
@@ -59,8 +60,21 @@ public interface QueryToolInterface {
      *
      * @return2
      */
-    public List<String> getTableNames();
+    List<String> getTableNames(String schema);
 
-    public List<String> getColumnsByQuerySql(String querySql);
+    /**
+     * 通过查询sql获取columns
+     * @param querySql
+     * @return
+     */
+    List<String> getColumnsByQuerySql(String querySql) throws SQLException;
+
+    /**
+     * 获取当前表maxId
+     * @param tableName
+     * @param primaryKey
+     * @return
+     */
+    long getMaxIdVal(String tableName,String primaryKey);
 
 }

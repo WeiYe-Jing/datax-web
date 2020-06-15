@@ -8,6 +8,8 @@
 
 		<result column="job_group" property="jobGroup" />
 		<result column="job_id" property="jobId" />
+		<result column="job_desc" property="jobDesc" />
+
 
 		<result column="executor_address" property="executorAddress" />
 		<result column="executor_handler" property="executorHandler" />
@@ -26,6 +28,9 @@
 		<result column="alarm_status" property="alarmStatus" />
 
 		<result column="process_id" property="processId" />
+		<result column="max_id" property="maxId" />
+
+		<result column="job_desc" property="jobDesc" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -44,7 +49,9 @@
 		t.handle_code,
 		t.handle_msg,
 		t.alarm_status,
-		t.process_id
+		t.process_id,
+		t.max_id,
+		t.job_desc
 	</sql>
 	
 	<select id="pageList" resultMap="JobLog">
@@ -124,12 +131,14 @@
 		INSERT INTO job_log (
 			`job_group`,
 			`job_id`,
+			`job_desc`,
 			`trigger_time`,
 			`trigger_code`,
 			`handle_code`
 		) VALUES (
 			#{jobGroup},
 			#{jobId},
+			#{jobDesc},
 			#{triggerTime},
 			#{triggerCode},
 			#{handleCode}
@@ -149,7 +158,8 @@
 			`executor_handler`=#{executorHandler},
 			`executor_param`= #{executorParam},
 			`executor_sharding_param`= #{executorShardingParam},
-			`executor_fail_retry_count`= #{executorFailRetryCount}
+			`executor_fail_retry_count`= #{executorFailRetryCount},
+			`max_id` = #{maxId}
 		WHERE `id`= #{id}
 	</update>
 
@@ -158,7 +168,7 @@
 		SET 
 			`handle_time`= #{handleTime}, 
 			`handle_code`= #{handleCode},
-			`handle_msg`= #{handleMsg} 
+			`handle_msg`= #{handleMsg}
 		WHERE `id`= #{id}
 	</update>
 

@@ -1,6 +1,8 @@
 package com.wugui.datax.admin.util;
 
-//TODO
+/**
+ * DBUtilErrorCode
+ */
 public enum DBUtilErrorCode implements ErrorCode {
     //连接错误
     MYSQL_CONN_USERPWD_ERROR("MYSQLErrCode-01","数据库用户名或者密码错误，请检查填写的账号密码或者联系DBA确认账号和密码是否正确"),
@@ -22,7 +24,7 @@ public enum DBUtilErrorCode implements ErrorCode {
     ORACLE_QUERY_SELECT_PRI_ERROR("ORACLEErrCode-06","读表数据出错，因为账号没有读表的权限，请联系DBA确认该账号的权限并授权"),
     ORACLE_QUERY_SQL_PARSER_ERROR("ORACLEErrCode-07","SQL语法出错，请检查Where条件是否存在拼写或语法错误"),
 
-    //PreSql,Post Sql错误
+    //PreSql,PostSql错误
     MYSQL_PRE_SQL_ERROR("MYSQLErrCode-08","PreSQL语法错误，请检查"),
     MYSQL_POST_SQL_ERROR("MYSQLErrCode-09","PostSql语法错误，请检查"),
     MYSQL_QUERY_SQL_PARSER_ERROR("MYSQLErrCode-10","SQL语法出错，请检查Where条件是否存在拼写或语法错误"),

@@ -167,11 +167,20 @@
     读写失败总数                    :                   0
     ```
     
-# 三、创建数据库
+# 三、Web部署
+
+## 1.linux环境部署
+
+[linux环境部署](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/datax-web-deploy.md)
+
+
+## 2.开发环境部署
+
+### 2.1 创建数据库
 
 #### 执行bin/db下面的datax_web.sql文件(注意老版本更新语句有指定库名)
 
-# 四、修改项目配置
+### 2.2 修改项目配置
 
 ### 1.修改datax_admin下resources/application.yml文件
 
@@ -258,7 +267,7 @@ datax:
 - pypath DataX启动脚本地址，例如：xxx/datax/bin/datax.py
 如果系统配置DataX环境变量（DATAX_HOME），logpath、jsonpath、pypath可不配，log文件和临时json存放在环境变量路径下。
 
-# 五、启动项目
+# 四、启动项目
 
 ### 1.本地idea开发环境
 
@@ -269,24 +278,14 @@ datax:
 
 admin启动成功后日志会输出三个地址，两个接口文档地址，一个前端页面地址
 
-### 2.linux环境部署
 
-* 1.本地安装好maven环境，安装此处细节忽略
-* 2.执行mvn package -Dmaven.test.skip=true
-* 3.打包成功后分别将datax-admin、datax-executor模块target下datax-admin-2.1.1.jar、datax-executor-2.1.1.jar放到指定目录
-* 4.分别启动datax-admin-1.0.0.jar、datax-executor-1.0.0.jar
-* 5.启动命令demo：
-    nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-admin-2.1.1.jar&
-    
-    nohup java -Xmx1024M -Xms1024M -Xmn448M -XX:MaxMetaspaceSize=192M -XX:MetaspaceSize=192M -jar datax-executor-2.1.1.jar&
-
-# 六、启动成功
+# 五、启动成功
 
 启动成功后打开页面（默认管理员用户名：admin 密码：123456）
 http://localhost:8080/index.html#/dashboard
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/dashboard.png)
 
-# 七、集群部署
+# 六、集群部署
 
 - 调度中心、执行器支持集群部署，提升调度系统容灾和可用性。
 

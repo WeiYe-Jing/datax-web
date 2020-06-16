@@ -105,7 +105,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 4. 构建JSON脚本
 
-- 1.步骤一，步骤二，选择第二步中创建的数据源，JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb，clickhouse 其它数据源的JSON构建正在开发中,暂时需要手动编写。
+- 1.步骤一，步骤二，选择第二步中创建的数据源，JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb,clickhouse 其它数据源的JSON构建正在开发中,暂时需要手动编写。
 
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
 

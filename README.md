@@ -63,7 +63,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 # Quick Start：
 
 ##### 请点击：[Quick Start](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
-##### 请点击：[一键部署](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/datax-web-deploy.md)
+##### Linux：[一键部署](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/datax-web-deploy.md)
 
 
 # Introduction：

@@ -122,7 +122,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
-                if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
+                if (StringUtils.isNotBlank(childJobIdItem) && isNumeric(childJobIdItem) && Integer.parseInt(childJobIdItem) > 0) {
                     JobInfo childJobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
                     if (childJobInfo == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
@@ -159,7 +159,7 @@ public class JobServiceImpl implements JobService {
 
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;

@@ -185,14 +185,17 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
 
         column = column.trim();
+        column = column.replace("[", "");
+        column = column.replace("]", "");
         column = column.replace("`", "");
         column = column.replace("\"", "");
         column = column.replace("'", "");
 
         switch (dbType) {
             case MYSQL:
-            case SQL_SERVER:
                 return String.format("`%s`", column);
+            case SQL_SERVER:
+                return String.format("[%s]", column);
             case POSTGRESQL:
             case ORACLE:
                 return String.format("\"%s\"", column);

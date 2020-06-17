@@ -7,7 +7,7 @@
 
 datax.json
 
-```json
+```
 {
   "job": {
     "content": [

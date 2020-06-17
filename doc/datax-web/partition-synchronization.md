@@ -3,6 +3,7 @@
 ## 一、DataX Json配置（样例）
 
 ```
+
 {
   "job": {
     "setting": {
@@ -89,9 +90,12 @@
     ]
   }
 }
+
 ```
 ## 二、reader分区信息的配置
+
 - DataX hdfsreader无法获取分区信息，我们可以通过动态参数指定分区信息，reader中分区信息的配置如下：
+
 ```
 {
   "value": "${p_data_day}",
@@ -104,9 +108,11 @@
 ```
 python /app/soft/datax/bin/datax.py -p "-Dp_data_day=2020-06-20"  /app/soft/datax/job/hive2clickhouse.json
 ```
+
 - 注意：命令中的p_data_day分区字段要和reader中配置的value变量名称一致。
 
 ## 四、DataX Web中配置动态传参
+
 - 机制：配置定时任务，任务执行时获取当前时间及用户选择的当前时间+—天数计算得到动态参数的值。
 - 示例：
 ![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/partition.png)

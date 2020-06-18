@@ -21,7 +21,7 @@ public class DataxHbasePojo {
 
   private String readerHbaseConfig;
 
-  private List<String> readerTable;
+  private String readerTable;
 
   private String readerMode;
 
@@ -31,7 +31,7 @@ public class DataxHbasePojo {
 
   private String writerHbaseConfig;
 
-  private List<String> writerTable;
+  private String writerTable;
 
   private String writerMode;
 

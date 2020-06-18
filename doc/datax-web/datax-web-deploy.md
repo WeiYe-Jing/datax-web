@@ -10,7 +10,7 @@
 
 ### 安装包准备
 #### 1）下载官方提供的版本tar版本包
-[点击下载](https://pan.baidu.com/s/1PMu29ndO7C-bE8Fx2xN0dA) 提取码：0b8w
+[点击下载](https://pan.baidu.com/s/1W9SBtDLmTorUvKtixjMBbA) 提取码：8m9k
 
 #### 2） 编译打包（官方提供的tar包跳过）
 直接从Git上面获得源代码，在项目的根目录下执行如下命令
@@ -86,7 +86,7 @@ vi ./modules/{module_name}/bin/env.properties
 ### 执行datax的python脚本地址
 PYTHON_PATH=
 
-### 保持和datax-admin服务的端口一致；默认是9527，如果没该datax-admin的端口，可以忽略
+### 保持和datax-admin服务的端口一致；默认是9527，如果没改datax-admin的端口，可以忽略
 DATAX_ADMIN_PORT=
 
 ````
@@ -111,7 +111,7 @@ vi ./modules/{module_name}/bin/env.properties
 ```
 ./bin/stop-all.sh
 ```
-当然也可以单一地启动某一模块服务：
+当然也可以单一地停止某一模块服务：
 ```
 ./bin/stop.sh -m {module_name}
 ```
@@ -119,6 +119,8 @@ vi ./modules/{module_name}/bin/env.properties
 #### 6）查看服务
 
  在Linux环境下使用JPS命令，查看是否出现DataXAdminApplication和DataXExecutorApplication进程，如果存在这表示项目运行成功
+ 
+ 如果项目启动失败，请检查启动日志：modules/datax-admin/bin/console.out或者modules/datax-executor/bin/console.out
 
 ---
 Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能会有未知的错误
@@ -133,7 +135,26 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
    部署完成之后，在modules/对应的项目/data/applogs下(用户也可以自己指定日志，修改application.yml
    中的logpath地址即可)，用户可以根据此日志跟踪项目实际启动情况   
    
+### 9）集群部署
+
+   将官方提供的tar包或者编译打包的tar包上传到服务节点，按照步骤5中介绍的方式单一地启动某一模块服务即可。例如执行器需要部署多个节点，仅需启动执行器项目，执行
+    ```
+    ./bin/start.sh -m datax-executor
+    ```
    
-### 7) Contact us
+调度中心、执行器支持集群部署，提升调度系统容灾和可用性。
+   
+    * 1.调度中心集群：
+       
+        DB配置保持一致；<br>
+        集群机器时钟保持一致（单机集群忽视）；<br>
+        
+    * 2.执行器集群:
+    
+        执行器回调地址(admin.addresses）需要保持一致；执行器根据该配置进行执行器自动注册等操作。
+        
+        同一个执行器集群内AppName（executor.appname）需要保持一致；调度中心根据该配置动态发现不同集群的在线执行器列表。
+        
+### 10) Contact us
 
 ### QQ交流群 795380631   

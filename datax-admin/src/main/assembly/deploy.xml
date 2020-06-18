@@ -39,5 +39,9 @@
             </includes>
             <outputDirectory>datax-admin/conf</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>src/main/lib</directory>
+            <outputDirectory>datax-admin/lib</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>

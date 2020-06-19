@@ -300,6 +300,10 @@
                     <artifactId>netty</artifactId>
                     <groupId>io.netty</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jsp-api</artifactId>
+                    <groupId>javax.servlet.jsp</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -475,6 +479,18 @@
                 <exclusion>
                     <artifactId>hive-shims-common</artifactId>
                     <groupId>org.apache.hive.shims</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jsp-api</artifactId>
+                    <groupId>javax.servlet.jsp</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jasper-compiler</artifactId>
+                    <groupId>tomcat</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hive-service</artifactId>
+                    <groupId>org.apache.hive</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -674,6 +690,14 @@
                 </exclusion>
                 <exclusion>
                     <artifactId>hbase-common</artifactId>
+                    <groupId>org.apache.hbase</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>javax.servlet.jsp-api</artifactId>
+                    <groupId>javax.servlet.jsp</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hbase-server</artifactId>
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
             </exclusions>

@@ -33,4 +33,4 @@ datax:
     jsonpath: ${json.path}
 
   #pypath: F:\tools\datax\bin\datax.py
-    pypath: ${python.path}
+  pypath: ${python.path}

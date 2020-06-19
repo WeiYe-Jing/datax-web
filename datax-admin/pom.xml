@@ -468,6 +468,14 @@
                     <artifactId>jersey-guice</artifactId>
                     <groupId>com.sun.jersey.contribs</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <groupId>org.apache.logging.log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hive-shims-common</artifactId>
+                    <groupId>org.apache.hive.shims</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -525,10 +533,6 @@
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>hbase-common</artifactId>
-                    <groupId>org.apache.hbase</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>hbase-protocol</artifactId>
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
@@ -543,7 +547,7 @@
             </exclusions>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.phoenix</groupId>
             <artifactId>phoenix-core</artifactId>
             <version>${phoenix.version}</version>
@@ -669,7 +673,7 @@
                     <groupId>com.google.code.findbugs</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.mongodb</groupId>

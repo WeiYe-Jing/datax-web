@@ -120,7 +120,7 @@ vi ./modules/{module_name}/bin/env.properties
 
  在Linux环境下使用JPS命令，查看是否出现DataXAdminApplication和DataXExecutorApplication进程，如果存在这表示项目运行成功
  
- 如果项目启动失败，请检查启动日志：modules/datax-admin/bin/console.out或者modules/datax-executor/bin/console.out
+ <label style="color:red">如果项目启动失败，请检查启动日志：modules/datax-admin/bin/console.out或者modules/datax-executor/bin/console.out</label>
 
 ---
 Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能会有未知的错误
@@ -131,7 +131,7 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
 
    输入用户名 admin  密码 123456 就可以直接访问系统
    
-### 8) 日志
+### 8) 运行日志
    部署完成之后，在modules/对应的项目/data/applogs下(用户也可以自己指定日志，修改application.yml
    中的logpath地址即可)，用户可以根据此日志跟踪项目实际启动情况   
    

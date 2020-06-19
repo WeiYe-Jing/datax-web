@@ -468,6 +468,14 @@
                     <artifactId>jersey-guice</artifactId>
                     <groupId>com.sun.jersey.contribs</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <groupId>org.apache.logging.log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hive-shims-common</artifactId>
+                    <groupId>org.apache.hive.shims</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -522,10 +530,6 @@
                 </exclusion>
                 <exclusion>
                     <artifactId>hbase-annotations</artifactId>
-                    <groupId>org.apache.hbase</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>hbase-common</artifactId>
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
                 <exclusion>

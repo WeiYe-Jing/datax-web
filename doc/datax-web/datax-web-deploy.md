@@ -10,7 +10,7 @@
 
 ### 安装包准备
 #### 1）下载官方提供的版本tar版本包
-[点击下载](https://pan.baidu.com/s/1hdGCr4g0OoB7iVU8zB_8TQ) 提取码：i03j
+[点击下载](https://pan.baidu.com/s/12Ppf_QeGH6gEloKuXSFVSw) 提取码：720x
 
 #### 2） 编译打包（官方提供的tar包跳过）
 直接从Git上面获得源代码，在项目的根目录下执行如下命令
@@ -116,11 +116,11 @@ vi ./modules/{module_name}/bin/env.properties
 ./bin/stop.sh -m {module_name}
 ```
 
-#### 6）查看服务
+#### 6）查看服务（注意！注意！）
 
  在Linux环境下使用JPS命令，查看是否出现DataXAdminApplication和DataXExecutorApplication进程，如果存在这表示项目运行成功
  
- 如果项目启动失败，请检查启动日志：modules/datax-admin/bin/console.out或者modules/datax-executor/bin/console.out
+ #### 如果项目启动失败，请检查启动日志：modules/datax-admin/bin/console.out或者modules/datax-executor/bin/console.out
 
 ---
 Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能会有未知的错误
@@ -131,7 +131,7 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
 
    输入用户名 admin  密码 123456 就可以直接访问系统
    
-### 8) 日志
+### 8) 运行日志
    部署完成之后，在modules/对应的项目/data/applogs下(用户也可以自己指定日志，修改application.yml
    中的logpath地址即可)，用户可以根据此日志跟踪项目实际启动情况   
    

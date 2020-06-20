@@ -448,7 +448,7 @@ public class JobServiceImpl implements JobService {
 
             String json = dataxJsonService.buildJobJson(jsonBuild);
 
-            JobTemplate jobTemplate = jobTemplateMapper.loadById(19);
+            JobTemplate jobTemplate = jobTemplateMapper.loadById(dto.getTemplateId());
             JobInfo jobInfo = new JobInfo();
             BeanUtils.copyProperties(jobTemplate, jobInfo);
             jobInfo.setJobJson(json);

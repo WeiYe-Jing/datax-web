@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -342,6 +343,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                 String tableName = rs.getString(1);
                 tables.add(tableName);
             }
+            tables.sort(Comparator.naturalOrder());
         } catch (SQLException e) {
             logger.error("[getTableNames Exception] --> "
                     + "the exception message is:" + e.getMessage());

@@ -137,6 +137,9 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
    
 ### 9）集群部署
 
+   修改modules/datax-executor/conf/application.yml文件下admin.addresses地址。
+   为了方便单机版部署，项目目前没有将ip部分配置到env.properties，部署多节点时可以将整个地址作为变量配置到env文件。
+   
    将官方提供的tar包或者编译打包的tar包上传到服务节点，按照步骤5中介绍的方式单一地启动某一模块服务即可。例如执行器需要部署多个节点，仅需启动执行器项目，执行
     ```
     ./bin/start.sh -m datax-executor
@@ -154,6 +157,7 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
         执行器回调地址(admin.addresses）需要保持一致；执行器根据该配置进行执行器自动注册等操作。
         
         同一个执行器集群内AppName（executor.appname）需要保持一致；调度中心根据该配置动态发现不同集群的在线执行器列表。
+        
         
 ### 10) Contact us
 

@@ -10,13 +10,12 @@ import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
-import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.tool.pojo.*;
 import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.util.TextUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -87,6 +86,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private MongoDBWriterDto mongoDBWriterDto;
 
+    List<DataXTransformer> transformers = new ArrayList<>();
 
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
@@ -168,6 +168,43 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
+    /**
+     * 初始化脱敏规则
+     *
+     * @param dataXJsonBuildDto
+     */
+    public void initTransformer(DataXJsonBuildDto dataXJsonBuildDto) {
+
+        for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
+            if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
+                continue;
+            }
+            DataXTransformer t = new DataXTransformer();
+            t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
+            DataXTransformer.Parameter p = new DataXTransformer.Parameter();
+            p.setColumnIndex(i);
+            List<String> paras = new ArrayList<>();
+            if ("dx_hiding".equals(t.getName())) {
+                paras.add("");
+            } else if ("dx_floor".equals(t.getName())) {
+                // 根据日期规整
+                paras.add("YMDHms");
+            } else if ("dx_floor".equals(t.getName())) {
+                // 根据数值规整
+                paras.add("mod");
+            } else if ("dx_enum".equals(t.getName())) {
+                paras.add("100");
+            } else if ("dx_prefix_preserve".equals(t.getName())) {
+                paras.add("3");
+            } else if ("dx_md5".equals(t.getName())) {
+                paras.add("");
+            }
+            p.setParas(paras);
+            t.setParameter(p);
+            transformers.add(t);
+        }
+    }
+
     private List<String> convertKeywordsColumns(String datasource, List<String> columns) {
         if (columns == null) {
             return null;
@@ -232,6 +269,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         res.put("reader", this.buildReader);
         res.put("writer", this.buildWriter);
+        if (transformers.size() > 0) {
+            res.put("transformer", transformers);
+        }
         return res;
     }
 

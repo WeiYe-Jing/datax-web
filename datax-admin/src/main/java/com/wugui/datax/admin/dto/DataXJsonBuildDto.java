@@ -9,7 +9,7 @@ import java.util.List;
  * 构建json dto
  *
  * @author jingwk
- * @ClassName DataxJsonDto
+ * @ClassName DataXJsonDto
  * @Version 2.1.1
  * @since 2020/03/14 07:15
  */
@@ -21,6 +21,8 @@ public class DataXJsonBuildDto implements Serializable {
     private List<String> readerTables;
 
     private List<String> readerColumns;
+
+    private List<String> transformer;
 
     private Long writerDatasourceId;
 

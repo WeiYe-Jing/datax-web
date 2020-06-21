@@ -115,7 +115,7 @@ python /app/soft/datax/bin/datax.py -p "-Dp_data_day=2020-06-20"  /app/soft/data
 
 - 机制：配置定时任务，任务执行时获取当前时间及用户选择的当前时间+—天数计算得到动态参数的值。
 - 示例：
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/partition.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/partition.png)
 
 
 

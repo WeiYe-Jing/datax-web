@@ -70,14 +70,14 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 1.执行器配置(使用开源项目xxl-job)
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/executor.png)
 
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;
 
 #### 执行器属性说明
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_executor.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/add_executor.png)
 
 ```
 1、AppName: （与datax-executor中application.yml的datax.job.executor.appname保持一致）
@@ -92,13 +92,13 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 2.创建数据源
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/add_datasource.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/add_datasource.png)
 
 第四步使用
 
 ### 3.创建任务模版
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/template_list.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/template_list.png)
 
 第四步使用
 
@@ -108,39 +108,39 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 - 1.步骤一，步骤二，选择第二步中创建的数据源，JSON构建目前支持的数据源有hive,mysql,oracle,postgresql,sqlserver,hbase,mongodb,clickhouse 其它数据源的JSON构建正在开发中,暂时需要手动编写。
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/build.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/build.png)
 
 - 2.字段映射
 
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/mapping.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/mapping.png)
 
 - 3.点击构建，生成json,此时可以选择复制json然后创建任务，选择datax任务，将json粘贴到文本框。也可以点击选择模版，直接生成任务。
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/select_template.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/select_template.png)
 
 ### 5.批量创建任务
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/batch_build_r.png)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/batch_build_w.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/batch_build_r.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/batch_build_w.png)
 
 ### 6.任务创建介绍（关联模版创建任务不再介绍，具体参考4. 构建JSON脚本）
 
 #### DataX任务
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/datax.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/datax.png)
 
 #### Shell任务
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/shell.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/shell.png)
 
 #### Python任务
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/python.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/python.png)
 
 #### PowerShell任务
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/powershell.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/powershell.png)
 
 - 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
@@ -154,21 +154,21 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 7. 任务列表
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/job.png)
 
 ### 8. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/job_log.png)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_stat.png)
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/log_detail.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/job_log.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/log_stat.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/log_detail.png)
 
 ### 9.任务资源监控
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/monitor.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/monitor.png)
 
 ### 10. admin可以创建用户，编辑用户信息
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/user.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/user.png)
 
 
 # UI
@@ -247,7 +247,7 @@ Copyright (c) 2020 WeiYe
 
 # 项目规划
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/plan.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
 
 # Contact us
 

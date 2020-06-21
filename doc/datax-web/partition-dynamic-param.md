@@ -1,7 +1,7 @@
 # DataX增量动态参数抽取数据到动态参数分区
 
 ## DataX Web配置
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/partition.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/partition.png)
 
 ## DataX Json配置
 

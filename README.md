@@ -70,7 +70,7 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 
 ### 1.执行器配置(使用开源项目xxl-job)
 
-![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/executor.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/executor.png)
 
 - 1、"调度中心OnLine:"右侧显示在线的"调度中心"列表, 任务执行结束后, 将会以failover的模式进行回调调度中心通知执行结果, 避免回调的单点风险;
 - 2、"执行器列表" 中显示在线的执行器列表, 可通过"OnLine 机器"查看对应执行器的集群机器;

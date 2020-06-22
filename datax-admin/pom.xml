@@ -300,6 +300,10 @@
                     <artifactId>netty</artifactId>
                     <groupId>io.netty</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -476,6 +480,10 @@
                     <artifactId>hive-shims-common</artifactId>
                     <groupId>org.apache.hive.shims</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>javax.servlet</artifactId>
+                    <groupId>org.eclipse.jetty.orbit</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -499,6 +507,10 @@
                 <exclusion>
                     <artifactId>jackson-mapper-asl</artifactId>
                     <groupId>org.codehaus.jackson</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

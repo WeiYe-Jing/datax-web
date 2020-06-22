@@ -712,6 +712,10 @@
                     <artifactId>hbase-server</artifactId>
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>javax.servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 

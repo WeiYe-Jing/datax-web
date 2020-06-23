@@ -10,7 +10,7 @@
 
 ### 安装包准备
 #### 1）下载官方提供的版本tar版本包
-[点击下载](https://pan.baidu.com/s/1xb7qRjkM8T0TD2B0SKGGOw) 提取码：jzog
+[点击下载](https://pan.baidu.com/s/13yoqhGpD00I82K4lOYtQhg) 提取码：cpsk
 
 #### 2） 编译打包（官方提供的tar包跳过）
 直接从Git上面获得源代码，在项目的根目录下执行如下命令

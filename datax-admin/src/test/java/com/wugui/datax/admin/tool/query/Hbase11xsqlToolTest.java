@@ -4,13 +4,10 @@ package com.wugui.datax.admin.tool.query;
 import com.wugui.datax.admin.util.ReflectionUtil;
 import org.apache.phoenix.compile.ColumnProjector;
 import org.apache.phoenix.compile.RowProjector;
-import org.apache.phoenix.util.SchemaUtil;
-import sqlline.SqlLine;
-import org.apache.phoenix.jdbc.PhoenixDriver;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
-import java.util.Properties;
 
 public class Hbase11xsqlToolTest {
 

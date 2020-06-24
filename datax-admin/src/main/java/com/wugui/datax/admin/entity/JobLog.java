@@ -63,20 +63,4 @@ public class JobLog {
 
     @ApiModelProperty("增量最大id")
     private Long maxId;
-
-    @ApiModelProperty("DataX任务启动时刻")
-    private String taskStartTimeSuffix;
-	@ApiModelProperty("DataX任务结束时刻")
-    private String taskEndTimeSuffix;
-	@ApiModelProperty("DataX任务总计耗时")
-    private String taskTotalTimeSuffix;
-	@ApiModelProperty("DataX任务平均流量")
-    private String taskAverageFlowSuffix;
-	@ApiModelProperty("DataX记录写入速度")
-    private String taskRecordWritingSpeedSuffix;
-	@ApiModelProperty("DataX读出记录总数")
-    private int taskRecordReaderNumSuffix;
-	@ApiModelProperty("DataX读写失败总数")
-    private int taskRecordWritingNumSuffix;
-
 }

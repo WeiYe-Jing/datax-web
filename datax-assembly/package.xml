@@ -20,10 +20,10 @@
             <outputDirectory>bin</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
-        <fileSet>
+        <!--<fileSet>
         <directory>../doc</directory>
         <outputDirectory>doc</outputDirectory>
-        </fileSet>
+        </fileSet>-->
         <fileSet>
             <directory>../</directory>
             <lineEnding>unix</lineEnding>

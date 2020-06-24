@@ -144,6 +144,7 @@ public class JobTrigger {
         //increment parameter
         Integer incrementType = jobInfo.getIncrementType();
         if (incrementType != null) {
+            triggerParam.setIncrementType(incrementType);
             if (IncrementTypeEnum.ID.getCode() == incrementType) {
                 long maxId = getMaxId(jobInfo);
                 jobLog.setMaxId(maxId);
@@ -213,7 +214,6 @@ public class JobTrigger {
         jobLog.setExecutorParam(jobInfo.getExecutorParam());
         jobLog.setExecutorShardingParam(shardingParam);
         jobLog.setExecutorFailRetryCount(finalFailRetryCount);
-        //jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
         JobAdminConfig.getAdminConfig().getJobLogMapper().updateTriggerInfo(jobLog);

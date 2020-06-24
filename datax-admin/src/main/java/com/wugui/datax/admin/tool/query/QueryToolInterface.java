@@ -3,6 +3,7 @@ package com.wugui.datax.admin.tool.query;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.TableInfo;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,7 @@ public interface QueryToolInterface {
      * @param querySql
      * @return
      */
-    List<String> getColumnsByQuerySql(String querySql);
+    List<String> getColumnsByQuerySql(String querySql) throws SQLException;
 
     /**
      * 获取当前表maxId

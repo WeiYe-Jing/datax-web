@@ -12,6 +12,7 @@ import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobTemplate;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.JobTemplateService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -40,11 +41,11 @@ public class JobTemplateServiceImpl implements JobTemplateService {
     private JobInfoMapper jobInfoMapper;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId,Integer[] projectIds) {
+    public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId, Integer[] projectIds) {
 
         // page list
-        List<JobTemplate> list = jobTemplateMapper.pageList(start, length, jobGroup, jobDesc, executorHandler, userId,projectIds);
-        int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, userId,projectIds);
+        List<JobTemplate> list = jobTemplateMapper.pageList(start, length, jobGroup, jobDesc, executorHandler, userId, projectIds);
+        int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, userId, projectIds);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -92,7 +93,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         if (jobTemplate.getChildJobId() != null && jobTemplate.getChildJobId().trim().length() > 0) {
             String[] childJobIds = jobTemplate.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
-                if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
+                if (StringUtils.isNotBlank(childJobIdItem) && isNumeric(childJobIdItem) && Integer.parseInt(childJobIdItem) > 0) {
                     JobInfo jobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
                     if (jobInfo == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
@@ -113,7 +114,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             jobTemplate.setChildJobId(temp);
         }
 
-        if(jobTemplate.getProjectId()==0){
+        if (jobTemplate.getProjectId() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
 

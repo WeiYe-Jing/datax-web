@@ -98,7 +98,7 @@ public class MetadataController extends BaseController {
      */
     @GetMapping("/getColumnsByQuerySql")
     @ApiOperation("根据数据源id和sql语句获取所有字段")
-    public R<List<String>> getColumnsByQuerySql(Long datasourceId, String querySql) {
+    public R<List<String>> getColumnsByQuerySql(Long datasourceId, String querySql) throws SQLException {
         return success(datasourceQueryService.getColumnsByQuerySql(datasourceId, querySql));
     }
 }

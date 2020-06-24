@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `job_group`;
 CREATE TABLE `job_group`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '执行器AppName',
-  `title` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '执行器名称',
+  `title` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '执行器名称',
   `order` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
   `address_type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '执行器地址类型：0=自动注册、1=手动录入',
   `address_list` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行器地址列表，多地址逗号分隔',
@@ -112,6 +112,7 @@ CREATE TABLE `job_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `job_group` int(11) NOT NULL COMMENT '执行器主键ID',
   `job_id` int(11) NOT NULL COMMENT '任务，主键ID',
+  `job_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `executor_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行器地址，本次执行的地址',
   `executor_handler` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行器任务handler',
   `executor_param` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '执行器任务参数',
@@ -125,11 +126,11 @@ CREATE TABLE `job_log`  (
   `handle_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '执行-日志',
   `alarm_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败',
   `process_id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'datax进程Id',
+  `max_id` bigint(20) NULL DEFAULT NULL COMMENT '增量表max id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `I_trigger_time`(`trigger_time`) USING BTREE,
   INDEX `I_handle_code`(`handle_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
+) ENGINE = InnoDB AUTO_INCREMENT = 0 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for job_log_report
@@ -319,23 +320,6 @@ CREATE TABLE `job_permission`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 
-/**
-日志列表添加任务描述
- */
-ALTER TABLE `job_log`
-ADD COLUMN `job_desc` VARCHAR(255) NULL AFTER `job_id`;
-
-/**
-DataX 统计信息
- */
-ALTER TABLE `job_log`
-ADD COLUMN `task_start_time_suffix` DATETIME NULL AFTER `job_desc`,
-ADD COLUMN `task_end_time_suffix` DATETIME NULL AFTER `task_start_time_suffix`,
-ADD COLUMN `task_total_time_suffix` VARCHAR(11) NULL AFTER `task_end_time_suffix`,
-ADD COLUMN `task_average_flow_suffix` VARCHAR(11) NULL AFTER `task_total_time_suffix`,
-ADD COLUMN `task_record_writing_speed_suffix` VARCHAR(11) NULL AFTER `task_average_flow_suffix`,
-ADD COLUMN `task_record_reader_num_suffix` INT(11) NULL AFTER `task_record_writing_speed_suffix`,
-ADD COLUMN `task_record_writing_num_suffix` INT(11) NULL AFTER `task_record_reader_num_suffix`;
 
 ALTER TABLE `job_info`
 ADD COLUMN `replace_param_type` varchar(255) NULL COMMENT '增量时间格式' AFTER `last_handle_code`;
@@ -351,11 +335,6 @@ ADD COLUMN `inc_start_id` VARCHAR(20) NULL COMMENT '增量初始id' AFTER `prima
 ADD COLUMN `increment_type` TINYINT(4) NULL COMMENT '增量类型' AFTER `inc_start_id`,
 ADD COLUMN `datasource_id` BIGINT(11) NULL COMMENT '数据源id' AFTER `increment_type`;
 
-ALTER TABLE `job_log`
-ADD COLUMN `max_id` BIGINT(20) NULL COMMENT '增量表max id' AFTER `process_id`;
-
-
-
 CREATE TABLE `job_project`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'key',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'project name',
@@ -370,3 +349,6 @@ CREATE TABLE `job_project`  (
 
 ALTER TABLE `job_info`
 CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;
+
+ALTER TABLE `job_info`
+CHANGE COLUMN `increment_type` `increment_type` TINYINT(4) NULL DEFAULT 0 COMMENT '增量类型' ;

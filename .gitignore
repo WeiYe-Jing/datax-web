@@ -15,3 +15,6 @@
 /logs/
 *-dev*
 /data/
+/build/
+/packages/
+/datax-assembly/target/

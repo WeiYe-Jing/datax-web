@@ -51,7 +51,7 @@ public interface DatasourceQueryService {
      * @param querySql
      * @return
      */
-    List<String> getColumnsByQuerySql(Long datasourceId, String querySql);
+    List<String> getColumnsByQuerySql(Long datasourceId, String querySql) throws SQLException;
 
     /**
      * 获取PG table schema

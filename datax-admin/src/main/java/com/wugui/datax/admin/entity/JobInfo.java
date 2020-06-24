@@ -109,7 +109,7 @@ public class JobInfo {
 	private Long incStartId;
 
 	@ApiModelProperty("增量方式")
-	private Integer incrementType;
+	private int incrementType;
 
 	@ApiModelProperty("datax的读表")
 	private  String readerTable;

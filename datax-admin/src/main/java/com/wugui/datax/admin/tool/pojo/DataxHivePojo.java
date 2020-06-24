@@ -47,5 +47,9 @@ public class DataxHivePojo {
 
     private String writeFieldDelimiter;
 
-    private Boolean skipHeader;
+    private String haveKerberos; //是否有kerberos 认证
+
+    private String kerberosKeytabFilePath;  //keyTab 的存储路径
+
+    private String kerberosPrincipal;  //用户认证 XXX@XXX.XXXX
 }

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +30,7 @@ public class MySQLQueryToolTest {
 
     @Test
     public void getTableNames() {
-        List<String> tableNames = queryTool.getTableNames(null);
+        List<String> tableNames = queryTool.getTableNames();
         tableNames.forEach(System.out::println);
     }
 
@@ -44,7 +43,7 @@ public class MySQLQueryToolTest {
     }
 
     @Test
-    public void getColumnsByQuerySql() throws SQLException {
+    public void getColumnsByQuerySql() {
         String querySql = "select l.log_file_path, c.name, c.job_group from job_log l left join job_config c on c.id = l.job_id where l.status = 1";
         List<String> columns = queryTool.getColumnsByQuerySql(querySql);
         log.info(columns.toString());

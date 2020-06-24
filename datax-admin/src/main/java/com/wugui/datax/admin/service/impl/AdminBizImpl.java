@@ -5,7 +5,6 @@ import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datatx.core.enums.IncrementTypeEnum;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
@@ -80,13 +79,9 @@ public class AdminBizImpl implements AdminBiz {
         // trigger success, to trigger child job
         String callbackMsg = null;
         int resultCode = handleCallbackParam.getExecuteResult().getCode();
-
         if (IJobHandler.SUCCESS.getCode() == resultCode) {
-
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
-
-            updateIncrementParam(log, jobInfo.getIncrementType());
-
+            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
             if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
@@ -133,32 +128,19 @@ public class AdminBizImpl implements AdminBiz {
             handleMsg.append(callbackMsg);
         }
 
-        if (handleMsg.length() > 15000) {
-            handleMsg = new StringBuffer(handleMsg.substring(0, 15000));  // text最大64kb 避免长度过长
-        }
-
         // success, save log
         log.setHandleTime(new Date());
         log.setHandleCode(resultCode);
         log.setHandleMsg(handleMsg.toString());
-
         jobLogMapper.updateHandleInfo(log);
         jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);
 
         return ReturnT.SUCCESS;
     }
 
-    private void updateIncrementParam(JobLog log, Integer incrementType) {
-        if (IncrementTypeEnum.ID.getCode() == incrementType) {
-            jobInfoMapper.incrementIdUpdate(log.getJobId(),log.getMaxId());
-        } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
-        }
-    }
-
     private boolean isNumeric(String str) {
         try {
-            Integer.valueOf(str);
+            int result = Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;

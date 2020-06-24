@@ -29,7 +29,7 @@ public class SqlServerQueryToolTest {
 
     @Test
     public void getTableNames() {
-        List<String> tableNames = queryTool.getTableNames(null);
+        List<String> tableNames = queryTool.getTableNames();
         tableNames.forEach(System.out::println);
     }
 

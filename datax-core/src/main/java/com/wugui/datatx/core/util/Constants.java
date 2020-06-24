@@ -21,7 +21,6 @@ public final class Constants {
 
 
     public static final String SPLIT_COMMA = ",";
-    public static final String SPLIT_AT = "@";
     public static final String SPLIT_COLON = ";";
     public static final String SPLIT_POINT = ".";
     public static final String SPLIT_SCOLON=":";
@@ -34,6 +33,4 @@ public final class Constants {
     public static final String AND = "AND";
     public static final String SPACE = " ";
     public static final String STRING_BLANK = "";
-    public static final String MONGO_URL_PREFIX = "mongodb://";
-
 }

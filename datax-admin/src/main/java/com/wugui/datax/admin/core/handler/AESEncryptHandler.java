@@ -1,7 +1,6 @@
 package com.wugui.datax.admin.core.handler;
 
 import com.wugui.datax.admin.util.AESUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
@@ -21,11 +20,7 @@ public class AESEncryptHandler extends BaseTypeHandler<String> {
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType) throws SQLException {
-        if(StringUtils.isNotBlank(parameter)){
-            ps.setString(i, AESUtil.encrypt(parameter));
-        }else{
-            ps.setString(i, null);
-        }
+        ps.setString(i, AESUtil.encrypt(parameter));
     }
 
     @Override

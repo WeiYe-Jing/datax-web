@@ -8,52 +8,44 @@ public interface DatabaseInterface {
      * @param tableName The name of the table to determine the layout for
      * @return The SQL to launch.
      */
-    String getSQLQueryFields(String tableName);
+    public String getSQLQueryFields(String tableName);
 
     /**
      * 获取主键字段
      *
      * @return
      */
-    String getSQLQueryPrimaryKey();
+    public String getSQLQueryPrimaryKey();
 
-    String getSQLQueryTableNameComment();
+    public String getSQLQueryTableNameComment();
 
-    String getSQLQueryTablesNameComments();
+    public String getSQLQueryTablesNameComments();
 
     /**
      * 获取所有表名的sql
      *
      * @return
      */
-    String getSQLQueryTables(String... tableSchema);
+    public String getSQLQueryTables(String... args);
 
-    /**
-     * 获取 Table schema
-     *
-     * @return
-     */
-    String getSQLQueryTableSchema(String... args);
+
     /**
      * 获取所有的字段的sql
      *
      * @return
      */
-    String getSQLQueryColumns(String... args);
+    public String getSQLQueryColumns(String... args);
 
     /**
      * 获取表和字段注释的sql语句
      *
      * @return The SQL to launch.
      */
-    String getSQLQueryComment(String schemaName, String tableName, String columnName);
+    public String getSQLQueryComment(String schemaName, String tableName, String columnName);
 
-
-    /**
-     * 获取当前表maxId
-     * @param tableName
-     * @param primaryKey
-     * @return
-     */
-    String getMaxId(String tableName,String primaryKey);
+//    /**
+//     * 查询表名所有字段信息
+//     * @return
+//     */
+//    public String getSQLQueryColumnInfos();
 }

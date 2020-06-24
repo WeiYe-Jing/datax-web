@@ -38,6 +38,14 @@ public class HiveWriter extends BaseWriterPlugin implements DataxWriterInterface
         parameterObj.put("fieldDelimiter", plugin.getWriteFieldDelimiter());
         parameterObj.put("column", plugin.getColumns());
         writerObj.put("parameter", parameterObj);
+        if (Boolean.parseBoolean(plugin.getHaveKerberos())) {
+            parameterObj.put("haveKerberos",plugin.getHaveKerberos());
+//            parameterObj.setKerberosKeytabFilePath(plugin.getKerberosKeytabFilePath());
+            parameterObj.put("kerberosKeytabFilePath",plugin.getKerberosKeytabFilePath());
+//            parameterObj.setKerberosPrincipal(plugin.getKerberosPrincipal());
+            parameterObj.put("kerberosPrincipal",plugin.getKerberosPrincipal());
+        }
+
         return writerObj;
     }
 }

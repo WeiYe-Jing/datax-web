@@ -24,6 +24,4 @@ public class DasColumn {
     private String columnClassName;
 
     private String columnComment;
-    private int isNull;
-    private boolean isprimaryKey;
 }

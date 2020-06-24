@@ -1,21 +1,30 @@
 package com.wugui.datax.admin.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.entity.JobDatasourceEntity;
 import com.wugui.datax.admin.service.JobDatasourceService;
+import com.wugui.datax.admin.util.AESUtil;
+import com.wugui.datax.admin.util.PageUtils;
+import com.wugui.datax.admin.entity.JobDatasource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * jdbc数据源配置控制器层
@@ -27,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/jobJdbcDatasource")
 @Api(tags = "jdbc数据源配置接口")
-public class JobDatasourceController extends BaseController {
+public class JobDatasourceController extends ApiController {
     /**
      * 服务对象
      */
@@ -48,22 +57,12 @@ public class JobDatasourceController extends BaseController {
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "ascs", value = "升序字段，多个用逗号分隔"),
                     @ApiImplicitParam(paramType = "query", dataType = "String", name = "descs", value = "降序字段，多个用逗号分隔")
             })
+    //TODO  不确定该接口哪里用到，但是想把current修改pageNo，size修改为pageSize
     public R<IPage<JobDatasource>> selectAll() {
         BaseForm form = new BaseForm();
         QueryWrapper<JobDatasource> query = (QueryWrapper<JobDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobDatasource>());
         return success(jobJdbcDatasourceService.page(form.getPlusPagingQueryEntity(), query));
     }
-
-    /**
-     * 获取所有数据源
-     * @return
-     */
-    @ApiOperation("获取所有数据源")
-    @GetMapping("/all")
-    public R<List<JobDatasource>> selectAllDatasource() {
-        return success(this.jobJdbcDatasourceService.selectAllDatasource());
-    }
-
     /**
      * 通过主键查询单条数据
      *
@@ -73,7 +72,17 @@ public class JobDatasourceController extends BaseController {
     @ApiOperation("通过主键查询单条数据")
     @GetMapping("{id}")
     public R<JobDatasource> selectOne(@PathVariable Serializable id) {
-        return success(this.jobJdbcDatasourceService.getById(id));
+        JobDatasource jobDatasource=this.jobJdbcDatasourceService.getById(id);
+        //如果用户名和密码不为空 需要进行解密传重新复制回给页面
+        if (StringUtils.isNotBlank(jobDatasource.getJdbcUsername())){
+            String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
+            jobDatasource.setJdbcUsername(userName);
+        }
+        if (StringUtils.isNotBlank(jobDatasource.getJdbcPassword())){
+            String password = AESUtil.decrypt(jobDatasource.getJdbcPassword());
+            jobDatasource.setJdbcPassword(password);
+        }
+        return success(jobDatasource);
     }
 
     /**
@@ -97,15 +106,19 @@ public class JobDatasourceController extends BaseController {
     @PutMapping
     @ApiOperation("修改数据")
     public R<Boolean> update(@RequestBody JobDatasource entity) {
-        LocalCacheUtil.remove(entity.getDatasourceName());
+        LocalCacheUtil.remove(entity.getDatasource());
         JobDatasource d = jobJdbcDatasourceService.getById(entity.getId());
-        if (null != d.getJdbcUsername() && entity.getJdbcUsername().equals(d.getJdbcUsername())) {
-            entity.setJdbcUsername(null);
+        //如果是hive不需要用户名和密码
+        if(!"hive".equals(d.getDatasource())){
+            if (entity.getJdbcUsername().equals(d.getJdbcUsername())) {
+                entity.setJdbcUsername(null);
+            }
+            if (entity.getJdbcPassword().equals(d.getJdbcPassword())) {
+                entity.setJdbcPassword(null);
+            }
         }
-        if (null != entity.getJdbcPassword() && entity.getJdbcPassword().equals(d.getJdbcPassword())) {
-            entity.setJdbcPassword(null);
-        }
-        return success(this.jobJdbcDatasourceService.updateById(entity));
+            return success(this.jobJdbcDatasourceService.updateById(entity));
+
     }
 
     /**
@@ -127,7 +140,7 @@ public class JobDatasourceController extends BaseController {
      */
     @PostMapping("/test")
     @ApiOperation("测试数据")
-    public R<Boolean> dataSourceTest (@RequestBody JobDatasource jobJdbcDatasource) throws IOException {
+    public R<Boolean> dataSourceTest (@RequestBody JobDatasourceEntity jobJdbcDatasource) throws IOException, SQLException, ClassNotFoundException {
         return success(jobJdbcDatasourceService.dataSourceTest(jobJdbcDatasource));
     }
 }

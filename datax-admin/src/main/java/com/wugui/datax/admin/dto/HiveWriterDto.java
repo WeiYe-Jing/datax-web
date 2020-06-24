@@ -26,4 +26,10 @@ public class HiveWriterDto implements Serializable {
     private String writeMode;
 
     private String writeFieldDelimiter;
+
+    private Boolean haveKerberos;// 是否加kerberos 认证
+
+    private String kerberosKeytabFilePath ; //keytab的位置
+
+    private String kerberosPrincipal; // 用户认证
 }

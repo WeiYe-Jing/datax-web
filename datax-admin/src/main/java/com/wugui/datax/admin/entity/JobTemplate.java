@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -30,8 +29,8 @@ public class JobTemplate {
 
 	private Date updateTime;
 
-	@ApiModelProperty("修改用户")
-	private int userId;
+	@ApiModelProperty("负责人")
+	private String author;
 
 	@ApiModelProperty("报警邮件")
 	private String alarmEmail;
@@ -66,7 +65,7 @@ public class JobTemplate {
 	@ApiModelProperty("GLUE更新时间")
 	private Date glueUpdatetime;
 
-	@ApiModelProperty("子任务ID")
+	@ApiModelProperty("子任务ID，多个逗号分隔")
 	private String childJobId;
 
 	@ApiModelProperty("上次调度时间")
@@ -78,15 +77,15 @@ public class JobTemplate {
 	@ApiModelProperty("datax运行json")
 	private String jobJson;
 
+	@ApiModelProperty("脚本动态参数")
+	private String replaceParam;
+
 	@ApiModelProperty("jvm参数")
 	private String jvmParam;
 
-    @ApiModelProperty("所属项目")
-	private int projectId;
+	@ApiModelProperty("增量初始时间")
+	private Date incStartTime;
 
-	@TableField(exist=false)
-	private String projectName;
-
-	@TableField(exist=false)
-	private String userName;
+	@ApiModelProperty("分区信息")
+	private String partitionInfo;
 }

@@ -21,10 +21,11 @@ public interface JobTemplateService {
 	 * @param jobGroup
 	 * @param jobDesc
 	 * @param executorHandler
-	 * @param userId
+	 * @param author
 	 * @return
 	 */
-	Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId,Integer[] projectIds);
+	Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String author);
+
 	/**
 	 * add job
 	 *

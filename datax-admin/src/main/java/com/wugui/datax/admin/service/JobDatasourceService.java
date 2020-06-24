@@ -2,9 +2,10 @@ package com.wugui.datax.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.entity.JobDatasourceEntity;
 
 import java.io.IOException;
-import java.util.List;
+import java.sql.SQLException;
 
 /**
  * jdbc数据源配置表服务接口
@@ -19,18 +20,7 @@ public interface JobDatasourceService extends IService<JobDatasource> {
      * @param jdbcDatasource
      * @return
      */
-    Boolean dataSourceTest(JobDatasource jdbcDatasource) throws IOException;
+    Boolean dataSourceTest(JobDatasourceEntity jdbcDatasource) throws IOException, SQLException, ClassNotFoundException;
 
-    /**
-     *更新数据源信息
-     * @param datasource
-     * @return
-     */
     int update(JobDatasource datasource);
-
-    /**
-     * 获取所有数据源
-     * @return
-     */
-    List<JobDatasource> selectAllDatasource();
 }

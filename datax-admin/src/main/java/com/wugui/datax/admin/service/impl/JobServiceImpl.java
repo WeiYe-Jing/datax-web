@@ -8,25 +8,18 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.DataXJsonBuildDto;
+import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLogReport;
-import com.wugui.datax.admin.entity.JobTemplate;
 import com.wugui.datax.admin.mapper.*;
-import com.wugui.datax.admin.service.DatasourceQueryService;
-import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobService;
-import com.wugui.datax.admin.util.DateFormatUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.wugui.datax.admin.util.CronUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -50,30 +43,20 @@ public class JobServiceImpl implements JobService {
     private JobLogGlueMapper jobLogGlueMapper;
     @Resource
     private JobLogReportMapper jobLogReportMapper;
-    @Resource
-    private DatasourceQueryService datasourceQueryService;
-    @Resource
-    private JobTemplateMapper jobTemplateMapper;
-    @Resource
-    private DataxJsonService dataxJsonService;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
+    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author) {
 
         // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author);
 
         // package result
-        Map<String, Object> maps = new HashMap<>();
+        Map<String, Object> maps = new HashMap<String, Object>();
         maps.put("recordsTotal", list_count);        // 总记录数
         maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
         maps.put("data", list);                    // 分页列表
         return maps;
-    }
-
-    public List<JobInfo> list() {
-        return jobInfoMapper.findAll();
     }
 
     @Override
@@ -81,36 +64,31 @@ public class JobServiceImpl implements JobService {
         // valid
         JobGroup group = jobGroupMapper.load(jobInfo.getJobGroup());
         if (group == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_jobgroup")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_jobgroup")));
         }
         if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
         }
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobInfo.getUserId() == 0 ) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
+        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_invalid")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid")));
         }
         if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_invalid")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
         }
         if (GlueTypeEnum.match(jobInfo.getGlueType()) == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_invalid")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_unvalid")));
         }
         if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
-        }
-
-
-        if (StringUtils.isBlank(jobInfo.getReplaceParamType()) || !DateFormatUtils.formatList().contains(jobInfo.getReplaceParamType())) {
-            jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
 
         // fix "\r" in shell
@@ -122,7 +100,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
-                if (StringUtils.isNotBlank(childJobIdItem) && isNumeric(childJobIdItem) && Integer.parseInt(childJobIdItem) > 0) {
+                if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
                     JobInfo childJobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
                     if (childJobInfo == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
@@ -130,7 +108,7 @@ public class JobServiceImpl implements JobService {
                     }
                 } else {
                     return new ReturnT<String>(ReturnT.FAIL_CODE,
-                            MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_invalid")), childJobIdItem));
+                            MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_unvalid")), childJobIdItem));
                 }
             }
 
@@ -146,20 +124,24 @@ public class JobServiceImpl implements JobService {
 
         // add in db
         jobInfo.setAddTime(new Date());
-        jobInfo.setJobJson(jobInfo.getJobJson());
         jobInfo.setUpdateTime(new Date());
         jobInfo.setGlueUpdatetime(new Date());
         jobInfoMapper.save(jobInfo);
         if (jobInfo.getId() < 1) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
         }
 
-        return new ReturnT<>(String.valueOf(jobInfo.getId()));
+        return new ReturnT<String>(String.valueOf(jobInfo.getId()));
+    }
+
+    @Override
+    public ReturnT<String> createCron(TaskScheduleDto dto) {
+        return new ReturnT<>(CronUtil.createCronExpression(dto));
     }
 
     private boolean isNumeric(String str) {
         try {
-            Integer.valueOf(str);
+            int result = Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -171,26 +153,22 @@ public class JobServiceImpl implements JobService {
 
         // valid
         if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid"));
         }
         if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
         }
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-
-        if (jobInfo.getProjectId() == 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
-        }
-        if (jobInfo.getUserId() == 0) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
+        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_invalid")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid")));
         }
         if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_invalid")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
         }
 
         // ChildJobId valid
@@ -205,7 +183,7 @@ public class JobServiceImpl implements JobService {
                     }
                 } else {
                     return new ReturnT<String>(ReturnT.FAIL_CODE,
-                            MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_invalid")), childJobIdItem));
+                            MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_unvalid")), childJobIdItem));
                 }
             }
 
@@ -222,7 +200,7 @@ public class JobServiceImpl implements JobService {
         // group valid
         JobGroup jobGroup = jobGroupMapper.load(jobInfo.getJobGroup());
         if (jobGroup == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_jobgroup") + I18nUtil.getString("system_invalid")));
+            return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_jobgroup") + I18nUtil.getString("system_unvalid")));
         }
 
         // stage job info
@@ -242,16 +220,29 @@ public class JobServiceImpl implements JobService {
                 nextTriggerTime = nextValidTime.getTime();
             } catch (ParseException e) {
                 logger.error(e.getMessage(), e);
-                return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid") + " | " + e.getMessage());
+                return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") + " | " + e.getMessage());
             }
         }
 
-        BeanUtils.copyProperties(jobInfo, exists_jobInfo);
-        if (StringUtils.isBlank(jobInfo.getReplaceParamType())) {
-            jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
-        }
+        exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
+        exists_jobInfo.setJobCron(jobInfo.getJobCron());
+        exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
+        exists_jobInfo.setAuthor(jobInfo.getAuthor());
+        exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
+        exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
+        exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());
+        exists_jobInfo.setExecutorParam(jobInfo.getExecutorParam());
+        exists_jobInfo.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
+        exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
+        exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
+        exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
+        exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
+        exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
+        exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());
         exists_jobInfo.setUpdateTime(new Date());
+        exists_jobInfo.setGlueType(jobInfo.getGlueType());
+        exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
 
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());
@@ -294,7 +285,7 @@ public class JobServiceImpl implements JobService {
             nextTriggerTime = nextValidTime.getTime();
         } catch (ParseException e) {
             logger.error(e.getMessage(), e);
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid") + " | " + e.getMessage());
+            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") + " | " + e.getMessage());
         }
 
         xxlJobInfo.setTriggerStatus(1);
@@ -308,14 +299,14 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public ReturnT<String> stop(int id) {
-        JobInfo jobInfo = jobInfoMapper.loadById(id);
+        JobInfo xxlJobInfo = jobInfoMapper.loadById(id);
 
-        jobInfo.setTriggerStatus(0);
-        jobInfo.setTriggerLastTime(0);
-        jobInfo.setTriggerNextTime(0);
+        xxlJobInfo.setTriggerStatus(0);
+        xxlJobInfo.setTriggerLastTime(0);
+        xxlJobInfo.setTriggerNextTime(0);
 
-        jobInfo.setUpdateTime(new Date());
-        jobInfoMapper.update(jobInfo);
+        xxlJobInfo.setUpdateTime(new Date());
+        jobInfoMapper.update(xxlJobInfo);
         return ReturnT.SUCCESS;
     }
 
@@ -404,60 +395,4 @@ public class JobServiceImpl implements JobService {
         return new ReturnT<>(result);
     }
 
-
-    @Override
-    public ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException {
-
-        String key = "system_please_choose";
-        List<String> rdTables = dto.getReaderTables();
-        List<String> wrTables = dto.getWriterTables();
-        if (dto.getReaderDatasourceId() == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_readerDataSource"));
-        }
-        if (dto.getWriterDatasourceId() == null) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_writerDataSource"));
-        }
-        if (rdTables.size() != wrTables.size()) {
-            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
-        }
-
-        DataXJsonBuildDto jsonBuild = new DataXJsonBuildDto();
-
-        List<String> rColumns;
-        List<String> wColumns;
-        for (int i = 0; i < rdTables.size(); i++) {
-            rColumns = datasourceQueryService.getColumns(dto.getReaderDatasourceId(), rdTables.get(i));
-            wColumns = datasourceQueryService.getColumns(dto.getWriterDatasourceId(), wrTables.get(i));
-
-            jsonBuild.setReaderDatasourceId(dto.getReaderDatasourceId());
-            jsonBuild.setWriterDatasourceId(dto.getWriterDatasourceId());
-
-            jsonBuild.setReaderColumns(rColumns);
-            jsonBuild.setWriterColumns(wColumns);
-
-            jsonBuild.setRdbmsReader(dto.getRdbmsReader());
-            jsonBuild.setRdbmsWriter(dto.getRdbmsWriter());
-
-            List<String> rdTable = new ArrayList<>();
-            rdTable.add(rdTables.get(i));
-            jsonBuild.setReaderTables(rdTable);
-
-            List<String> wdTable = new ArrayList<>();
-            wdTable.add(wrTables.get(i));
-            jsonBuild.setWriterTables(wdTable);
-
-            String json = dataxJsonService.buildJobJson(jsonBuild);
-
-            JobTemplate jobTemplate = jobTemplateMapper.loadById(dto.getTemplateId());
-            JobInfo jobInfo = new JobInfo();
-            BeanUtils.copyProperties(jobTemplate, jobInfo);
-            jobInfo.setJobJson(json);
-            jobInfo.setJobDesc(rdTables.get(i));
-            jobInfo.setAddTime(new Date());
-            jobInfo.setUpdateTime(new Date());
-            jobInfo.setGlueUpdatetime(new Date());
-            jobInfoMapper.save(jobInfo);
-        }
-        return ReturnT.SUCCESS;
-    }
 }

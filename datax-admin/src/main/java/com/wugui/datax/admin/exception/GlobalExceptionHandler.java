@@ -1,7 +1,7 @@
 package com.wugui.datax.admin.exception;
 
 import com.baomidou.mybatisplus.extension.api.R;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author Jing WenKai
  * @date 2019/07/05 11:57
  */
-@Slf4j
+@Log4j2
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

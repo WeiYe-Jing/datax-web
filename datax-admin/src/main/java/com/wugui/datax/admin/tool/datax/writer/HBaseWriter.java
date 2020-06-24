@@ -1,6 +1,5 @@
 package com.wugui.datax.admin.tool.datax.writer;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,9 @@ public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterfac
         parameterObj.put("table", plugin.getWriterTable());
         parameterObj.put("mode", plugin.getWriterMode());
         parameterObj.put("column", plugin.getColumns());
-        parameterObj.put("rowkeyColumn", JSON.parseArray(plugin.getWriterRowkeyColumn()));
+        if (StringUtils.isNotBlank(plugin.getWriterRowkeyColumn().getType())) {
+            parameterObj.put("rowkeyColumn", plugin.getWriterRowkeyColumn());
+        }
         if (StringUtils.isNotBlank(plugin.getWriterVersionColumn().getValue())) {
             parameterObj.put("versionColumn", plugin.getWriterVersionColumn());
         }

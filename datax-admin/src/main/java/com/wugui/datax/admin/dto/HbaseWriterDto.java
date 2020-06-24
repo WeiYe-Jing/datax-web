@@ -11,7 +11,7 @@ public class HbaseWriterDto implements Serializable {
 
   private String writerMode;
 
-  private String writerRowkeyColumn;
+  private RowkeyColumn writerRowkeyColumn;
 
   private VersionColumn writerVersionColumn;
 }

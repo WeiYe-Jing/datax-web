@@ -23,6 +23,10 @@ public class HiveReaderDto implements Serializable {
 
     private String readerFieldDelimiter;
 
-    private Boolean readerSkipHeader;
+    private Boolean haveKerberos;// 是否加kerberos 认证
+
+    private String kerberosKeytabFilePath ; //keytab的位置
+
+    private String kerberosPrincipal; // 用户认证
 
 }

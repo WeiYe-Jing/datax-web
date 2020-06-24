@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -14,63 +15,105 @@ import com.alibaba.fastjson.JSONObject;
 public class JSONUtils {
 
     /**
-     * decrypt 解密
-     */
-    public static Integer decrypt = 0;
-    /**
-     * decrypt 加密
-     */
-    public static Integer encrypt = 1;
-
-    /**
-     * @param content
-     * @param key
-     * @param changeType 0加密 or 1解密
+     * 返回格式化的json
+     *
+     * @param object
      * @return
      */
-    public static JSONObject change(String content, String key, Integer changeType) {
-        JSONObject keyObj = JSONObject.parseObject(JSONObject.parseObject(content).getString(key));
-        JSONObject params = JSONObject.parseObject(keyObj.getString("parameter"));
-        String dUsername = null, dPassword = null;
-        if (decrypt.equals(changeType)) { //解密
-            dUsername = AESUtil.decrypt(params.getString("username"));
-            dPassword = AESUtil.decrypt(params.getString("password"));
-
-        } else if (encrypt.equals(changeType)) {//加密
-
-            dUsername = AESUtil.encrypt(params.getString("username"));
-            dPassword = AESUtil.encrypt(params.getString("password"));
-        }
-        String username = dUsername == null ? params.getString("username") : dUsername;
-        String password = dPassword == null ? params.getString("password") : dPassword;
-        params.put("username", username);
-        params.put("password", password);
-        keyObj.put("parameter", params);
-        return keyObj;
+    public static String formatJson(Object object) {
+        return JSON.toJSONString(object, true);
     }
 
-    /**
-     * @param jsonStr
-     * @param changeType 0加密 or 1解密
-     * @return jsonStr
-     */
-    public static String changeJson(String jsonStr, Integer changeType) {
+    public static String decryptJson(String jsonStr) {
         JSONObject json = JSONObject.parseObject(jsonStr);
         JSONObject job = json.getJSONObject("job");
-        JSONArray contents = job.getJSONArray("content");
-        for (int i = 0; i < contents.size(); i++) {
-            String contentStr = contents.getString(i);
-            Object obj = contents.get(i);
-            if (decrypt.equals(changeType)) { //解密
-                ((JSONObject) obj).put("reader", change(contentStr, "reader", decrypt));
-                ((JSONObject) obj).put("writer", change(contentStr, "writer", decrypt));
-            } else if (encrypt.equals(changeType)) {//加密
-                ((JSONObject) obj).put("reader", change(contentStr, "reader", encrypt));
-                ((JSONObject) obj).put("writer", change(contentStr, "writer", encrypt));
-            }
+        JSONArray content = job.getJSONArray("content");
+        for (int i = 0; i < content.size(); i++) {
+            ((JSONObject) content.get(i)).put("reader", decrypt(content.getString(i), "reader"));
+            ((JSONObject) content.get(i)).put("writer", decrypt(content.getString(i), "writer"));
         }
-        job.put("content", contents);
+        job.put("content", content);
         json.put("job", job);
         return json.toJSONString();
+    }
+
+    public static JSONObject decrypt(String content, String key) {
+        JSONObject writer = JSONObject.parseObject(JSONObject.parseObject(content).getString(key));
+        JSONObject writerParams = JSONObject.parseObject(writer.getString("parameter"));
+
+        String dUsername = AESUtil.decrypt(writerParams.getString("username"));
+        String username = dUsername == null ? writerParams.getString("username") : dUsername;
+        writerParams.put("username", username);
+
+        String dPassword = AESUtil.decrypt(writerParams.getString("password"));
+        String password = dPassword == null ? writerParams.getString("password") : dPassword;
+        writerParams.put("password", password);
+
+        writer.put("parameter", writerParams);
+        return writer;
+    }
+
+
+    public static void main(String[] args) {
+        String s = "{\n" +
+                "  \"job\": {\n" +
+                "    \"setting\": {\n" +
+                "      \"speed\": {\n" +
+                "        \"channel\": 3\n" +
+                "      },\n" +
+                "      \"errorLimit\": {\n" +
+                "        \"record\": 0,\n" +
+                "        \"percentage\": 0.02\n" +
+                "      }\n" +
+                "    },\n" +
+                "    \"content\": [\n" +
+                "      {\n" +
+                "        \"reader\": {\n" +
+                "          \"name\": \"mysqlreader\",\n" +
+                "          \"parameter\": {\n" +
+                "            \"username\": \"8ivlZcKGclwi5NwpuzkXzg==\",\n" +
+                "            \"password\": \"fZfGM5387/mzCDxqjb2thQ==\",\n" +
+                "            \"column\": [\n" +
+                "              \"`id`\"\n" +
+                "            ],\n" +
+                "            \"splitPk\": \"\",\n" +
+                "            \"connection\": [\n" +
+                "              {\n" +
+                "                \"table\": [\n" +
+                "                  \"datax_plugin\"\n" +
+                "                ],\n" +
+                "                \"jdbcUrl\": [\n" +
+                "                  \"jdbc:mysql://localhost:3306/datax_web\"\n" +
+                "                ]\n" +
+                "              }\n" +
+                "            ]\n" +
+                "          }\n" +
+                "        },\n" +
+                "        \"writer\": {\n" +
+                "          \"name\": \"mysqlwriter\",\n" +
+                "          \"parameter\": {\n" +
+                "            \"username\": \"8ivlZcKGclwi5NwpuzkXzg==\",\n" +
+                "            \"password\": \"fZfGM5387/mzCDxqjb2thQ==\",\n" +
+                "            \"column\": [\n" +
+                "              \"`id`\"\n" +
+                "            ],\n" +
+                "            \"preSql\": [\n" +
+                "              \"\"\n" +
+                "            ],\n" +
+                "            \"connection\": [\n" +
+                "              {\n" +
+                "                \"table\": [\n" +
+                "                  \"job_log\"\n" +
+                "                ],\n" +
+                "                \"jdbcUrl\": \"jdbc:mysql://localhost:3306/datax_web\"\n" +
+                "              }\n" +
+                "            ]\n" +
+                "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "}";
+        System.out.println(decryptJson(s));
     }
 }

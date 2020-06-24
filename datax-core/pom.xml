@@ -6,8 +6,8 @@
 
     <parent>
         <groupId>com.wugui</groupId>
-        <artifactId>datax-web</artifactId>
-        <version>2.1.2</version>
+        <artifactId>datax-all</artifactId>
+        <version>2.1.1</version>
     </parent>
 
     <artifactId>datax-core</artifactId>
@@ -67,16 +67,6 @@
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>${oshi.core.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jna</artifactId>
-                    <groupId>net.java.dev.jna</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 

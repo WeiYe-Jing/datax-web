@@ -29,15 +29,9 @@ public class PostgresqlDatabaseMeta extends BaseDatabaseMeta implements Database
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
-        return "SELECT concat_ws('.',\"table_schema\",\"table_name\") FROM information_schema.tables \n" +
-                "where (\"table_name\" not like 'pg_%' AND \"table_name\" not like 'sql_%') \n" +
-                "and table_type='BASE TABLE' and table_schema='" + tableSchema[0] + "'";
-    }
-
-    @Override
-    public String getSQLQueryTableSchema(String... args) {
-        return "select table_schema FROM information_schema.tables where \"table_name\" not like 'pg_%' or \"table_name\" not like 'sql_%' group by table_schema;";
+    public String getSQLQueryTables(String... args) {
+        return "select relname as tabname from pg_class c \n" +
+                "where  relkind = 'r' and relname not like 'pg_%' and relname not like 'sql_%' order by relname";
     }
 
     @Override

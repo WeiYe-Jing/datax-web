@@ -29,10 +29,6 @@ public class QueryToolFactory {
             return getSqlserverQueryToolInstance(jobDatasource);
         }else if (JdbcConstants.HIVE.equals(datasource)) {
             return getHiveQueryToolInstance(jobDatasource);
-        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
-            return getClickHouseQueryToolInstance(jobDatasource);
-        }else if (JdbcConstants.HBASE20XSQL.equals(datasource)) {
-            return getHbase20XsqlQueryToolQueryToolInstance(jobDatasource);
         }
         throw new UnsupportedOperationException("找不到该类型: ".concat(datasource));
     }
@@ -79,23 +75,6 @@ public class QueryToolFactory {
         } catch (SQLException e) {
             throw RdbmsException.asConnException(JdbcConstants.HIVE,
                     e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
-        }
-    }
-    private static BaseQueryTool getClickHouseQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new ClickHouseQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.CLICKHOUSE,
-                    e, jdbcDatasource.getJdbcUsername(), jdbcDatasource.getDatasourceName());
-        }
-    }
-
-    private static Hbase20XsqlQueryTool getHbase20XsqlQueryToolQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new Hbase20XsqlQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.HBASE20XSQL,
-                    e, jdbcDatasource.getJdbcUsername(), jdbcDatasource.getDatasourceName());
         }
     }
 }

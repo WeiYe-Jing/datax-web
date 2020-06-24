@@ -1,4 +1,3 @@
-/*
 package com.wugui.datax.rpc.registry.impl;
 
 import com.wugui.datax.registry.XxlRegistryClient;
@@ -7,13 +6,11 @@ import com.wugui.datax.rpc.registry.ServiceRegistry;
 
 import java.util.*;
 
-*/
 /**
  * service registry for "xxl-registry v1.0.1"
  *
  * @author xuxueli 2018-11-30
- *//*
-
+ */
 public class XxlRegistryServiceRegistry extends ServiceRegistry {
 
     public static final String XXL_REGISTRY_ADDRESS = "XXL_REGISTRY_ADDRESS";
@@ -85,4 +82,3 @@ public class XxlRegistryServiceRegistry extends ServiceRegistry {
     }
 
 }
-*/

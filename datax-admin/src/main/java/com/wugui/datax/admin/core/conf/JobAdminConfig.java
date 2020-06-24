@@ -66,9 +66,6 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
     @Value("${datax.job.logretentiondays}")
     private int logretentiondays;
 
-    @Value("${datasource.aes.key}")
-    private String dataSourceAESKey;
-
     // dao, service
 
     @Resource
@@ -85,8 +82,7 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
     private JavaMailSender mailSender;
     @Resource
     private DataSource dataSource;
-    @Resource
-    private JobDatasourceMapper jobDatasourceMapper;
+
 
     public String getI18n() {
         return i18n;
@@ -140,15 +136,4 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
         return dataSource;
     }
 
-    public JobDatasourceMapper getJobDatasourceMapper() {
-        return jobDatasourceMapper;
-    }
-
-    public String getDataSourceAESKey() {
-        return dataSourceAESKey;
-    }
-
-    public void setDataSourceAESKey(String dataSourceAESKey) {
-        this.dataSourceAESKey = dataSourceAESKey;
-    }
 }

@@ -19,22 +19,19 @@ public interface JobTemplateMapper {
 									  @Param("jobGroup") int jobGroup,
 									  @Param("jobDesc") String jobDesc,
 									  @Param("executorHandler") String executorHandler,
-									  @Param("userId") int userId,
-									  @Param("projectIds") Integer[] projectIds);
-
+									  @Param("author") String author);
 	public int pageListCount(@Param("offset") int offset,
                              @Param("pagesize") int pagesize,
                              @Param("jobGroup") int jobGroup,
                              @Param("jobDesc") String jobDesc,
                              @Param("executorHandler") String executorHandler,
-                             @Param("userId") int userId,
-							 @Param("projectIds") Integer[] projectIds);
+                             @Param("author") String author);
 
 	public int save(JobTemplate info);
 
 	public JobTemplate loadById(@Param("id") int id);
 
-	public int update(JobTemplate jobTemplate);
+	public int update(JobTemplate xxlJobTemplate);
 
 	public int delete(@Param("id") long id);
 

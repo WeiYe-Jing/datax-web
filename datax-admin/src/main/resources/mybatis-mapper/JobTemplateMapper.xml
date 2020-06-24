@@ -13,7 +13,7 @@
 	    <result column="add_time" property="addTime" />
 	    <result column="update_time" property="updateTime" />
 
-		<result column="user_id" property="userId" />
+	    <result column="author" property="author" />
 	    <result column="alarm_email" property="alarmEmail" />
 
 		<result column="executor_route_strategy" property="executorRouteStrategy" />
@@ -34,8 +34,11 @@
 		<result column="trigger_next_time" property="triggerNextTime" />
 		<result column="job_json" property="jobJson" />
 
+		<result column="replace_param" property="replaceParam" />
 		<result column="jvm_param" property="jvmParam" />
-		<result column="project_id" property="projectId"/>
+		<result column="inc_start_time" property="incStartTime" />
+
+		<result column="partition_info" property="partitionInfo" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -45,7 +48,7 @@
 		t.job_desc,
 		t.add_time,
 		t.update_time,
-		t.user_id,
+		t.author,
 		t.alarm_email,
 		t.executor_route_strategy,
 		t.executor_handler,
@@ -61,20 +64,15 @@
 		t.trigger_last_time,
 		t.trigger_next_time,
 		t.job_json,
+		t.replace_param,
 		t.jvm_param,
-		t.project_id
-	</sql>
-
-	<sql id="Project_Column_List">
-		p.name as project_name,
-		u.username
+		t.inc_start_time,
+		t.partition_info
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobTemplate">
-		SELECT <include refid="Base_Column_List" />,<include refid="Project_Column_List" />
+		SELECT <include refid="Base_Column_List" />
 		FROM job_template AS t
-		INNER JOIN job_project p on t.project_id=p.id
-		INNER JOIN job_user u on t.user_id = u.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -85,14 +83,8 @@
 			<if test="executorHandler != null and executorHandler != ''">
 				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
 			</if>
-			<if test="userId gt 0">
-				AND t.user_id = #{userId}
-			</if>
-			<if test="projectIds != null and projectIds.length != 0">
-				AND t.project_id IN
-				<foreach collection="projectIds" item="projectId" index="index" open="(" close=")" separator=",">
-					#{projectId}
-				</foreach>
+			<if test="author != null and author != ''">
+				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
 			</if>
 		</trim>
 		ORDER BY id DESC
@@ -112,14 +104,8 @@
 			<if test="executorHandler != null and executorHandler != ''">
 				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
 			</if>
-			<if test="userId gt 0">
-				AND t.user_id = #{userId})
-			</if>
-			<if test="projectIds != null and projectIds.length != 0">
-				AND t.project_id IN
-				<foreach collection="projectIds" item="projectId" index="index" open="(" close=")" separator=",">
-					#{projectId}
-				</foreach>
+			<if test="author != null and author != ''">
+				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
 			</if>
 		</trim>
 	</select>
@@ -131,7 +117,7 @@
 			job_desc,
 			add_time,
 			update_time,
-			user_id,
+			author,
 			alarm_email,
             executor_route_strategy,
 			executor_handler,
@@ -147,15 +133,17 @@
 			trigger_last_time,
 			trigger_next_time,
 			job_json,
+			replace_param,
 			jvm_param,
-			project_id
+			inc_start_time,
+			partition_info
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
 			#{jobDesc},
 			#{addTime},
 			#{updateTime},
-			#{userId},
+			#{author},
 			#{alarmEmail},
 			#{executorRouteStrategy},
 			#{executorHandler},
@@ -171,8 +159,10 @@
 			#{triggerLastTime},
 			#{triggerNextTime},
 			#{jobJson},
+			#{replaceParam},
 			#{jvmParam},
-			#{projectId}
+			#{incStartTime},
+			#{partitionInfo}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -193,7 +183,7 @@
 			job_cron = #{jobCron},
 			job_desc = #{jobDesc},
 			update_time = #{updateTime},
-			user_id = #{userId},
+			author = #{author},
 			alarm_email = #{alarmEmail},
 			executor_route_strategy = #{executorRouteStrategy},
 			executor_handler = #{executorHandler},
@@ -209,8 +199,10 @@
 			trigger_last_time = #{triggerLastTime},
 			trigger_next_time = #{triggerNextTime},
 			job_json=#{jobJson},
+			replace_param=#{replaceParam},
 			jvm_param=#{jvmParam},
-			project_id=#{projectId}
+			inc_start_time=#{incStartTime},
+			partition_info=#{partitionInfo}
 		WHERE id = #{id}
 	</update>
 

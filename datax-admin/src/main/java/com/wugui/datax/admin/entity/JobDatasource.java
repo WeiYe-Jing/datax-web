@@ -131,6 +131,12 @@ public class JobDatasource extends Model<JobDatasource> {
      */
     @ApiModelProperty(value = "数据库名", hidden = true)
     private String databaseName;
+
+    @ApiModelProperty(value = "其他参数", hidden = true)
+    private String connectionParams;
+
+
+
     /**
      * 获取主键值
      *

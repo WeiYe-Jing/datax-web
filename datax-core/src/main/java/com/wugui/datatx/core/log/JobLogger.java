@@ -16,8 +16,6 @@ import java.util.Date;
 public class JobLogger {
     private static Logger logger = LoggerFactory.getLogger("datax-web logger");
 
-
-
     /**
      * append log
      *

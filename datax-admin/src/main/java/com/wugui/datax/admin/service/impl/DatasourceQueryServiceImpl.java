@@ -5,13 +5,15 @@ import com.google.common.collect.Lists;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.JobDatasourceService;
-import com.wugui.datax.admin.tool.query.*;
+import com.wugui.datax.admin.tool.query.BaseQueryTool;
+import com.wugui.datax.admin.tool.query.HBaseQueryTool;
+import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
+import com.wugui.datax.admin.tool.query.QueryToolFactory;
 import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -37,7 +39,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
 
 
     @Override
-    public List<String> getTables(Long id, String tableSchema) throws IOException {
+    public List<String> getTables(Long id) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装
@@ -46,28 +48,16 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
         }
         if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
             return new HBaseQueryTool(datasource).getTableNames();
-        } else if (JdbcConstants.MONGODB.equals(datasource.getDatasource())) {
+        } else if(JdbcConstants.MONGODB.equals(datasource.getDatasource())){
             return new MongoDBQueryTool(datasource).getCollectionNames(datasource.getDatabaseName());
         } else {
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-            return qTool.getTableNames(tableSchema);
+            return qTool.getTableNames();
         }
     }
 
     @Override
-    public List<String> getTableSchema(Long id) {
-        //获取数据源对象
-        JobDatasource datasource = jobDatasourceService.getById(id);
-        //queryTool组装
-        if (ObjectUtil.isNull(datasource)) {
-            return Lists.newArrayList();
-        }
-        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-        return qTool.getTableSchema();
-    }
-
-    @Override
-    public List<String> getCollectionNames(long id, String dbName) throws IOException {
+    public List<String> getCollectionNames(long id,String dbName) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装
@@ -97,7 +87,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     }
 
     @Override
-    public List<String> getColumnsByQuerySql(Long datasourceId, String querySql) throws SQLException {
+    public List<String> getColumnsByQuerySql(Long datasourceId, String querySql) {
         //获取数据源对象
         JobDatasource jdbcDatasource = jobDatasourceService.getById(datasourceId);
         //queryTool组装

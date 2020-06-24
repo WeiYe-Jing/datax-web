@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import static com.wugui.datatx.core.biz.model.ReturnT.FAIL_CODE;
 @RestController
 @RequestMapping("/api/user")
 @Api(tags = "用户信息接口")
-public class UserController {
+public class UserController extends BaseController {
 
     @Resource
     private JobUserMapper jobUserMapper;
@@ -60,8 +61,13 @@ public class UserController {
 
     @PostMapping("/add")
     @ApiOperation("添加用户")
-    public ReturnT<String> add(@RequestBody JobUser jobUser) {
+    public ReturnT<String> add(HttpServletRequest request,@RequestBody JobUser jobUser) {
 
+        int userId = getCurrentUserId(request);
+        JobUser user=jobUserMapper.getUserById(userId);
+        if("ADMIN".equals(user.getRole())){
+            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_permission_limit"));
+        }
         // valid username
         if (!StringUtils.hasText(jobUser.getUsername())) {
             return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
@@ -93,7 +99,12 @@ public class UserController {
 
     @PostMapping(value = "/update")
     @ApiOperation("更新用户信息")
-    public ReturnT<String> update(@RequestBody JobUser jobUser) {
+    public ReturnT<String> update(HttpServletRequest request, @RequestBody JobUser jobUser) {
+        int userId = getCurrentUserId(request);
+        JobUser user=jobUserMapper.getUserById(userId);
+        if("ADMIN".equals(user.getRole())){
+            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_permission_limit"));
+        }
         if (StringUtils.hasText(jobUser.getPassword())) {
             String pwd = jobUser.getPassword().trim();
             if (StrUtil.isBlank(pwd)) {

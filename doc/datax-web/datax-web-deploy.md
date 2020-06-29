@@ -1,7 +1,7 @@
 ### 环境准备
 #### 1）基础软件安装
 - MySQL (5.5+) 必选，对应客户端可以选装, Linux服务上若安装mysql的客户端可以通过部署脚本快速初始化数据库
-- JDK (1.8.0_141) 必选
+- JDK (1.8.0_xxx) 必选
 - Maven (3.6.1+) 必选
 - DataX 必选
 - Python (2.x) (支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax-web/datax-python3下)

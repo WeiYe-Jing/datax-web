@@ -66,7 +66,6 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 ##### 请点击：[Quick Start](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
 ##### Linux：[一键部署](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/datax-web-deploy.md)
-##### Docker镜像：[地址](https://github.com/WeiYe-Jing/datax-web/blob/dev/docker/README.md)
 
 
 # Introduction：

@@ -70,7 +70,7 @@ vi ./modules/datax-admin/conf/bootstrap.properties
 
 
 在项目目录：
-/module/datax-admin/bin/ev.properties 配置邮件服务(可跳过)
+/modules/datax-admin/bin/env.properties 配置邮件服务(可跳过)
 
 ```
 MAIL_USERNAME=""
@@ -78,7 +78,7 @@ MAIL_PASSWORD=""
 ```
 
 
-在项目目录下/module/datax-execute/bin/ev.properties 指定PYTHON_PATH的路径
+在项目目录下/modules/datax-execute/bin/env.properties 指定PYTHON_PATH的路径
 
 ```
 vi ./modules/{module_name}/bin/env.properties

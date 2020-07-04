@@ -177,6 +177,22 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 [前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
 
+# 项目成员
+
+- water
+
+```
+非常荣幸成为datax-web的Committer，从早期datax手工编写任务+配置，到datax-web界面化勾选创建任务+配置信息+调度管理，datax-web将数据同步工作的效率提升不少，相信后面后成为etl中不可或缺的生产力……
+```
+
+- Alecor
+
+```
+非常荣幸成为datax-web的Committer，datax-web旨在帮助用户从datax配置中解放出来，提供datax的Web化的管理能力。希望datax-web能为更多有需要的人服务，带来更好的简单、易用的体验！
+```
+
+感谢天烬、光戈、祁然、巴真、静行对DataX做出的贡献。
+
 # Contributing
 
 Contributions are welcome! Open a pull request to fix a bug, or open an Issue to discuss a new feature or change.

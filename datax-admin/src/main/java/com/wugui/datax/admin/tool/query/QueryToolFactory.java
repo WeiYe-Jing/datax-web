@@ -16,7 +16,7 @@ import java.sql.SQLException;
  */
 public class QueryToolFactory {
 
-    public static final BaseQueryTool getByDbType(JobDatasource jobDatasource) {
+    public static BaseQueryTool getByDbType(JobDatasource jobDatasource) {
         //获取dbType
         String datasource = jobDatasource.getDatasource();
         if (JdbcConstants.MYSQL.equals(datasource)) {

@@ -121,6 +121,9 @@ public class JobInfoController extends BaseController{
     @PostMapping("/batchAdd")
     @ApiOperation("批量创建任务")
     public ReturnT<String> batchAdd(@RequestBody DataXBatchJsonBuildDto dto) throws IOException {
+        if (dto.getTemplateId() ==0) {
+            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_temp")));
+        }
         return jobService.batchAdd(dto);
     }
 }

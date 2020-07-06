@@ -31,14 +31,6 @@
 		<result column="max_id" property="maxId" />
 
 		<result column="job_desc" property="jobDesc" />
-
-		<result column="task_start_time_suffix" property="taskStartTimeSuffix" />
-		<result column="task_end_time_suffix" property="taskEndTimeSuffix" />
-		<result column="task_total_time_suffix" property="taskTotalTimeSuffix" />
-		<result column="task_average_flow_suffix" property="taskAverageFlowSuffix" />
-		<result column="task_record_writing_speed_suffix" property="taskRecordWritingSpeedSuffix" />
-		<result column="task_record_reader_num_suffix" property="taskRecordReaderNumSuffix" />
-		<result column="task_record_writing_num_suffix" property="taskRecordWritingNumSuffix" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -59,14 +51,7 @@
 		t.alarm_status,
 		t.process_id,
 		t.max_id,
-		t.job_desc,
-		t.task_start_time_suffix,
-		t.task_end_time_suffix,
-		t.task_total_time_suffix,
-		t.task_average_flow_suffix,
-		t.task_record_writing_speed_suffix,
-		t.task_record_reader_num_suffix,
-		t.task_record_writing_num_suffix
+		t.job_desc
 	</sql>
 	
 	<select id="pageList" resultMap="JobLog">
@@ -149,16 +134,14 @@
 			`job_desc`,
 			`trigger_time`,
 			`trigger_code`,
-			`handle_code`,
-			`max_id`
+			`handle_code`
 		) VALUES (
 			#{jobGroup},
 			#{jobId},
 			#{jobDesc},
 			#{triggerTime},
 			#{triggerCode},
-			#{handleCode},
-			#{maxId}
+			#{handleCode}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID() 
@@ -175,7 +158,8 @@
 			`executor_handler`=#{executorHandler},
 			`executor_param`= #{executorParam},
 			`executor_sharding_param`= #{executorShardingParam},
-			`executor_fail_retry_count`= #{executorFailRetryCount}
+			`executor_fail_retry_count`= #{executorFailRetryCount},
+			`max_id` = #{maxId}
 		WHERE `id`= #{id}
 	</update>
 
@@ -184,14 +168,7 @@
 		SET 
 			`handle_time`= #{handleTime}, 
 			`handle_code`= #{handleCode},
-			`handle_msg`= #{handleMsg} ,
-			`task_start_time_suffix`= #{taskStartTimeSuffix},
-			`task_end_time_suffix`= #{taskEndTimeSuffix},
-			`task_total_time_suffix`= #{taskTotalTimeSuffix},
-			`task_average_flow_suffix`= #{taskAverageFlowSuffix},
-			`task_record_writing_speed_suffix`= #{taskRecordWritingSpeedSuffix},
-			`task_record_reader_num_suffix`= #{taskRecordReaderNumSuffix},
-			`task_record_writing_num_suffix`= #{taskRecordWritingNumSuffix}
+			`handle_msg`= #{handleMsg}
 		WHERE `id`= #{id}
 	</update>
 

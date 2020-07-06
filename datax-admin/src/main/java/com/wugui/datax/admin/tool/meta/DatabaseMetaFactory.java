@@ -26,6 +26,8 @@ public class DatabaseMetaFactory {
             return HiveDatabaseMeta.getInstance();
         }else if(JdbcConstants.CLICKHOUSE.equals(dbType)) {
             return ClickHouseDataBaseMeta.getInstance();
+        } else if(JdbcConstants.HBASE20XSQL.equals(dbType)) {
+            return Hbase20xsqlMeta.getInstance();
         } else {
             throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
         }

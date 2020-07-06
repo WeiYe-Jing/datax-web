@@ -3,7 +3,7 @@ package com.wugui.datax.admin.config;
 import com.google.common.collect.Multimap;
 import io.swagger.models.*;
 import io.swagger.models.parameters.Parameter;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.MessageSource;

@@ -10,7 +10,6 @@ import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.DataXJsonBuildDto;
-import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLogReport;
@@ -19,7 +18,6 @@ import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobService;
-import com.wugui.datax.admin.util.CronUtil;
 import com.wugui.datax.admin.util.DateFormatUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -124,7 +122,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
-                if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
+                if (StringUtils.isNotBlank(childJobIdItem) && isNumeric(childJobIdItem) && Integer.parseInt(childJobIdItem) > 0) {
                     JobInfo childJobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
                     if (childJobInfo == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
@@ -159,14 +157,9 @@ public class JobServiceImpl implements JobService {
         return new ReturnT<>(String.valueOf(jobInfo.getId()));
     }
 
-    @Override
-    public ReturnT<String> createCron(TaskScheduleDto dto) {
-        return new ReturnT<>(CronUtil.createCronExpression(dto));
-    }
-
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -455,7 +448,7 @@ public class JobServiceImpl implements JobService {
 
             String json = dataxJsonService.buildJobJson(jsonBuild);
 
-            JobTemplate jobTemplate = jobTemplateMapper.loadById(19);
+            JobTemplate jobTemplate = jobTemplateMapper.loadById(dto.getTemplateId());
             JobInfo jobInfo = new JobInfo();
             BeanUtils.copyProperties(jobTemplate, jobInfo);
             jobInfo.setJobJson(json);

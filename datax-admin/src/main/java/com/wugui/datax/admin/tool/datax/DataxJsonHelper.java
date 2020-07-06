@@ -5,22 +5,24 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
-import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
-import com.wugui.datatx.core.util.Constants;
+import com.wugui.datax.admin.tool.pojo.*;
 import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.util.TextUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.wugui.datax.admin.util.JdbcConstants.*;
 
 /**
  * 构建 com.wugui.datax json的工具类
@@ -84,6 +86,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private MongoDBWriterDto mongoDBWriterDto;
 
+    List<DataXTransformer> transformers = new ArrayList<>();
 
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
@@ -99,29 +102,29 @@ public class DataxJsonHelper implements DataxJsonInterface {
         // reader 插件
         String datasource = readerDatasource.getDatasource();
 
-        this.readerColumns = this.rewrite(this.readerColumns, datasource);
-        if (JdbcConstants.MYSQL.equals(datasource)) {
+        this.readerColumns = convertKeywordsColumns(datasource, this.readerColumns);
+        if (MYSQL.equals(datasource)) {
             readerPlugin = new MysqlReader();
             buildReader = buildReader();
-        } else if (JdbcConstants.ORACLE.equals(datasource)) {
+        } else if (ORACLE.equals(datasource)) {
             readerPlugin = new OracleReader();
             buildReader = buildReader();
-        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
+        } else if (SQL_SERVER.equals(datasource)) {
             readerPlugin = new SqlServerReader();
             buildReader = buildReader();
-        } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
+        } else if (POSTGRESQL.equals(datasource)) {
             readerPlugin = new PostgresqlReader();
             buildReader = buildReader();
-        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
+        } else if (CLICKHOUSE.equals(datasource)) {
             readerPlugin = new ClickHouseReader();
             buildReader = buildReader();
-        } else if (JdbcConstants.HIVE.equals(datasource)) {
+        } else if (HIVE.equals(datasource)) {
             readerPlugin = new HiveReader();
             buildReader = buildHiveReader();
-        } else if (JdbcConstants.HBASE.equals(datasource)) {
+        } else if (HBASE.equals(datasource)) {
             readerPlugin = new HBaseReader();
             buildReader = buildHBaseReader();
-        } else if (JdbcConstants.MONGODB.equals(datasource)) {
+        } else if (MONGODB.equals(datasource)) {
             readerPlugin = new MongoDBReader();
             buildReader = buildMongoDBReader();
         }
@@ -137,23 +140,23 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
-        this.writerColumns = this.rewrite(this.writerColumns, datasource);
-        if (JdbcConstants.MYSQL.equals(datasource)) {
+        this.writerColumns = convertKeywordsColumns(datasource, this.writerColumns);
+        if (MYSQL.equals(datasource)) {
             writerPlugin = new MysqlWriter();
             buildWriter = this.buildWriter();
-        } else if (JdbcConstants.ORACLE.equals(datasource)) {
+        } else if (ORACLE.equals(datasource)) {
             writerPlugin = new OraclelWriter();
             buildWriter = this.buildWriter();
         } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
             writerPlugin = new SqlServerlWriter();
             buildWriter = this.buildWriter();
-        } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
+        } else if (POSTGRESQL.equals(datasource)) {
             writerPlugin = new PostgresqllWriter();
             buildWriter = this.buildWriter();
-        }  else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
+        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
             writerPlugin = new ClickHouseWriter();
             buildWriter = buildWriter();
-        }else if (JdbcConstants.HIVE.equals(datasource)) {
+        } else if (JdbcConstants.HIVE.equals(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
         } else if (JdbcConstants.HBASE.equals(datasource)) {
@@ -165,24 +168,78 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
-    public List<String> rewrite(List<String> list, String datasource) {
-        List<String> newLists = new ArrayList<>();
-        if (JdbcConstants.POSTGRESQL.equals(datasource)) {
-            list.forEach((v) -> {
-                newLists.add("\"" + v + "\"");
-            });
-        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
-            list.forEach((v) -> {
-                newLists.add("[" + v + "]");
-            });
-        } else if(JdbcConstants.MYSQL.equals(datasource)){
-            list.forEach((v) -> {
-                newLists.add("`" + v + "`");
-            });
-        }else {
-            return list;
+    /**
+     * 初始化脱敏规则
+     *
+     * @param dataXJsonBuildDto
+     */
+    public void initTransformer(DataXJsonBuildDto dataXJsonBuildDto) {
+
+        for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
+            if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
+                continue;
+            }
+            DataXTransformer t = new DataXTransformer();
+            t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
+            DataXTransformer.Parameter p = new DataXTransformer.Parameter();
+            p.setColumnIndex(i);
+            List<String> paras = new ArrayList<>();
+            if ("dx_hiding".equals(t.getName())) {
+                paras.add("");
+            } else if ("dx_floor".equals(t.getName())) {
+                // 根据日期规整
+                paras.add("YMDHms");
+            } else if ("dx_floor".equals(t.getName())) {
+                // 根据数值规整
+                paras.add("mod");
+            } else if ("dx_enum".equals(t.getName())) {
+                paras.add("100");
+            } else if ("dx_prefix_preserve".equals(t.getName())) {
+                paras.add("3");
+            } else if ("dx_md5".equals(t.getName())) {
+                paras.add("");
+            }
+            p.setParas(paras);
+            t.setParameter(p);
+            transformers.add(t);
         }
-        return newLists;
+    }
+
+    private List<String> convertKeywordsColumns(String datasource, List<String> columns) {
+        if (columns == null) {
+            return null;
+        }
+
+        List<String> toColumns = new ArrayList<>();
+        columns.forEach(s -> {
+            toColumns.add(doConvertKeywordsColumn(datasource, s));
+        });
+        return toColumns;
+    }
+
+    private String doConvertKeywordsColumn(String dbType, String column) {
+        if (column == null) {
+            return null;
+        }
+
+        column = column.trim();
+        column = column.replace("[", "");
+        column = column.replace("]", "");
+        column = column.replace("`", "");
+        column = column.replace("\"", "");
+        column = column.replace("'", "");
+
+        switch (dbType) {
+            case MYSQL:
+                return String.format("`%s`", column);
+            case SQL_SERVER:
+                return String.format("[%s]", column);
+            case POSTGRESQL:
+            case ORACLE:
+                return String.format("\"%s\"", column);
+            default:
+                return column;
+        }
     }
 
     @Override
@@ -212,6 +269,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         res.put("reader", this.buildReader);
         res.put("writer", this.buildWriter);
+        if (transformers.size() > 0) {
+            res.put("transformer", transformers);
+        }
         return res;
     }
 
@@ -265,7 +325,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
         dataxHbasePojo.setColumns(columns);
         dataxHbasePojo.setReaderHbaseConfig(readerDatasource.getZkAdress());
-        dataxHbasePojo.setReaderTable(readerTables);
+        String readerTable=!CollectionUtils.isEmpty(readerTables)?readerTables.get(0):Constants.STRING_BLANK;
+        dataxHbasePojo.setReaderTable(readerTable);
         dataxHbasePojo.setReaderMode(hbaseReaderDto.getReaderMode());
         dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
         return readerPlugin.buildHbase(dataxHbasePojo);
@@ -331,7 +392,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
         dataxHbasePojo.setColumns(columns);
         dataxHbasePojo.setWriterHbaseConfig(writerDatasource.getZkAdress());
-        dataxHbasePojo.setWriterTable(writerTables);
+        String writerTable=!CollectionUtils.isEmpty(writerTables)?writerTables.get(0):Constants.STRING_BLANK;
+        dataxHbasePojo.setWriterTable(writerTable);
         dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWriterVersionColumn());
         dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
         dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());

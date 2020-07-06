@@ -40,15 +40,6 @@ public interface JobService {
      */
     ReturnT<String> add(JobInfo jobInfo);
 
-
-    /**
-     * create cron
-     *
-     * @param dto
-     * @return
-     */
-    ReturnT<String> createCron(TaskScheduleDto dto);
-
     /**
      * update job
      *

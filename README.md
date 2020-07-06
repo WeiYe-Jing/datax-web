@@ -191,6 +191,12 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 非常荣幸成为datax-web的Committer，datax-web旨在帮助用户从datax配置中解放出来，提供datax的Web化的管理能力。希望datax-web能为更多有需要的人服务，带来更好的简单、易用的体验！
 ```
 
+- zhouhongfa
+
+- liukunyuan
+
+感谢贡献！
+
 # Contributing
 
 Contributions are welcome! Open a pull request to fix a bug, or open an Issue to discuss a new feature or change.

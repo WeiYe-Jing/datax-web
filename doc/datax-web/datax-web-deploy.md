@@ -7,7 +7,7 @@
 - Python (2.x) (支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax-web/datax-python3下)
  必选，主要用于调度执行底层DataX的启动脚本，默认的方式是以Java子进程方式执行DataX，用户可以选择以Python方式来做自定义的改造
 
-### DataX安装[DataX](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
+### DataX安装请参考：[DataX](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
 
 ### DataX Web安装包准备
 #### 1）下载官方提供的版本tar版本包

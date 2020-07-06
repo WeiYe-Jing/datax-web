@@ -18,3 +18,8 @@
 /build/
 /packages/
 /datax-assembly/target/
+/tortoiseX-datasource/tortoiseX-datasource-hbase/tortoiseX-datasource-hbase.iml
+/tortoiseX-datasource/tortoiseX-datasource-mongodb/tortoiseX-datasource-mongodb.iml
+/tortoiseX-datasource/tortoiseX-datasource-spi/tortoiseX-datasource-spi.iml
+/tortoiseX-datasource/tortoiseX-datasource-mysql/tortoiseX-datasource-mysql.iml
+/tortoiseX-datasource/tortoiseX-datasource-hive/tortoiseX-datasource-hive.iml

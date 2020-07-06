@@ -63,6 +63,13 @@ public interface QueryToolInterface {
     List<String> getTableNames(String schema);
 
     /**
+     * 获取所有可用表名
+     *
+     * @return2
+     */
+    List<String> getTableNames();
+
+    /**
      * 通过查询sql获取columns
      * @param querySql
      * @return

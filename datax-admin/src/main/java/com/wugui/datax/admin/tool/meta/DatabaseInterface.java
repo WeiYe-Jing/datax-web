@@ -41,6 +41,7 @@ public interface DatabaseInterface {
      * @return
      */
     String getSQLQueryTableSchema(String... args);
+
     /**
      * 获取所有的字段的sql
      *

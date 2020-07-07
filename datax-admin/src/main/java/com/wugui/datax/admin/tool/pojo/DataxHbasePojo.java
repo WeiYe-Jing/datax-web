@@ -8,6 +8,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author water
+ */
 @Data
 public class DataxHbasePojo {
 

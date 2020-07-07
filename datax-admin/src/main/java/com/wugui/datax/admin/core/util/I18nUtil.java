@@ -60,7 +60,7 @@ public class I18nUtil {
      * @return
      */
     public static String getMultString(String... keys) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
 
         Properties prop = loadI18nProp();
         if (keys!=null && keys.length>0) {

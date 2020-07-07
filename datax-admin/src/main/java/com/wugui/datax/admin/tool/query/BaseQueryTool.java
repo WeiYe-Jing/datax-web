@@ -3,6 +3,7 @@ package com.wugui.datax.admin.tool.query;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
@@ -11,7 +12,7 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
-import com.wugui.datax.admin.util.AESUtil;
+import com.wugui.datax.admin.util.AesUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
@@ -61,7 +62,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             getDataSource(jobDatasource);
         } else {
             this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
-            if (!this.connection.isValid(500)) {
+            if (!this.connection.isValid(ReturnT.FAIL_CODE)) {
                 LocalCacheUtil.remove(jobDatasource.getDatasourceName());
                 getDataSource(jobDatasource);
             }
@@ -73,12 +74,12 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     private void getDataSource(JobDatasource jobDatasource) throws SQLException {
-        String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
+        String userName = AesUtil.decrypt(jobDatasource.getJdbcUsername());
 
         //这里默认使用 hikari 数据源
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setUsername(userName);
-        dataSource.setPassword(AESUtil.decrypt(jobDatasource.getJdbcPassword()));
+        dataSource.setPassword(AesUtil.decrypt(jobDatasource.getJdbcPassword()));
         dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
         dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
         dataSource.setMaximumPoolSize(1);
@@ -88,7 +89,12 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         this.connection = this.datasource.getConnection();
     }
 
-    //根据connection获取schema
+    /**
+     * 根据connection获取schema
+     *
+     * @param jdbcUsername
+     * @return
+     */
     private String getSchema(String jdbcUsername) {
         String res = null;
         try {
@@ -145,7 +151,13 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return tableInfo;
     }
 
-    //无论怎么查，返回结果都应该只有表名和表注释，遍历map拿value值即可
+
+    /**
+     * 无论怎么查，返回结果都应该只有表名和表注释，遍历map拿value值即可
+     *
+     * @param tableName
+     * @return
+     */
     @Override
     public List<Map<String, Object>> getTableInfo(String tableName) {
         String sqlQueryTableNameComment = sqlBuilder.getSQLQueryTableNameComment();
@@ -216,7 +228,14 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return res;
     }
 
-    //构建DasColumn对象
+
+    /**
+     * 构建DasColumn对象
+     *
+     * @param tableName
+     * @param metaData
+     * @return
+     */
     private List<DasColumn> buildDasColumn(String tableName, ResultSetMetaData metaData) {
         List<DasColumn> res = Lists.newArrayList();
         try {
@@ -274,7 +293,13 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return res;
     }
 
-    //获取指定表的主键，可能是多个，所以用list
+
+    /**
+     * 获取指定表的主键，可能是多个，所以用list
+     *
+     * @param tableName String
+     * @return List<String>
+     */
     private List<String> getPrimaryKeys(String tableName) {
         List<String> res = Lists.newArrayList();
         String sqlQueryPrimaryKey = sqlBuilder.getSQLQueryPrimaryKey();

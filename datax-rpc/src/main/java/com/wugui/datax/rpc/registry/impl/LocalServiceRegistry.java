@@ -1,6 +1,6 @@
 package com.wugui.datax.rpc.registry.impl;
 
-import com.wugui.datax.rpc.registry.ServiceRegistry;
+import com.wugui.datax.rpc.registry.AbstractServiceRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.TreeSet;
  *
  * @author xuxueli 2018-10-17
  */
-public class LocalServiceRegistry extends ServiceRegistry {
+public class LocalServiceRegistry extends AbstractServiceRegistry {
 
     /**
      * registry data
@@ -69,7 +69,7 @@ public class LocalServiceRegistry extends ServiceRegistry {
         if (keys == null || keys.size() == 0) {
             return null;
         }
-        Map<String, TreeSet<String>> registryDataTmp = new HashMap<String, TreeSet<String>>();
+        Map<String, TreeSet<String>> registryDataTmp = new HashMap<>();
         for (String key : keys) {
             TreeSet<String> valueSetTmp = discovery(key);
             if (valueSetTmp != null) {

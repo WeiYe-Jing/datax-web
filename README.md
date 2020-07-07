@@ -1,5 +1,7 @@
-![Java](https://woolson.gitee.io/npmer-badge/Java-555555-1.8-44cc11-check-ffffff-square-gradient-shadow.svg)
-![](https://img.shields.io/badge/springboot-2.1.4.RELEASE-red.svg)
+![GitHub contributors](https://img.shields.io/github/contributors/WeiYe-Jing/datax-web)
+![GitHub issues](https://img.shields.io/github/issues/WeiYe-Jing/datax-web)
+![GitHub](https://img.shields.io/github/license/WeiYe-Jing/datax-web)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/WeiYe-Jing/datax-web)
 ![](https://img.shields.io/badge/qq%E7%BE%A4-795380631-green.svg)
 
 # DataX-Web

@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.core.trigger;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
@@ -16,7 +17,7 @@ import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLog;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.util.JSONUtils;
+import com.wugui.datax.admin.util.JsonUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +29,7 @@ import java.util.Date;
 
 /**
  * xxl-job trigger
- * Created by xuxueli on 17/7/13.
+ * @author  xuxueli on 17/7/13.
  */
 public class JobTrigger {
     private static Logger logger = LoggerFactory.getLogger(JobTrigger.class);
@@ -52,7 +53,7 @@ public class JobTrigger {
         }
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             //解密账密
-            String json = JSONUtils.changeJson(jobInfo.getJobJson(), JSONUtils.decrypt);
+            String json = JsonUtils.changeJson(jobInfo.getJobJson(), JsonUtils.decrypt);
             jobInfo.setJobJson(json);
         }
         if (StringUtils.isNotBlank(executorParam)) {
@@ -107,9 +108,10 @@ public class JobTrigger {
 
         TriggerParam triggerParam = new TriggerParam();
 
-        // param
-        ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);  // block strategy
-        ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
+        // block strategy
+        ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);
+        // route strategy
+        ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);
         String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
         // 1、save log-id
@@ -118,28 +120,21 @@ public class JobTrigger {
         calendar.set(Calendar.MILLISECOND, 0);
         Date triggerTime = calendar.getTime();
         JobLog jobLog = new JobLog();
-        jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(triggerTime);
-        jobLog.setJobDesc(jobInfo.getJobDesc());
+        BeanUtil.copyProperties(jobInfo,jobLog);
 
         JobAdminConfig.getAdminConfig().getJobLogMapper().save(jobLog);
         logger.debug(">>>>>>>>>>> datax-web trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
         triggerParam.setJobId(jobInfo.getId());
-        triggerParam.setExecutorHandler(jobInfo.getExecutorHandler());
-        triggerParam.setExecutorParams(jobInfo.getExecutorParam());
-        triggerParam.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        triggerParam.setExecutorTimeout(jobInfo.getExecutorTimeout());
         triggerParam.setLogId(jobLog.getId());
         triggerParam.setLogDateTime(jobLog.getTriggerTime().getTime());
-        triggerParam.setGlueType(jobInfo.getGlueType());
-        triggerParam.setGlueSource(jobInfo.getGlueSource());
         triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
         triggerParam.setBroadcastIndex(index);
         triggerParam.setBroadcastTotal(total);
-        triggerParam.setJobJson(jobInfo.getJobJson());
+        BeanUtil.copyProperties(jobInfo,triggerParam);
 
         //increment parameter
         Integer incrementType = jobInfo.getIncrementType();
@@ -217,7 +212,6 @@ public class JobTrigger {
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
         JobAdminConfig.getAdminConfig().getJobLogMapper().updateTriggerInfo(jobLog);
-
         logger.debug(">>>>>>>>>>> datax-web trigger end, jobId:{}", jobLog.getId());
     }
 

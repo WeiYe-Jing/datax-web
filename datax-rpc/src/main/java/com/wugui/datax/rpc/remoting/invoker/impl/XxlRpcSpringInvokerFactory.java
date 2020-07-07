@@ -1,6 +1,6 @@
 package com.wugui.datax.rpc.remoting.invoker.impl;
 
-import com.wugui.datax.rpc.registry.ServiceRegistry;
+import com.wugui.datax.rpc.registry.AbstractServiceRegistry;
 import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
 import com.wugui.datax.rpc.remoting.invoker.annotation.XxlRpcReference;
 import com.wugui.datax.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,11 +30,11 @@ public class XxlRpcSpringInvokerFactory extends InstantiationAwareBeanPostProces
 
     // ---------------------- config ----------------------
 
-    private Class<? extends ServiceRegistry> serviceRegistryClass;          // class.forname
+    private Class<? extends AbstractServiceRegistry> serviceRegistryClass;
     private Map<String, String> serviceRegistryParam;
 
 
-    public void setServiceRegistryClass(Class<? extends ServiceRegistry> serviceRegistryClass) {
+    public void setServiceRegistryClass(Class<? extends AbstractServiceRegistry> serviceRegistryClass) {
         this.serviceRegistryClass = serviceRegistryClass;
     }
 

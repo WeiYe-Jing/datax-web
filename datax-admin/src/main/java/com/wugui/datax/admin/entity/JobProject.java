@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by jingwk on 2020/05/24
+ * @author  jingwk on 2020/05/24
  */
 @Data
 public class JobProject {

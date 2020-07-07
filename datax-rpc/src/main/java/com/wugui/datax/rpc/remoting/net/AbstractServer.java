@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author xuxueli 2015-11-24 20:59:49
  */
-public abstract class Server {
-	protected static final Logger logger = LoggerFactory.getLogger(Server.class);
+public abstract class AbstractServer {
+	protected static final Logger logger = LoggerFactory.getLogger(AbstractServer.class);
 
 
 	private BaseCallback startedCallback;

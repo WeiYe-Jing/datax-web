@@ -13,8 +13,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * @author water
+ */
 @Slf4j
-public class AESUtil {
+public class AesUtil {
 
     private static String DEFAULT_CIPHER_ALGORITHM = "SHA1PRNG";
     private static String KEY_ALGORITHM = "AES";

@@ -32,7 +32,7 @@ public class ProcessUtil {
             try {
                 field = process.getClass().getDeclaredField("handle");
                 field.setAccessible(true);
-                pid = Kernel32.INSTANCE.GetProcessId((Long) field.get(process));
+                pid = Kernel32.INSTANCE.getProcessId((Long) field.get(process));
             } catch (Exception ex) {
                 logger.error("get process id for windows error {0}", ex);
             }

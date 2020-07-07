@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
  * @Version 1.0
  * @since 2019/7/31 14:54
  */
-public class JSONUtils {
+public class JsonUtils {
 
     /**
      * decrypt 解密
@@ -32,14 +32,14 @@ public class JSONUtils {
         JSONObject keyObj = JSONObject.parseObject(JSONObject.parseObject(content).getString(key));
         JSONObject params = JSONObject.parseObject(keyObj.getString("parameter"));
         String dUsername = null, dPassword = null;
-        if (decrypt.equals(changeType)) { //解密
-            dUsername = AESUtil.decrypt(params.getString("username"));
-            dPassword = AESUtil.decrypt(params.getString("password"));
+        if (decrypt.equals(changeType)) {
+            dUsername = AesUtil.decrypt(params.getString("username"));
+            dPassword = AesUtil.decrypt(params.getString("password"));
 
-        } else if (encrypt.equals(changeType)) {//加密
+        } else if (encrypt.equals(changeType)) {
 
-            dUsername = AESUtil.encrypt(params.getString("username"));
-            dPassword = AESUtil.encrypt(params.getString("password"));
+            dUsername = AesUtil.encrypt(params.getString("username"));
+            dPassword = AesUtil.encrypt(params.getString("password"));
         }
         String username = dUsername == null ? params.getString("username") : dUsername;
         String password = dPassword == null ? params.getString("password") : dPassword;
@@ -61,10 +61,10 @@ public class JSONUtils {
         for (int i = 0; i < contents.size(); i++) {
             String contentStr = contents.getString(i);
             Object obj = contents.get(i);
-            if (decrypt.equals(changeType)) { //解密
+            if (decrypt.equals(changeType)) {
                 ((JSONObject) obj).put("reader", change(contentStr, "reader", decrypt));
                 ((JSONObject) obj).put("writer", change(contentStr, "writer", decrypt));
-            } else if (encrypt.equals(changeType)) {//加密
+            } else if (encrypt.equals(changeType)) {
                 ((JSONObject) obj).put("reader", change(contentStr, "reader", encrypt));
                 ((JSONObject) obj).put("writer", change(contentStr, "writer", encrypt));
             }

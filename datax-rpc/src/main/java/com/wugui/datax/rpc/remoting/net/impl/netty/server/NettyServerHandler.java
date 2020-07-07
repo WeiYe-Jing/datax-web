@@ -39,17 +39,17 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<XxlRpcReques
             logger.debug(">>>>>>>>>>> xxl-rpc provider netty server read beat-ping.");
             return;
         }
-
         // do invoke
         try {
-            serverHandlerPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    // invoke + response
-                    XxlRpcResponse xxlRpcResponse = xxlRpcProviderFactory.invokeService(xxlRpcRequest);
-
-                    ctx.writeAndFlush(xxlRpcResponse);
+            serverHandlerPool.execute(() -> {
+                // invoke + response
+                XxlRpcResponse xxlRpcResponse = null;
+                try {
+                    xxlRpcResponse = xxlRpcProviderFactory.invokeService(xxlRpcRequest);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
                 }
+                ctx.writeAndFlush(xxlRpcResponse);
             });
         } catch (Exception e) {
             // catch error
@@ -59,7 +59,6 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<XxlRpcReques
 
             ctx.writeAndFlush(xxlRpcResponse);
         }
-
     }
 
     @Override

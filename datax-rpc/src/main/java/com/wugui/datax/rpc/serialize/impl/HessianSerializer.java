@@ -2,7 +2,7 @@ package com.wugui.datax.rpc.serialize.impl;
 
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import com.wugui.datax.rpc.util.XxlRpcException;
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +13,7 @@ import java.io.IOException;
  * hessian serialize
  * @author xuxueli 2015-9-26 02:53:29
  */
-public class HessianSerializer extends Serializer {
+public class HessianSerializer extends AbstractSerializer {
 
 	@Override
 	public <T> byte[] serialize(T obj){

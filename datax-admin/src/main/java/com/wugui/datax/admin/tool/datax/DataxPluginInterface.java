@@ -33,6 +33,7 @@ public interface DataxPluginInterface {
 
     /**
      * hive json构建
+     *
      * @param dataxHivePojo
      * @return
      */
@@ -40,6 +41,7 @@ public interface DataxPluginInterface {
 
     /**
      * hbase json构建
+     *
      * @param dataxHbasePojo
      * @return
      */
@@ -47,10 +49,11 @@ public interface DataxPluginInterface {
 
     /**
      * mongodb json构建
+     *
      * @param dataxMongoDBPojo
      * @return
      */
-    Map<String,Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
+    Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
 
     /**
      * 获取示例

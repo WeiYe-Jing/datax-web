@@ -1,6 +1,6 @@
 package com.wugui.datax.rpc.remoting.net.impl.netty.codec;
 
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -15,9 +15,9 @@ import java.util.List;
 public class NettyDecoder extends ByteToMessageDecoder {
 
     private Class<?> genericClass;
-    private Serializer serializer;
+    private AbstractSerializer serializer;
 
-    public NettyDecoder(Class<?> genericClass, final Serializer serializer) {
+    public NettyDecoder(Class<?> genericClass, final AbstractSerializer serializer) {
         this.genericClass = genericClass;
         this.serializer = serializer;
     }

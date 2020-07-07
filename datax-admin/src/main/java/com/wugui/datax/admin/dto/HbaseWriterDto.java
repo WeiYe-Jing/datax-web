@@ -4,14 +4,17 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author water
+ */
 @Data
-public class HbaseWriterDto implements Serializable {
+public class HbaseWriterDTO implements Serializable {
 
-  private String writeNullMode;
+    private String writeNullMode;
 
-  private String writerMode;
+    private String writerMode;
 
-  private String writerRowkeyColumn;
+    private String writerRowkeyColumn;
 
-  private VersionColumn writerVersionColumn;
+    private VersionColumn writerVersionColumn;
 }

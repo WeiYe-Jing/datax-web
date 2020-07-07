@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @since 2019/12/01 16:12
  */
 @Data
-public class TriggerJobDto implements Serializable {
+public class TriggerJobDTO implements Serializable {
 
     private String executorParam;
 

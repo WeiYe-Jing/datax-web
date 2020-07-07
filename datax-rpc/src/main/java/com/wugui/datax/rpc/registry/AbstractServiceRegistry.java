@@ -15,10 +15,11 @@ import java.util.TreeSet;
  *
  * @author xuxueli 2018-10-17
  */
-public abstract class ServiceRegistry {
+public abstract class AbstractServiceRegistry {
 
     /**
      * start
+     * @param param
      */
     public abstract void start(Map<String, String> param);
 

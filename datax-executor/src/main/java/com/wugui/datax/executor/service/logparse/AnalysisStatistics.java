@@ -21,7 +21,6 @@ import static com.wugui.datax.executor.service.jobhandler.DataXConstant.*;
 public class AnalysisStatistics {
 
 
-
     /**
      * Log of analysis statistics
      *
@@ -63,9 +62,14 @@ public class AnalysisStatistics {
     }
 
     private static String subResult(String line) {
-        if (StringUtils.isBlank(line)) return Constants.STRING_BLANK;
+        if (StringUtils.isBlank(line)) {
+            return Constants.STRING_BLANK;
+        }
+
         int pos = line.indexOf(Constants.SPLIT_SCOLON);
-        if (pos > 0) return line.substring(pos + 1).trim();
+        if (pos > 0) {
+            return line.substring(pos + 1).trim();
+        }
         return line.trim();
     }
 }

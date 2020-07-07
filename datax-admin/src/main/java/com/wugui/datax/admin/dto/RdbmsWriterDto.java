@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @since 2020/01/11 17:15
  */
 @Data
-public class RdbmsWriterDto implements Serializable {
+public class RdbmsWriterDTO implements Serializable {
 
     private String preSql;
 

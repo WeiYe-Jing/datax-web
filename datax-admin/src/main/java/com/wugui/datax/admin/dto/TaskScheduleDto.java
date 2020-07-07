@@ -1,7 +1,23 @@
 package com.wugui.datax.admin.dto;
 
-public class TaskScheduleDto {
+import java.util.Arrays;
 
+/**
+ * @author water
+ */
+public class TaskScheduleDTO {
+
+    @Override
+    public String toString() {
+        return "TaskScheduleDTO{" +
+                "jobType=" + jobType +
+                ", dayOfWeeks=" + Arrays.toString(dayOfWeeks) +
+                ", dayOfMonths=" + Arrays.toString(dayOfMonths) +
+                ", second=" + second +
+                ", minute=" + minute +
+                ", hour=" + hour +
+                '}';
+    }
 
     /**
      * 所选作业类型:

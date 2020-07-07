@@ -18,3 +18,4 @@
 /build/
 /packages/
 /datax-assembly/target/
+*.iml

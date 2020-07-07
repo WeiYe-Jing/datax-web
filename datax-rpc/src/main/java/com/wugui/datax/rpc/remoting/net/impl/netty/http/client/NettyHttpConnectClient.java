@@ -1,11 +1,11 @@
-package com.wugui.datax.rpc.remoting.net.impl.netty_http.client;
+package com.wugui.datax.rpc.remoting.net.impl.netty.http.client;
 
 import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
-import com.wugui.datax.rpc.remoting.net.common.ConnectClient;
+import com.wugui.datax.rpc.remoting.net.common.AbstractConnectClient;
 import com.wugui.datax.rpc.remoting.net.common.NettyConstant;
 import com.wugui.datax.rpc.remoting.net.params.Beat;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcRequest;
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -27,22 +27,22 @@ import java.util.concurrent.TimeUnit;
  *
  * @author xuxueli 2015-11-24 22:25:15
  */
-public class NettyHttpConnectClient extends ConnectClient {
+public class NettyHttpConnectClient extends AbstractConnectClient {
 
     private EventLoopGroup group;
     private Channel channel;
 
-    private Serializer serializer;
+    private AbstractSerializer serializer;
     private String address;
     private String host;
-    private DefaultFullHttpRequest beatRequest;
 
     @Override
-    public void init(String address, final Serializer serializer, final XxlRpcInvokerFactory xxlRpcInvokerFactory) throws Exception {
+    public void init(String address, final AbstractSerializer serializer, final XxlRpcInvokerFactory xxlRpcInvokerFactory) throws Exception {
         final NettyHttpConnectClient thisClient = this;
-
-        if (!address.toLowerCase().startsWith("http")) {
-            address = "http://" + address;    // IP:PORT, need parse to url
+        String http = "http";
+        if (!address.toLowerCase().startsWith(http)) {
+            // IP:PORT, need parse to url
+            address = "http://" + address;
         }
 
         this.address = address;
@@ -57,7 +57,7 @@ public class NettyHttpConnectClient extends ConnectClient {
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    public void initChannel(SocketChannel channel) throws Exception {
+                    public void initChannel(SocketChannel channel) {
                         channel.pipeline()
                                 .addLast(new IdleStateHandler(0, 0, Beat.BEAT_INTERVAL, TimeUnit.SECONDS))   // beat N, close if fail
                                 .addLast(new HttpClientCodec())

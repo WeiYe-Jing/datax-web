@@ -1,6 +1,6 @@
 package com.wugui.datax.rpc.test;
 
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import com.wugui.datax.rpc.serialize.impl.HessianSerializer;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 public class SerializerTest {
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        Serializer serializer = HessianSerializer.class.newInstance();
+        AbstractSerializer serializer = HessianSerializer.class.newInstance();
         System.out.println(serializer);
         try {
             Map<String, String> map = new HashMap<String, String>();

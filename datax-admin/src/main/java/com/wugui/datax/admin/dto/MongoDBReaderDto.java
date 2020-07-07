@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @since 2020/03/14 07:15
  */
 @Data
-public class MongoDBReaderDto implements Serializable {
+public class MongoDBReaderDTO implements Serializable {
 
 
 }

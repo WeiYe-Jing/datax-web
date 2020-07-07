@@ -4,8 +4,11 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author water
+ */
 @Data
-public class HbaseReaderDto implements Serializable {
+public class HbaseReaderDTO implements Serializable {
 
   private String readerMaxVersion;
 

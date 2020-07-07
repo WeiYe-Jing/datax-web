@@ -8,16 +8,18 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * @author xuxueli on 17/3/10.
  */
-public abstract class ExecutorRouter {
-    protected static Logger logger = LoggerFactory.getLogger(ExecutorRouter.class);
+public abstract class AbstractExecutorRouter {
+
+    protected static Logger logger = LoggerFactory.getLogger(AbstractExecutorRouter.class);
 
     /**
-     * route address
+     * 执行器路由
      *
+     * @param triggerParam
      * @param addressList
-     * @return  ReturnT.content=address
+     * @return
      */
     public abstract ReturnT<String> route(TriggerParam triggerParam, List<String> addressList);
 

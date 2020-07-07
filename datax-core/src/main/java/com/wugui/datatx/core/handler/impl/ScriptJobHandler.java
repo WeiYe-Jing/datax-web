@@ -3,7 +3,7 @@ package com.wugui.datatx.core.handler.impl;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
-import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.util.ScriptUtil;
@@ -12,9 +12,9 @@ import com.wugui.datatx.core.util.ShardingUtil;
 import java.io.File;
 
 /**
- * Created by xuxueli on 17/4/27.
+ * @author  xuxueli on 17/4/27.
  */
-public class ScriptJobHandler extends IJobHandler {
+public class ScriptJobHandler extends AbstractJobHandler {
 
     private int jobId;
     private long glueUpdatetime;
@@ -50,7 +50,7 @@ public class ScriptJobHandler extends IJobHandler {
     @Override
     public ReturnT<String> execute(TriggerParam tgParam) throws Exception {
         if (!glueType.isScript()) {
-            return new ReturnT<>(IJobHandler.FAIL.getCode(), "glueType[" + glueType + "] invalid.");
+            return new ReturnT<>(AbstractJobHandler.FAIL.getCode(), "glueType[" + glueType + "] invalid.");
         }
 
         // cmd
@@ -69,7 +69,7 @@ public class ScriptJobHandler extends IJobHandler {
         }
 
         // log file
-        String logFileName = JobFileAppender.contextHolder.get();
+        String logFileName = JobFileAppender.CONTEXT_HOLDER.get();
 
         // script params：0=param、1=分片序号、2=分片总数
         ShardingUtil.ShardingVO shardingVO = ShardingUtil.getShardingVo();
@@ -83,9 +83,9 @@ public class ScriptJobHandler extends IJobHandler {
         int exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName,tgParam.getLogId(),tgParam.getLogDateTime(), scriptParams);
 
         if (exitValue == 0) {
-            return IJobHandler.SUCCESS;
+            return AbstractJobHandler.SUCCESS;
         } else {
-            return new ReturnT<>(IJobHandler.FAIL.getCode(), "script exit value(" + exitValue + ") is failed");
+            return new ReturnT<>(AbstractJobHandler.FAIL.getCode(), "script exit value(" + exitValue + ") is failed");
         }
     }
 

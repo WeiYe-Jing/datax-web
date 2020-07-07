@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.tool.query;
 
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
@@ -12,14 +13,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 public class HBaseQueryTool {
 
     private Configuration conf = HBaseConfiguration.create();
-    private ExecutorService pool = Executors.newScheduledThreadPool(2);
+
+    private ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("thread-call-runner-%d").build();
+    ExecutorService pool = new ThreadPoolExecutor(2, 50, 1L, SECONDS,
+            new LinkedBlockingQueue<>(10), threadFactory, new ThreadPoolExecutor.AbortPolicy());
     private Connection connection = null;
     private Admin admin;
     private Table table;
@@ -45,7 +50,10 @@ public class HBaseQueryTool {
         admin = connection.getAdmin();
     }
 
-    // 关闭连接
+
+    /**
+     * 关闭连接
+     */
     public void sourceClose() {
         try {
             if (admin != null) {
@@ -84,8 +92,8 @@ public class HBaseQueryTool {
         List<String> list = new ArrayList<>();
         Admin admin = connection.getAdmin();
         TableName[] names = admin.listTableNames();
-        for (int i = 0; i < names.length; i++) {
-            list.add(names[i].getNameAsString());
+        for (TableName name : names) {
+            list.add(name.getNameAsString());
         }
         return list;
     }
@@ -101,8 +109,6 @@ public class HBaseQueryTool {
         List<String> list = new ArrayList<>();
         table = connection.getTable(TableName.valueOf(tableName));
         Scan scan = new Scan();
-        //Filter filter = new PageFilter(1);
-        //scan.setFilter(filter);
         scan.getStartRow();
         ResultScanner scanner = table.getScanner(scan);
         Iterator<Result> it = scanner.iterator();

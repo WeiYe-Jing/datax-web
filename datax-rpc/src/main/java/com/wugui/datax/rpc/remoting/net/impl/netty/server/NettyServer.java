@@ -7,7 +7,7 @@ import com.wugui.datax.rpc.remoting.net.params.XxlRpcRequest;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcResponse;
 import com.wugui.datax.rpc.remoting.provider.XxlRpcProviderFactory;
 import com.wugui.datax.rpc.util.ThreadPoolUtil;
-import com.wugui.datax.rpc.remoting.net.Server;
+import com.wugui.datax.rpc.remoting.net.AbstractServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author xuxueli 2015-10-29 18:17:14
  */
-public class NettyServer extends Server {
+public class NettyServer extends AbstractServer {
 
     private Thread thread;
 

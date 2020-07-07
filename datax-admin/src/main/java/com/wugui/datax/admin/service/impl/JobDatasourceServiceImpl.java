@@ -8,7 +8,7 @@ import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.HBaseQueryTool;
 import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
-import com.wugui.datax.admin.util.AESUtil;
+import com.wugui.datax.admin.util.AesUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by jingwk on 2020/01/30
+ * @author  jingwk on 2020/01/30
  */
 @Service
 @Transactional(readOnly = true)
@@ -32,14 +32,14 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobDatasourceMapper, J
         if (JdbcConstants.HBASE.equals(jobDatasource.getDatasource())) {
             return new HBaseQueryTool(jobDatasource).dataSourceTest();
         }
-        String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
+        String userName = AesUtil.decrypt(jobDatasource.getJdbcUsername());
         //  判断账密是否为密文
         if (userName == null) {
-            jobDatasource.setJdbcUsername(AESUtil.encrypt(jobDatasource.getJdbcUsername()));
+            jobDatasource.setJdbcUsername(AesUtil.encrypt(jobDatasource.getJdbcUsername()));
         }
-        String pwd = AESUtil.decrypt(jobDatasource.getJdbcPassword());
+        String pwd = AesUtil.decrypt(jobDatasource.getJdbcPassword());
         if (pwd == null) {
-            jobDatasource.setJdbcPassword(AESUtil.encrypt(jobDatasource.getJdbcPassword()));
+            jobDatasource.setJdbcPassword(AesUtil.encrypt(jobDatasource.getJdbcPassword()));
         }
         if (JdbcConstants.MONGODB.equals(jobDatasource.getDatasource())) {
             return new MongoDBQueryTool(jobDatasource).dataSourceTest(jobDatasource.getDatabaseName());

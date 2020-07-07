@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2020/01/11 17:15
  */
 @Data
-public class RdbmsReaderDto implements Serializable {
+public class RdbmsReaderDTO implements Serializable {
 
     private String readerSplitPk;
 

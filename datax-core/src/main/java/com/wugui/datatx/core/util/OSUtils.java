@@ -13,17 +13,19 @@ import java.text.DecimalFormat;
 
 /**
  * os utils
+ *
+ * @author water
  */
-public class OSUtils {
+public class OsUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(OSUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(OsUtils.class);
 
     private static final SystemInfo SI = new SystemInfo();
     public static final String TWO_DECIMAL = "0.00";
 
     private static HardwareAbstractionLayer hal = SI.getHardware();
 
-    private OSUtils() {
+    private OsUtils() {
     }
 
 
@@ -102,7 +104,7 @@ public class OSUtils {
         DecimalFormat df = new DecimalFormat(TWO_DECIMAL);
         df.setRoundingMode(RoundingMode.HALF_UP);
 
-        return Double.parseDouble(df.format(cpuUsage*100));
+        return Double.parseDouble(df.format(cpuUsage * 100));
     }
 
 
@@ -113,9 +115,9 @@ public class OSUtils {
      */
     public static Boolean checkResource(double systemCpuLoad, double systemReservedMemory) {
         // judging usage
-        double loadAverage = OSUtils.loadAverage();
+        double loadAverage = OsUtils.loadAverage();
         //
-        double availablePhysicalMemorySize = OSUtils.availablePhysicalMemorySize();
+        double availablePhysicalMemorySize = OsUtils.availablePhysicalMemorySize();
 
         if (loadAverage > systemCpuLoad || availablePhysicalMemorySize < systemReservedMemory) {
             logger.warn("load or availablePhysicalMemorySize(G) is too high, it's availablePhysicalMemorySize(G):{},loadAvg:{}", availablePhysicalMemorySize, loadAverage);

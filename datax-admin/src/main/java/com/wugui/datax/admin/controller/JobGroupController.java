@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * Created by jingwk on 2019/11/17
+ * @author  jingwk on 2019/11/17
  */
 @RestController
 @RequestMapping("/api/jobGroup")

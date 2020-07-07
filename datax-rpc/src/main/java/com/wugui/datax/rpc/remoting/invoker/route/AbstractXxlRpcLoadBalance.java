@@ -9,8 +9,14 @@ import java.util.TreeSet;
  *
  * @author xuxueli 2018-12-04
  */
-public abstract class XxlRpcLoadBalance {
+public abstract class AbstractXxlRpcLoadBalance {
 
+    /**
+     * route
+     * @param serviceKey
+     * @param addressSet
+     * @return
+     */
     public abstract String route(String serviceKey, TreeSet<String> addressSet);
 
 }

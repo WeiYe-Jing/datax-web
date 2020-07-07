@@ -1,6 +1,6 @@
-package com.wugui.datax.rpc.remoting.net.impl.netty_http.server;
+package com.wugui.datax.rpc.remoting.net.impl.netty.http.server;
 
-import com.wugui.datax.rpc.remoting.net.Server;
+import com.wugui.datax.rpc.remoting.net.AbstractServer;
 import com.wugui.datax.rpc.remoting.net.common.NettyConstant;
 import com.wugui.datax.rpc.remoting.net.params.Beat;
 import com.wugui.datax.rpc.remoting.provider.XxlRpcProviderFactory;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author xuxueli 2015-11-24 22:25:15
  */
-public class NettyHttpServer extends Server {
+public class NettyHttpServer extends AbstractServer {
 
     private Thread thread;
 
@@ -74,7 +74,6 @@ public class NettyHttpServer extends Server {
                     logger.error(">>>>>>>>>>> xxl-rpc remoting server error.", e);
                 }
             } finally {
-
                 // stop
                 try {
                     serverHandlerPool.shutdown();    // shutdownNow
@@ -90,7 +89,8 @@ public class NettyHttpServer extends Server {
             }
 
         });
-        thread.setDaemon(true);    // daemon, service jvm, user thread leave >>> daemon leave >>> jvm leave
+        // daemon, service jvm, user thread leave >>> daemon leave >>> jvm leave
+        thread.setDaemon(true);
         thread.start();
     }
 

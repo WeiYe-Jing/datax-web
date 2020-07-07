@@ -25,6 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 public class BaseForm {
+
     /**
      * 查询参数对象
      */
@@ -79,8 +80,8 @@ public class BaseForm {
      */
     public Long getPageSize() {
         String pageSize = StrUtil.toString(this.get("size"));
-
-        if (StrUtil.isNotEmpty(pageSize) && NumberUtil.isNumber(pageSize) && !"null".equalsIgnoreCase(pageSize)) {
+        String emptyStr = "null";
+        if (StrUtil.isNotEmpty(pageSize) && NumberUtil.isNumber(pageSize) && !emptyStr.equalsIgnoreCase(pageSize)) {
             this.size = Long.parseLong(pageSize);
         }
         return this.size;
@@ -154,8 +155,9 @@ public class BaseForm {
         //如果无current，默认返回1000条数据
         page.setCurrent(this.getPageNo());
         page.setSize(this.getPageSize());
-        if (ObjectUtil.isNotNull(this.get("ifCount"))) {
-            page.setSearchCount(BooleanUtil.toBoolean(this.getString("ifCount")));
+        String ifCount = "ifCount";
+        if (ObjectUtil.isNotNull(this.get(ifCount))) {
+            page.setSearchCount(BooleanUtil.toBoolean(this.getString(ifCount)));
         } else {
             //默认给true
             page.setSearchCount(true);
@@ -168,15 +170,16 @@ public class BaseForm {
      */
     public void parsePagingQueryParams() {
         // 排序字段解析
-        String orderBy = StrUtil.toString(this.get("orderby")).trim();
+        String asc = "asc", desc = "desc";
+        String orderBy = StrUtil.toString(this.get("orderBy")).trim();
         String sortName = StrUtil.toString(this.get("sort")).trim();
         String sortOrder = StrUtil.toString(this.get("order")).trim().toLowerCase();
 
         if (StrUtil.isEmpty(orderBy) && !StrUtil.isEmpty(sortName)) {
-            if (!sortOrder.equals("asc") && !sortOrder.equals("desc")) {
-                sortOrder = "asc";
+            if (!asc.equals(sortOrder) && !desc.equals(sortOrder)) {
+                sortOrder = asc;
             }
-            this.set("orderby", sortName + " " + sortOrder);
+            this.set("orderBy", sortName + " " + sortOrder);
         }
     }
 
@@ -231,6 +234,8 @@ public class BaseForm {
                     break;
                 case "descs":
                     queryWrapper.orderByDesc(StrUtil.toUnderlineCase(StrUtil.toString(v)));
+                    break;
+                default:
                     break;
             }
         });

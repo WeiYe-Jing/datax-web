@@ -14,7 +14,7 @@ import java.util.List;
 import static com.wugui.datatx.core.util.Constants.SPLIT_COMMA;
 
 /**
- * Created by jingwk on 2019/12/01
+ * @author  jingwk on 2019/12/01
  */
 public class JwtTokenUtils {
 
@@ -36,7 +36,7 @@ public class JwtTokenUtils {
     // 创建token
     public static String createToken(Integer id, String username, String role, boolean isRememberMe) {
         long expiration = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>(1);
         map.put(ROLE_CLAIMS, role);
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)

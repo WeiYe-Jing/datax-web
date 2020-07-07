@@ -27,6 +27,7 @@ public class BuildCommand {
 
     /**
      * DataX command build
+     *
      * @param tgParam
      * @param tmpFilePath
      * @param dataXPyPath
@@ -64,10 +65,12 @@ public class BuildCommand {
         if (incrementType != null && replaceParam != null) {
 
             if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                if (doc.length() > 0) {
+                    doc.append(SPLIT_SPACE);
+                }
                 String replaceParamType = tgParam.getReplaceParamType();
 
-                if (StringUtils.isBlank(replaceParamType) || replaceParamType.equals("Timestamp")) {
+                if (StringUtils.isBlank(replaceParamType) || "Timestamp".equals(replaceParamType)) {
                     long startTime = tgParam.getStartTime().getTime() / 1000;
                     long endTime = tgParam.getTriggerTime().getTime() / 1000;
                     doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
@@ -83,7 +86,9 @@ public class BuildCommand {
             } else if (IncrementTypeEnum.ID.getCode() == incrementType) {
                 long startId = tgParam.getStartId();
                 long endId = tgParam.getEndId();
-                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                if (doc.length() > 0) {
+                    doc.append(SPLIT_SPACE);
+                }
                 doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startId, endId));
                 doc.append(TRANSFORM_QUOTES);
             }
@@ -92,7 +97,9 @@ public class BuildCommand {
         if (incrementType != null && IncrementTypeEnum.PARTITION.getCode() == incrementType) {
             if (StringUtils.isNotBlank(partitionStr)) {
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(SPLIT_COMMA));
-                if (doc.length() > 0) doc.append(SPLIT_SPACE);
+                if (doc.length() > 0) {
+                    doc.append(SPLIT_SPACE);
+                }
                 doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
             }
         }

@@ -16,7 +16,19 @@ import java.util.Map;
 @Mapper
 public interface JobLogMapper {
 
-    // exist jobId not use jobGroup, not exist use jobGroup
+
+    /**
+     * exist jobId not use jobGroup, not exist use jobGroup
+     *
+     * @param offset
+     * @param pagesize
+     * @param jobGroup
+     * @param jobId
+     * @param triggerTimeStart
+     * @param triggerTimeEnd
+     * @param logStatus
+     * @return
+     */
     List<JobLog> pageList(@Param("offset") int offset,
                           @Param("pagesize") int pagesize,
                           @Param("jobGroup") int jobGroup,
@@ -25,6 +37,16 @@ public interface JobLogMapper {
                           @Param("triggerTimeEnd") Date triggerTimeEnd,
                           @Param("logStatus") int logStatus);
 
+    /**
+     * @param offset
+     * @param pagesize
+     * @param jobGroup
+     * @param jobId
+     * @param triggerTimeStart
+     * @param triggerTimeEnd
+     * @param logStatus
+     * @return
+     */
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
                       @Param("jobGroup") int jobGroup,
@@ -33,14 +55,35 @@ public interface JobLogMapper {
                       @Param("triggerTimeEnd") Date triggerTimeEnd,
                       @Param("logStatus") int logStatus);
 
+    /**
+     * @param id
+     * @return
+     */
     JobLog load(@Param("id") long id);
 
+    /**
+     * @param jobLog
+     * @return
+     */
     long save(JobLog jobLog);
 
+    /**
+     * @param jobLog
+     * @return
+     */
     int updateTriggerInfo(JobLog jobLog);
 
+    /**
+     * @param jobLog
+     * @return
+     */
     int updateHandleInfo(JobLog jobLog);
 
+    /**
+     * @param id
+     * @param processId
+     * @return
+     */
     int updateProcessId(@Param("id") long id,
                         @Param("processId") String processId);
 

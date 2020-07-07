@@ -16,25 +16,28 @@ import java.util.List;
  */
 public class AdminBizClient implements AdminBiz {
 
+    private static String END_DELIMITER = "/";
+
     public AdminBizClient() {
     }
+
     public AdminBizClient(String addressUrl, String accessToken) {
         this.addressUrl = addressUrl;
         this.accessToken = accessToken;
 
         // valid
-        if (!this.addressUrl.endsWith("/")) {
-            this.addressUrl = this.addressUrl + "/";
+        if (!this.addressUrl.endsWith(END_DELIMITER)) {
+            this.addressUrl = this.addressUrl + END_DELIMITER;
         }
     }
 
-    private String addressUrl ;
+    private String addressUrl;
     private String accessToken;
 
 
     @Override
     public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList) {
-        return JobRemotingUtil.postBody(addressUrl+"api/callback", accessToken, callbackParamList, 3);
+        return JobRemotingUtil.postBody(addressUrl + "api/callback", accessToken, callbackParamList, 3);
     }
 
     @Override

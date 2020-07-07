@@ -9,10 +9,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * for HBase2.X and Phoenix5.X
- */
 
+/**
+ * @author water
+ */
 public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInterface {
     Connection conn = null;
 
@@ -39,8 +39,8 @@ public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInte
 
     @Override
     public List<String> getTableNames(String tableSchema) {
-        DatabaseMetaData metaData = null;
-        List<String> tables = new ArrayList<String>();
+        DatabaseMetaData metaData;
+        List<String> tables = new ArrayList<>();
         ResultSet rs = null;
         try {
             metaData = conn.getMetaData();
@@ -50,19 +50,16 @@ public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInte
             }
 
         } catch (SQLException e) {
-            logger.error("[getTableNames Exception] --> "
-                    + "the exception message is:" + e.getMessage());
+            logger.error("[getTableNames Exception] --> the exception message is:{}", e.getMessage());
         } finally {
             JdbcUtils.close(rs);
         }
-
-
         return tables;
     }
 
     @Override
-    public List<String> getColumnNames(String tableName, String datasource) {
-        DatabaseMetaData metaData = null;
+    public List<String> getColumnNames(String tableName, String dataSource) {
+        DatabaseMetaData metaData;
         List<String> columnNames = Lists.newArrayList();
         ResultSet rs = null;
         try {
@@ -74,13 +71,10 @@ public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInte
             }
 
         } catch (SQLException e) {
-            logger.error("[getColumnNames Exception] --> "
-                    + "the exception message is:" + e.getMessage());
+            logger.error("[getColumnNames Exception] --> the exception message is:{}", e.getMessage());
         } finally {
             JdbcUtils.close(rs);
         }
-
-
         return columnNames;
     }
 
@@ -90,14 +84,13 @@ public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInte
             if (rs.getType() == ResultSet.TYPE_FORWARD_ONLY) {
                 return -1;
             }
-
             rs.last();
             int total = rs.getRow();
             rs.beforeFirst();
             return total;
-        } catch (SQLException sqle) {
+        } catch (SQLException e) {
             return -1;
-        } catch (AbstractMethodError ame) {
+        } catch (AbstractMethodError e) {
             return -1;
         }
     }
@@ -105,8 +98,6 @@ public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInte
 
     private void getDataSource(JobDatasource jobDatasource) throws SQLException {
         conn = DriverManager.getConnection(jobDatasource.getJdbcUrl());
-
-
     }
 
 

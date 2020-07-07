@@ -195,14 +195,14 @@ public final class JdbcUtils implements  JdbcConstants {
                     if (rs.wasNull()) {
                         out.print("null");
                     } else {
-                        out.print(Boolean.toString(value));
+                        out.print(value);
                     }
                 } else if (type == Types.TINYINT) {
                     byte value = rs.getByte(columnIndex);
                     if (rs.wasNull()) {
                         out.print("null");
                     } else {
-                        out.print(Byte.toString(value));
+                        out.print(value);
                     }
                 } else if (type == Types.SMALLINT) {
                     short value = rs.getShort(columnIndex);
@@ -654,10 +654,10 @@ public final class JdbcUtils implements  JdbcConstants {
     }
 
     public static String makeInsertToTableSql(String tableName, Collection<String> names) {
-        StringBuilder sql = new StringBuilder() //
-                .append("insert into ") //
-                .append(tableName) //
-                .append("("); //
+        StringBuilder sql = new StringBuilder()
+                .append("insert into ")
+                .append(tableName)
+                .append("(");
 
         int nameCount = 0;
         for (String name : names) {

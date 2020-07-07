@@ -1,9 +1,9 @@
-package com.wugui.datax.rpc.remoting.net.impl.netty_http.client;
+package com.wugui.datax.rpc.remoting.net.impl.netty.http.client;
 
 import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
 import com.wugui.datax.rpc.remoting.net.params.Beat;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcResponse;
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import com.wugui.datax.rpc.util.XxlRpcException;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,9 +24,9 @@ public class NettyHttpClientHandler extends SimpleChannelInboundHandler<FullHttp
 
 
     private XxlRpcInvokerFactory xxlRpcInvokerFactory;
-    private Serializer serializer;
+    private AbstractSerializer serializer;
     private NettyHttpConnectClient nettyHttpConnectClient;
-    public NettyHttpClientHandler(final XxlRpcInvokerFactory xxlRpcInvokerFactory, Serializer serializer, final NettyHttpConnectClient nettyHttpConnectClient) {
+    public NettyHttpClientHandler(final XxlRpcInvokerFactory xxlRpcInvokerFactory, AbstractSerializer serializer, final NettyHttpConnectClient nettyHttpConnectClient) {
         this.xxlRpcInvokerFactory = xxlRpcInvokerFactory;
         this.serializer = serializer;
         this.nettyHttpConnectClient = nettyHttpConnectClient;
@@ -58,24 +58,15 @@ public class NettyHttpClientHandler extends SimpleChannelInboundHandler<FullHttp
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        //super.exceptionCaught(ctx, cause);
         logger.error(">>>>>>>>>>> xxl-rpc netty_http client caught exception", cause);
         ctx.close();
     }
 
-    /*@Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        // retry
-        super.channelInactive(ctx);
-    }*/
-
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent){
-            /*ctx.channel().close();      // close idle channel
-            logger.debug(">>>>>>>>>>> xxl-rpc netty_http client close an idle channel.");*/
-
-            nettyHttpConnectClient.send(Beat.BEAT_PING);    // beat N, close if fail(may throw error)
+            // beat N, close if fail(may throw error)
+            nettyHttpConnectClient.send(Beat.BEAT_PING);
             logger.debug(">>>>>>>>>>> xxl-rpc netty_http client send beat-ping.");
         } else {
             super.userEventTriggered(ctx, evt);

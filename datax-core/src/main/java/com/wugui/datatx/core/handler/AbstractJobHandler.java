@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author xuxueli 2015-12-19 19:06:38
  */
-public abstract class IJobHandler {
+public abstract class AbstractJobHandler {
 
 
 	/** success */
@@ -21,7 +21,7 @@ public abstract class IJobHandler {
 	/** fail timeout */
 	public static final ReturnT<String> FAIL_TIMEOUT = new ReturnT<>(502, null);
 
-	public static final ConcurrentMap<String, String> jobTmpFiles = new ConcurrentHashMap<>();
+	public static final ConcurrentMap<String, String> JOB_TEM_FILES = new ConcurrentHashMap<>();
 	/**
 	 * execute handler, invoked when executor receives a scheduling request
 	 *

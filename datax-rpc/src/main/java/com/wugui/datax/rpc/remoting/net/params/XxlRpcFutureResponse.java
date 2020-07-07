@@ -1,10 +1,9 @@
 package com.wugui.datax.rpc.remoting.net.params;
 
 import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
-import com.wugui.datax.rpc.remoting.invoker.call.XxlRpcInvokeCallback;
+import com.wugui.datax.rpc.remoting.invoker.call.AbstractXxlRpcInvokeCallback;
 import com.wugui.datax.rpc.util.XxlRpcException;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -27,10 +26,10 @@ public class XxlRpcFutureResponse implements Future<XxlRpcResponse> {
     private Object lock = new Object();
 
     // callback, can be null
-    private XxlRpcInvokeCallback invokeCallback;
+    private AbstractXxlRpcInvokeCallback invokeCallback;
 
 
-    public XxlRpcFutureResponse(final XxlRpcInvokerFactory invokerFactory, XxlRpcRequest request, XxlRpcInvokeCallback invokeCallback) {
+    public XxlRpcFutureResponse(final XxlRpcInvokerFactory invokerFactory, XxlRpcRequest request, AbstractXxlRpcInvokeCallback invokeCallback) {
         this.invokerFactory = invokerFactory;
         this.request = request;
         this.invokeCallback = invokeCallback;
@@ -57,7 +56,7 @@ public class XxlRpcFutureResponse implements Future<XxlRpcResponse> {
         return request;
     }
 
-    public XxlRpcInvokeCallback getInvokeCallback() {
+    public AbstractXxlRpcInvokeCallback getInvokeCallback() {
         return invokeCallback;
     }
 

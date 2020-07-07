@@ -2,7 +2,7 @@ package com.wugui.datax.admin.core.route.strategy;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
-import com.wugui.datax.admin.core.route.ExecutorRouter;
+import com.wugui.datax.admin.core.route.AbstractExecutorRouter;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentMap;
  *      a、LFU(Least Frequently Used)：最不经常使用，频率/次数
  *      b(*)、LRU(Least Recently Used)：最近最久未使用，时间
  *
- * Created by xuxueli on 17/3/10.
+ * @author  xuxueli on 17/3/10.
  */
-public class ExecutorRouteLRU extends ExecutorRouter {
+public class ExecutorRouteLru extends AbstractExecutorRouter {
 
     private static ConcurrentMap<Integer, LinkedHashMap<String, String>> jobLRUMap = new ConcurrentHashMap<Integer, LinkedHashMap<String, String>>();
     private static long CACHE_VALID_TIME = 0;

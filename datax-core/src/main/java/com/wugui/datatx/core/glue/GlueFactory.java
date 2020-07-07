@@ -1,7 +1,7 @@
 package com.wugui.datatx.core.glue;
 
 import com.wugui.datatx.core.glue.impl.SpringGlueFactory;
-import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import groovy.lang.GroovyClassLoader;
 
 import java.math.BigInteger;
@@ -45,15 +45,15 @@ public class GlueFactory {
      * @return
      * @throws Exception
      */
-    public IJobHandler loadNewInstance(String codeSource) throws Exception {
+    public AbstractJobHandler loadNewInstance(String codeSource) throws Exception {
         if (codeSource != null && codeSource.trim().length() > 0) {
             Class<?> clazz = getCodeSourceClass(codeSource);
             if (clazz != null) {
                 Object instance = clazz.newInstance();
                 if (instance != null) {
-                    if (instance instanceof IJobHandler) {
+                    if (instance instanceof AbstractJobHandler) {
                         this.injectService(instance);
-                        return (IJobHandler) instance;
+                        return (AbstractJobHandler) instance;
                     } else {
                         throw new IllegalArgumentException(">>>>>>>>>>> xxl-glue, loadNewInstance error, "
                                 + "cannot convert from instance[" + instance.getClass() + "] to IJobHandler");

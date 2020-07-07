@@ -24,13 +24,18 @@ import java.util.regex.Pattern;
  * @since 2019/8/2 16:28
  */
 public abstract class BaseWriterPlugin extends BaseDataxPlugin {
+
+    /**
+     * 不要在方法里定义正则表达式规则,应定义为常量或字段,能加快正则匹配速度
+     */
+    private static Pattern p = Pattern.compile("\r\n|\r|\n|\n\r");
+
     @Override
     public Map<String, Object> build(DataxRdbmsPojo plugin) {
         Map<String, Object> writerObj = Maps.newLinkedHashMap();
         writerObj.put("name", getName());
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-//        parameterObj.put("writeMode", "insert");
         JobDatasource jobDatasource = plugin.getJobDatasource();
         parameterObj.put("username", jobDatasource.getJdbcUsername());
         parameterObj.put("password", jobDatasource.getJdbcPassword());
@@ -51,7 +56,7 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
     private String[] splitSql(String sql) {
         String[] sqlArr = null;
         if (StringUtils.isNotBlank(sql)) {
-            Pattern p = Pattern.compile("\r\n|\r|\n|\n\r");
+
             Matcher m = p.matcher(sql);
             String sqlStr = m.replaceAll(Constants.STRING_BLANK);
             sqlArr = sqlStr.split(Constants.SPLIT_COLON);

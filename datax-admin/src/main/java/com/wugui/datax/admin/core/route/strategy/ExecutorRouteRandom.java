@@ -2,15 +2,15 @@ package com.wugui.datax.admin.core.route.strategy;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
-import com.wugui.datax.admin.core.route.ExecutorRouter;
+import com.wugui.datax.admin.core.route.AbstractExecutorRouter;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * @author  xuxueli on 17/3/10.
  */
-public class ExecutorRouteRandom extends ExecutorRouter {
+public class ExecutorRouteRandom extends AbstractExecutorRouter {
 
     private static Random localRandom = new Random();
 

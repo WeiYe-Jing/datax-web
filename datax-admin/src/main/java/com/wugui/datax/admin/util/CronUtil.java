@@ -1,15 +1,19 @@
 package com.wugui.datax.admin.util;
 
-import com.wugui.datax.admin.dto.TaskScheduleDto;
+import com.wugui.datax.admin.dto.TaskScheduleDTO;
 
+/**
+ * @author
+ */
 public class CronUtil {
 
 
-    public static String createCronExpression(TaskScheduleDto dto) {
+    public static String createCronExpression(TaskScheduleDTO dto) {
         StringBuffer cronExp = new StringBuffer();
 
         if (null == dto.getJobType()) {
-            System.out.println("执行周期未配置");//执行周期未配置
+            //执行周期未配置
+            System.out.println("执行周期未配置");
         }
 
         if (null != dto.getSecond()
@@ -46,9 +50,12 @@ public class CronUtil {
 
             //每天
             if (dto.getJobType().intValue() == 1) {
-                cronExp.append("* ");//日
-                cronExp.append("* ");//月
-                cronExp.append("?");//周
+                //日
+                cronExp.append("* ");
+                //月
+                cronExp.append("* ");
+                //周
+                cronExp.append("?");
             }
 
             //按每周
@@ -87,7 +94,7 @@ public class CronUtil {
             }
 
         } else {
-            System.out.println("时或分或秒参数未配置");//时或分或秒参数未配置
+            System.out.println("时或分或秒参数未配置");
         }
         return cronExp.toString();
     }
@@ -98,7 +105,7 @@ public class CronUtil {
      * @param dto
      * @return String
      */
-    public static String createDescription(TaskScheduleDto dto) {
+    public static String createDescription(TaskScheduleDTO dto) {
         StringBuffer description = new StringBuffer();
         //计划执行开始时间
 
@@ -154,25 +161,24 @@ public class CronUtil {
         return description.toString();
     }
 
-    //参考例子
     public static void main(String[] args) {
         //执行时间：每天的12时12分12秒 start
-        TaskScheduleDto dto = new TaskScheduleDto();
-
-        dto.setJobType(0);//按每秒
+        TaskScheduleDTO dto = new TaskScheduleDTO();
+        //按每秒
+        dto.setJobType(0);
         dto.setSecond(30);
         String cronExp = createCronExpression(dto);
         System.out.println(cronExp);
-
-        dto.setJobType(4);//按每分钟
+        //按每分钟
+        dto.setJobType(4);
         dto.setMinute(8);
         String cronExpp = createCronExpression(dto);
         System.out.println(cronExpp);
-
-        dto.setJobType(1);//按每天
-        Integer hour = 12; //时
-        Integer minute = 12; //分
-        Integer second = 12; //秒
+        //按每天
+        dto.setJobType(1);
+        Integer hour = 12;
+        Integer minute = 12;
+        Integer second = 12;
         dto.setHour(hour);
         dto.setMinute(minute);
         dto.setSecond(second);
@@ -180,7 +186,8 @@ public class CronUtil {
         System.out.println(cropExp + ":" + createDescription(dto));
         //执行时间：每天的12时12分12秒 end
 
-        dto.setJobType(3);//每周的哪几天执行
+        //每周的哪几天执行
+        dto.setJobType(3);
         Integer[] dayOfWeeks = new Integer[3];
         dayOfWeeks[0] = 1;
         dayOfWeeks[1] = 2;
@@ -188,8 +195,8 @@ public class CronUtil {
         dto.setDayOfWeeks(dayOfWeeks);
         cropExp = createCronExpression(dto);
         System.out.println(cropExp + ":" + createDescription(dto));
-
-        dto.setJobType(2);//每月的哪几天执行
+        //每月的哪几天执行
+        dto.setJobType(2);
         Integer[] dayOfMonths = new Integer[3];
         dayOfMonths[0] = 1;
         dayOfMonths[1] = 21;

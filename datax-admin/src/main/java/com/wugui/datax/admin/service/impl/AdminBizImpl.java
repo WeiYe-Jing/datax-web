@@ -5,8 +5,8 @@ import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datatx.core.handler.IJobHandler;
-import com.wugui.datatx.core.util.DateUtil;
+import com.wugui.datatx.core.enums.IncrementTypeEnum;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
@@ -45,7 +45,7 @@ public class AdminBizImpl implements AdminBiz {
         for (HandleCallbackParam handleCallbackParam : callbackParamList) {
             ReturnT<String> callbackResult = callback(handleCallbackParam);
             logger.debug(">>>>>>>>> JobApiController.callback {}, handleCallbackParam={}, callbackResult={}",
-                    (callbackResult.getCode() == IJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleCallbackParam, callbackResult);
+                    (callbackResult.getCode() == AbstractJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleCallbackParam, callbackResult);
         }
 
         return ReturnT.SUCCESS;
@@ -56,7 +56,7 @@ public class AdminBizImpl implements AdminBiz {
         for (HandleProcessCallbackParam handleProcessCallbackParam : callbackParamList) {
             ReturnT<String> callbackResult = processCallback(handleProcessCallbackParam);
             logger.debug(">>>>>>>>> JobApiController.processCallback {}, handleCallbackParam={}, callbackResult={}",
-                    (callbackResult.getCode() == IJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleProcessCallbackParam, callbackResult);
+                    (callbackResult.getCode() == AbstractJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleProcessCallbackParam, callbackResult);
         }
         return ReturnT.SUCCESS;
     }
@@ -74,15 +74,20 @@ public class AdminBizImpl implements AdminBiz {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "log item not found.");
         }
         if (log.getHandleCode() > 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
+            // avoid repeat callback, trigger child job etc
+            return new ReturnT<>(ReturnT.FAIL_CODE, "log repeate callback.");
         }
 
         // trigger success, to trigger child job
         String callbackMsg = null;
         int resultCode = handleCallbackParam.getExecuteResult().getCode();
-        if (IJobHandler.SUCCESS.getCode() == resultCode) {
+
+        if (AbstractJobHandler.SUCCESS.getCode() == resultCode) {
+
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
-            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
+
+            updateIncrementParam(log, jobInfo.getIncrementType());
+
             if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
                 callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
@@ -113,7 +118,7 @@ public class AdminBizImpl implements AdminBiz {
         }
 
         //kill execution timeout DataX process
-        if (!StringUtils.isEmpty(log.getProcessId()) && IJobHandler.FAIL_TIMEOUT.getCode() == resultCode) {
+        if (!StringUtils.isEmpty(log.getProcessId()) && AbstractJobHandler.FAIL_TIMEOUT.getCode() == resultCode) {
             KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
         }
 
@@ -128,9 +133,10 @@ public class AdminBizImpl implements AdminBiz {
         if (callbackMsg != null) {
             handleMsg.append(callbackMsg);
         }
-
-        if (handleMsg.length() > 15000) {
-            handleMsg = new StringBuffer(handleMsg.substring(0, 15000));  // text最大64kb 避免长度过长
+        int len = 15000;
+        if (handleMsg.length() > len) {
+            // text最大64kb 避免长度过长
+            handleMsg = new StringBuffer(handleMsg.substring(0, len));
         }
 
         // success, save log
@@ -138,25 +144,23 @@ public class AdminBizImpl implements AdminBiz {
         log.setHandleCode(resultCode);
         log.setHandleMsg(handleMsg.toString());
 
-        String[] strs = handleMsg.toString().split(",");
-        if (strs.length ==7) {
-            log.setTaskStartTimeSuffix(strs[0]);
-            log.setTaskEndTimeSuffix(strs[1]);
-            log.setTaskTotalTimeSuffix(strs[2]);
-            log.setTaskAverageFlowSuffix(strs[3]);
-            log.setTaskRecordWritingSpeedSuffix(strs[4]);
-            log.setTaskRecordReaderNumSuffix(Integer.parseInt(strs[5]));
-            log.setTaskRecordWritingNumSuffix(Integer.parseInt(strs[6]));
-        }
         jobLogMapper.updateHandleInfo(log);
         jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);
 
         return ReturnT.SUCCESS;
     }
 
+    private void updateIncrementParam(JobLog log, Integer incrementType) {
+        if (IncrementTypeEnum.ID.getCode() == incrementType) {
+            jobInfoMapper.incrementIdUpdate(log.getJobId(), log.getMaxId());
+        } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
+            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
+        }
+    }
+
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;

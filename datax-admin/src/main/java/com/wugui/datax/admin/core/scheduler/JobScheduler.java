@@ -8,7 +8,7 @@ import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.rpc.remoting.invoker.call.CallType;
 import com.wugui.datax.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
 import com.wugui.datax.rpc.remoting.invoker.route.LoadBalance;
-import com.wugui.datax.rpc.remoting.net.impl.netty_http.client.NettyHttpClient;
+import com.wugui.datax.rpc.remoting.net.impl.netty.http.client.NettyHttpClient;
 import com.wugui.datax.rpc.serialize.impl.HessianSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

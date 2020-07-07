@@ -17,6 +17,7 @@ public class HBaseReader extends BaseReaderPlugin implements DataxReaderInterfac
     return null;
   }
 
+  @Override
   public Map<String, Object> buildHbase(DataxHbasePojo plugin) {
     //构建
     Map<String, Object> readerObj = Maps.newLinkedHashMap();

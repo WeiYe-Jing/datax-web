@@ -8,6 +8,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author water
+ */
 @Data
 public class DataxHbasePojo {
 
@@ -21,7 +24,7 @@ public class DataxHbasePojo {
 
   private String readerHbaseConfig;
 
-  private List<String> readerTable;
+  private String readerTable;
 
   private String readerMode;
 
@@ -31,7 +34,7 @@ public class DataxHbasePojo {
 
   private String writerHbaseConfig;
 
-  private List<String> writerTable;
+  private String writerTable;
 
   private String writerMode;
 

@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author water
+ */
 public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterface {
     @Override
     public String getName() {

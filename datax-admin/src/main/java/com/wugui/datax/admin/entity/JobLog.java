@@ -2,6 +2,7 @@ package com.wugui.datax.admin.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,7 +17,6 @@ public class JobLog {
 
     private long id;
 
-    // job info
     @ApiModelProperty("执行器主键ID")
     private int jobGroup;
     @ApiModelProperty("任务，主键ID")
@@ -24,7 +24,6 @@ public class JobLog {
     @ApiModelProperty("任务描述")
     private String jobDesc;
 
-    // execute info
     @ApiModelProperty("执行器地址，本次执行的地址")
     private String executorAddress;
     @ApiModelProperty("执行器任务handler")
@@ -36,7 +35,6 @@ public class JobLog {
     @ApiModelProperty("失败重试次数")
     private int executorFailRetryCount;
 
-    // trigger info
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty("调度-时间")
     private Date triggerTime;
@@ -45,7 +43,6 @@ public class JobLog {
     @ApiModelProperty("调度-日志")
     private String triggerMsg;
 
-    // handle info
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty("执行-时间")
     private Date handleTime;
@@ -54,7 +51,6 @@ public class JobLog {
     @ApiModelProperty("执行-日志")
     private String handleMsg;
 
-    // alarm info
     @ApiModelProperty("告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败")
     private int alarmStatus;
 
@@ -63,20 +59,4 @@ public class JobLog {
 
     @ApiModelProperty("增量最大id")
     private Long maxId;
-
-    @ApiModelProperty("DataX任务启动时刻")
-    private String taskStartTimeSuffix;
-	@ApiModelProperty("DataX任务结束时刻")
-    private String taskEndTimeSuffix;
-	@ApiModelProperty("DataX任务总计耗时")
-    private String taskTotalTimeSuffix;
-	@ApiModelProperty("DataX任务平均流量")
-    private String taskAverageFlowSuffix;
-	@ApiModelProperty("DataX记录写入速度")
-    private String taskRecordWritingSpeedSuffix;
-	@ApiModelProperty("DataX读出记录总数")
-    private int taskRecordReaderNumSuffix;
-	@ApiModelProperty("DataX读写失败总数")
-    private int taskRecordWritingNumSuffix;
-
 }

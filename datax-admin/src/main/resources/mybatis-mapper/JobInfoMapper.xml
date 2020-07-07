@@ -4,7 +4,7 @@
 <mapper namespace="com.wugui.datax.admin.mapper.JobInfoMapper">
 
 	<resultMap id="JobProject" type="com.wugui.datax.admin.entity.JobInfo">
-		<result column="job_project" property="jobProject"/>
+		<result column="project_id" property="projectId"/>
 	</resultMap>
 	<resultMap id="JobInfo" type="com.wugui.datax.admin.entity.JobInfo" >
 		<result column="id" property="id" />
@@ -16,7 +16,7 @@
 	    <result column="add_time" property="addTime" />
 	    <result column="update_time" property="updateTime" />
 
-	    <result column="author" property="author" />
+	    <result column="user_id" property="userId" />
 	    <result column="alarm_email" property="alarmEmail" />
 
 		<result column="executor_route_strategy" property="executorRouteStrategy" />
@@ -45,7 +45,13 @@
 
 		<result column="last_handle_code" property="lastHandleCode" />
 		<result column="replace_param_type" property="replaceParamType" />
-		<result column="job_project" property="jobProject"/>
+		<result column="project_id" property="projectId"/>
+
+		<result column="reader_table" property="readerTable" />
+		<result column="primary_key" property="primaryKey" />
+		<result column="inc_start_id" property="incStartId" />
+		<result column="increment_type" property="incrementType" />
+		<result column="datasource_id" property="datasourceId" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -55,7 +61,7 @@
 		t.job_desc,
 		t.add_time,
 		t.update_time,
-		t.author,
+		t.user_id,
 		t.alarm_email,
 		t.executor_route_strategy,
 		t.executor_handler,
@@ -78,12 +84,23 @@
 		t.partition_info,
 		t.last_handle_code,
 		t.replace_param_type,
-		t.job_project
+		t.project_id,
+		t.reader_table,
+		t.primary_key,
+		t.inc_start_id,
+		t.increment_type,
+		t.datasource_id
 	</sql>
 
+	<sql id="Project_Column_List">
+		p.name as project_name,
+		u.username
+	</sql>
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
-		SELECT <include refid="Base_Column_List" />
+		SELECT <include refid="Base_Column_List" />,<include refid="Project_Column_List" />
 		FROM job_info AS t
+		INNER JOIN job_project p on t.project_id=p.id
+		INNER JOIN job_user u on t.user_id = u.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -97,13 +114,13 @@
 			<if test="glueType != null and glueType != ''">
 				AND t.glue_type like CONCAT(CONCAT('%', #{glueType}), '%')
 			</if>
-			<if test="author != null and author != ''">
-				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
+			<if test="userId gt 0">
+				AND t.user_id = #{userId}
 			</if>
-            <if test="jobProjects != null">
-                AND t.job_project IN
-                <foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
-                    #{jobProject}
+            <if test="projectIds != null and projectIds.length != 0">
+                AND t.project_id IN
+                <foreach collection="projectIds" item="projectId" index="index" open="(" close=")" separator=",">
+                    #{projectId}
                 </foreach>
             </if>
 		</trim>
@@ -117,16 +134,10 @@
 		ORDER BY job_desc ASC
 	</select>
 
-	<select id="projects" parameterType="java.util.HashMap" resultMap="JobProject">
-		SELECT distinct(job_project) as job_project
-		FROM job_info AS t
-		WHERE  job_project IS NOT NULL
-		ORDER BY job_project ASC
-	</select>
-
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
 		SELECT count(1)
 		FROM job_info AS t
+		INNER JOIN job_project p on t.project_id=p.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -140,13 +151,13 @@
 			<if test="glueType != null and glueType != ''">
 				AND t.glue_type like CONCAT(CONCAT('%', #{glueType}), '%')
 			</if>
-			<if test="author != null and author != ''">
-				AND t.author like CONCAT(CONCAT('%', #{author}), '%')
+			<if test="userId gt 0">
+				AND t.user_id =#{userId}
 			</if>
-            <if test="jobProjects != null">
-                AND t.job_project IN
-                <foreach collection="jobProjects" item="jobProject" index="index" open="(" close=")" separator=",">
-                    #{jobProject}
+            <if test="projectIds != null and projectIds.length != 0">
+                AND t.project_id IN
+                <foreach collection="projectIds" item="projectId" index="index" open="(" close=")" separator=",">
+                    #{projectId}
                 </foreach>
             </if>
 		</trim>
@@ -159,7 +170,7 @@
 			job_desc,
 			add_time,
 			update_time,
-			author,
+			user_id,
 			alarm_email,
             executor_route_strategy,
 			executor_handler,
@@ -182,14 +193,19 @@
 			partition_info,
 			last_handle_code,
 		    replace_param_type,
-		    job_project
+		    project_id,
+			reader_table,
+			primary_key,
+			inc_start_id,
+			increment_type,
+			datasource_id
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
 			#{jobDesc},
 			#{addTime},
 			#{updateTime},
-			#{author},
+			#{userId},
 			#{alarmEmail},
 			#{executorRouteStrategy},
 			#{executorHandler},
@@ -212,7 +228,12 @@
 			#{partitionInfo},
 			#{lastHandleCode},
 			#{replaceParamType},
-			#{jobProject}
+			#{projectId},
+			#{readerTable},
+			#{primaryKey},
+			#{incStartId},
+			#{incrementType},
+			#{datasourceId}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -233,7 +254,7 @@
 			job_cron = #{jobCron},
 			job_desc = #{jobDesc},
 			update_time = #{updateTime},
-			author = #{author},
+			user_id = #{userId},
 			alarm_email = #{alarmEmail},
 			executor_route_strategy = #{executorRouteStrategy},
 			executor_handler = #{executorHandler},
@@ -256,7 +277,12 @@
 			partition_info=#{partitionInfo},
 			last_handle_code=#{lastHandleCode},
 			replace_param_type=#{replaceParamType},
-			job_project=#{jobProject}
+			project_id=#{projectId},
+			reader_table = #{readerTable},
+		    primary_key = #{primaryKey},
+		    inc_start_id = #{incStartId},
+		    increment_type = #{incrementType},
+		    datasource_id= #{datasourceId}
 		WHERE id = #{id}
 	</update>
 
@@ -307,6 +333,13 @@
 		UPDATE job_info
 		SET
 			last_handle_code = #{lastHandleCode}
+		WHERE id = #{id}
+	</update>
+
+	<update id="incrementIdUpdate" parameterType="java.util.HashMap">
+		UPDATE job_info
+		SET
+		inc_start_id = #{incStartId}
 		WHERE id = #{id}
 	</update>
 </mapper>

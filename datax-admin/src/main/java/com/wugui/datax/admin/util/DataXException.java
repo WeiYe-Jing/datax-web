@@ -53,7 +53,6 @@ public class DataXException extends RuntimeException {
             PrintWriter pw = new PrintWriter(str);
             ((Throwable) obj).printStackTrace(pw);
             return str.toString();
-            // return ((Throwable) obj).getMessage();
         } else {
             return obj.toString();
         }

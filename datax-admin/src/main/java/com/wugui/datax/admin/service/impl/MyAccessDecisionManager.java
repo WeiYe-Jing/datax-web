@@ -30,7 +30,8 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
         for (Iterator<ConfigAttribute> iter = configAttributes.iterator(); iter.hasNext(); ) {
             c = iter.next();
             needRole = c.getAttribute();
-            for (GrantedAuthority ga : authentication.getAuthorities()) {//authentication 为在注释1 中循环添加到 GrantedAuthority 对象中的权限信息集合
+            //authentication 为在注释1 中循环添加到 GrantedAuthority 对象中的权限信息集合
+            for (GrantedAuthority ga : authentication.getAuthorities()) {
                 if (needRole.trim().equals(ga.getAuthority())) {
                     return;
                 }

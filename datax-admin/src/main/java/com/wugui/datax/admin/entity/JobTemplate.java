@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -29,8 +30,8 @@ public class JobTemplate {
 
 	private Date updateTime;
 
-	@ApiModelProperty("负责人")
-	private String author;
+	@ApiModelProperty("修改用户")
+	private int userId;
 
 	@ApiModelProperty("报警邮件")
 	private String alarmEmail;
@@ -77,21 +78,15 @@ public class JobTemplate {
 	@ApiModelProperty("datax运行json")
 	private String jobJson;
 
-	@ApiModelProperty("脚本动态参数")
-	private String replaceParam;
-
-	@ApiModelProperty("时间增量格式")
-	private String replaceParamType;
-
 	@ApiModelProperty("jvm参数")
 	private String jvmParam;
 
-	@ApiModelProperty("增量初始时间")
-	private Date incStartTime;
-
-	@ApiModelProperty("分区信息")
-	private String partitionInfo;
-
     @ApiModelProperty("所属项目")
-    private String jobProject;
+	private int projectId;
+
+	@TableField(exist=false)
+	private String projectName;
+
+	@TableField(exist=false)
+	private String userName;
 }

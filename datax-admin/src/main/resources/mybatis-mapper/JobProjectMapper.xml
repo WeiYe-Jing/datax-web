@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wugui.datax.admin.mapper.JobProjectMapper">
+
+    <select id="getProjectListPaging" resultType="com.wugui.datax.admin.entity.JobProject">
+        select
+        p.*,u.username
+        from job_project p
+        join job_user u on p.user_id = u.id
+        where p.flag=1
+        <if test="searchName!=null and searchName != ''">
+            and p.name like concat('%', #{searchName}, '%')
+        </if>
+        order by p.create_time desc
+    </select>
+</mapper>

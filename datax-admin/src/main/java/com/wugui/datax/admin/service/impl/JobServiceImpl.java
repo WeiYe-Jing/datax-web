@@ -8,9 +8,8 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.DataXJsonBuildDto;
-import com.wugui.datax.admin.dto.TaskScheduleDto;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDTO;
+import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLogReport;
@@ -19,7 +18,6 @@ import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobService;
-import com.wugui.datax.admin.util.CronUtil;
 import com.wugui.datax.admin.util.DateFormatUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -60,32 +58,23 @@ public class JobServiceImpl implements JobService {
     private DataxJsonService dataxJsonService;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, String author, String jobProject) {
-
-        String[] jobProjects = null;
-        if (jobProject != null && !jobProject.isEmpty()) {
-            jobProjects = jobProject.split(",");
-        }
-
+    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
 
         // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, author, jobProjects);
+        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
 
         // package result
-        Map<String, Object> maps = new HashMap<>();
-        maps.put("recordsTotal", list_count);        // 总记录数
-        maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
+        Map<String, Object> maps = new HashMap<>(3);
+        maps.put("recordsTotal", list_count);
+        maps.put("recordsFiltered", list_count);
+        maps.put("data", list);
         return maps;
     }
 
-    public List<Object> list() {
+    @Override
+    public List<JobInfo> list() {
         return jobInfoMapper.findAll();
-    }
-
-    public List<Object> projects() {
-        return jobInfoMapper.projects();
     }
 
     @Override
@@ -104,7 +93,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfo.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -134,7 +123,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
-                if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
+                if (StringUtils.isNotBlank(childJobIdItem) && isNumeric(childJobIdItem) && Integer.parseInt(childJobIdItem) > 0) {
                     JobInfo childJobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
                     if (childJobInfo == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
@@ -169,14 +158,9 @@ public class JobServiceImpl implements JobService {
         return new ReturnT<>(String.valueOf(jobInfo.getId()));
     }
 
-    @Override
-    public ReturnT<String> createCron(TaskScheduleDto dto) {
-        return new ReturnT<>(CronUtil.createCronExpression(dto));
-    }
-
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            Integer.valueOf(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -197,10 +181,10 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
 
-        if (jobInfo.getJobProject() == null || jobInfo.getJobProject().isEmpty()) {
+        if (jobInfo.getProjectId() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobproject")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfo.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -263,32 +247,12 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        BeanUtils.copyProperties(jobInfo,exists_jobInfo);
+        BeanUtils.copyProperties(jobInfo, exists_jobInfo);
         if (StringUtils.isBlank(jobInfo.getReplaceParamType())) {
             jobInfo.setReplaceParamType(DateFormatUtils.TIMESTAMP);
         }
-        exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
-        exists_jobInfo.setJobCron(jobInfo.getJobCron());
-        exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
-        exists_jobInfo.setAuthor(jobInfo.getAuthor());
-        exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
-        exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
-        exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());
-        exists_jobInfo.setExecutorParam(jobInfo.getExecutorParam());
-        exists_jobInfo.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
-        exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
-        exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
-        exists_jobInfo.setReplaceParamType(jobInfo.getReplaceParamType());
-        exists_jobInfo.setTriggerNextTime(nextTriggerTime);
-        exists_jobInfo.setReplaceParam(jobInfo.getReplaceParam());
-        exists_jobInfo.setJvmParam(jobInfo.getJvmParam());
-        exists_jobInfo.setIncStartTime(jobInfo.getIncStartTime());
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setUpdateTime(new Date());
-        exists_jobInfo.setGlueType(jobInfo.getGlueType());
-        exists_jobInfo.setPartitionInfo(jobInfo.getPartitionInfo());
-        exists_jobInfo.setJobProject(jobInfo.getJobProject());
 
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());
@@ -382,7 +346,7 @@ public class JobServiceImpl implements JobService {
 
         int executorCount = executorAddressSet.size();
 
-        Map<String, Object> dashboardMap = new HashMap<>();
+        Map<String, Object> dashboardMap = new HashMap<>(4);
         dashboardMap.put("jobInfoCount", jobInfoCount);
         dashboardMap.put("jobLogCount", jobLogCount);
         dashboardMap.put("jobLogSuccessCount", jobLogSuccessCount);
@@ -428,7 +392,7 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>(7);
         result.put("triggerDayList", triggerDayList);
         result.put("triggerDayCountRunningList", triggerDayCountRunningList);
         result.put("triggerDayCountSucList", triggerDayCountSucList);
@@ -443,7 +407,7 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
-    public ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException {
+    public ReturnT<String> batchAdd(DataXBatchJsonBuildDTO dto) throws IOException {
 
         String key = "system_please_choose";
         List<String> rdTables = dto.getReaderTables();
@@ -455,10 +419,10 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString(key) + I18nUtil.getString("jobinfo_field_writerDataSource"));
         }
         if (rdTables.size() != wrTables.size()) {
-            return new ReturnT<>(ReturnT.FAIL_CODE,  I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
+            return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
         }
 
-        DataXJsonBuildDto jsonBuild = new DataXJsonBuildDto();
+        DataXJsonBuildDTO jsonBuild = new DataXJsonBuildDTO();
 
         List<String> rColumns;
         List<String> wColumns;
@@ -483,12 +447,13 @@ public class JobServiceImpl implements JobService {
             wdTable.add(wrTables.get(i));
             jsonBuild.setWriterTables(wdTable);
 
-            String json=dataxJsonService.buildJobJson(jsonBuild);
+            String json = dataxJsonService.buildJobJson(jsonBuild);
 
-            JobTemplate jobTemplate = jobTemplateMapper.loadById(19);
+            JobTemplate jobTemplate = jobTemplateMapper.loadById(dto.getTemplateId());
             JobInfo jobInfo = new JobInfo();
             BeanUtils.copyProperties(jobTemplate, jobInfo);
             jobInfo.setJobJson(json);
+            jobInfo.setJobDesc(rdTables.get(i));
             jobInfo.setAddTime(new Date());
             jobInfo.setUpdateTime(new Date());
             jobInfo.setGlueUpdatetime(new Date());

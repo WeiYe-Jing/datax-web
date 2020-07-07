@@ -5,7 +5,7 @@ import java.util.Date;
 
 
 /**
- * Created by xuxueli on 16/7/22.
+ * @author  xuxueli on 16/7/22.
  */
 public class TriggerParam implements Serializable{
     private static final long serialVersionUID = 42L;
@@ -40,7 +40,7 @@ public class TriggerParam implements Serializable{
     private long startId;
     private long endId;
 
-    private int incrementType;
+    private Integer incrementType;
 
     private String replaceParamType;
 
@@ -213,11 +213,11 @@ public class TriggerParam implements Serializable{
         this.endId = endId;
     }
 
-    public int getIncrementType() {
+    public Integer getIncrementType() {
         return incrementType;
     }
 
-    public void setIncrementType(int incrementType) {
+    public void setIncrementType(Integer incrementType) {
         this.incrementType = incrementType;
     }
 

@@ -46,7 +46,7 @@ public class BasicJsonReader {
     }
 
     private Object parseInternal(String json) {
-        if (json.equals("null")) {
+        if ("null".equals(json)) {
             return null;
         }
         if (json.startsWith("[")) {
@@ -83,7 +83,6 @@ public class BasicJsonReader {
         return map;
     }
 
-    // append start
     private static String[] split(String toSplit, String delimiter) {
         if (toSplit != null && !toSplit.isEmpty() && delimiter != null && !delimiter.isEmpty()) {
             int offset = toSplit.indexOf(delimiter);
@@ -162,7 +161,6 @@ public class BasicJsonReader {
         return list;
     }
 
-    // plugin util
     private static String trimTrailingCharacter(String string, char c) {
         if (string.length() > 0 && string.charAt(string.length() - 1) == c) {
             return string.substring(0, string.length() - 1);

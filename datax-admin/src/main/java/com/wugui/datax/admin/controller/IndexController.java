@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * index controller
  *
- * @author xuxueli 2015-12-19 16:13:16
+ * @author jingwk 2019-12-22 16:13:16
  */
 @RestController
 @Api(tags = "首页接口")

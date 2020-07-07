@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by xuxueli on 17/5/10.
+ * @author  xuxueli on 17/5/10.
  */
 @RestController
 @RequestMapping("/api")
@@ -25,8 +25,6 @@ public class JobApiController {
 
     @Resource
     private AdminBiz adminBiz;
-
-
 
     /**
      * callback

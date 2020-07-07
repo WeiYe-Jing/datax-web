@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +19,12 @@ import java.util.Map;
 import static com.wugui.datatx.core.biz.model.ReturnT.FAIL_CODE;
 
 /**
- * @author jingwk on 2019/11/17
+ * @author by jingwk on 2019/11/17
  */
 @RestController
 @RequestMapping("/api/user")
 @Api(tags = "用户信息接口")
-public class UserController extends BaseController {
+public class UserController {
 
     @Resource
     private JobUserMapper jobUserMapper;
@@ -40,20 +39,25 @@ public class UserController extends BaseController {
                                                  @RequestParam(required = false, defaultValue = "10") int size,
                                                  String username) {
 
+        // page list
         List<JobUser> list = jobUserMapper.pageList((current - 1) * size, size, username);
         int recordsTotal = jobUserMapper.pageListCount((current - 1) * size, size, username);
 
-        Map<String, Object> maps = new HashMap<>(3);
-        maps.put("recordsTotal", recordsTotal);
-        maps.put("recordsFiltered", recordsTotal);
-        maps.put("data", list);
+        // package result
+        Map<String, Object> maps = new HashMap<>();
+        maps.put("recordsTotal", recordsTotal);        // 总记录数
+        maps.put("recordsFiltered", recordsTotal);    // 过滤后的总记录数
+        maps.put("data", list);                    // 分页列表
         return new ReturnT<>(maps);
     }
 
     @GetMapping("/list")
     @ApiOperation("用户列表")
     public ReturnT<List<JobUser>> list(String username) {
-        return new ReturnT<>(jobUserMapper.findAll(username));
+
+        // page list
+        List<JobUser> list = jobUserMapper.findAll(username);
+        return new ReturnT<>(list);
     }
 
     @GetMapping("/getUserById")
@@ -64,14 +68,8 @@ public class UserController extends BaseController {
 
     @PostMapping("/add")
     @ApiOperation("添加用户")
-    public ReturnT<String> add(HttpServletRequest request, @RequestBody JobUser jobUser) {
+    public ReturnT<String> add(@RequestBody JobUser jobUser) {
 
-        int userId = getCurrentUserId(request);
-        JobUser user = jobUserMapper.getUserById(userId);
-        String admin = "ADMIN";
-        if (admin.equals(user.getRole())) {
-            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_permission_limit"));
-        }
         // valid username
         if (!StringUtils.hasText(jobUser.getUsername())) {
             return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
@@ -104,12 +102,7 @@ public class UserController extends BaseController {
 
     @PostMapping(value = "/update")
     @ApiOperation("更新用户信息")
-    public ReturnT<String> update(HttpServletRequest request, @RequestBody JobUser jobUser) {
-        int userId = getCurrentUserId(request);
-        JobUser user = jobUserMapper.getUserById(userId);
-        if ("ADMIN".equals(user.getRole())) {
-            return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_permission_limit"));
-        }
+    public ReturnT<String> update(@RequestBody JobUser jobUser) {
         if (StringUtils.hasText(jobUser.getPassword())) {
             String pwd = jobUser.getPassword().trim();
             if (StrUtil.isBlank(pwd)) {
@@ -128,7 +121,7 @@ public class UserController extends BaseController {
         return ReturnT.SUCCESS;
     }
 
-    @PostMapping("/remove")
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ApiOperation("删除用户")
     public ReturnT<String> remove(int id) {
         int result = jobUserMapper.delete(id);
@@ -143,8 +136,7 @@ public class UserController extends BaseController {
             return new ReturnT<>(ReturnT.FAIL.getCode(), "密码不可为空");
         }
         password = password.trim();
-        int pwdShortLen = 4, pwdLongLen = 20;
-        if (!(password.length() >= pwdShortLen && password.length() <= pwdLongLen)) {
+        if (!(password.length() >= 4 && password.length() <= 20)) {
             return new ReturnT<>(FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
         // do write

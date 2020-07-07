@@ -21,19 +21,16 @@ import org.springframework.stereotype.Service;
 public class DataxJsonServiceImpl implements DataxJsonService {
 
     @Autowired
-    private JobDatasourceService jobJdbcDatasourceService;
+    private JobDatasourceService jobJdbcDataSourceService;
 
     @Override
     public String buildJobJson(DataXJsonBuildDTO dataXJsonBuildDto) {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
         // reader
-        JobDatasource readerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
+        JobDatasource readerDataSource = jobJdbcDataSourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
         // reader plugin init
-        dataxJsonHelper.initReader(dataXJsonBuildDto, readerDatasource);
-
-        dataxJsonHelper.initTransformer(dataXJsonBuildDto);
-
-        JobDatasource writerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
+        dataxJsonHelper.initReader(dataXJsonBuildDto, readerDataSource);
+        JobDatasource writerDatasource = jobJdbcDataSourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
         dataxJsonHelper.initWriter(dataXJsonBuildDto, writerDatasource);
 
         return JSON.toJSONString(dataxJsonHelper.buildJob());

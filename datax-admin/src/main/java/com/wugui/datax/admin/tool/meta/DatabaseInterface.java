@@ -38,11 +38,19 @@ public interface DatabaseInterface {
 
 
     /**
+     * 获取所有表名的sql
+     *
+     * @return
+     */
+    String getSQLQueryTables();
+
+    /**
      * 获取 Table schema
      * @param args
      * @return
      */
     String getSQLQueryTableSchema(String... args);
+
     /**
      * 获取所有的字段的sql
      *

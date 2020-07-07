@@ -379,6 +379,30 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return tables;
     }
 
+    @Override
+    public List<String> getTableNames() {
+        List<String> tables = new ArrayList<String>();
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.createStatement();
+            //获取sql
+            String sql = getSQLQueryTables();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String tableName = rs.getString(1);
+                tables.add(tableName);
+            }
+        } catch (SQLException e) {
+            logger.error("[getTableNames Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        } finally {
+            JdbcUtils.close(rs);
+            JdbcUtils.close(stmt);
+        }
+        return tables;
+    }
+
     public Boolean dataSourceTest() {
         try {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -392,13 +416,18 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return false;
     }
 
+
+    protected String getSQLQueryTables(String tableSchema) {
+        return sqlBuilder.getSQLQueryTables(tableSchema);
+    }
+
     /**
      * 不需要其他参数的可不重写
      *
      * @return
      */
-    protected String getSQLQueryTables(String tableSchema) {
-        return sqlBuilder.getSQLQueryTables(tableSchema);
+    protected String getSQLQueryTables() {
+        return sqlBuilder.getSQLQueryTables();
     }
 
     @Override

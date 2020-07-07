@@ -7,6 +7,7 @@ import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.query.*;
 import com.wugui.datax.admin.util.JdbcConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,11 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             return new MongoDBQueryTool(datasource).getCollectionNames(datasource.getDatabaseName());
         } else {
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-            return qTool.getTableNames(tableSchema);
+            if(StringUtils.isBlank(tableSchema)){
+                return qTool.getTableNames();
+            }else{
+                return qTool.getTableNames(tableSchema);
+            }
         }
     }
 

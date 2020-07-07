@@ -23,6 +23,11 @@ public class SqlServerDatabaseMeta extends BaseDatabaseMeta implements DatabaseI
     }
 
     @Override
+    public String getSQLQueryTables() {
+        return "SELECT Name FROM SysObjects Where XType='U' ORDER BY Name";
+    }
+
+    @Override
     public String getSQLQueryTables(String... tableSchema) {
         return "select schema_name(schema_id)+'.'+object_name(object_id) from sys.objects \n" +
                 "where type ='U' \n" +

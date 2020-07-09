@@ -73,7 +73,7 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        applicationContext = applicationContext;
+        this.applicationContext = applicationContext;
     }
 
     public static ApplicationContext getApplicationContext() {

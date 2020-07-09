@@ -120,12 +120,7 @@ public class JobExecutor {
         TriggerCallbackThread.getInstance().toStop();
 
         // destory ProcessCallbackThread
-        try {
-            ProcessCallbackThread.getInstance().toStop();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        ProcessCallbackThread.getInstance().toStop();
     }
 
 

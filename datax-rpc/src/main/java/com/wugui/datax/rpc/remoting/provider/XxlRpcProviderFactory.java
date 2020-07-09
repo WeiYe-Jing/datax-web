@@ -210,10 +210,10 @@ public class XxlRpcProviderFactory {
     /**
      * invoke service
      *
-     * @param xxlRpcRequest XxlRpcRequest
-     * @return XxlRpcResponse
+     * @param xxlRpcRequest
+     * @return
      */
-    public XxlRpcResponse invokeService(XxlRpcRequest xxlRpcRequest) throws Throwable {
+    public XxlRpcResponse invokeService(XxlRpcRequest xxlRpcRequest) {
 
         //  make response
         XxlRpcResponse xxlRpcResponse = new XxlRpcResponse();
@@ -225,30 +225,41 @@ public class XxlRpcProviderFactory {
 
         // valid
         if (serviceBean == null) {
-            xxlRpcResponse.setErrorMsg("The serviceKey[" + serviceKey + "] not found.");
+            xxlRpcResponse.setErrorMsg("The serviceKey["+ serviceKey +"] not found.");
             return xxlRpcResponse;
         }
 
-        if (System.currentTimeMillis() - xxlRpcRequest.getCreateMillisTime() > 3 * 60 * 1000) {
+        if (System.currentTimeMillis() - xxlRpcRequest.getCreateMillisTime() > 3*60*1000) {
             xxlRpcResponse.setErrorMsg("The timestamp difference between admin and executor exceeds the limit.");
             return xxlRpcResponse;
         }
-        if (accessToken != null && accessToken.trim().length() > 0 && !accessToken.trim().equals(xxlRpcRequest.getAccessToken())) {
+        if (accessToken!=null && accessToken.trim().length()>0 && !accessToken.trim().equals(xxlRpcRequest.getAccessToken())) {
             xxlRpcResponse.setErrorMsg("The access token[" + xxlRpcRequest.getAccessToken() + "] is wrong.");
             return xxlRpcResponse;
         }
 
-        // invoke
-        Class<?> serviceClass = serviceBean.getClass();
-        String methodName = xxlRpcRequest.getMethodName();
-        Class<?>[] parameterTypes = xxlRpcRequest.getParameterTypes();
-        Object[] parameters = xxlRpcRequest.getParameters();
+        try {
+            // invoke
+            Class<?> serviceClass = serviceBean.getClass();
+            String methodName = xxlRpcRequest.getMethodName();
+            Class<?>[] parameterTypes = xxlRpcRequest.getParameterTypes();
+            Object[] parameters = xxlRpcRequest.getParameters();
 
-        Method method = serviceClass.getMethod(methodName, parameterTypes);
-        method.setAccessible(true);
-        Object result = method.invoke(serviceBean, parameters);
-        xxlRpcResponse.setResult(result);
+            Method method = serviceClass.getMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            Object result = method.invoke(serviceBean, parameters);
+
+			/*FastClass serviceFastClass = FastClass.create(serviceClass);
+			FastMethod serviceFastMethod = serviceFastClass.getMethod(methodName, parameterTypes);
+			Object result = serviceFastMethod.invoke(serviceBean, parameters);*/
+
+            xxlRpcResponse.setResult(result);
+        } catch (Throwable t) {
+            // catch error
+            logger.error("xxl-rpc provider invokeService error.", t);
+            xxlRpcResponse.setErrorMsg(ThrowableUtil.toString(t));
+        }
+
         return xxlRpcResponse;
     }
-
 }

@@ -23,7 +23,7 @@ public class HiveDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterf
     }
 
     @Override
-    public String getSQLQueryTables(String... args) {
+    public String getSQLQueryTables() {
         return "show tables";
     }
 

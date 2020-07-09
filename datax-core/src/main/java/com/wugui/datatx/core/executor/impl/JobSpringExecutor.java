@@ -1,6 +1,5 @@
 package com.wugui.datatx.core.executor.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.glue.GlueFactory;
 import com.wugui.datatx.core.handler.AbstractJobHandler;
@@ -55,7 +54,7 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
         // init job handler action
         Map<String, Object> serviceBeanMap = applicationContext.getBeansWithAnnotation(JobHandler.class);
 
-        if (CollectionUtil.isNotEmpty(serviceBeanMap)) {
+        if (serviceBeanMap != null && serviceBeanMap.size() > 0) {
             for (Object serviceBean : serviceBeanMap.values()) {
                 if (serviceBean instanceof AbstractJobHandler) {
                     String name = serviceBean.getClass().getAnnotation(JobHandler.class).value();

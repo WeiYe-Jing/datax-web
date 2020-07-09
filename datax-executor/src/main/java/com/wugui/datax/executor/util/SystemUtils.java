@@ -14,8 +14,6 @@ import java.io.File;
  */
 public class SystemUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SystemUtils.class);
-
     private static String DATAX_HOME;
 
     private SystemUtils() {

@@ -13,7 +13,7 @@ public class ClickHouseDataBaseMeta extends BaseDatabaseMeta implements Database
         return single;
     }
     @Override
-    public String getSQLQueryTables(String... args) {
+    public String getSQLQueryTables() {
         return "show tables";
     }
 }

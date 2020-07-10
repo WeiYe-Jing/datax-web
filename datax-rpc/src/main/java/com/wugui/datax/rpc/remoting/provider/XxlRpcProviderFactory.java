@@ -1,7 +1,7 @@
 package com.wugui.datax.rpc.remoting.provider;
 
 import com.wugui.datax.rpc.registry.AbstractServiceRegistry;
-import com.wugui.datax.rpc.remoting.net.AbstractServer;
+import com.wugui.datax.rpc.remoting.net.Server;
 import com.wugui.datax.rpc.remoting.net.impl.netty.server.NettyServer;
 import com.wugui.datax.rpc.remoting.net.params.BaseCallback;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcRequest;
@@ -29,7 +29,7 @@ public class XxlRpcProviderFactory {
 
     // ---------------------- config ----------------------
 
-    private Class<? extends AbstractServer> server = NettyServer.class;
+    private Class<? extends Server> server = NettyServer.class;
     private Class<? extends AbstractSerializer> serializer = HessianSerializer.class;
 
     private int corePoolSize = 60;
@@ -43,7 +43,7 @@ public class XxlRpcProviderFactory {
     private Map<String, String> serviceRegistryParam = null;
 
     // set
-    public void setServer(Class<? extends AbstractServer> server) {
+    public void setServer(Class<? extends Server> server) {
         this.server = server;
     }
 
@@ -98,7 +98,7 @@ public class XxlRpcProviderFactory {
 
     // ---------------------- start / stop ----------------------
 
-    private AbstractServer serverInstance;
+    private Server serverInstance;
     private AbstractSerializer serializerInstance;
     private AbstractServiceRegistry serviceRegistryInstance;
     private String serviceAddress;

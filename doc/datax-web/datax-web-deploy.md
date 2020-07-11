@@ -11,7 +11,7 @@
 
 ### DataX Web安装包准备
 #### 1）下载官方提供的版本tar版本包
-[点击下载](https://datax-web.oss-cn-hangzhou.aliyuncs.com/tar/datax-web-2.1.2.tar.gz)
+[点击下载](https://pan.baidu.com/s/13yoqhGpD00I82K4lOYtQhg) 提取码：cpsk
 
 #### 2） 编译打包（官方提供的tar包跳过）
 直接从Git上面获得源代码，在项目的根目录下执行如下命令

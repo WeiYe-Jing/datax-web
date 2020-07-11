@@ -158,7 +158,7 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 ### 9.任务资源监控
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/monitor.png)
+![](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/img/monitor.png)
 
 ### 10. admin可以创建用户，编辑用户信息
 

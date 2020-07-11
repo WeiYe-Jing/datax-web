@@ -163,5 +163,7 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
 ### 10) Contact us
 
 ### QQ交流群
-https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
+
 

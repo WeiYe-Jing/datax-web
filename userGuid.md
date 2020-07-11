@@ -303,4 +303,6 @@ http://localhost:8080/index.html#/dashboard
 # Contact us
 
 ### QQ交流群
-https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
+

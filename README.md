@@ -130,29 +130,19 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 ### 6.任务创建介绍（关联模版创建任务不再介绍，具体参考4. 构建JSON脚本）
 
-#### DataX任务
+#### 支持DataX任务,Shell任务，Python任务，PowerShell任务
 
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/datax.png)
 
-#### Shell任务
-
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/shell.png)
 
-#### Python任务
-
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/python.png)
-
-#### PowerShell任务
-
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/powershell.png)
-
-- 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
     - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
     - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
     - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
 - 增量增新建议将阻塞策略设置为丢弃后续调度或者单机串行
     - 设置单机串行时应该注意合理设置重试次数(失败重试的次数*每次执行时间<任务的调度周期)，重试的次数如果设置的过多会导致数据重复，例如任务30秒执行一次，每次执行时间需要20秒，设置重试三次，如果任务失败了，第一个重试的时间段为1577755680-1577756680，重试任务没结束，新任务又开启，那新任务的时间段会是1577755680-1577758680
+
 - [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/time-increment-desc.md)
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/partition-dynamic-param.md)
 
@@ -271,7 +261,7 @@ Copyright (c) 2020 WeiYe
 
 # 项目规划
 
-![项目规划](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
+[项目规划](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
 
 # Contact us
 

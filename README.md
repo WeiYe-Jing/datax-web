@@ -2,7 +2,7 @@
 ![GitHub issues](https://img.shields.io/github/issues/WeiYe-Jing/datax-web)
 ![GitHub](https://img.shields.io/github/license/WeiYe-Jing/datax-web)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/WeiYe-Jing/datax-web)
-![](https://img.shields.io/badge/qq%E7%BE%A4-795380631-green.svg)
+![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
 
 # DataX-Web
 
@@ -275,4 +275,5 @@ Copyright (c) 2020 WeiYe
 
 # Contact us
 
-### QQ交流群 795380631
+### QQ交流群
+https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png

@@ -152,7 +152,6 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 ### 8. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/job_log.png)
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/log_stat.png)
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/log_detail.png)
 

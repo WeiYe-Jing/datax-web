@@ -144,6 +144,7 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 #### PowerShell任务
 
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/powershell.png)
 
 - 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
@@ -270,7 +271,7 @@ Copyright (c) 2020 WeiYe
 
 # 项目规划
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
+![项目规划](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
 
 # Contact us
 

@@ -1,0 +1,6 @@
+{
+  "name": "dx_md5",
+  "class": "com.alibaba.datax.transformer.Md5Transformer",
+  "description": "Hiding transformer setting any value as default",
+  "developer": "build2last@github.com"
+}

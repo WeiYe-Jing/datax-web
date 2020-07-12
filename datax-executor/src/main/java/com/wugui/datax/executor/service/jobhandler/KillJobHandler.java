@@ -4,7 +4,7 @@ package com.wugui.datax.executor.service.jobhandler;
 import cn.hutool.core.io.FileUtil;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
-import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.util.ProcessUtil;
 import org.springframework.stereotype.Component;
@@ -20,20 +20,20 @@ import java.io.File;
 
 @JobHandler(value = "killJobHandler")
 @Component
-public class KillJobHandler extends IJobHandler {
+public class KillJobHandler extends AbstractJobHandler {
 
     @Override
     public ReturnT<String> execute(TriggerParam tgParam) {
         String processId = tgParam.getProcessId();
         boolean result = ProcessUtil.killProcessByPid(processId);
         //  删除临时文件
-        if (!CollectionUtils.isEmpty(jobTmpFiles)) {
-            String pathname = jobTmpFiles.get(processId);
+        if (!CollectionUtils.isEmpty(JOB_TEM_FILES)) {
+            String pathname = JOB_TEM_FILES.get(processId);
             if (pathname != null) {
                 FileUtil.del(new File(pathname));
-                jobTmpFiles.remove(processId);
+                JOB_TEM_FILES.remove(processId);
             }
         }
-        return result ? IJobHandler.SUCCESS : IJobHandler.FAIL;
+        return result ? AbstractJobHandler.SUCCESS : AbstractJobHandler.FAIL;
     }
 }

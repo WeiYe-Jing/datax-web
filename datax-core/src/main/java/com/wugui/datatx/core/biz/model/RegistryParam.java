@@ -3,7 +3,7 @@ package com.wugui.datatx.core.biz.model;
 import java.io.Serializable;
 
 /**
- * Created by xuxueli on 2017-05-10 20:22:42
+ * @author  xuxueli on 2017-05-10 20:22:42
  */
 public class RegistryParam implements Serializable {
     private static final long serialVersionUID = 42L;

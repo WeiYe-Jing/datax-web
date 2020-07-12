@@ -4,7 +4,7 @@ import com.wugui.datatx.core.biz.model.HandleCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.executor.JobExecutor;
-import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.util.ShardingUtil;
@@ -32,25 +32,25 @@ public class JobThread extends Thread {
     private static Logger logger = LoggerFactory.getLogger(JobThread.class);
 
     private int jobId;
-    private IJobHandler handler;
+    private AbstractJobHandler handler;
     private LinkedBlockingQueue<TriggerParam> triggerQueue;
-    private Set<Long> triggerLogIdSet;        // avoid repeat trigger for the same TRIGGER_LOG_ID
+    private Set<Long> triggerLogIdSet;
 
     private volatile boolean toStop = false;
     private String stopReason;
 
-    private boolean running = false;    // if running job
-    private int idleTimes = 0;            // idel times
+    private boolean running = false;
+    private int idleTimes = 0;
 
 
-    public JobThread(int jobId, IJobHandler handler) {
+    public JobThread(int jobId, AbstractJobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
         this.triggerQueue = new LinkedBlockingQueue<>();
         this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<>());
     }
 
-    public IJobHandler getHandler() {
+    public AbstractJobHandler getHandler() {
         return handler;
     }
 
@@ -98,7 +98,6 @@ public class JobThread extends Thread {
 
     @Override
     public void run() {
-
         // init
         try {
             handler.init();
@@ -123,7 +122,7 @@ public class JobThread extends Thread {
 
                     // log filename, like "logPath/yyyy-MM-dd/9999.log"
                     String logFileName = JobFileAppender.makeLogFileName(new Date(tgParam.getLogDateTime()), tgParam.getLogId());
-                    JobFileAppender.contextHolder.set(logFileName);
+                    JobFileAppender.CONTEXT_HOLDER.set(logFileName);
                     ShardingUtil.setShardingVo(new ShardingUtil.ShardingVO(tgParam.getBroadcastIndex(), tgParam.getBroadcastTotal()));
 
                     // execute
@@ -144,7 +143,7 @@ public class JobThread extends Thread {
                             JobLogger.log("<br>----------- datax-web job execute timeout");
                             JobLogger.log(e);
 
-                            executeResult = new ReturnT<>(IJobHandler.FAIL_TIMEOUT.getCode(), "job execute timeout ");
+                            executeResult = new ReturnT<>(AbstractJobHandler.FAIL_TIMEOUT.getCode(), "job execute timeout ");
                         } finally {
                             futureThread.interrupt();
                         }
@@ -154,19 +153,19 @@ public class JobThread extends Thread {
                     }
 
                     if (executeResult == null) {
-                        executeResult = IJobHandler.FAIL;
+                        executeResult = AbstractJobHandler.FAIL;
                     } else {
                         executeResult.setMsg(
                                 (executeResult != null && executeResult.getMsg() != null && executeResult.getMsg().length() > 50000)
                                         ? executeResult.getMsg().substring(0, 50000).concat("...")
                                         : executeResult.getMsg());
-                        executeResult.setContent(null);    // limit obj size
+                        executeResult.setContent(null);
                     }
                     JobLogger.log("<br>----------- datax-web job execute end(finish) -----------<br>----------- ReturnT:" + executeResult);
 
                 } else {
                     if (idleTimes > 30) {
-                        if (triggerQueue.size() == 0) {    // avoid concurrent trigger causes jobId-lost
+                        if (triggerQueue.size() == 0) {
                             JobExecutor.removeJobThread(jobId, "executor idel times over limit.");
                         }
                     }
@@ -191,7 +190,7 @@ public class JobThread extends Thread {
                         TriggerCallbackThread.pushCallBack(new HandleCallbackParam(tgParam.getLogId(), tgParam.getLogDateTime(), executeResult));
                     } else {
                         // is killed
-                        ReturnT<String> stopResult = new ReturnT<String>(ReturnT.FAIL_CODE, stopReason + " [job running, killed]");
+                        ReturnT<String> stopResult = new ReturnT<>(ReturnT.FAIL_CODE, stopReason + " [job running, killed]");
                         TriggerCallbackThread.pushCallBack(new HandleCallbackParam(tgParam.getLogId(), tgParam.getLogDateTime(), stopResult));
                     }
                 }
@@ -203,11 +202,10 @@ public class JobThread extends Thread {
             TriggerParam triggerParam = triggerQueue.poll();
             if (triggerParam != null) {
                 // is killed
-                ReturnT<String> stopResult = new ReturnT<String>(ReturnT.FAIL_CODE, stopReason + " [job not executed, in the job queue, killed.]");
+                ReturnT<String> stopResult = new ReturnT<>(ReturnT.FAIL_CODE, stopReason + " [job not executed, in the job queue, killed.]");
                 TriggerCallbackThread.pushCallBack(new HandleCallbackParam(triggerParam.getLogId(), triggerParam.getLogDateTime(), stopResult));
             }
         }
-
         // destroy
         try {
             handler.destroy();

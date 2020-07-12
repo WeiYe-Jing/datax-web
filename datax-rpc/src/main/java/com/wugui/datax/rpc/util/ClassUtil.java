@@ -7,25 +7,25 @@ import java.util.HashMap;
  */
 public class ClassUtil {
 
-    private static final HashMap<String, Class<?>> primClasses = new HashMap<>();
+    private static final HashMap<String, Class<?>> PRIM_CLASSES = new HashMap<>();
 
     static {
-        primClasses.put("boolean", boolean.class);
-        primClasses.put("byte", byte.class);
-        primClasses.put("char", char.class);
-        primClasses.put("short", short.class);
-        primClasses.put("int", int.class);
-        primClasses.put("long", long.class);
-        primClasses.put("float", float.class);
-        primClasses.put("double", double.class);
-        primClasses.put("void", void.class);
+        PRIM_CLASSES.put("boolean", boolean.class);
+        PRIM_CLASSES.put("byte", byte.class);
+        PRIM_CLASSES.put("char", char.class);
+        PRIM_CLASSES.put("short", short.class);
+        PRIM_CLASSES.put("int", int.class);
+        PRIM_CLASSES.put("long", long.class);
+        PRIM_CLASSES.put("float", float.class);
+        PRIM_CLASSES.put("double", double.class);
+        PRIM_CLASSES.put("void", void.class);
     }
 
     public static Class<?> resolveClass(String className) throws ClassNotFoundException {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException ex) {
-            Class<?> cl = primClasses.get(className);
+            Class<?> cl = PRIM_CLASSES.get(className);
             if (cl != null) {
                 return cl;
             } else {

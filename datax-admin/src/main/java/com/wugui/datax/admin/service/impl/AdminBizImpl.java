@@ -6,7 +6,7 @@ import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.RegistryParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.IncrementTypeEnum;
-import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
@@ -45,7 +45,7 @@ public class AdminBizImpl implements AdminBiz {
         for (HandleCallbackParam handleCallbackParam : callbackParamList) {
             ReturnT<String> callbackResult = callback(handleCallbackParam);
             logger.debug(">>>>>>>>> JobApiController.callback {}, handleCallbackParam={}, callbackResult={}",
-                    (callbackResult.getCode() == IJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleCallbackParam, callbackResult);
+                    (callbackResult.getCode() == AbstractJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleCallbackParam, callbackResult);
         }
 
         return ReturnT.SUCCESS;
@@ -56,7 +56,7 @@ public class AdminBizImpl implements AdminBiz {
         for (HandleProcessCallbackParam handleProcessCallbackParam : callbackParamList) {
             ReturnT<String> callbackResult = processCallback(handleProcessCallbackParam);
             logger.debug(">>>>>>>>> JobApiController.processCallback {}, handleCallbackParam={}, callbackResult={}",
-                    (callbackResult.getCode() == IJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleProcessCallbackParam, callbackResult);
+                    (callbackResult.getCode() == AbstractJobHandler.SUCCESS.getCode() ? "success" : "fail"), handleProcessCallbackParam, callbackResult);
         }
         return ReturnT.SUCCESS;
     }
@@ -74,14 +74,15 @@ public class AdminBizImpl implements AdminBiz {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "log item not found.");
         }
         if (log.getHandleCode() > 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
+            // avoid repeat callback, trigger child job etc
+            return new ReturnT<>(ReturnT.FAIL_CODE, "log repeate callback.");
         }
 
         // trigger success, to trigger child job
         String callbackMsg = null;
         int resultCode = handleCallbackParam.getExecuteResult().getCode();
 
-        if (IJobHandler.SUCCESS.getCode() == resultCode) {
+        if (AbstractJobHandler.SUCCESS.getCode() == resultCode) {
 
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
 
@@ -117,7 +118,7 @@ public class AdminBizImpl implements AdminBiz {
         }
 
         //kill execution timeout DataX process
-        if (!StringUtils.isEmpty(log.getProcessId()) && IJobHandler.FAIL_TIMEOUT.getCode() == resultCode) {
+        if (!StringUtils.isEmpty(log.getProcessId()) && AbstractJobHandler.FAIL_TIMEOUT.getCode() == resultCode) {
             KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
         }
 
@@ -132,9 +133,10 @@ public class AdminBizImpl implements AdminBiz {
         if (callbackMsg != null) {
             handleMsg.append(callbackMsg);
         }
-
-        if (handleMsg.length() > 15000) {
-            handleMsg = new StringBuffer(handleMsg.substring(0, 15000));  // text最大64kb 避免长度过长
+        int len = 15000;
+        if (handleMsg.length() > len) {
+            // text最大64kb 避免长度过长
+            handleMsg = new StringBuffer(handleMsg.substring(0, len));
         }
 
         // success, save log
@@ -150,7 +152,7 @@ public class AdminBizImpl implements AdminBiz {
 
     private void updateIncrementParam(JobLog log, Integer incrementType) {
         if (IncrementTypeEnum.ID.getCode() == incrementType) {
-            jobInfoMapper.incrementIdUpdate(log.getJobId(),log.getMaxId());
+            jobInfoMapper.incrementIdUpdate(log.getJobId(), log.getMaxId());
         } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
             jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
         }

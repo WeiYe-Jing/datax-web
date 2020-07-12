@@ -1,11 +1,15 @@
-![Java](https://woolson.gitee.io/npmer-badge/Java-555555-1.8-44cc11-check-ffffff-square-gradient-shadow.svg)
-![](https://img.shields.io/badge/springboot-2.1.4.RELEASE-red.svg)
+![GitHub contributors](https://img.shields.io/github/contributors/WeiYe-Jing/datax-web)
+![GitHub issues](https://img.shields.io/github/issues/WeiYe-Jing/datax-web)
+![GitHub](https://img.shields.io/github/license/WeiYe-Jing/datax-web)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/WeiYe-Jing/datax-web)
 ![](https://img.shields.io/badge/qq%E7%BE%A4-795380631-green.svg)
 
 # DataX-Web
 
-DataX阿里在开源的时候并未提供任何可视化界面，我们在使用的过程中，需要将Json配置文件放到DataX的job路径下，随着业务的增加，配置文件不方便管理和迁移并且每次执行都需要记录命令。
-目前DataX只支持单机版，多节点之间的协作不能控制，我们希望能有一款有友好的可视化界面，支持定时任务,支持分布式的数据同步利器，这也是该项目的目标。
+DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易用的
+操作界面，降低用户使用DataX的学习成本，缩短任务配置时间，避免配置过程中出错。用户可通过页面选择数据源即可创建数据同步任务，RDBMS数据源可批量创建数据同步任务，支持实时查看数据同步进度及日志并提供终止同步功能，集成并二次开发xxl-job可根据时间、自增主键增量同步数据。
+
+任务"执行器"支持集群部署，支持执行器多节点路由策略选择，支持超时控制、失败重试、失败告警、任务依赖，执行器CPU.内存.负载的监控等等。后续还将提供更多的数据源支持、数据转换UDF、表结构同步、数据同步血缘等更为复杂的业务场景。
 
 # System Requirements
 
@@ -174,6 +178,26 @@ DataX阿里在开源的时候并未提供任何可视化界面，我们在使用
 # UI
 
 [前端github地址](https://github.com/WeiYe-Jing/datax-web-ui)
+
+# 项目成员
+
+- water
+
+```
+非常荣幸成为datax-web的Committer，从早期datax手工编写任务+配置，到datax-web界面化勾选创建任务+配置信息+调度管理，datax-web将数据同步工作的效率提升不少，相信后面后成为etl中不可或缺的生产力……
+```
+
+- Alecor
+
+```
+非常荣幸成为datax-web的Committer，datax-web旨在帮助用户从datax配置中解放出来，提供datax的Web化的管理能力。希望datax-web能为更多有需要的人服务，带来更好的简单、易用的体验！
+```
+
+- zhouhongfa
+
+- liukunyuan
+
+感谢贡献！
 
 # Contributing
 

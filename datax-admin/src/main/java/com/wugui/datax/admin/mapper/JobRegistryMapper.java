@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by jingwk on 2019/11/17
+ * @author  jingwk on 2019/11/17
  */
 @Mapper
 public interface JobRegistryMapper extends BaseMapper<JobRegistry> {

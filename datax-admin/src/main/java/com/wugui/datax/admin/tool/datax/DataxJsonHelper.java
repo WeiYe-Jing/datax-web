@@ -10,12 +10,13 @@ import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
-import com.wugui.datax.admin.tool.pojo.*;
+import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
+import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
+import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import com.wugui.datax.admin.util.JdbcConstants;
-import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.util.TextUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -70,28 +71,27 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private BaseDataxPlugin writerPlugin;
 
-    private HiveReaderDto hiveReaderDto;
+    private HiveReaderDTO hiveReaderDto;
 
-    private HiveWriterDto hiveWriterDto;
+    private HiveWriterDTO hiveWriterDto;
 
-    private HbaseReaderDto hbaseReaderDto;
+    private HbaseReaderDTO hbaseReaderDto;
 
-    private HbaseWriterDto hbaseWriterDto;
+    private HbaseWriterDTO hbaseWriterDto;
 
-    private RdbmsReaderDto rdbmsReaderDto;
+    private RdbmsReaderDTO rdbmsReaderDto;
 
-    private RdbmsWriterDto rdbmsWriterDto;
+    private RdbmsWriterDTO rdbmsWriterDto;
 
-    private MongoDBReaderDto mongoDBReaderDto;
+    private MongoDBReaderDTO mongoDBReaderDto;
 
-    private MongoDBWriterDto mongoDBWriterDto;
+    private MongoDBWriterDTO mongoDBWriterDto;
 
-    List<DataXTransformer> transformers = new ArrayList<>();
 
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
 
-    public void initReader(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
+    public void initReader(DataXJsonBuildDTO dataxJsonDto, JobDatasource readerDatasource) {
 
         this.readerDatasource = readerDatasource;
         this.readerTables = dataxJsonDto.getReaderTables();
@@ -130,7 +130,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
-    public void initWriter(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
+    public void initWriter(DataXJsonBuildDTO dataxJsonDto, JobDatasource readerDatasource) {
         this.writerDatasource = readerDatasource;
         this.writerTables = dataxJsonDto.getWriterTables();
         this.writerColumns = dataxJsonDto.getWriterColumns();
@@ -168,17 +168,12 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
+
     /**
      * 初始化脱敏规则
      * 暂时实现
      * 1.对字段进行MD5脱敏
      * 2.对字段替换换行符
-     *
-     * @param dataXJsonBuildDto
-     */
-
-    /**
-     * 初始化脱敏规则
      *
      * @param dataXJsonBuildDto
      */
@@ -212,6 +207,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
             transformers.add(t);
         }
     }
+
 
     private List<String> convertKeywordsColumns(String datasource, List<String> columns) {
         if (columns == null) {
@@ -277,9 +273,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         res.put("reader", this.buildReader);
         res.put("writer", this.buildWriter);
-        if (transformers.size() > 0) {
-            res.put("transformer", transformers);
-        }
         return res;
     }
 

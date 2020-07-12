@@ -22,10 +22,10 @@ public class SqlServerDatabaseMeta extends BaseDatabaseMeta implements DatabaseI
         return single;
     }
 
-    /*@Override
-    public String getSQLQueryTables(String... args) {
+    @Override
+    public String getSQLQueryTables() {
         return "SELECT Name FROM SysObjects Where XType='U' ORDER BY Name";
-    }*/
+    }
 
     @Override
     public String getSQLQueryTables(String... tableSchema) {

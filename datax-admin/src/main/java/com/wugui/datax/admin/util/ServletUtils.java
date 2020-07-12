@@ -22,9 +22,10 @@ import java.util.Map.Entry;
  * @since 2019/6/15
  */
 public class ServletUtils {
-
-    public static final String DEFAULT_PARAMS_PARAM = "params";        // 登录扩展参数（JSON字符串）优先级高于扩展参数前缀
-    public static final String DEFAULT_PARAM_PREFIX_PARAM = "param_";    // 扩展参数前缀
+    // 登录扩展参数（JSON字符串）优先级高于扩展参数前缀
+    public static final String DEFAULT_PARAMS_PARAM = "params";
+    // 扩展参数前缀
+    public static final String DEFAULT_PARAM_PREFIX_PARAM = "param_";
 
     // 定义静态文件后缀；静态文件排除URI地址
     private static String[] staticFiles;
@@ -77,7 +78,7 @@ public class ServletUtils {
     public static String getRequestJsonString(HttpServletRequest request) throws IOException {
         String submitMehtod = request.getMethod();
         // GET
-        if (submitMehtod.equals("GET")) {
+        if ("GET".equals(submitMehtod)) {
             if (StrUtil.isNotEmpty(request.getQueryString())) {
                 return new String(request.getQueryString().getBytes("iso-8859-1"), "utf-8").replaceAll("%22", "\"");
             } else {
@@ -104,7 +105,7 @@ public class ServletUtils {
         if (contentLength < 0) {
             return null;
         }
-        byte buffer[] = new byte[contentLength];
+        byte[] buffer = new byte[contentLength];
         for (int i = 0; i < contentLength; ) {
             int readlen = request.getInputStream().read(buffer, i, contentLength - i);
             if (readlen == -1) {
@@ -126,7 +127,7 @@ public class ServletUtils {
      * @throws IOException
      */
     public static String getRequestPostStr(HttpServletRequest request) throws IOException {
-        byte buffer[] = getRequestPostBytes(request);
+        byte[] buffer = getRequestPostBytes(request);
         String charEncoding = request.getCharacterEncoding();
         if (charEncoding == null) {
             charEncoding = "UTF-8";

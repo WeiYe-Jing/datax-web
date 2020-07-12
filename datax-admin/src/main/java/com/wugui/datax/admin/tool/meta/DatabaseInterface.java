@@ -17,23 +17,40 @@ public interface DatabaseInterface {
      */
     String getSQLQueryPrimaryKey();
 
+    /**
+     * getSQLQueryTableNameComment
+     * @return
+     */
     String getSQLQueryTableNameComment();
-
+    /**
+     * getSQLQueryTablesNameComments
+     * @return
+     */
     String getSQLQueryTablesNameComments();
+
+
+    /**
+     * 获取所有表名的sql
+     * @param tableSchema
+     * @return
+     */
+    String getSQLQueryTables(String... tableSchema);
+
 
     /**
      * 获取所有表名的sql
      *
      * @return
      */
-    String getSQLQueryTables(String... tableSchema);
+    String getSQLQueryTables();
 
     /**
      * 获取 Table schema
-     *
+     * @param args
      * @return
      */
     String getSQLQueryTableSchema(String... args);
+
     /**
      * 获取所有的字段的sql
      *

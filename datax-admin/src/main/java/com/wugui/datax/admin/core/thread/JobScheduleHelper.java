@@ -27,7 +27,7 @@ public class JobScheduleHelper {
         return instance;
     }
 
-    public static final long PRE_READ_MS = 5000;    // pre read
+    public static final long PRE_READ_MS = 5000;
 
     private Thread scheduleThread;
     private Thread ringThread;
@@ -296,7 +296,7 @@ public class JobScheduleHelper {
         // 1、stop schedule
         scheduleThreadToStop = true;
         try {
-            TimeUnit.SECONDS.sleep(1);  // wait
+            TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         }

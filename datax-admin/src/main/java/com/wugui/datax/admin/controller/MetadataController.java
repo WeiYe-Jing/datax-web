@@ -60,8 +60,8 @@ public class MetadataController extends BaseController {
      */
     @GetMapping("/getDBSchema")
     @ApiOperation("根据数据源id获取 db schema")
-    public R<List<String>> getTableSchema(Long datasourceId) {
-        return success(datasourceQueryService.getTableSchema(datasourceId));
+    public R<List<String>> getDbSchema(Long datasourceId) {
+        return success(datasourceQueryService.getDbSchema(datasourceId));
     }
 
     /**
@@ -72,7 +72,7 @@ public class MetadataController extends BaseController {
      */
     @GetMapping("/getTables")
     @ApiOperation("根据数据源id获取可用表名")
-    public R<List<String>> getTableNames(Long datasourceId,String tableSchema) throws IOException, SQLException {
+    public R<List<String>> getTableNames(Long datasourceId,String tableSchema) throws IOException {
         return success(datasourceQueryService.getTables(datasourceId,tableSchema));
     }
 
@@ -85,7 +85,7 @@ public class MetadataController extends BaseController {
      */
     @GetMapping("/getColumns")
     @ApiOperation("根据数据源id和表名获取所有字段")
-    public R<List<String>> getColumns(Long datasourceId, String tableName) throws IOException, SQLException {
+    public R<List<String>> getColumns(Long datasourceId, String tableName) throws IOException {
         return success(datasourceQueryService.getColumns(datasourceId, tableName));
     }
 

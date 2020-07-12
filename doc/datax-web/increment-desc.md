@@ -234,4 +234,11 @@ select * from job_log where id>= ${startId} and id< ${endId}
 - JVM启动参数拼接结果为： -j "-Xms2G -Xmx2G"
 
 
+## 四、常见问题
+
+请查看issue列表或者提issue说明问题，我们会尽快回复。
+
+https://github.com/WeiYe-Jing/datax-web/issues/198
+
+
 

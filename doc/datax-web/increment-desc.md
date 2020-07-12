@@ -1,8 +1,11 @@
 # DataX Web增量配置说明
 
+
 ## 一、根据日期进行增量数据抽取
 
+
 ### 1.页面任务配置
+
 
 打开菜单任务管理页面，选择添加任务
 
@@ -89,7 +92,10 @@ datax.json
   }
 }
 ```
+
+
 #### querySql解析
+
 
 ```
 select * from test_list where operationDate >= ${lastTime} and operationDate < ${currentTime}
@@ -106,7 +112,9 @@ select * from test_list where operationDate >= FROM_UNIXTIME(${lastTime}) and op
 
 ## 二、根据自增Id进行增量数据抽取
 
+
 ### 1.页面任务配置
+
 
 打开菜单任务管理页面，选择添加任务
 
@@ -129,6 +137,7 @@ select * from test_list where operationDate >= FROM_UNIXTIME(${lastTime}) and op
 ```
 
 注意，注意，注意: 一定要仔细看文档（后续会对这块配置进行优化，避免大家犯错）
+
 
 ### 2.JSON配置
 
@@ -209,6 +218,7 @@ datax.json
 
 #### querySql解析
 
+
 ```
 select * from job_log where id>= ${startId} and id< ${endId}
 ```
@@ -218,6 +228,8 @@ select * from job_log where id>= ${startId} and id< ${endId}
  
  
 ## 三、JVM启动参数配置
+
+
 此选择为非必选，可以配置DataX启动时JVM的参数，具体配置不做详解。
 - JVM启动参数拼接结果为： -j "-Xms2G -Xmx2G"
 

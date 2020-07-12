@@ -42,4 +42,16 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta implements DatabaseInter
     public String getSQLQueryColumns(String... args) {
         return "select column_name from information_schema.columns where table_schema=? and table_name=?";
     }
+
+    /**
+     * 在mysql中 scheme与database同义词。
+     * 如果需要schema 则return "show databases";
+     *
+     * @param args
+     * @return
+     */
+    @Override
+    public String getSQLQueryTableSchema(String... args) {
+        return "show databases";
+    }
 }

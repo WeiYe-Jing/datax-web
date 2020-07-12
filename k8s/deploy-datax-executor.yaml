@@ -1,0 +1,65 @@
+# deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: deploy-datax-executor
+  labels:
+    app: deploy-datax-executor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datax-executor
+  revisionHistoryLimit: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      namespace: default
+      labels:
+        app: datax-executor
+    spec:
+      containers:
+      - name: datax-executor
+        image: yangzhuangqiu/datax:executor-2.1.2
+        ports:
+        - containerPort: 9999
+          name: executor
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          tcpSocket:
+            port: executor
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          tcpSocket:
+            port: executor
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sleep", "15"]
+        env:
+        - name: SERVER_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: JAVA_OPTS
+          value: -server -Xmx512m -Xms512m -Duser.timezone=Asia/Shanghai -Dserver.port=9504 -Dexecutor.port=9999 -Ddatax.admin.host=svc-datax-admin -Ddatax.admin.port=9527 -Dpython.path=/opt/datax/bin/datax.py -Ddata.path=/opt/datax-executor/data -Djson.path=/opt/datax-executor/json -Dlogging.config=/opt/datax-executor/conf/logback.xml
+        - name: LOG_PATH
+          value: /opt/datax-executor/logs
+      securityContext:
+        runAsUser: 0

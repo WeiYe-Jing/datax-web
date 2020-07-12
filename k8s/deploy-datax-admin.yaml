@@ -1,0 +1,112 @@
+# ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ing-datax-admin
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: datax-web.xxx.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: svc-datax-admin
+          servicePort: web
+---
+# svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-datax-admin
+  namespace: default
+  labels:
+    app: svc-datax-admin
+spec:
+  selector:
+    app: datax-admin
+  ports:
+  - name: web
+    port: 9527
+    targetPort: web
+---
+# deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: deploy-datax-admin
+  labels:
+    app: deploy-datax-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datax-admin
+  revisionHistoryLimit: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      namespace: default
+      labels:
+        app: datax-admin
+    spec:
+      containers:
+      - name: datax-admin
+        image: yangzhuangqiu/datax:admin-2.1.2
+        ports:
+        - containerPort: 9527
+          name: web
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /index.html
+            port: web
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: web
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        # 优雅退出
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sleep", "15"]
+        volumeMounts:
+        - name: config
+          mountPath: /opt/datax-admin/conf/bootstrap.properties
+          subPath: bootstrap.properties
+          readOnly: true
+        env:
+        - name: SERVER_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: JAVA_OPTS
+          value: -server -Xmx512m -Xms512m -Duser.timezone=Asia/Shanghai -Dserver.port=9527 -Ddata.path=/opt/datax-admin/data -Dlogging.config=/opt/datax-admin/conf/logback.xml -Dmail.username=datax -Dmail.password=123456
+        - name: LOG_PATH
+          value: /opt/datax-admin/logs
+      securityContext:
+        runAsUser: 0
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 0600
+          name: datax-admin-bootstrap-conf

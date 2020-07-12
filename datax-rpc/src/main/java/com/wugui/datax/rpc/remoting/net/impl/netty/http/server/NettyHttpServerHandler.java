@@ -78,12 +78,7 @@ public class NettyHttpServerHandler extends SimpleChannelInboundHandler<FullHttp
                 }
 
                 // invoke + response
-                XxlRpcResponse xxlRpcResponse = null;
-                try {
-                    xxlRpcResponse = xxlRpcProviderFactory.invokeService(xxlRpcRequest);
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
+                XxlRpcResponse xxlRpcResponse = xxlRpcProviderFactory.invokeService(xxlRpcRequest);
                 // response serialize
                 byte[] responseBytes = xxlRpcProviderFactory.getSerializerInstance().serialize(xxlRpcResponse);
 

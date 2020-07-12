@@ -1,7 +1,7 @@
 package com.wugui.datax.rpc.remoting.provider;
 
 import com.wugui.datax.rpc.registry.AbstractServiceRegistry;
-import com.wugui.datax.rpc.remoting.net.AbstractServer;
+import com.wugui.datax.rpc.remoting.net.Server;
 import com.wugui.datax.rpc.remoting.net.impl.netty.server.NettyServer;
 import com.wugui.datax.rpc.remoting.net.params.BaseCallback;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcRequest;
@@ -29,7 +29,7 @@ public class XxlRpcProviderFactory {
 
     // ---------------------- config ----------------------
 
-    private Class<? extends AbstractServer> server = NettyServer.class;
+    private Class<? extends Server> server = NettyServer.class;
     private Class<? extends AbstractSerializer> serializer = HessianSerializer.class;
 
     private int corePoolSize = 60;
@@ -43,7 +43,7 @@ public class XxlRpcProviderFactory {
     private Map<String, String> serviceRegistryParam = null;
 
     // set
-    public void setServer(Class<? extends AbstractServer> server) {
+    public void setServer(Class<? extends Server> server) {
         this.server = server;
     }
 
@@ -98,7 +98,7 @@ public class XxlRpcProviderFactory {
 
     // ---------------------- start / stop ----------------------
 
-    private AbstractServer serverInstance;
+    private Server serverInstance;
     private AbstractSerializer serializerInstance;
     private AbstractServiceRegistry serviceRegistryInstance;
     private String serviceAddress;
@@ -210,10 +210,10 @@ public class XxlRpcProviderFactory {
     /**
      * invoke service
      *
-     * @param xxlRpcRequest XxlRpcRequest
-     * @return XxlRpcResponse
+     * @param xxlRpcRequest
+     * @return
      */
-    public XxlRpcResponse invokeService(XxlRpcRequest xxlRpcRequest) throws Throwable {
+    public XxlRpcResponse invokeService(XxlRpcRequest xxlRpcRequest) {
 
         //  make response
         XxlRpcResponse xxlRpcResponse = new XxlRpcResponse();
@@ -225,30 +225,41 @@ public class XxlRpcProviderFactory {
 
         // valid
         if (serviceBean == null) {
-            xxlRpcResponse.setErrorMsg("The serviceKey[" + serviceKey + "] not found.");
+            xxlRpcResponse.setErrorMsg("The serviceKey["+ serviceKey +"] not found.");
             return xxlRpcResponse;
         }
 
-        if (System.currentTimeMillis() - xxlRpcRequest.getCreateMillisTime() > 3 * 60 * 1000) {
+        if (System.currentTimeMillis() - xxlRpcRequest.getCreateMillisTime() > 3*60*1000) {
             xxlRpcResponse.setErrorMsg("The timestamp difference between admin and executor exceeds the limit.");
             return xxlRpcResponse;
         }
-        if (accessToken != null && accessToken.trim().length() > 0 && !accessToken.trim().equals(xxlRpcRequest.getAccessToken())) {
+        if (accessToken!=null && accessToken.trim().length()>0 && !accessToken.trim().equals(xxlRpcRequest.getAccessToken())) {
             xxlRpcResponse.setErrorMsg("The access token[" + xxlRpcRequest.getAccessToken() + "] is wrong.");
             return xxlRpcResponse;
         }
 
-        // invoke
-        Class<?> serviceClass = serviceBean.getClass();
-        String methodName = xxlRpcRequest.getMethodName();
-        Class<?>[] parameterTypes = xxlRpcRequest.getParameterTypes();
-        Object[] parameters = xxlRpcRequest.getParameters();
+        try {
+            // invoke
+            Class<?> serviceClass = serviceBean.getClass();
+            String methodName = xxlRpcRequest.getMethodName();
+            Class<?>[] parameterTypes = xxlRpcRequest.getParameterTypes();
+            Object[] parameters = xxlRpcRequest.getParameters();
 
-        Method method = serviceClass.getMethod(methodName, parameterTypes);
-        method.setAccessible(true);
-        Object result = method.invoke(serviceBean, parameters);
-        xxlRpcResponse.setResult(result);
+            Method method = serviceClass.getMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            Object result = method.invoke(serviceBean, parameters);
+
+			/*FastClass serviceFastClass = FastClass.create(serviceClass);
+			FastMethod serviceFastMethod = serviceFastClass.getMethod(methodName, parameterTypes);
+			Object result = serviceFastMethod.invoke(serviceBean, parameters);*/
+
+            xxlRpcResponse.setResult(result);
+        } catch (Throwable t) {
+            // catch error
+            logger.error("xxl-rpc provider invokeService error.", t);
+            xxlRpcResponse.setErrorMsg(ThrowableUtil.toString(t));
+        }
+
         return xxlRpcResponse;
     }
-
 }

@@ -84,7 +84,7 @@ public class JobRemotingUtil {
                     returnT.setCode(ReturnT.FAIL_CODE);
                     returnT.setMsg("AdminBizClient Remoting call fail.");
                 } else {
-                    returnT.setCode(Integer.valueOf(String.valueOf(resultMap.get("code"))));
+                    returnT.setCode(Integer.parseInt(String.valueOf(resultMap.get("code"))));
                     returnT.setMsg(String.valueOf(resultMap.get("msg")));
                     returnT.setContent(String.valueOf(resultMap.get("content")));
                 }

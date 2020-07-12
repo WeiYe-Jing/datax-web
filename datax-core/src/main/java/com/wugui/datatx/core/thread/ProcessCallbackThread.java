@@ -125,18 +125,26 @@ public class ProcessCallbackThread {
 
     }
 
-    public void toStop() throws InterruptedException {
+    public void toStop() {
         toStop = true;
         // stop callback, interrupt and wait
-        // support empty admin address
-        if (processCallbackThread != null) {
+        if (processCallbackThread != null) {    // support empty admin address
             processCallbackThread.interrupt();
-            processCallbackThread.join();
+            try {
+                processCallbackThread.join();
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage(), e);
+            }
         }
+
         // stop retry, interrupt and wait
         if (processRetryCallbackThread != null) {
             processRetryCallbackThread.interrupt();
-            processRetryCallbackThread.join();
+            try {
+                processRetryCallbackThread.join();
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage(), e);
+            }
         }
     }
 

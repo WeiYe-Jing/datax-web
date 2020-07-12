@@ -7,6 +7,7 @@ import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.log.JobLogger;
+import com.wugui.datatx.core.util.CollectionUtils;
 import com.wugui.datatx.core.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public class TriggerCallbackThread {
                     HandleCallbackParam callback = getInstance().callBackQueue.take();
 
                     // callback list param
-                    List<HandleCallbackParam> callbackParamList = new ArrayList<HandleCallbackParam>();
+                    List<HandleCallbackParam> callbackParamList = new ArrayList<>();
                     int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
                     callbackParamList.add(callback);
 
@@ -81,9 +82,9 @@ public class TriggerCallbackThread {
 
             // last callback
             try {
-                List<HandleCallbackParam> callbackParamList = new ArrayList<HandleCallbackParam>();
+                List<HandleCallbackParam> callbackParamList = new ArrayList<>();
                 int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
-                if (callbackParamList != null && callbackParamList.size() > 0) {
+                if (CollectionUtils.isNotEmpty(callbackParamList)) {
                     doCallback(callbackParamList);
                 }
             } catch (Exception e) {

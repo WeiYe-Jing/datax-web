@@ -168,6 +168,47 @@ public class DataxJsonHelper implements DataxJsonInterface {
         }
     }
 
+
+    /**
+     * 初始化脱敏规则
+     * 暂时实现
+     * 1.对字段进行MD5脱敏
+     * 2.对字段替换换行符
+     *
+     * @param dataXJsonBuildDto
+     */
+    public void initTransformer(DataXJsonBuildDto dataXJsonBuildDto) {
+        if( null==dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size()==0){
+            return;
+        }
+//        List<String> transformer = new ArrayList<String>();
+//        transformer.add("dx_md5");
+//        transformer.add("dx_replaceNewLineSymbol");
+//        dataXJsonBuildDto.setTransformer(transformer);
+        for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
+            if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
+                continue;
+            }
+            DataXTransformer t = new DataXTransformer();
+            t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
+            DataXTransformer.Parameter p = new DataXTransformer.Parameter();
+            List<String> paras = new ArrayList<>();
+            if ("replaceNewLineSymbol".equals(t.getName())) {
+                paras.add("");
+                p.setColumnIndex(i);
+
+            }else if ("md5".equals(t.getName())) {
+                paras.add("");
+                p.setColumnIndex(i);
+
+            }
+            p.setParas(paras);
+            t.setParameter(p);
+            transformers.add(t);
+        }
+    }
+
+
     private List<String> convertKeywordsColumns(String datasource, List<String> columns) {
         if (columns == null) {
             return null;

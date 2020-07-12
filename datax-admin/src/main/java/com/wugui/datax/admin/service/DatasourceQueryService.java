@@ -72,5 +72,5 @@ public interface DatasourceQueryService {
      * @param id
      * @return
      */
-    List<String> getTableSchema(Long id);
+    List<String> getDbSchema(Long id);
 }

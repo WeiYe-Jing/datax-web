@@ -60,8 +60,8 @@ public class MetadataController extends BaseController {
      */
     @GetMapping("/getDBSchema")
     @ApiOperation("根据数据源id获取 db schema")
-    public R<List<String>> getTableSchema(Long datasourceId) {
-        return success(datasourceQueryService.getTableSchema(datasourceId));
+    public R<List<String>> getDbSchema(Long datasourceId) {
+        return success(datasourceQueryService.getDbSchema(datasourceId));
     }
 
     /**

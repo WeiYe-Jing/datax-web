@@ -143,7 +143,7 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 - 增量增新建议将阻塞策略设置为丢弃后续调度或者单机串行
     - 设置单机串行时应该注意合理设置重试次数(失败重试的次数*每次执行时间<任务的调度周期)，重试的次数如果设置的过多会导致数据重复，例如任务30秒执行一次，每次执行时间需要20秒，设置重试三次，如果任务失败了，第一个重试的时间段为1577755680-1577756680，重试任务没结束，新任务又开启，那新任务的时间段会是1577755680-1577758680
 
-- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/time-increment-desc.md)
+- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/increment-desc.md)
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/partition-dynamic-param.md)
 
 ### 7. 任务列表

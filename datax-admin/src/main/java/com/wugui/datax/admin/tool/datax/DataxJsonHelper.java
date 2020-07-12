@@ -198,11 +198,11 @@ public class DataxJsonHelper implements DataxJsonInterface {
             t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
             DataXTransformer.Parameter p = new DataXTransformer.Parameter();
             List<String> paras = new ArrayList<>();
-            if ("dx_replaceNewLineSymbol".equals(t.getName())) {
+            if ("replaceNewLineSymbol".equals(t.getName())) {
                 paras.add("");
                 p.setColumnIndex(i);
 
-            }else if ("dx_md5".equals(t.getName())) {
+            }else if ("md5".equals(t.getName())) {
                 paras.add("");
                 p.setColumnIndex(i);
 

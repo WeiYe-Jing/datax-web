@@ -68,7 +68,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             return Lists.newArrayList();
         }
         BaseQueryTool qTool = QueryToolFactory.getByDbType(dataSource);
-        return qTool.getTableSchema();
+        return qTool.getDbSchema();
     }
 
     @Override

@@ -170,11 +170,26 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     /**
      * 初始化脱敏规则
+     * 暂时实现
+     * 1.对字段进行MD5脱敏
+     * 2.对字段替换换行符
+     *
+     * @param dataXJsonBuildDto
+     */
+
+    /**
+     * 初始化脱敏规则
      *
      * @param dataXJsonBuildDto
      */
     public void initTransformer(DataXJsonBuildDto dataXJsonBuildDto) {
-
+        if( null==dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size()==0){
+            return;
+        }
+//        List<String> transformer = new ArrayList<String>();
+//        transformer.add("dx_md5");
+//        transformer.add("dx_replaceNewLineSymbol");
+//        dataXJsonBuildDto.setTransformer(transformer);
         for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
             if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
                 continue;
@@ -182,22 +197,15 @@ public class DataxJsonHelper implements DataxJsonInterface {
             DataXTransformer t = new DataXTransformer();
             t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
             DataXTransformer.Parameter p = new DataXTransformer.Parameter();
-            p.setColumnIndex(i);
             List<String> paras = new ArrayList<>();
-            if ("dx_hiding".equals(t.getName())) {
+            if ("dx_replaceNewLineSymbol".equals(t.getName())) {
                 paras.add("");
-            } else if ("dx_floor".equals(t.getName())) {
-                // 根据日期规整
-                paras.add("YMDHms");
-            } else if ("dx_floor".equals(t.getName())) {
-                // 根据数值规整
-                paras.add("mod");
-            } else if ("dx_enum".equals(t.getName())) {
-                paras.add("100");
-            } else if ("dx_prefix_preserve".equals(t.getName())) {
-                paras.add("3");
-            } else if ("dx_md5".equals(t.getName())) {
+                p.setColumnIndex(i);
+
+            }else if ("dx_md5".equals(t.getName())) {
                 paras.add("");
+                p.setColumnIndex(i);
+
             }
             p.setParas(paras);
             t.setParameter(p);

@@ -1,4 +1,4 @@
-#DataX Web增量配置说明
+# DataX Web增量配置说明
 
 ## 一、根据日期进行增量数据抽取
 
@@ -8,7 +8,7 @@
 
 #### 按下图中5个步骤进行配置
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/time-increment.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/time-increment.png)
 
 - 1.任务类型选DataX任务
 - 2.辅助参数选择时间自增

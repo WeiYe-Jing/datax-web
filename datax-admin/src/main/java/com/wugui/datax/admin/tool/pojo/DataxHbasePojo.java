@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author water
+ * @author jingwk
  */
 @Data
 public class DataxHbasePojo {

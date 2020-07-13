@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
 /**
- * @author water
+ * @author jingwk
  */
 public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterface {
     @Override

@@ -8,7 +8,7 @@ import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import java.util.Map;
 
 /**
- * @author water
+ * @author jingwk
  */
 public class MongoDBReader extends BaseReaderPlugin implements DataxReaderInterface {
     @Override

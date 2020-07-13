@@ -5,7 +5,7 @@ spring:
   #数据源
   datasource:
     username: root
-    password: password
+    password: root
     url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
 #    password: ${DB_PASSWORD:password}
 #    username: ${DB_USERNAME:username}

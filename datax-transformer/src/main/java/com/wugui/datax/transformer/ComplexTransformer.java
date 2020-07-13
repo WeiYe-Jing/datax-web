@@ -1,4 +1,4 @@
-package com.alibaba.datax.transformer;
+package com.wugui.datax.transformer;
 
 import com.alibaba.datax.common.element.Record;
 

@@ -77,6 +77,7 @@ vi ./modules/datax-admin/conf/bootstrap.properties
 MAIL_USERNAME=""
 MAIL_PASSWORD=""
 ```
+此文件中包括一些默认配置参数，例如：server.port，具体请查看文件。
 
 
 在项目目录下/modules/datax-execute/bin/env.properties 指定PYTHON_PATH的路径
@@ -91,7 +92,7 @@ PYTHON_PATH=
 DATAX_ADMIN_PORT=
 
 ````
-
+此文件中包括一些默认配置参数，例如：executor.port,json.path,data.path等，具体请查看文件。
 
 #### 5）启动服务
 ##### - 一键启动所有服务
@@ -168,5 +169,3 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
 ### QQ交流群
 
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
-
-

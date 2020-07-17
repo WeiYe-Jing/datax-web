@@ -217,7 +217,7 @@ stop_m(){
     LOG INFO "Killing ${FRIEND_NAME} (pid ${p}) ..."
     case "`uname`" in
         CYCGWIN*) taskkill /PID "${p}" ;;
-        *) kill -SIGTERM "${p}" ;;
+        *) kill -TERM "${p}" ;;
     esac
     LOG INFO "Waiting ${FRIEND_NAME} to stop complete ..."
     wait_for_stop 20

@@ -4,7 +4,7 @@ import com.wugui.datax.admin.core.route.strategy.*;
 import com.wugui.datax.admin.core.util.I18nUtil;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * @author  xuxueli on 17/3/10.
  */
 public enum ExecutorRouteStrategyEnum {
 
@@ -13,24 +13,24 @@ public enum ExecutorRouteStrategyEnum {
     ROUND(I18nUtil.getString("jobconf_route_round"), new ExecutorRouteRound()),
     RANDOM(I18nUtil.getString("jobconf_route_random"), new ExecutorRouteRandom()),
     CONSISTENT_HASH(I18nUtil.getString("jobconf_route_consistenthash"), new ExecutorRouteConsistentHash()),
-    LEAST_FREQUENTLY_USED(I18nUtil.getString("jobconf_route_lfu"), new ExecutorRouteLFU()),
-    LEAST_RECENTLY_USED(I18nUtil.getString("jobconf_route_lru"), new ExecutorRouteLRU()),
+    LEAST_FREQUENTLY_USED(I18nUtil.getString("jobconf_route_lfu"), new ExecutorRouteLfu()),
+    LEAST_RECENTLY_USED(I18nUtil.getString("jobconf_route_lru"), new ExecutorRouteLru()),
     FAILOVER(I18nUtil.getString("jobconf_route_failover"), new ExecutorRouteFailover()),
     BUSYOVER(I18nUtil.getString("jobconf_route_busyover"), new ExecutorRouteBusyover()),
     SHARDING_BROADCAST(I18nUtil.getString("jobconf_route_shard"), null);
 
-    ExecutorRouteStrategyEnum(String title, ExecutorRouter router) {
+    ExecutorRouteStrategyEnum(String title, AbstractExecutorRouter router) {
         this.title = title;
         this.router = router;
     }
 
     private String title;
-    private ExecutorRouter router;
+    private AbstractExecutorRouter router;
 
     public String getTitle() {
         return title;
     }
-    public ExecutorRouter getRouter() {
+    public AbstractExecutorRouter getRouter() {
         return router;
     }
 

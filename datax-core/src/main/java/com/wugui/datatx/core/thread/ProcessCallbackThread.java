@@ -19,7 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by jingwk on 2019/12/14.
+ * @author jingwk on 2019/12/14.
  */
 public class ProcessCallbackThread {
     private static Logger logger = LoggerFactory.getLogger(ProcessCallbackThread.class);
@@ -146,13 +146,12 @@ public class ProcessCallbackThread {
                 logger.error(e.getMessage(), e);
             }
         }
-
     }
 
     /**
      * do callback, will retry if error
      *
-     * @param callbackParamList
+     * @param callbackParamList List<HandleProcessCallbackParam>
      */
     private void doCallback(List<HandleProcessCallbackParam> callbackParamList) {
         boolean callbackRet = false;
@@ -182,7 +181,7 @@ public class ProcessCallbackThread {
     private void callbackLog(List<HandleProcessCallbackParam> callbackParamList, String logContent) {
         for (HandleProcessCallbackParam callbackParam : callbackParamList) {
             String logFileName = JobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTime()), callbackParam.getLogId());
-            JobFileAppender.contextHolder.set(logFileName);
+            JobFileAppender.CONTEXT_HOLDER.set(logFileName);
             JobLogger.log(logContent);
         }
     }
@@ -190,28 +189,31 @@ public class ProcessCallbackThread {
 
     // ---------------------- fail-callback file ----------------------
 
-    private static String failCallbackFilePath = JobFileAppender.getLogPath().concat(File.separator).concat("processcallbacklog").concat(File.separator);
-    private static String failCallbackFileName = failCallbackFilePath.concat("datax-web-processcallback-{x}").concat(".log");
+    private final static String failCallbackFilePath = JobFileAppender.getLogPath().concat(File.separator).concat(
+            "processcallbacklog").concat(File.separator);
+    private final static String failCallbackFileName = failCallbackFilePath.concat("datax-web-processcallback-{x" +
+            "}").concat(".log");
 
     private void appendFailCallbackFile(List<HandleProcessCallbackParam> handleProcessCallbackParams) {
         // valid
-        if (handleProcessCallbackParams == null || handleProcessCallbackParams.size() == 0) {
+        if (handleProcessCallbackParams.isEmpty()) {
             return;
         }
 
         // append file
-        byte[] callbackParamList_bytes = JobExecutor.getSerializer().serialize(handleProcessCallbackParams);
+        byte[] callbackParamListBytes = JobExecutor.getSerializer().serialize(handleProcessCallbackParams);
 
         File callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis())));
         if (callbackLogFile.exists()) {
-            for (int i = 0; i < 100; i++) {
+            int bigLen = 100;
+            for (int i = 0; i < bigLen; i++) {
                 callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis()).concat("-").concat(String.valueOf(i))));
                 if (!callbackLogFile.exists()) {
                     break;
                 }
             }
         }
-        FileUtil.writeFileContent(callbackLogFile, callbackParamList_bytes);
+        FileUtil.writeFileContent(callbackLogFile, callbackParamListBytes);
     }
 
     private void retryFailCallbackFile() {

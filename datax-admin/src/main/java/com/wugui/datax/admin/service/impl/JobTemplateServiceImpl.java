@@ -48,10 +48,10 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, userId, projectIds);
 
         // package result
-        Map<String, Object> maps = new HashMap<>();
-        maps.put("recordsTotal", list_count);        // 总记录数
-        maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
+        Map<String, Object> maps = new HashMap<>(3);
+        maps.put("recordsTotal", list_count);
+        maps.put("recordsFiltered", list_count);
+        maps.put("data", list);
         return maps;
     }
 

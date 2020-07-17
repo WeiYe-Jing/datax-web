@@ -7,6 +7,7 @@ import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datatx.core.executor.JobExecutor;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.log.JobLogger;
+import com.wugui.datatx.core.util.CollectionUtils;
 import com.wugui.datatx.core.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by xuxueli on 16/7/22.
+ * @author xuxueli on 16/7/22.
  */
 public class TriggerCallbackThread {
     private static Logger logger = LoggerFactory.getLogger(TriggerCallbackThread.class);
@@ -64,7 +65,7 @@ public class TriggerCallbackThread {
                     HandleCallbackParam callback = getInstance().callBackQueue.take();
 
                     // callback list param
-                    List<HandleCallbackParam> callbackParamList = new ArrayList<HandleCallbackParam>();
+                    List<HandleCallbackParam> callbackParamList = new ArrayList<>();
                     int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
                     callbackParamList.add(callback);
 
@@ -81,9 +82,9 @@ public class TriggerCallbackThread {
 
             // last callback
             try {
-                List<HandleCallbackParam> callbackParamList = new ArrayList<HandleCallbackParam>();
+                List<HandleCallbackParam> callbackParamList = new ArrayList<>();
                 int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
-                if (callbackParamList != null && callbackParamList.size() > 0) {
+                if (CollectionUtils.isNotEmpty(callbackParamList)) {
                     doCallback(callbackParamList);
                 }
             } catch (Exception e) {
@@ -128,7 +129,8 @@ public class TriggerCallbackThread {
     public void toStop() {
         toStop = true;
         // stop callback, interrupt and wait
-        if (triggerCallbackThread != null) {    // support empty admin address
+        // support empty admin address
+        if (triggerCallbackThread != null) {
             triggerCallbackThread.interrupt();
             try {
                 triggerCallbackThread.join();
@@ -182,7 +184,7 @@ public class TriggerCallbackThread {
     private void callbackLog(List<HandleCallbackParam> callbackParamList, String logContent) {
         for (HandleCallbackParam c : callbackParamList) {
             String logFileName = JobFileAppender.makeLogFileName(new Date(c.getLogDateTim()), c.getLogId());
-            JobFileAppender.contextHolder.set(logFileName);
+            JobFileAppender.CONTEXT_HOLDER.set(logFileName);
             JobLogger.log(logContent);
         }
     }

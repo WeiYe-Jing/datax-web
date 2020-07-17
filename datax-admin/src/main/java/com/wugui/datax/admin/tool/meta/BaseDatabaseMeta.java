@@ -42,7 +42,7 @@ public abstract class BaseDatabaseMeta implements DatabaseInterface {
 
     @Override
     public String getMaxId(String tableName, String primaryKey) {
-        return String.format("select max(%s) from %s",primaryKey,tableName);
+        return String.format("select max(%s) from %s", primaryKey, tableName);
     }
 
     @Override

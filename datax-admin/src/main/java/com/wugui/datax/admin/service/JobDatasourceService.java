@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.entity.JobDatasource;
 
 import java.io.IOException;
@@ -33,4 +34,9 @@ public interface JobDatasourceService extends IService<JobDatasource> {
      * @return
      */
     List<JobDatasource> selectAllDatasource();
+
+
+    boolean checkConnection(DbType type, String parameter);
+
+    String buildParameter(String userName, String password, DbType type, String database,String jdbcUrl,String principal,String comments);
 }

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: datax-admin-bootstrap-conf
+  labels:
+    app: datax-admin
+data:
+  bootstrap.properties: |
+    #Database
+    DB_HOST=svc-mysql.db.svc.cluster.local
+    DB_PORT=3306
+    DB_USERNAME=root
+    DB_PASSWORD=123456
+    DB_DATABASE=datax

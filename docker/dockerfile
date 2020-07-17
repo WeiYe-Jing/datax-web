@@ -1,0 +1,29 @@
+FROM daocloud.io/library/centos:centos7.7.1908
+
+WORKDIR /opt/
+
+copy Centos-7.repo                                /opt/
+copy jdk-8u251-linux-x64.tar.gz                   /opt/
+copy datax.tar.gz                                 /opt/
+copy datax-web-2.1.2.tar.gz                       /opt/
+copy input.data                                   /opt/
+
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone && \
+    rm /etc/yum.repos.d/CentOS-* -rf && \
+    cp /opt/Centos-7.repo /etc/yum.repos.d/ && \
+    yum install -y mysql && \
+    yum clean all && \
+    rm -rf /var/cache/yum && \
+    echo export JAVA_HOME=/opt/jdk1.8.0_251 >>/root/.bash_profile && \
+    echo export PATH=\$PATH:\$JAVA_HOME/bin >>/root/.bash_profile && \
+    source /root/.bash_profile && \
+    tar zxvf /opt/jdk-8u251-linux-x64.tar.gz && \
+    tar zxvf /opt/datax.tar.gz && \
+    tar zxvf /opt/datax-web-2.1.2.tar.gz && \
+    rm -rf /opt/*.tar.gz && \
+    datax-web-2.1.2/bin/install.sh < input.data && \
+    sed -i "/^PYTHON_PATH=/c\PYTHON_PATH=\/opt\/datax\/bin\/datax.py" /opt/datax-web-2.1.2/modules/datax-executor/bin/env.properties
+
+
+CMD source /root/.bash_profile && /opt/datax-web-2.1.2/bin/start.sh -m datax-admin && /opt/datax-web-2.1.2/bin/start.sh -m datax-executor && tail -F /opt/datax-web-2.1.2/modules/datax-admin/bin/console.out
+

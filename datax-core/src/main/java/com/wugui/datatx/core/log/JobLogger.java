@@ -11,11 +11,10 @@ import java.io.StringWriter;
 import java.util.Date;
 
 /**
- * Created by xuxueli on 17/4/28.
+ * @author  xuxueli on 17/4/28.
  */
 public class JobLogger {
     private static Logger logger = LoggerFactory.getLogger("datax-web logger");
-
 
 
     /**
@@ -34,7 +33,7 @@ public class JobLogger {
                 .append(appendLog != null ? appendLog : "");
         String formatAppendLog = buffer.toString();
 
-        String logFileName = JobFileAppender.contextHolder.get();
+        String logFileName = JobFileAppender.CONTEXT_HOLDER.get();
         if (logFileName != null && logFileName.trim().length() > 0) {
             JobFileAppender.appendLog(logFileName, formatAppendLog);
         } else {
@@ -52,12 +51,6 @@ public class JobLogger {
 
         FormattingTuple ft = MessageFormatter.arrayFormat(appendLogPattern, appendLogArguments);
         String appendLog = ft.getMessage();
-
-        /*appendLog = appendLogPattern;
-        if (appendLogArguments!=null && appendLogArguments.length>0) {
-            appendLog = MessageFormat.format(appendLogPattern, appendLogArguments);
-        }*/
-
         StackTraceElement callInfo = new Throwable().getStackTrace()[1];
         logDetail(callInfo, appendLog);
     }

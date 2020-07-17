@@ -1,6 +1,6 @@
 server:
   #port: 8080
-  port: ${server.port}
+  port: ${SERVER_PORT:9527}
 spring:
   #数据源
   datasource:
@@ -32,8 +32,8 @@ spring:
     port: 25
     #username: xxx@qq.com
     #password: xxx
-    username: ${mail.username}
-    password: ${mail.password}
+    username: ${MAIL_USERNAME:username}
+    password: ${MAIL_PASSWORD:password}
     properties:
       mail:
         smtp:

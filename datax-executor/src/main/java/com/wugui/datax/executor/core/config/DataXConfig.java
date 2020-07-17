@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Configuration;
 public class DataXConfig {
     private Logger logger = LoggerFactory.getLogger(DataXConfig.class);
 
-    private static final String DEFAULT_LOG_PATH = "log/executor/jobhandler";
-
     @Value("${datax.job.admin.addresses}")
     private String adminAddresses;
 
@@ -51,10 +49,6 @@ public class DataXConfig {
         jobSpringExecutor.setIp(ip);
         jobSpringExecutor.setPort(port);
         jobSpringExecutor.setAccessToken(accessToken);
-        String dataXHomePath = SystemUtils.getDataXHomePath();
-        if (StringUtils.isEmpty(logPath)) {
-            logPath = dataXHomePath + DEFAULT_LOG_PATH;
-        }
         jobSpringExecutor.setLogPath(logPath);
         jobSpringExecutor.setLogRetentionDays(logRetentionDays);
 

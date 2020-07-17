@@ -129,7 +129,7 @@ select * from test_list where operationDate >= FROM_UNIXTIME(${lastTime}) and op
 
 ```
 1.-D是DataX参数的标识符，必配
-2.-D后面的startId和endId是DataX json中where条件的id字段标识符，必须和json中的变量名称保持一致
+2.-D后面的startId和endId是DataX json中where条件的id字段标识符，必须和json中的变量名称保持一致，endId是任务在每次执行时获取当前表maxId，也是下一次任务的startId
 3.='%s'是项目用来去替换时间的占位符，比配并且格式要完全一致
 4.注意-DstartId='%s'和-DendId='%s' 中间有一个空格，空格必须保留并且是一个空格
 5.reader数据源，选择任务同步的读数据源

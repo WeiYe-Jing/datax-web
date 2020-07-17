@@ -200,7 +200,7 @@
 logging:
   level:
     com.wugui.datax.admin.mapper: error
-  path: ./data/applogs/admin
+    path: ./data/applogs/admin
 ```
 
 修改日志路径path

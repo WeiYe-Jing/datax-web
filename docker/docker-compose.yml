@@ -1,0 +1,49 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/mysql/data:/var/lib/mysql
+      - /var/mysql/conf:/etc/mysql/conf.d
+      - /var/mysql/logs:/logs
+      - ./bin/db:/docker-entrypoint-initdb.d/
+    container_name: datax_web_mysql
+
+  datax_admin:
+    image: wenyangchou/datax_admin:2.1.2
+    volumes:
+      - /var/log/datax_web/admin:/root/log
+    ports:
+      - 9527:9527
+    environment:
+      SERVER_PORT: 9527
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_HOST: datax_web_mysql
+      DB_PORT: 3306
+      DB_DATABASE: dataxweb
+      MAIL_USERNAME: email_name
+      MAIL_PASSWORD: email_password
+    depends_on:
+      - mysql
+    container_name: datax_web_admin
+  datax_executor:
+    image: wenyangchou/datax_executor:2.1.2
+    volumes:
+      - /var/log/datax_web/executor:/root/log
+      - /var/data/datax_web/executor:/root/json
+    ports:
+      - 8081:8081
+    environment:
+      SERVER_PORT: 8081
+      DATAX_ADMIN_HOST: datax_web_admin
+      DATAX_ADMIN_PORT: 9527
+      EXECUTOR_PORT: 9999
+    depends_on:
+      - mysql
+      - datax_admin
+    container_name: datax_web_executor

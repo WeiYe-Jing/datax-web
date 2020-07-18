@@ -92,7 +92,6 @@ public class BuildCommand {
                     String endTime = sdf.format(tgParam.getTriggerTime());
 //                    String startTime = sdf.format(tgParam.getStartTime()).replaceAll(SPLIT_SPACE, PERCENT);
                     String startTime = sdf.format(tgParam.getStartTime());
-                    // datax.py -p"-DDT=\"100 101\" -DDN=200"    xx.json
                     String format =String.format(replaceParam, startTime, endTime);
                     doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(format);
                 }

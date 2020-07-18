@@ -1,4 +1,4 @@
-package com.alibaba.datax.transformer;
+package com.wugui.datax.transformer;
 
 import com.alibaba.datax.common.element.Column;
 import com.alibaba.datax.common.element.Record;
@@ -6,10 +6,7 @@ import com.alibaba.datax.common.element.StringColumn;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.core.transport.record.DefaultRecord;
 import com.alibaba.datax.core.transport.transformer.TransformerErrorCode;
-import com.alibaba.datax.transformer.Transformer;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -57,7 +54,5 @@ public class ReplaceNewLineSymbolTransformer extends ComplexTransformer {
         record.setColumn(0,column0);
         record= (DefaultRecord)new ReplaceNewLineSymbolTransformer().evaluate(record, null, new Integer[]{0,0});
         System.out.println(record.toString());
-
-
     }
 }

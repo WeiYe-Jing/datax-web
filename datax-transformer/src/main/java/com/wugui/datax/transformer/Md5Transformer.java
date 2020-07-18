@@ -1,11 +1,10 @@
-package com.alibaba.datax.transformer;
+package com.wugui.datax.transformer;
 
 import com.alibaba.datax.common.element.Column;
 import com.alibaba.datax.common.element.Record;
 import com.alibaba.datax.common.element.StringColumn;
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.core.transport.transformer.TransformerErrorCode;
-import com.alibaba.datax.transformer.Transformer;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -200,7 +200,7 @@
 logging:
   level:
     com.wugui.datax.admin.mapper: error
-  path: ./data/applogs/admin
+    path: ./data/applogs/admin
 ```
 
 修改日志路径path
@@ -302,4 +302,7 @@ http://localhost:8080/index.html#/dashboard
   
 # Contact us
 
-### QQ交流群 795380631
+### QQ交流群
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
+

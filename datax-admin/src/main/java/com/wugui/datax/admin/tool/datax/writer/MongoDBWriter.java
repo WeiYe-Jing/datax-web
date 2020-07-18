@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author water
+ * @author jingwk
  */
 public class MongoDBWriter extends BaseWriterPlugin implements DataxWriterInterface {
     @Override

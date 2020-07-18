@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /**
- * @author water
+ * @author jingwk
  */
 public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInterface {
     Connection conn = null;

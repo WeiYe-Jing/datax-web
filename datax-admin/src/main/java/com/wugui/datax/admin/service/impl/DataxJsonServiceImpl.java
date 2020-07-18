@@ -28,6 +28,8 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
         // reader
         JobDatasource readerDataSource = jobJdbcDataSourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
+
+        dataxJsonHelper.initTransformer(dataXJsonBuildDto);
         // reader plugin init
         dataxJsonHelper.initReader(dataXJsonBuildDto, readerDataSource);
         JobDatasource writerDatasource = jobJdbcDataSourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());

@@ -10,13 +10,12 @@ import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
-import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.tool.pojo.*;
 import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.util.TextUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -86,6 +85,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
     private MongoDBReaderDTO mongoDBReaderDto;
 
     private MongoDBWriterDTO mongoDBWriterDto;
+
+    private List<DataXTransformer> transformers = new ArrayList<>();
 
 
     //用于保存额外参数
@@ -177,14 +178,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
      *
      * @param dataXJsonBuildDto
      */
-    public void initTransformer(DataXJsonBuildDto dataXJsonBuildDto) {
+    public void initTransformer(DataXJsonBuildDTO dataXJsonBuildDto) {
         if( null==dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size()==0){
             return;
         }
-//        List<String> transformer = new ArrayList<String>();
-//        transformer.add("dx_md5");
-//        transformer.add("dx_replaceNewLineSymbol");
-//        dataXJsonBuildDto.setTransformer(transformer);
         for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
             if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
                 continue;
@@ -273,6 +270,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         res.put("reader", this.buildReader);
         res.put("writer", this.buildWriter);
+        if (transformers.size() > 0) {
+            res.put("transformer", transformers);
+        }
         return res;
     }
 

@@ -52,6 +52,8 @@ public class ExecutorJobHandler extends AbstractJobHandler {
 
         try {
             String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath);
+            String cmd = StringUtils.join(cmdarrayFinal, " ");
+            JobLogger.log("------------------Command CMD is :" + cmd);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
             String prcsId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX process id: " + prcsId);

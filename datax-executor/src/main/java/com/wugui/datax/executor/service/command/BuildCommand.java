@@ -45,7 +45,8 @@ public class BuildCommand {
         cmdArr.add(dataXPyPath);
         String doc = buildDataXParam(tgParam);
         if (StringUtils.isNotBlank(doc)) {
-            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
+            cmdArr.add(doc);
+//            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
         }
         cmdArr.add(tmpFilePath);
         return cmdArr.toArray(new String[cmdArr.size()]);
@@ -87,9 +88,12 @@ public class BuildCommand {
                     doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat(replaceParamType);
-                    String endTime = sdf.format(tgParam.getTriggerTime()).replaceAll(SPLIT_SPACE, PERCENT);
-                    String startTime = sdf.format(tgParam.getStartTime()).replaceAll(SPLIT_SPACE, PERCENT);
-                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
+//                    String endTime = sdf.format(tgParam.getTriggerTime()).replaceAll(SPLIT_SPACE, PERCENT);
+                    String endTime = sdf.format(tgParam.getTriggerTime());
+//                    String startTime = sdf.format(tgParam.getStartTime()).replaceAll(SPLIT_SPACE, PERCENT);
+                    String startTime = sdf.format(tgParam.getStartTime());
+                    String format =String.format(replaceParam, startTime, endTime);
+                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(format);
                 }
                 //buildPartitionCM(doc, partitionStr);
                 doc.append(TRANSFORM_QUOTES);

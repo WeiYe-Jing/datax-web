@@ -66,7 +66,7 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 # Architecture diagram：
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/DataX%20Web.svg)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/DataX%20Web%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
 
 # Quick Start：
 

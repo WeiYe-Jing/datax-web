@@ -64,6 +64,10 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 - 40、数据源信息加密算法修改及代码优化；
 - 41、日志页面增加DataX执行结果统计数据；
 
+# Architecture diagram：
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/DataX%20Web.svg)
+
 # Quick Start：
 
 ##### 请点击：[Quick Start](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)

@@ -11,6 +11,10 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 任务"执行器"支持集群部署，支持执行器多节点路由策略选择，支持超时控制、失败重试、失败告警、任务依赖，执行器CPU.内存.负载的监控等等。后续还将提供更多的数据源支持、数据转换UDF、表结构同步、数据同步血缘等更为复杂的业务场景。
 
+# Architecture diagram：
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/DataX-Web.png)
+
 # System Requirements
 
 - Language: Java 8（jdk版本建议1.8.201以上）<br>
@@ -63,10 +67,6 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 - 39、rdbms json构建增加postSql，并支持构建多个preSql，postSql；
 - 40、数据源信息加密算法修改及代码优化；
 - 41、日志页面增加DataX执行结果统计数据；
-
-# Architecture diagram：
-
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/DataX-Web.png)
 
 # Quick Start：
 

@@ -278,6 +278,10 @@
                     <artifactId>netty</artifactId>
                     <groupId>io.netty</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -402,6 +406,14 @@
                     <artifactId>servlet-api</artifactId>
                     <groupId>javax.servlet</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jsp-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                    <groupId>org.apache.logging.log4j</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -445,6 +457,10 @@
                 <exclusion>
                     <artifactId>hadoop-annotations</artifactId>
                     <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -570,6 +586,11 @@
                     <artifactId>commons-lang</artifactId>
                     <groupId>commons-lang</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+
             </exclusions>
         </dependency>
 

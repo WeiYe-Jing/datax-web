@@ -590,7 +590,10 @@
                     <artifactId>slf4j-log4j12</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
-
+                <exclusion>
+                    <artifactId>javax.servlet.jsp</artifactId>
+                    <groupId>org.glassfish.web</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 

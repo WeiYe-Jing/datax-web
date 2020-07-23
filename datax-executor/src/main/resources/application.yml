@@ -25,5 +25,6 @@ datax:
 
   executor:
     jsonpath: ${JSON_PATH:.}
+    pythonpath: python
 
   pypath: ${PYTHON_PATH:.}

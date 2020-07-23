@@ -12,6 +12,7 @@ import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
+import com.wugui.datax.admin.tool.table.TableNameHandle;
 import com.wugui.datax.admin.util.AesUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
@@ -305,6 +306,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         Statement stmt = null;
         ResultSet rs = null;
         try {
+            //处理表名
+            if (JdbcConstants.ORACLE.equals(datasource) || JdbcConstants.POSTGRESQL.equals(datasource)){
+                tableName = TableNameHandle.addDoubleQuotes(tableName);
+            }
+
             //获取查询指定表所有字段的sql语句
             String querySql = sqlBuilder.getSQLQueryFields(tableName);
             logger.info("querySql: {}", querySql);

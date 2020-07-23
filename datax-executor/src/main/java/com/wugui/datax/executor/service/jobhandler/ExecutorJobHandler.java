@@ -17,9 +17,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.FutureTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.wugui.datax.executor.service.command.BuildCommand.buildDataXExecutorCmd;
+import static com.wugui.datax.executor.service.command.BuildCommand.buildDataXParamToMap;
 import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_JSON;
 import static com.wugui.datax.executor.service.logparse.AnalysisStatistics.analysisStatisticsLog;
 
@@ -39,7 +44,11 @@ public class ExecutorJobHandler extends AbstractJobHandler {
     @Value("${datax.pypath}")
     private String dataXPyPath;
 
+    @Value("${datax.executor.pythonpath}")
+    private  String pythonPath;
 
+
+    private  static final Pattern VARIABLE_PATTERN = Pattern.compile("(\\$)\\{?(\\w+)\\}?");
     @Override
     public ReturnT<String> execute(TriggerParam trigger) {
 
@@ -48,10 +57,13 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         String tmpFilePath;
         LogStatistics logStatistics = null;
         //Generate JSON temporary file
-        tmpFilePath = generateTemJsonFile(trigger.getJobJson());
+//        String jobJson=replaceVariable(trigger.getJobJson(),null);
 
+        HashMap<String, String> keyValueMap = buildDataXParamToMap(trigger);
+        String jobJson = replaceVariable(trigger.getJobJson(),keyValueMap);
+        tmpFilePath = generateTemJsonFile(jobJson);
         try {
-            String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath);
+            String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath,pythonPath);
             String cmd = StringUtils.join(cmdarrayFinal, " ");
             JobLogger.log("------------------Command CMD is :" + cmd);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
@@ -98,6 +110,30 @@ public class ExecutorJobHandler extends AbstractJobHandler {
             return new ReturnT<>(AbstractJobHandler.FAIL.getCode(), "command exit value(" + exitValue + ") is failed");
         }
     }
+
+
+    public static String replaceVariable(final String param,HashMap<String, String> variableMap) {
+        Map<String, String> mapping = new HashMap<String, String>();
+
+        Matcher matcher = VARIABLE_PATTERN.matcher(param);
+        while (matcher.find()) {
+            String variable = matcher.group(2);
+
+            String value = variableMap.get(variable).toString();
+            if (StringUtils.isBlank(value)) {
+                value = matcher.group();
+            }
+            mapping.put(matcher.group(), value);
+        }
+
+        String retString = param;
+        for (final String key : mapping.keySet()) {
+            retString = retString.replace(key, mapping.get(key));
+        }
+
+        return retString;
+    }
+
 
 
     private String generateTemJsonFile(String jobJson) {

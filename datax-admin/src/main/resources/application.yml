@@ -1,5 +1,4 @@
 server:
-  #port: 8080
   port: ${SERVER_PORT:9527}
 spring:
   #数据源

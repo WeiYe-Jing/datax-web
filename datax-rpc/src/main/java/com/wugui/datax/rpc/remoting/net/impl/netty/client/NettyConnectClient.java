@@ -1,13 +1,13 @@
 package com.wugui.datax.rpc.remoting.net.impl.netty.client;
 
 import com.wugui.datax.rpc.remoting.invoker.XxlRpcInvokerFactory;
-import com.wugui.datax.rpc.remoting.net.common.ConnectClient;
+import com.wugui.datax.rpc.remoting.net.common.AbstractConnectClient;
 import com.wugui.datax.rpc.remoting.net.impl.netty.codec.NettyDecoder;
 import com.wugui.datax.rpc.remoting.net.impl.netty.codec.NettyEncoder;
 import com.wugui.datax.rpc.remoting.net.params.Beat;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcRequest;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcResponse;
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import com.wugui.datax.rpc.util.IpUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author xuxueli
  */
-public class NettyConnectClient extends ConnectClient {
+public class NettyConnectClient extends AbstractConnectClient {
 
 
     private EventLoopGroup group;
@@ -34,7 +34,7 @@ public class NettyConnectClient extends ConnectClient {
 
 
     @Override
-    public void init(String address, final Serializer serializer, final XxlRpcInvokerFactory xxlRpcInvokerFactory) throws Exception {
+    public void init(String address, final AbstractSerializer serializer, final XxlRpcInvokerFactory xxlRpcInvokerFactory) throws Exception {
         final NettyConnectClient thisClient = this;
 
         Object[] array = IpUtil.parseIpPort(address);

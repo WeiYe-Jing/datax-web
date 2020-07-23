@@ -7,8 +7,8 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.TriggerJobDto;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDTO;
+import com.wugui.datax.admin.dto.TriggerJobDTO;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.service.JobService;
 import io.swagger.annotations.Api;
@@ -87,7 +87,7 @@ public class JobInfoController extends BaseController{
 
     @PostMapping(value = "/trigger")
     @ApiOperation("触发任务")
-    public ReturnT<String> triggerJob(@RequestBody TriggerJobDto dto) {
+    public ReturnT<String> triggerJob(@RequestBody TriggerJobDTO dto) {
         // force cover job param
         String executorParam=dto.getExecutorParam();
         if (executorParam == null) {
@@ -120,7 +120,7 @@ public class JobInfoController extends BaseController{
 
     @PostMapping("/batchAdd")
     @ApiOperation("批量创建任务")
-    public ReturnT<String> batchAdd(@RequestBody DataXBatchJsonBuildDto dto) throws IOException {
+    public ReturnT<String> batchAdd(@RequestBody DataXBatchJsonBuildDTO dto) throws IOException {
         if (dto.getTemplateId() ==0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("jobinfo_field_temp")));
         }

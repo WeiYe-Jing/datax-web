@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * @author
+ */
 public class MongoDBQueryTool {
 
 
@@ -107,12 +109,6 @@ public class MongoDBQueryTool {
                 String type = v.getClass().getSimpleName();
                 list.add(k + ":" + type);
             }
-      /*if ("Document".equals(type)) {
-        ((Document) v).forEach((k1, v1) -> {
-          String simpleName = v1.getClass().getSimpleName();
-        });
-      } */
-
         });
         return list;
     }

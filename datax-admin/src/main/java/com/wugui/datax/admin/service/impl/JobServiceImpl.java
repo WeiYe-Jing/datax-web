@@ -8,8 +8,8 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.DataXJsonBuildDto;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDTO;
+import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLogReport;
@@ -65,13 +65,14 @@ public class JobServiceImpl implements JobService {
         int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
 
         // package result
-        Map<String, Object> maps = new HashMap<>();
-        maps.put("recordsTotal", list_count);        // 总记录数
-        maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
+        Map<String, Object> maps = new HashMap<>(3);
+        maps.put("recordsTotal", list_count);
+        maps.put("recordsFiltered", list_count);
+        maps.put("data", list);
         return maps;
     }
 
+    @Override
     public List<JobInfo> list() {
         return jobInfoMapper.findAll();
     }
@@ -92,7 +93,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobInfo.getUserId() == 0 ) {
+        if (jobInfo.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -345,7 +346,7 @@ public class JobServiceImpl implements JobService {
 
         int executorCount = executorAddressSet.size();
 
-        Map<String, Object> dashboardMap = new HashMap<>();
+        Map<String, Object> dashboardMap = new HashMap<>(4);
         dashboardMap.put("jobInfoCount", jobInfoCount);
         dashboardMap.put("jobLogCount", jobLogCount);
         dashboardMap.put("jobLogSuccessCount", jobLogSuccessCount);
@@ -391,7 +392,7 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>(7);
         result.put("triggerDayList", triggerDayList);
         result.put("triggerDayCountRunningList", triggerDayCountRunningList);
         result.put("triggerDayCountSucList", triggerDayCountSucList);
@@ -406,7 +407,7 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
-    public ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException {
+    public ReturnT<String> batchAdd(DataXBatchJsonBuildDTO dto) throws IOException {
 
         String key = "system_please_choose";
         List<String> rdTables = dto.getReaderTables();
@@ -421,7 +422,7 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("json_build_inconsistent_number_r_w_tables"));
         }
 
-        DataXJsonBuildDto jsonBuild = new DataXJsonBuildDto();
+        DataXJsonBuildDTO jsonBuild = new DataXJsonBuildDTO();
 
         List<String> rColumns;
         List<String> wColumns;

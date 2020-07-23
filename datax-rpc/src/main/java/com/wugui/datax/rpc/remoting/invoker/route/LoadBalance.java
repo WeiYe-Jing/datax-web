@@ -14,9 +14,9 @@ public enum LoadBalance {
     CONSISTENT_HASH(new XxlRpcLoadBalanceConsistentHashStrategy());
 
 
-    public final XxlRpcLoadBalance xxlRpcInvokerRouter;
+    public final AbstractXxlRpcLoadBalance xxlRpcInvokerRouter;
 
-    private LoadBalance(XxlRpcLoadBalance xxlRpcInvokerRouter) {
+    private LoadBalance(AbstractXxlRpcLoadBalance xxlRpcInvokerRouter) {
         this.xxlRpcInvokerRouter = xxlRpcInvokerRouter;
     }
 

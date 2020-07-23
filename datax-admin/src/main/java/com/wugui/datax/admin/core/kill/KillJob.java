@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * datax-job trigger
- * Created by jingwk on 2019/12/15.
+ * @author  jingwk on 2019/12/15.
  */
 public class KillJob {
 

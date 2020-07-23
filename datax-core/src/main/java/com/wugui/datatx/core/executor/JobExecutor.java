@@ -4,13 +4,13 @@ import com.wugui.datatx.core.biz.AdminBiz;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.client.AdminBizClient;
 import com.wugui.datatx.core.biz.impl.ExecutorBizImpl;
-import com.wugui.datatx.core.handler.IJobHandler;
+import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datatx.core.log.JobFileAppender;
 import com.wugui.datatx.core.thread.*;
-import com.wugui.datax.rpc.registry.ServiceRegistry;
-import com.wugui.datax.rpc.remoting.net.impl.netty_http.server.NettyHttpServer;
+import com.wugui.datax.rpc.registry.AbstractServiceRegistry;
+import com.wugui.datax.rpc.remoting.net.impl.netty.http.server.NettyHttpServer;
 import com.wugui.datax.rpc.remoting.provider.XxlRpcProviderFactory;
-import com.wugui.datax.rpc.serialize.Serializer;
+import com.wugui.datax.rpc.serialize.AbstractSerializer;
 import com.wugui.datax.rpc.serialize.impl.HessianSerializer;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.NetUtil;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Created by xuxueli on 2016/3/2 21:14.
+ * @author  xuxueli on 2016/3/2 21:14.
  */
 public class JobExecutor {
     private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
@@ -121,13 +121,12 @@ public class JobExecutor {
 
         // destory ProcessCallbackThread
         ProcessCallbackThread.getInstance().toStop();
-
     }
 
 
     // ---------------------- admin-client (rpc invoker) ----------------------
     private static List<AdminBiz> adminBizList;
-    private static Serializer serializer = new HessianSerializer();
+    private static AbstractSerializer serializer = new HessianSerializer();
 
     private void initAdminBizList(String adminAddresses, String accessToken) throws Exception {
         if (adminAddresses != null && adminAddresses.trim().length() > 0) {
@@ -149,7 +148,7 @@ public class JobExecutor {
         return adminBizList;
     }
 
-    public static Serializer getSerializer() {
+    public static AbstractSerializer getSerializer() {
         return serializer;
     }
 
@@ -161,7 +160,7 @@ public class JobExecutor {
 
         // init, provider factory
         String address = IpUtil.getIpPort(ip, port);
-        Map<String, String> serviceRegistryParam = new HashMap<>();
+        Map<String, String> serviceRegistryParam = new HashMap<>(2);
         serviceRegistryParam.put("appName", appName);
         serviceRegistryParam.put("address", address);
 
@@ -185,7 +184,7 @@ public class JobExecutor {
 
     }
 
-    public static class ExecutorServiceRegistry extends ServiceRegistry {
+    public static class ExecutorServiceRegistry extends AbstractServiceRegistry {
 
         @Override
         public void start(Map<String, String> param) {
@@ -232,27 +231,28 @@ public class JobExecutor {
 
 
     // ---------------------- job handler repository ----------------------
-    private static ConcurrentMap<String, IJobHandler> jobHandlerRepository = new ConcurrentHashMap<String, IJobHandler>();
+    private static ConcurrentMap<String, AbstractJobHandler> jobHandlerRepository = new ConcurrentHashMap<>();
 
-    public static IJobHandler registJobHandler(String name, IJobHandler jobHandler) {
+    public static AbstractJobHandler registJobHandler(String name, AbstractJobHandler jobHandler) {
         logger.info(">>>>>>>>>>> datax-web register jobhandler success, name:{}, jobHandler:{}", name, jobHandler);
         return jobHandlerRepository.put(name, jobHandler);
     }
 
-    public static IJobHandler loadJobHandler(String name) {
+    public static AbstractJobHandler loadJobHandler(String name) {
         return jobHandlerRepository.get(name);
     }
 
 
     // ---------------------- job thread repository ----------------------
-    private static ConcurrentMap<Integer, JobThread> jobThreadRepository = new ConcurrentHashMap<Integer, JobThread>();
+    private static ConcurrentMap<Integer, JobThread> jobThreadRepository = new ConcurrentHashMap<>();
 
-    public static JobThread registJobThread(int jobId, IJobHandler handler, String removeOldReason) {
+
+    public static JobThread registJobThread(int jobId, AbstractJobHandler handler, String removeOldReason) {
         JobThread newJobThread = new JobThread(jobId, handler);
         newJobThread.start();
         logger.info(">>>>>>>>>>> datax-web regist JobThread success, jobId:{}, handler:{}", new Object[]{jobId, handler});
-
-        JobThread oldJobThread = jobThreadRepository.put(jobId, newJobThread);    // putIfAbsent | oh my god, map's put method return the old value!!!
+        // putIfAbsent | oh my god, map's put method return the old value!!!
+        JobThread oldJobThread = jobThreadRepository.put(jobId, newJobThread);
         if (oldJobThread != null) {
             oldJobThread.toStop(removeOldReason);
             oldJobThread.interrupt();

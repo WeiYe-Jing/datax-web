@@ -3,7 +3,7 @@
 
     <contextName>exe</contextName>
     <property name="LOG_PATH"
-              value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/data/applogs/executor/jobhandler}}}" />
+              value="${log.path:-${LOG_TEMP:-${java.io.tmpdir:-/data/applogs/executor/jobhandler}}}" />
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

@@ -14,9 +14,12 @@
  Date: 15/12/2019 22:27:10
 */
 
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+CREATE DATABASE IF NOT EXISTS dataxweb;
+USE dataxweb;
 -- ----------------------------
 -- Table structure for job_group
 -- ----------------------------

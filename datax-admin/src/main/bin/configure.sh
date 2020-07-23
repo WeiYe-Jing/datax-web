@@ -123,7 +123,7 @@ SERVER_NAME_SIMPLE=${SERVER_NAME/datax-/}
 LOG_PATH=${BIN}/../logs
 if [ "x${BASE_LOG_DIR}" != "x" ]; then
     LOG_PATH=${BASE_LOG_DIR}/${SERVER_NAME_SIMPLE}
-    sed -ri "s![#]?(WEB_LOG_PATH=)\S*!\1${LOG_PATH}!g" ${ENV_FILE_PATH}
+    sed -ri "s![#]?(SERVICE_LOG_PATH=)\S*!\1${LOG_PATH}!g" ${ENV_FILE_PATH}
 fi
 
 CONF_PATH=${BIN}/../conf

@@ -60,15 +60,15 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
     }
 
     @Override
-    public List<String> getTableSchema(Long id) {
+    public List<String> getDbSchema(Long id) {
         //获取数据源对象
-        JobDatasource datasource = jobDatasourceService.getById(id);
+        JobDatasource dataSource = jobDatasourceService.getById(id);
         //queryTool组装
-        if (ObjectUtil.isNull(datasource)) {
+        if (ObjectUtil.isNull(dataSource)) {
             return Lists.newArrayList();
         }
-        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
-        return qTool.getTableSchema();
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(dataSource);
+        return qTool.getDbSchema();
     }
 
     @Override

@@ -7,6 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
+/**
+ * @author jingwk
+ */
 public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterface {
     @Override
     public String getName() {
@@ -18,6 +21,7 @@ public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterfac
         return null;
     }
 
+    @Override
     public Map<String, Object> buildHbase(DataxHbasePojo plugin) {
         //构建
         Map<String, Object> writerObj = Maps.newLinkedHashMap();

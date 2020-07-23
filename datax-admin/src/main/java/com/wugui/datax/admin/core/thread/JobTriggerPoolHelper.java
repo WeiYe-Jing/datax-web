@@ -54,15 +54,16 @@ public class JobTriggerPoolHelper {
 
 
     public void stop() {
-        //triggerPool.shutdown();
         fastTriggerPool.shutdownNow();
         slowTriggerPool.shutdownNow();
         logger.info(">>>>>>>>> datax-web trigger thread pool shutdown success.");
     }
 
 
-    // job timeout count
-    private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
+    /**
+     * job timeout count
+     */
+    private volatile long minTim = System.currentTimeMillis() / 60000;
     private volatile ConcurrentMap<Integer, AtomicInteger> jobTimeoutCountMap = new ConcurrentHashMap<>();
 
 
@@ -74,7 +75,8 @@ public class JobTriggerPoolHelper {
         // choose thread pool
         ThreadPoolExecutor triggerPool_ = fastTriggerPool;
         AtomicInteger jobTimeoutCount = jobTimeoutCountMap.get(jobId);
-        if (jobTimeoutCount != null && jobTimeoutCount.get() > 10) {      // job-timeout 10 times in 1 min
+        // job-timeout 10 times in 1 min
+        if (jobTimeoutCount != null && jobTimeoutCount.get() > 10) {
             triggerPool_ = slowTriggerPool;
         }
         // trigger

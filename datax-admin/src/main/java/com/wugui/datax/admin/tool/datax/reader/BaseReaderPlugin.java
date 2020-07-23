@@ -9,7 +9,6 @@ import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
-import com.wugui.datax.admin.util.AESUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;

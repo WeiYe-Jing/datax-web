@@ -6,6 +6,9 @@ import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.datax.DataxJsonHelper;
+import com.wugui.datax.admin.tool.table.TableNameHandle;
+import com.wugui.datax.admin.util.JdbcConstants;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +29,40 @@ public class DataxJsonServiceImpl implements DataxJsonService {
     @Override
     public String buildJobJson(DataXJsonBuildDTO dataXJsonBuildDto) {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
+      
         // reader
-        JobDatasource readerDataSource = jobJdbcDataSourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
-
+        JobDatasource readerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
+      
         dataxJsonHelper.initTransformer(dataXJsonBuildDto);
+      
+        //处理reader表名
+        processingTableName(readerDatasource, dataXJsonBuildDto.getReaderTables());
         // reader plugin init
-        dataxJsonHelper.initReader(dataXJsonBuildDto, readerDataSource);
-        JobDatasource writerDatasource = jobJdbcDataSourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
+        dataxJsonHelper.initReader(dataXJsonBuildDto, readerDatasource);
+
+        JobDatasource writerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
+        //处理writer表名
+        processingTableName(writerDatasource, dataXJsonBuildDto.getWriterTables());
+
         dataxJsonHelper.initWriter(dataXJsonBuildDto, writerDatasource);
 
         return JSON.toJSONString(dataxJsonHelper.buildJob());
     }
+
+    /**
+     * 处理表名称
+     * 解决生成json中的表名称大小写敏感问题
+     * 目前针对Oracle和postgreSQL
+     * @param jobDatasource
+     * @param tables
+     */
+    private void processingTableName(JobDatasource jobDatasource, List<String> tables) {
+        if (JdbcConstants.ORACLE.equals(jobDatasource.getDatasource()) || JdbcConstants.POSTGRESQL.equals(jobDatasource.getDatasource())) {
+            for (int i = 0; i < tables.size(); i++) {
+                tables.set(i, TableNameHandle.addDoubleQuotes(tables.get(i)));
+            }
+        }
+    }
+
+
 }

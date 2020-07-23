@@ -15,3 +15,4 @@
 /datax-assembly/target/
 *.iml
 /datax-transformer/target/
+/applogs/

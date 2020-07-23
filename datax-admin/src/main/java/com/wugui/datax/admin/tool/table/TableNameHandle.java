@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.tool.table;
 
+import com.wugui.datatx.core.util.Constants;
+
 /**
  * 表名称处理
  */
@@ -14,15 +16,14 @@ public class TableNameHandle {
      * @return
      */
     public static String addDoubleQuotes(String tableName) {
-        if (tableName.indexOf(".") >= 0) {
-            int idx = tableName.indexOf(".");
+        if (tableName.contains(Constants.SPLIT_POINT)) {
+            int idx = tableName.indexOf(Constants.SPLIT_POINT);
             String prefixStr = tableName.substring(0, idx);
             String suffixStr = tableName.substring(idx + 1);
-            tableName = prefixStr + ".\"" + suffixStr + "\"";
+            tableName = String.format(prefixStr + ".\"%s\"", suffixStr);
         } else {
-            tableName = "\"" + tableName + "\"";
+            tableName = String.format("\"%s\"", tableName);
         }
         return tableName;
     }
-
 }

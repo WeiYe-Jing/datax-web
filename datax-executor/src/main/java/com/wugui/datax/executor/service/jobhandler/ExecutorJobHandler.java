@@ -56,11 +56,12 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         Thread errThread = null;
         String tmpFilePath;
         LogStatistics logStatistics = null;
-        //Generate JSON temporary file
-//        String jobJson=replaceVariable(trigger.getJobJson(),null);
 
         HashMap<String, String> keyValueMap = buildDataXParamToMap(trigger);
+
         String jobJson = replaceVariable(trigger.getJobJson(),keyValueMap);
+
+        //Generate JSON temporary file
         tmpFilePath = generateTemJsonFile(jobJson);
         try {
             String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath,pythonPath);
@@ -119,7 +120,7 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         while (matcher.find()) {
             String variable = matcher.group(2);
 
-            String value = variableMap.get(variable).toString();
+            String value = variableMap.get(variable);
             if (StringUtils.isBlank(value)) {
                 value = matcher.group();
             }
@@ -150,7 +151,7 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         try (PrintWriter writer = new PrintWriter(tmpFilePath, "UTF-8")) {
             writer.println(jobJson);
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            JobLogger.log("JSON 临时文件写入异常：" + e.getMessage());
+            JobLogger.log("JSON temporary file write exception：" + e.getMessage());
         }
         return tmpFilePath;
     }

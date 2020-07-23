@@ -8,9 +8,10 @@ import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.tool.datax.DataxJsonHelper;
 import com.wugui.datax.admin.tool.table.TableNameHandle;
 import com.wugui.datax.admin.util.JdbcConstants;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * com.wugui.datax json构建实现类
@@ -24,14 +25,14 @@ import org.springframework.stereotype.Service;
 public class DataxJsonServiceImpl implements DataxJsonService {
 
     @Autowired
-    private JobDatasourceService jobJdbcDataSourceService;
+    private JobDatasourceService jobDataSourceService;
 
     @Override
     public String buildJobJson(DataXJsonBuildDTO dataXJsonBuildDto) {
         DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
       
         // reader
-        JobDatasource readerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
+        JobDatasource readerDatasource = jobDataSourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
       
         dataxJsonHelper.initTransformer(dataXJsonBuildDto);
       
@@ -40,7 +41,7 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         // reader plugin init
         dataxJsonHelper.initReader(dataXJsonBuildDto, readerDatasource);
 
-        JobDatasource writerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
+        JobDatasource writerDatasource = jobDataSourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
         //处理writer表名
         processingTableName(writerDatasource, dataXJsonBuildDto.getWriterTables());
 

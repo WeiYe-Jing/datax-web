@@ -2,12 +2,10 @@ package com.wugui.datax.executor.service.command;
 
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.IncrementTypeEnum;
-import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -31,7 +29,7 @@ public class BuildCommand {
      * @param dataXPyPath
      * @return
      */
-    public static String[] buildDataXExecutorCmd(TriggerParam tgParam, String tmpFilePath, String dataXPyPath,String pythonPath) {
+    public static String[] buildDataXExecutorCmd(TriggerParam tgParam, String tmpFilePath, String dataXPyPath, String pythonPath) {
         // command process
         //"--loglevel=debug"
         List<String> cmdArr = new ArrayList<>();
@@ -43,8 +41,7 @@ public class BuildCommand {
         cmdArr.add(dataXPyPath);
         String doc = buildDataXParam(tgParam);
         if (StringUtils.isNotBlank(doc)) {
-            cmdArr.add(doc);
-//            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
+            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
         }
         cmdArr.add(tmpFilePath);
         return cmdArr.toArray(new String[cmdArr.size()]);
@@ -53,7 +50,6 @@ public class BuildCommand {
     private static String buildDataXParam(TriggerParam tgParam) {
         StringBuilder doc = new StringBuilder();
         String jvmParam = StringUtils.isNotBlank(tgParam.getJvmParam()) ? tgParam.getJvmParam().trim() : tgParam.getJvmParam();
-        String partitionStr = tgParam.getPartitionInfo();
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
@@ -62,13 +58,8 @@ public class BuildCommand {
 
 
     public static HashMap<String, String> buildDataXParamToMap(TriggerParam tgParam) {
-        StringBuilder doc = new StringBuilder();
-        String jvmParam = StringUtils.isNotBlank(tgParam.getJvmParam()) ? tgParam.getJvmParam().trim() : tgParam.getJvmParam();
-        String partitionStr = tgParam.getPartitionInfo();
-        if (StringUtils.isNotBlank(jvmParam)) {
-            doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
-        }
 
+        String partitionStr = tgParam.getPartitionInfo();
         Integer incrementType = tgParam.getIncrementType();
         String replaceParam = StringUtils.isNotBlank(tgParam.getReplaceParam()) ? tgParam.getReplaceParam().trim() : null;
         if (incrementType != null && replaceParam != null) {
@@ -76,9 +67,6 @@ public class BuildCommand {
             if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
                 long startId = tgParam.getStartId();
                 long endId = tgParam.getEndId();
-                if (doc.length() > 0) {
-                    doc.append(SPLIT_SPACE);
-                }
                 String formatParam = String.format(replaceParam, startId, endId);
                 return getKeyValue(formatParam);
 
@@ -86,24 +74,19 @@ public class BuildCommand {
 
             if (IncrementTypeEnum.time.contains(incrementType)) {
 
-                if (doc.length() > 0) {
-                    doc.append(SPLIT_SPACE);
-                }
                 String replaceParamType = tgParam.getReplaceParamType();
 
                 if (StringUtils.isBlank(replaceParamType) || "Timestamp".equals(replaceParamType)) {
                     long startTime = tgParam.getStartTime().getTime() / 1000;
                     long endTime = tgParam.getTriggerTime().getTime() / 1000;
-                   String formatParam =  String.format(replaceParam, startTime, endTime);
+                    String formatParam = String.format(replaceParam, startTime, endTime);
                     return getKeyValue(formatParam);
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat(replaceParamType);
-//                    String endTime = sdf.format(tgParam.getTriggerTime()).replaceAll(SPLIT_SPACE, PERCENT);
                     String endTime = sdf.format(tgParam.getTriggerTime());
-//                    String startTime = sdf.format(tgParam.getStartTime()).replaceAll(SPLIT_SPACE, PERCENT);
                     String startTime = sdf.format(tgParam.getStartTime());
 
-                    String formatParam =  String.format(replaceParam, startTime, endTime);
+                    String formatParam = String.format(replaceParam, startTime, endTime);
                     return getKeyValue(formatParam);
                 }
             }
@@ -114,10 +97,7 @@ public class BuildCommand {
 
             if (StringUtils.isNotBlank(partitionStr)) {
                 List<String> partitionInfo = Arrays.asList(partitionStr.split(SPLIT_COMMA));
-                if (doc.length() > 0) {
-                    doc.append(SPLIT_SPACE);
-                }
-                String formatParam= String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo));
+                String formatParam = String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo));
                 return getKeyValue(formatParam);
             }
 
@@ -126,15 +106,15 @@ public class BuildCommand {
         return null;
     }
 
-    private static  HashMap<String, String> getKeyValue(String formatParam){
+    private static HashMap<String, String> getKeyValue(String formatParam) {
         String[] paramArr = formatParam.split(PARAMS_SYSTEM);
         HashMap<String, String> map = new HashMap<String, String>();
 
-        for(String param:paramArr){
-            if(StringUtils.isNotBlank(param) ){
-                param=param.trim();
+        for (String param : paramArr) {
+            if (StringUtils.isNotBlank(param)) {
+                param = param.trim();
                 String[] keyValue = param.split(PARAMS_EQUALS);
-                map.put(keyValue[0],keyValue[1]);
+                map.put(keyValue[0], keyValue[1]);
             }
         }
 

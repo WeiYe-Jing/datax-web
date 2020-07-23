@@ -138,22 +138,20 @@ public class JobTrigger {
 
         //increment parameter
         Integer incrementType = jobInfo.getIncrementType();
-        if (incrementType != null) {
-            triggerParam.setIncrementType(incrementType);
-            if (IncrementTypeEnum.ID.getCode() == incrementType) {
-                long maxId = getMaxId(jobInfo);
-                jobLog.setMaxId(maxId);
-                triggerParam.setEndId(maxId);
-                triggerParam.setStartId(jobInfo.getIncStartId());
-            } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-                triggerParam.setStartTime(jobInfo.getIncStartTime());
-                triggerParam.setTriggerTime(triggerTime);
-                triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
-            } else if (IncrementTypeEnum.PARTITION.getCode() == incrementType) {
-                triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
-            }
-            triggerParam.setReplaceParam(jobInfo.getReplaceParam());
+        triggerParam.setIncrementType(incrementType);
+        if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
+            long maxId = getMaxId(jobInfo);
+            jobLog.setMaxId(maxId);
+            triggerParam.setEndId(maxId);
+            triggerParam.setStartId(jobInfo.getIncStartId());
+        } else if (IncrementTypeEnum.TIME.getCode().equals(incrementType)) {
+            triggerParam.setStartTime(jobInfo.getIncStartTime());
+            triggerParam.setTriggerTime(triggerTime);
+            triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
+        } else if (IncrementTypeEnum.PARTITION.getCode().equals(incrementType)) {
+            triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
         }
+        triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         //jvm parameter
         triggerParam.setJvmParam(jobInfo.getJvmParam());
 

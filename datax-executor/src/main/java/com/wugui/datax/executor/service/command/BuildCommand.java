@@ -7,13 +7,11 @@ import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.wugui.datatx.core.util.Constants.SPLIT_COMMA;
 import static com.wugui.datax.executor.service.jobhandler.DataXConstant.*;
@@ -33,11 +31,11 @@ public class BuildCommand {
      * @param dataXPyPath
      * @return
      */
-    public static String[] buildDataXExecutorCmd(TriggerParam tgParam, String tmpFilePath, String dataXPyPath) {
+    public static String[] buildDataXExecutorCmd(TriggerParam tgParam, String tmpFilePath, String dataXPyPath,String pythonPath) {
         // command process
         //"--loglevel=debug"
         List<String> cmdArr = new ArrayList<>();
-        cmdArr.add("python");
+        cmdArr.add(pythonPath);
         String dataXHomePath = SystemUtils.getDataXHomePath();
         if (StringUtils.isNotEmpty(dataXHomePath)) {
             dataXPyPath = dataXHomePath.contains("bin") ? dataXHomePath + DEFAULT_DATAX_PY : dataXHomePath + "bin" + File.separator + DEFAULT_DATAX_PY;
@@ -59,10 +57,20 @@ public class BuildCommand {
         if (StringUtils.isNotBlank(jvmParam)) {
             doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
         }
+        return doc.toString();
+    }
+
+
+    public static HashMap<String, String> buildDataXParamToMap(TriggerParam tgParam) {
+        StringBuilder doc = new StringBuilder();
+        String jvmParam = StringUtils.isNotBlank(tgParam.getJvmParam()) ? tgParam.getJvmParam().trim() : tgParam.getJvmParam();
+        String partitionStr = tgParam.getPartitionInfo();
+        if (StringUtils.isNotBlank(jvmParam)) {
+            doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
+        }
 
         Integer incrementType = tgParam.getIncrementType();
         String replaceParam = StringUtils.isNotBlank(tgParam.getReplaceParam()) ? tgParam.getReplaceParam().trim() : null;
-
         if (incrementType != null && replaceParam != null) {
 
             if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
@@ -71,8 +79,9 @@ public class BuildCommand {
                 if (doc.length() > 0) {
                     doc.append(SPLIT_SPACE);
                 }
-                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startId, endId));
-                doc.append(TRANSFORM_QUOTES);
+                String formatParam = String.format(replaceParam, startId, endId);
+                return getKeyValue(formatParam);
+
             }
 
             if (IncrementTypeEnum.time.contains(incrementType)) {
@@ -85,18 +94,18 @@ public class BuildCommand {
                 if (StringUtils.isBlank(replaceParamType) || "Timestamp".equals(replaceParamType)) {
                     long startTime = tgParam.getStartTime().getTime() / 1000;
                     long endTime = tgParam.getTriggerTime().getTime() / 1000;
-                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(replaceParam, startTime, endTime));
+                   String formatParam =  String.format(replaceParam, startTime, endTime);
+                    return getKeyValue(formatParam);
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat(replaceParamType);
 //                    String endTime = sdf.format(tgParam.getTriggerTime()).replaceAll(SPLIT_SPACE, PERCENT);
                     String endTime = sdf.format(tgParam.getTriggerTime());
 //                    String startTime = sdf.format(tgParam.getStartTime()).replaceAll(SPLIT_SPACE, PERCENT);
                     String startTime = sdf.format(tgParam.getStartTime());
-                    String format =String.format(replaceParam, startTime, endTime);
-                    doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(format);
+
+                    String formatParam =  String.format(replaceParam, startTime, endTime);
+                    return getKeyValue(formatParam);
                 }
-                //buildPartitionCM(doc, partitionStr);
-                doc.append(TRANSFORM_QUOTES);
             }
 
         }
@@ -108,13 +117,28 @@ public class BuildCommand {
                 if (doc.length() > 0) {
                     doc.append(SPLIT_SPACE);
                 }
-                doc.append(PARAMS_CM).append(TRANSFORM_QUOTES).append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo))).append(TRANSFORM_QUOTES);
+                String formatParam= String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo));
+                return getKeyValue(formatParam);
             }
 
         }
 
-        JobLogger.log("------------------Command parameters:" + doc);
-        return doc.toString();
+        return null;
+    }
+
+    private static  HashMap<String, String> getKeyValue(String formatParam){
+        String[] paramArr = formatParam.split(PARAMS_SYSTEM);
+        HashMap<String, String> map = new HashMap<String, String>();
+
+        for(String param:paramArr){
+            if(StringUtils.isNotBlank(param) ){
+                param=param.trim();
+                String[] keyValue = param.split(PARAMS_EQUALS);
+                map.put(keyValue[0],keyValue[1]);
+            }
+        }
+
+        return map;
     }
 
 

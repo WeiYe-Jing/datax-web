@@ -19,6 +19,10 @@ public class DataXConstant {
 
     public static final String PARAMS_CM = "-p";
 
+
+    public static final String PARAMS_SYSTEM = "-D";
+    public static final String PARAMS_EQUALS = "=";
+
     public static final String PARAMS_CM_V_PT = "-Dpartition=%s";
 
     public static final String DEFAULT_JSON = "jsons";

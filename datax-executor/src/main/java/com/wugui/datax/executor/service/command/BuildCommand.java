@@ -94,7 +94,7 @@ public class BuildCommand {
             // 这里是mongodb主键自增
             if(IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)){
                 String startId = tgParam.getMongodbStartId();
-                String endId = new ObjectId(tgParam.getTriggerTime()).toHexString();
+                String endId = tgParam.getMongodbEndId();
                 String formatParam = String.format(replaceParam, startId, endId);
                 return getKeyValue(formatParam);
             }

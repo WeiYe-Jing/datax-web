@@ -45,13 +45,7 @@ public class TriggerParam implements Serializable{
         this.mongodbStartId = mongodbStartId;
     }
 
-    public String getMongodbEndId() {
-        return mongodbEndId;
-    }
 
-    public void setMongodbEndId(String mongodbEndId) {
-        this.mongodbEndId = mongodbEndId;
-    }
 
     private long startId;
     private long endId;
@@ -63,6 +57,14 @@ public class TriggerParam implements Serializable{
 
     private String replaceParamType;
 
+
+    public String getMongodbEndId() {
+        return mongodbEndId;
+    }
+
+    public void setMongodbEndId(String mongodbEndId) {
+        this.mongodbEndId = mongodbEndId;
+    }
 
     public int getJobId() {
         return jobId;

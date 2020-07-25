@@ -37,8 +37,27 @@ public class TriggerParam implements Serializable{
 
     private String partitionInfo;
 
+    public String getMongodbStartId() {
+        return mongodbStartId;
+    }
+
+    public void setMongodbStartId(String mongodbStartId) {
+        this.mongodbStartId = mongodbStartId;
+    }
+
+    public String getMongodbEndId() {
+        return mongodbEndId;
+    }
+
+    public void setMongodbEndId(String mongodbEndId) {
+        this.mongodbEndId = mongodbEndId;
+    }
+
     private long startId;
     private long endId;
+
+    private String mongodbStartId;
+    private String mongodbEndId;
 
     private Integer incrementType;
 

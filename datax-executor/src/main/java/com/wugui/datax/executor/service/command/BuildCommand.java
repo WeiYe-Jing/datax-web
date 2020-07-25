@@ -6,6 +6,7 @@ import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -90,6 +91,13 @@ public class BuildCommand {
                     return getKeyValue(formatParam);
                 }
             }
+            // 这里是mongodb主键自增
+            if(IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)){
+                String startId = tgParam.getMongodbStartId();
+                String endId = new ObjectId(tgParam.getTriggerTime()).toHexString();
+                String formatParam = String.format(replaceParam, startId, endId);
+                return getKeyValue(formatParam);
+            }
 
         }
 
@@ -120,6 +128,8 @@ public class BuildCommand {
 
         return map;
     }
+
+
 
 
     private void buildPartitionCM(StringBuilder doc, String partitionStr) {

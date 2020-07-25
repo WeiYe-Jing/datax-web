@@ -150,6 +150,9 @@ public class JobTrigger {
             triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
         } else if (IncrementTypeEnum.PARTITION.getCode().equals(incrementType)) {
             triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
+        } else if (IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)) {
+            triggerParam.setMongodbStartId(jobInfo.getMongodbIncStartId());
+            triggerParam.setTriggerTime(triggerTime);
         }
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         //jvm parameter

@@ -12,11 +12,13 @@ public enum IncrementTypeEnum {
      * 1 ID
      * 3 PARTITION
      * 4 3 PARTITION AND TIME
+     * 5 MONGODB ID
      */
-    TIME(2, "时间"),
     ID(1, "自增主键"),
+    TIME(2, "时间"),
     PARTITION(3, "HIVE分区"),
-    PARTITION_TIME(4, "HIVE分区时间增量");
+    PARTITION_TIME(4, "HIVE分区时间增量"),
+    MONGODB_ID(5, "mongodb主键增量");
 
     IncrementTypeEnum(Integer code, String descp) {
         this.code = code;

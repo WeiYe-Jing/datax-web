@@ -6,7 +6,6 @@ import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

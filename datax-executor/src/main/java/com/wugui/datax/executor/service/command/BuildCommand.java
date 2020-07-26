@@ -6,7 +6,6 @@ import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -94,7 +93,7 @@ public class BuildCommand {
             // 这里是mongodb主键自增
             if(IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)){
                 String startId = tgParam.getMongodbStartId();
-                String endId = new ObjectId(tgParam.getTriggerTime()).toHexString();
+                String endId = tgParam.getMongodbEndId();
                 String formatParam = String.format(replaceParam, startId, endId);
                 return getKeyValue(formatParam);
             }

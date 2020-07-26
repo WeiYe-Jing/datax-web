@@ -106,7 +106,7 @@ public class JobInfo {
 	private String primaryKey;
 
 	@ApiModelProperty("增量初始id")
-	private Long incStartId;
+	private String incStartId;
 
 	@ApiModelProperty("增量方式")
 	private int incrementType;

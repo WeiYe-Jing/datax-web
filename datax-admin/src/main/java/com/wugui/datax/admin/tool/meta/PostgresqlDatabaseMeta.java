@@ -44,7 +44,7 @@ public class PostgresqlDatabaseMeta extends BaseDatabaseMeta implements Database
 
     @Override
     public String getSQLQueryTableSchema(String... args) {
-        return "select table_schema FROM information_schema.tables where \"table_name\" not like 'pg_%' or \"table_name\" not like 'sql_%' group by table_schema;";
+        return "select table_schema FROM information_schema.tables where \"table_name\" not like 'pg_%' or \"table_name\" not like 'sql_%' group by table_schema order by table_schema;";
     }
 
     @Override

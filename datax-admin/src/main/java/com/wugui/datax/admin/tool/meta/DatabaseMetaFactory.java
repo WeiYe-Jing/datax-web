@@ -22,6 +22,8 @@ public class DatabaseMetaFactory {
             return OracleDatabaseMeta.getInstance();
         } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
             return PostgresqlDatabaseMeta.getInstance();
+        } else if (JdbcConstants.GREENPLUM.equals(dbType)) {
+            return PostgresqlDatabaseMeta.getInstance();
         } else if (JdbcConstants.SQL_SERVER.equals(dbType)) {
             return SqlServerDatabaseMeta.getInstance();
         } else if (JdbcConstants.HIVE.equals(dbType)) {

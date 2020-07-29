@@ -116,6 +116,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (POSTGRESQL.equals(datasource)) {
             readerPlugin = new PostgresqlReader();
             buildReader = buildReader();
+        } else if (GREENPLUM.equals(datasource)) {
+            readerPlugin = new PostgresqlReader();
+            buildReader = buildReader();
         } else if (CLICKHOUSE.equals(datasource)) {
             readerPlugin = new ClickHouseReader();
             buildReader = buildReader();
@@ -153,6 +156,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
             buildWriter = this.buildWriter();
         } else if (POSTGRESQL.equals(datasource)) {
             writerPlugin = new PostgresqllWriter();
+            buildWriter = this.buildWriter();
+        } else if (GREENPLUM.equals(datasource)) {
+            writerPlugin = new GreenPlumWriter();
             buildWriter = this.buildWriter();
         } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
             writerPlugin = new ClickHouseWriter();

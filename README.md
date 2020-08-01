@@ -262,6 +262,9 @@ Copyright (c) 2020 WeiYe
 
 1. 任务日志过大时，查看日志报错，请求超时；
 
+# 提交代码
+[参与贡献](https://github.com/WeiYe-Jing/datax-web/issues/190)
+
 # 项目规划
 
 [项目规划](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)

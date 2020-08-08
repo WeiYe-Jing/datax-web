@@ -19,7 +19,7 @@ com.dtstack.flinkx.launcher.Launcher
 ```
 
 3、点击apply和Ok
-![](../pic/flinkx/flinkx-debug/debug.jpg)
+![Alt text](../pic/flinkx/flinkx-debug/debug.jpg "")
 
 ## 四、打断点运行FlinkX任务  
 ![](../pic/flinkx/flinkx-debug/debug2.jpg)

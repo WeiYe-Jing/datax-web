@@ -265,9 +265,6 @@ Copyright (c) 2020 WeiYe
 # 提交代码
 [参与贡献](https://github.com/WeiYe-Jing/datax-web/issues/190)
 
-# 项目规划
-
-[项目规划](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
 
 # Contact us
 

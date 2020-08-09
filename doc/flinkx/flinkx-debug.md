@@ -19,13 +19,13 @@ com.dtstack.flinkx.launcher.Launcher
 ```
 
 3、点击apply和Ok
-![Alt text](../pic/flinkx/flinkx-debug/debug.jpg "")
+![](../pic/flinkx/flinkx-debug/debug.jpg "")
 
 ## 四、打断点运行FlinkX任务  
-![Alt text](../pic/flinkx/flinkx-debug/debug2.jpg "")
+![](../pic/flinkx/flinkx-debug/debug2.jpg "")
 
 ## 五、查看监控页面：http://localhost:8888/  
-![Alt text](../pic/flinkx/flinkx-debug/watch.jpg "")
+![](../pic/flinkx/flinkx-debug/watch.jpg "")
 
 
 

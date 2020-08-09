@@ -8,7 +8,8 @@ FlinkX是一个基于Flink的批流统一的数据同步工具，既可以采集
 需要安装maven、java8、配置好github相关参数
 
 2、Fork FlinX项目到自己的仓库中  
-![](../pic/flinkx/flinkx-quickstart/fork.jpg)
+![Alt text](../pic/flinkx/flinkx-quickstart/fork.jpg "")
+
 
 2、Clone项目到本地  
 git clone https://github.com/liukunyuan/flinkx.git
@@ -94,12 +95,20 @@ rest.bind-port: 8888
   }
 }
 ```
-3、运行任务查看执行结果  
+3、运行任务  
+```
 nohup /Users/jack/Documents/jack-project/flinkx/bin/flinkx -mode local \
                      -job /Users/jack/Documents/jack-project/flinkx/flinkconf/mysql2mysql.json    \
            -pluginRoot /Users/jack/Documents/jack-project/flinkx/plugins \
-           -confProp "{\"flink.checkpoint.interval\":60000}" > log.txt 2>&1 &  
+           -flinkconf /Users/jack/Documents/jack-project/flinkx/flinkconf/ \
+           -confProp "{\"flink.checkpoint.interval\":60000}" > log.txt 2>&1 & 
 ```
+4、查看监控网页和log.txt文件：http://localhost:8888/  
+![Alt text](../pic/flinkx/flinkx-quickstart/watch.jpg "")
+
+
+```
+
 ---------------------------------
 numWrite                  |  2
 last_write_num_0          |  0

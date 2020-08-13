@@ -166,7 +166,8 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         logger.info(sqlQueryTables);
         List<Map<String, Object>> res = null;
         try {
-            res = JdbcUtils.executeQuery(connection, sqlQueryTables, ImmutableList.of(currentSchema));
+           // res = JdbcUtils.executeQuery(connection, sqlQueryTables, ImmutableList.of(currentSchema));
+            res = JdbcUtils.executeQuery(connection, sqlQueryTables, new ArrayList());//该sql没有参数?执行报错,不能传入参数
         } catch (SQLException e) {
             logger.error("[getTables Exception] --> "
                     + "the exception message is:" + e.getMessage());

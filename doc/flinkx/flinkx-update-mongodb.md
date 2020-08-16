@@ -1,5 +1,5 @@
 # FLinkX的Mongodb插件存在的问题以及对源码进行优化
-
+PR地址[https://github.com/DTStack/flinkx/pull/263]
 
 ## 一、目前FlinkX的mongodb插件存在的问题  
 ### 1、mongodbreader在查询[*]的时候，并不能适应真正的nosql非结构化数据  

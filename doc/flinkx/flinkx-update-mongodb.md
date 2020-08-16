@@ -2,12 +2,12 @@
 
 
 ## 一、目前FlinkX的mongodb插件存在的问题  
-###1、mongodbreader在查询[*]的时候，并不能适应真正的nosql非结构化数据  
-###2、查询mongodb的ObjectId时，数据类型没有处理，插入mysql时，会报错  
-###3、查询Array和Object时，结果数据的数据结构不正确
+### 1、mongodbreader在查询[*]的时候，并不能适应真正的nosql非结构化数据  
+### 2、查询mongodb的ObjectId时，数据类型没有处理，插入mysql时，会报错  
+### 3、查询Array和Object时，结果数据的数据结构不正确
 
 ## 二、mongodbreader查询[*]  
-###1)、mongodb中存在的测试数据  
+### 1)、mongodb中存在的测试数据  
 ```
 { "_id" : ObjectId("5f38ba948592e21c30acf06e"), "username" : "jack", "age" : "30" }
 { "_id" : ObjectId("5f38ba948592e21c30acf06f"), "age" : "30", "username" : "jack" }
@@ -17,7 +17,7 @@
 { "_id" : ObjectId("5f38bde622d2ab66755ea950"), "username" : "jack", "list" : [ { "username" : "jack", "age" : "30", "installDate" : ISODate("2020-08-16T05:02:30.323Z") }, { "age" : "30", "username" : "jack", "installDate" : ISODate("2020-08-16T05:02:30.323Z") } ] }
 { "_id" : ObjectId("5f38be06635b721e5ff16183"), "username" : "jack", "doc" : { "age" : "30", "username" : "jack", "installDate" : ISODate("2020-08-16T05:03:02.212Z") } }
 ```
-###2)、查询的job配置  
+### 2)、查询的job配置  
 ```
 {
     "job":{
@@ -101,7 +101,7 @@
     }
 }
 ```
-###3)、查询结果  
+### 3)、查询结果  
 ```
 5f38ba948592e21c30acf06e,jack,30
 5f38ba948592e21c30acf06f,30,jack
@@ -111,7 +111,7 @@
 5f38bde622d2ab66755ea950,jack,[Document{{username=jack, age=30, installDate=Sun Aug 16 13:02:30 CST 2020}}, Document{{age=30, username=jack, installDate=Sun Aug 16 13:02:30 CST 2020}}]
 5f38be06635b721e5ff16183,jack,Document{{age=30, username=jack, installDate=Sun Aug 16 13:03:02 CST 2020}}
 ```
-###4)、分析存在的问题  
+### 4)、分析存在的问题  
 可以看出username字段和age字段在第一行和第二行，字段位置错位了。查看代码发现原因：
 ```
 if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0).getName())){
@@ -123,7 +123,7 @@ if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0
             }
 }
 ```
-###5)、改进思路  
+### 5)、改进思路  
 在查询[*]时，将查询Document对象保存在一个字段中，而不是遍历Document的所有字段
 ```
  if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0).getName())){
@@ -133,7 +133,7 @@ if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0
           
 }
 ```
-###6)、改进后测试job  
+### 6)、改进后测试job  
 ```
 {
     "job":{
@@ -197,7 +197,7 @@ if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0
     }
 }
 ```
-###7)、查看导出到本地的结果数据    
+### 7)、查看导出到本地的结果数据    
 ```
 {"_id": "5f38ba948592e21c30acf06e", "username": "jack", "age": "30"}
 {"_id": "5f38ba948592e21c30acf06f", "age": "30", "username": "jack"}
@@ -207,11 +207,11 @@ if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0
 {"_id": "5f38bde622d2ab66755ea950", "username": "jack", "list": [{"username": "jack", "age": "30", "installDate": "1597554150323"}, {"age": "30", "username": "jack", "installDate": "1597554150323"}]}
 {"_id": "5f38be06635b721e5ff16183", "username": "jack", "doc": {"age": "30", "username": "jack", "installDate": "1597554182212"}}
 ```
-###8)、结论  
+### 8)、结论  
 可以看出所有的字段都导出来了，而且放入了一个字段，用户在writer配置时，不需要配置具体的字段名称了。能动态的将Collection中所有字段导出来，真正地满足了nosql非结构化数据导出。
 
 ## 三、查询mongodb的ObjectId时，数据类型没有处理，插入mysql时，会报错   
-###1)、配置job文件  
+### 1)、配置job文件  
 查询_id、name插入到mysql,将提前将日志的level设置为all，或者按照此pr修改日志级别[https://github.com/DTStack/flinkx/pull/260]
 ```
 {
@@ -270,7 +270,7 @@ if(metaColumns.size() == 1 && ConstantValue.STAR_SYMBOL.equals(metaColumns.get(0
   }
 }
 ``` 
-###2)、运行job文件，发现插入异常  
+### 2)、运行job文件，发现插入异常  
 ```
 16:13:42.124 [Source: mongodbreader -> Sink: mysqlwriter (1/1)] ERROR com.dtstack.flinkx.mysql.format.MysqlOutputFormat - write error row, row = 5f38be06635b721e5ff16183,null, e = com.dtstack.flinkx.exception.WriteRecordException: Incorrect string value: '\xAC\xED\x00\x05sr...' for column 'aa' at row 1
 java.sql.SQLException: Incorrect string value: '\xAC\xED\x00\x05sr...' for column 'aa' at row 1
@@ -302,11 +302,11 @@ Caused by: java.sql.SQLException: Incorrect string value: '\xAC\xED\x00\x05sr...
 	at com.dtstack.flinkx.rdb.outputformat.JdbcOutputFormat.writeSingleRecordInternal(JdbcOutputFormat.java:208)
 	... 15 more
 ```
-###3)、异常原因分析  
+### 3)、异常原因分析  
 在JdbcOutputFormat的writeSingleRecordInternal方法打debug断点，然后进行debug查看。可以查看_id字段的getField()方法的返回结果数据类型为ObjectId,
 而Mysql的Jdbc协议不支持ObjectId数据类型，因此会报错
 ![](../pic/flinkx/flinkx-update-mongodb/debug.jpg "")
-###4)、对Mongodb的_id查询进行优化  
+### 4)、对Mongodb的_id查询进行优化  
 ```
 public Row nextRecordInternal(Row row) throws IOException {
         Document doc = cursor.next();
@@ -342,7 +342,7 @@ public Row nextRecordInternal(Row row) throws IOException {
         return row;
     }
 ```
-###5)、运行并查看执行结果，可以看出_id成功插入到mysql数据库了
+### 5)、运行并查看执行结果，可以看出_id成功插入到mysql数据库了
 ```
 flinkx -mode local  -job /Users/jack/Documents/jack-project/flinkx/flinkconf/mongodb2mysql.json   -pluginRoot /Users/jack/Documents/jack-project/flinkx/syncplugins   -confProp "{\"flink.checkpoint.interval\":60000}"
 ```
@@ -370,7 +370,7 @@ nErrors                   |  0
 导出结果并不符合JsonObject或者JsonArray的数据结构规范     
 
 
-###1)、配置job文件  
+### 1)、配置job文件  
 ```
 
 {
@@ -433,11 +433,11 @@ nErrors                   |  0
   }
 }
 ```
-###2)、查看导出结果，可以发现doc字段没有成功导出，list对象格式不符合JsonArray规范  
+### 2)、查看导出结果，可以发现doc字段没有成功导出，list对象格式不符合JsonArray规范  
 ```
 [Document{{username=jack, age=30, installDate=Sun Aug 16 13:02:30 CST 2020}}, Document{{age=30, username=jack, installDate=Sun Aug 16 13:02:30 CST 2020}}],
 ```
-###3)、优化代码  
+### 3)、优化代码  
 ```
 public Row nextRecordInternal(Row row) throws IOException {
         Document doc = cursor.next();
@@ -473,7 +473,7 @@ public Row nextRecordInternal(Row row) throws IOException {
         return row;
     }
 ```  
-###4)、查看执行结果,可以看出Mongodb的Object和Array对象已经符合json格式了
+### 4)、查看执行结果,可以看出Mongodb的Object和Array对象已经符合json格式了
 ```
 ---------------------------------
 numWrite                  |  7

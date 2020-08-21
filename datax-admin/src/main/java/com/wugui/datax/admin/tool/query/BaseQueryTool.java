@@ -440,11 +440,9 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             //根据各情况添加where 1=0 或on 1=0 
             if ((idx_where>idx_on && idx_on>idx_from) || (idx_where>idx_from && idx_from>idx_on)){
                 sql = replaceLast(querySql," where "," where 1=0 and ");
-            } else if ((idx_on>idx_where && idx_where>idx_from) || (idx_on>idx_from && idx_from>idx_where)) {
-                sql = replaceLast(querySql," on "," on 1=0 and ");
-            } else if (idx_group>idx_from) {
+            } else if (idx_group>idx_on && idx_on>idx_from) {
                 sql = replaceLast(querySql," group "," where 1=0 group ");
-            } else if (idx_order>idx_from) {
+            } else if (idx_order>idx_on && idx_on>idx_from) {
                 sql = replaceLast(querySql," order "," where 1=0 order ");
             } else {
                 sql = querySql.concat(" where 1=0");

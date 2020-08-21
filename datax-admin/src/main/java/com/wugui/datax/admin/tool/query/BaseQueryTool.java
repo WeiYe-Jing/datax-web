@@ -426,11 +426,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             //替换sql中的from 、where、on、group、order为小写
             String sql;
             querySql = querySql.replace(";", "");
-            querySql = querySql.replace("\nFROM ", " from ").replace("\nfrom ", " from ").replace(" FROM ", " from ")；
-            querySql = querySql.replace("\nWHERE ", " where ").replace("\nwhere ", " where ").replace(" WHERE ", " where ")；
-            querySql = querySql.replace("\nON ", " on ").replace("\non ", " on ").replace(" ON ", " on ")；
-            querySql = querySql.replace("\nGROUP ", " group ").replace("\ngroup ", " group ").replace(" GROUP ", " group ")；
-            querySql = querySql.replace("\nORDER ", " order ").replace("\norder ", " order ").replace(" ORDER ", " order ")；
+            querySql = querySql.replace("\nFROM ", " from ").replace("\nfrom ", " from ").replace(" FROM ", " from ");
+            querySql = querySql.replace("\nWHERE ", " where ").replace("\nwhere ", " where ").replace(" WHERE ", " where ");
+            querySql = querySql.replace("\nON ", " on ").replace("\non ", " on ").replace(" ON ", " on ");
+            querySql = querySql.replace("\nGROUP ", " group ").replace("\ngroup ", " group ").replace(" GROUP ", " group ");
+            querySql = querySql.replace("\nORDER ", " order ").replace("\norder ", " order ").replace(" ORDER ", " order ");
             //寻找from 、where、on、group、order在sql中的位置
             int idx_from = querySql.lastIndexOf(" from ");
             int idx_where = querySql.lastIndexOf(" where ");

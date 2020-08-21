@@ -423,19 +423,31 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         Statement stmt = null;
         ResultSet rs = null;
         try {
+            //替换sql中的from 、where、on、group、order为小写
+            String sql;
             querySql = querySql.replace(";", "");
-            //拼装sql语句，在后面加上 where 1=0 即可
-            String sql = querySql.concat(" where 1=0");
-            //判断是否已有where，如果是，则加 and 1=0
-            //从最后一个 ) 开始找 where，或者整个语句找
-            if (querySql.contains(")")) {
-                if (querySql.substring(querySql.indexOf(")")).contains("where")) {
-                    sql = querySql.concat(" and 1=0");
-                }
+            querySql = querySql.replace("\nFROM ", " from ").replace("\nfrom ", " from ").replace(" FROM ", " from ")；
+            querySql = querySql.replace("\nWHERE ", " where ").replace("\nwhere ", " where ").replace(" WHERE ", " where ")；
+            querySql = querySql.replace("\nON ", " on ").replace("\non ", " on ").replace(" ON ", " on ")；
+            querySql = querySql.replace("\nGROUP ", " group ").replace("\ngroup ", " group ").replace(" GROUP ", " group ")；
+            querySql = querySql.replace("\nORDER ", " order ").replace("\norder ", " order ").replace(" ORDER ", " order ")；
+            //寻找from 、where、on、group、order在sql中的位置
+            int idx_from = querySql.lastIndexOf(" from ");
+            int idx_where = querySql.lastIndexOf(" where ");
+            int idx_on = querySql.lastIndexOf(" on ");
+            int idx_group = querySql.lastIndexOf(" group ");
+            int idx_order = querySql.lastIndexOf(" order ");
+            //根据各情况添加where 1=0 或on 1=0 
+            if ((idx_where>idx_on && idx_on>idx_from) || (idx_where>idx_from && idx_from>idx_on)){
+                sql = replaceLast(querySql," where "," where 1=0 and ");
+            } else if ((idx_on>idx_where && idx_where>idx_from) || (idx_on>idx_from && idx_from>idx_where)) {
+                sql = replaceLast(querySql," on "," on 1=0 and ");
+            } else if (idx_group>idx_from) {
+                sql = replaceLast(querySql," group "," where 1=0 group ");
+            } else if (idx_order>idx_from) {
+                sql = replaceLast(querySql," order "," where 1=0 order ");
             } else {
-                if (querySql.contains("where")) {
-                    sql = querySql.concat(" and 1=0");
-                }
+                sql = querySql.concat(" where 1=0");
             }
             //获取所有字段
             stmt = connection.createStatement();
@@ -516,5 +528,8 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
     protected String getSQLQueryTableSchema() {
         return sqlBuilder.getSQLQueryTableSchema();
+    }
+    public static String replaceLast(String text, String strToReplace, String replaceWithThis) {
+        return text.replaceFirst("(?s)" + strToReplace + "(?!.*?" + strToReplace + ")", replaceWithThis);
     }
 }

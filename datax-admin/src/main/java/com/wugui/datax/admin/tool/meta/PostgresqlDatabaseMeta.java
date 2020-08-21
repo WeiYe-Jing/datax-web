@@ -38,13 +38,13 @@ public class PostgresqlDatabaseMeta extends BaseDatabaseMeta implements Database
     @Override
     public String getSQLQueryTables(String... tableSchema) {
         return "SELECT concat_ws('.',\"table_schema\",\"table_name\") FROM information_schema.tables \n" +
-                "where (\"table_name\" not like 'pg_%' AND \"table_name\" not like 'sql_%') \n" +
+                "where \"table_schema\" not in ('pg_toast','pg_temp_1','pg_toast_temp_1','pg_catalog','information_schema','gp_toolkit','pg_aoseg','pg_bitmapindex') \n" + 
                 "and table_type='BASE TABLE' and table_schema='" + tableSchema[0] + "' order by table_name";
     }
 
     @Override
     public String getSQLQueryTableSchema(String... args) {
-        return "select table_schema FROM information_schema.tables where \"table_name\" not like 'pg_%' or \"table_name\" not like 'sql_%' group by table_schema order by table_schema;";
+        return "select schema_name FROM information_schema.schemata where \"schema_name\" not in ('pg_toast','pg_temp_1','pg_toast_temp_1','pg_catalog','information_schema','gp_toolkit','pg_aoseg','pg_bitmapindex') order by schema_name;";
     }
 
     @Override

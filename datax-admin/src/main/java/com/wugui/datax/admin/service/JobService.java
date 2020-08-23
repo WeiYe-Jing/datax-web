@@ -2,8 +2,7 @@ package com.wugui.datax.admin.service;
 
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.TaskScheduleDto;
+import com.wugui.datax.admin.dto.DataXBatchJsonBuildDTO;
 import com.wugui.datax.admin.entity.JobInfo;
 
 import java.io.IOException;
@@ -92,5 +91,5 @@ public interface JobService {
      * @param dto
      * @return
      */
-    ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException;
+    ReturnT<String> batchAdd(DataXBatchJsonBuildDTO dto) throws IOException;
 }

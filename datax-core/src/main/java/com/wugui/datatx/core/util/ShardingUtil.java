@@ -11,8 +11,16 @@ public class ShardingUtil {
 
     public static class ShardingVO {
 
-        private int index;  // sharding index
-        private int total;  // sharding total
+        @Override
+        public String toString() {
+            return "ShardingVO{" +
+                    "index=" + index +
+                    ", total=" + total +
+                    '}';
+        }
+
+        private int index;
+        private int total;
 
         public ShardingVO(int index, int total) {
             this.index = index;

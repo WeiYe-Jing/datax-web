@@ -3,7 +3,7 @@
 
     <contextName>admin</contextName>
     <property name="LOG_PATH"
-              value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/data/applogs/admin}}}"/>
+              value="${log.path:-${LOG_TEMP:-${java.io.tmpdir:-/data/applogs/admin}}}"/>
 
     <!--控制台日志， 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

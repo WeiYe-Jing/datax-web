@@ -1,6 +1,6 @@
 package com.wugui.datax.rpc.remoting.invoker;
 
-import com.wugui.datax.rpc.registry.ServiceRegistry;
+import com.wugui.datax.rpc.registry.AbstractServiceRegistry;
 import com.wugui.datax.rpc.registry.impl.LocalServiceRegistry;
 import com.wugui.datax.rpc.remoting.net.params.BaseCallback;
 import com.wugui.datax.rpc.remoting.net.params.XxlRpcFutureResponse;
@@ -33,14 +33,14 @@ public class XxlRpcInvokerFactory {
 
     // ---------------------- config ----------------------
 
-    private Class<? extends ServiceRegistry> serviceRegistryClass;          // class.forname
+    private Class<? extends AbstractServiceRegistry> serviceRegistryClass;
     private Map<String, String> serviceRegistryParam;
 
 
     public XxlRpcInvokerFactory() {
     }
 
-    public XxlRpcInvokerFactory(Class<? extends ServiceRegistry> serviceRegistryClass, Map<String, String> serviceRegistryParam) {
+    public XxlRpcInvokerFactory(Class<? extends AbstractServiceRegistry> serviceRegistryClass, Map<String, String> serviceRegistryParam) {
         this.serviceRegistryClass = serviceRegistryClass;
         this.serviceRegistryParam = serviceRegistryParam;
     }
@@ -56,14 +56,13 @@ public class XxlRpcInvokerFactory {
         }
     }
 
-    public void stop() throws Exception {
+    public void stop() {
         // stop registry
         if (serviceRegistry != null) {
             serviceRegistry.stop();
         }
-
         // stop callback
-        if (stopCallbackList.size() > 0) {
+        if (stopCallbackList.isEmpty()) {
             for (BaseCallback callback : stopCallbackList) {
                 try {
                     callback.run();
@@ -72,17 +71,13 @@ public class XxlRpcInvokerFactory {
                 }
             }
         }
-
         // stop CallbackThreadPool
         stopCallbackThreadPool();
     }
 
+    private AbstractServiceRegistry serviceRegistry;
 
-    // ---------------------- service registry ----------------------
-
-    private ServiceRegistry serviceRegistry;
-
-    public ServiceRegistry getServiceRegistry() {
+    public AbstractServiceRegistry getServiceRegistry() {
         return serviceRegistry;
     }
 
@@ -100,7 +95,7 @@ public class XxlRpcInvokerFactory {
 
     // XxlRpcFutureResponseFactory
 
-    private ConcurrentMap<String, XxlRpcFutureResponse> futureResponsePool = new ConcurrentHashMap<String, XxlRpcFutureResponse>();
+    private final ConcurrentMap<String, XxlRpcFutureResponse> futureResponsePool = new ConcurrentHashMap<>();
 
     public void setInvokerFuture(String requestId, XxlRpcFutureResponse futureResponse) {
         futureResponsePool.put(requestId, futureResponse);

@@ -3,6 +3,7 @@ package com.wugui.datax.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.JobDatasourceService;
@@ -32,7 +33,7 @@ public class JobDatasourceController extends BaseController {
      * 服务对象
      */
     @Autowired
-    private JobDatasourceService jobJdbcDatasourceService;
+    private JobDatasourceService jobDatasourceService;
 
     /**
      * 分页查询所有数据
@@ -51,17 +52,18 @@ public class JobDatasourceController extends BaseController {
     public R<IPage<JobDatasource>> selectAll() {
         BaseForm form = new BaseForm();
         QueryWrapper<JobDatasource> query = (QueryWrapper<JobDatasource>) form.pageQueryWrapperCustom(form.getParameters(), new QueryWrapper<JobDatasource>());
-        return success(jobJdbcDatasourceService.page(form.getPlusPagingQueryEntity(), query));
+        return success(jobDatasourceService.page(form.getPlusPagingQueryEntity(), query));
     }
 
     /**
      * 获取所有数据源
+     *
      * @return
      */
     @ApiOperation("获取所有数据源")
     @GetMapping("/all")
     public R<List<JobDatasource>> selectAllDatasource() {
-        return success(this.jobJdbcDatasourceService.selectAllDatasource());
+        return success(this.jobDatasourceService.selectAllDatasource());
     }
 
     /**
@@ -73,7 +75,7 @@ public class JobDatasourceController extends BaseController {
     @ApiOperation("通过主键查询单条数据")
     @GetMapping("{id}")
     public R<JobDatasource> selectOne(@PathVariable Serializable id) {
-        return success(this.jobJdbcDatasourceService.getById(id));
+        return success(this.jobDatasourceService.getById(id));
     }
 
     /**
@@ -85,7 +87,7 @@ public class JobDatasourceController extends BaseController {
     @ApiOperation("新增数据")
     @PostMapping
     public R<Boolean> insert(@RequestBody JobDatasource entity) {
-        return success(this.jobJdbcDatasourceService.save(entity));
+        return success(this.jobDatasourceService.save(entity));
     }
 
     /**
@@ -98,14 +100,14 @@ public class JobDatasourceController extends BaseController {
     @ApiOperation("修改数据")
     public R<Boolean> update(@RequestBody JobDatasource entity) {
         LocalCacheUtil.remove(entity.getDatasourceName());
-        JobDatasource d = jobJdbcDatasourceService.getById(entity.getId());
+        JobDatasource d = jobDatasourceService.getById(entity.getId());
         if (null != d.getJdbcUsername() && entity.getJdbcUsername().equals(d.getJdbcUsername())) {
             entity.setJdbcUsername(null);
         }
         if (null != entity.getJdbcPassword() && entity.getJdbcPassword().equals(d.getJdbcPassword())) {
             entity.setJdbcPassword(null);
         }
-        return success(this.jobJdbcDatasourceService.updateById(entity));
+        return success(this.jobDatasourceService.updateById(entity));
     }
 
     /**
@@ -117,17 +119,19 @@ public class JobDatasourceController extends BaseController {
     @DeleteMapping
     @ApiOperation("删除数据")
     public R<Boolean> delete(@RequestParam("idList") List<Long> idList) {
-        return success(this.jobJdbcDatasourceService.removeByIds(idList));
+        return success(this.jobDatasourceService.removeByIds(idList));
     }
 
     /**
      * 测试数据源
-     * @param jobJdbcDatasource
+     *
+     * @param
      * @return
      */
     @PostMapping("/test")
     @ApiOperation("测试数据")
     public R<Boolean> dataSourceTest (@RequestBody JobDatasource jobJdbcDatasource) throws IOException {
-        return success(jobJdbcDatasourceService.dataSourceTest(jobJdbcDatasource));
+        return success(jobDatasourceService.dataSourceTest(jobJdbcDatasource));
     }
+
 }

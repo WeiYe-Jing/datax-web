@@ -25,6 +25,8 @@ public class QueryToolFactory {
             return getOracleQueryToolInstance(jobDatasource);
         } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
             return getPostgresqlQueryToolInstance(jobDatasource);
+        } else if (JdbcConstants.GREENPLUM.equals(datasource)) {
+            return getPostgresqlQueryToolInstance(jobDatasource);
         } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
             return getSqlserverQueryToolInstance(jobDatasource);
         }else if (JdbcConstants.HIVE.equals(datasource)) {

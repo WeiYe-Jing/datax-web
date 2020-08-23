@@ -21,7 +21,7 @@ import java.util.*;
 import static com.google.common.collect.Maps.newTreeMap;
 
 /**
- * application configuration
+ * @author jingwk
  */
 @Component(value = "ServiceModelToSwagger2Mapper")
 @Primary
@@ -49,14 +49,12 @@ public class ServiceModelToSwagger2MapperImpl extends ServiceModelToSwagger2Mapp
         if (from == null) {
             return null;
         }
-
         Swagger swagger = new Swagger();
-
         swagger.setVendorExtensions(vendorExtensionsMapper.mapExtensions(from.getVendorExtensions()));
         swagger.setSchemes(mapSchemes(from.getSchemes()));
         swagger.setPaths(mapApiListings(from.getApiListings()));
         swagger.setHost(from.getHost());
-        swagger.setDefinitions(modelsFromApiListings( from.getApiListings() ) );
+        swagger.setDefinitions(modelsFromApiListings(from.getApiListings()));
         swagger.setSecurityDefinitions(securityMapper.toSecuritySchemeDefinitions(from.getResourceListing()));
         ApiInfo info = fromResourceListingInfo(from);
         if (info != null) {
@@ -66,13 +64,13 @@ public class ServiceModelToSwagger2MapperImpl extends ServiceModelToSwagger2Mapp
         swagger.setTags(tagSetToTagList(from.getTags()));
         List<String> list2 = from.getConsumes();
         if (list2 != null) {
-            swagger.setConsumes(new ArrayList<String>(list2));
+            swagger.setConsumes(new ArrayList<>(list2));
         } else {
             swagger.setConsumes(null);
         }
         List<String> list3 = from.getProduces();
         if (list3 != null) {
-            swagger.setProduces(new ArrayList<String>(list3));
+            swagger.setProduces(new ArrayList<>(list3));
         } else {
             swagger.setProduces(null);
         }
@@ -136,19 +134,19 @@ public class ServiceModelToSwagger2MapperImpl extends ServiceModelToSwagger2Mapp
         operation.setSchemes(stringSetToSchemeList(from.getProtocol()));
         Set<String> tagsSet = new HashSet<>(1);
 
-        if(from.getTags() != null && from.getTags().size() > 0){
+        if (from.getTags() != null && from.getTags().size() > 0) {
 
             List<String> list = new ArrayList<String>(tagsSet.size());
 
             Iterator<String> it = from.getTags().iterator();
-            while(it.hasNext()){
-               String tag = it.next();
-               list.add(
-                   StringUtils.isNotBlank(tag) ? messageSource.getMessage(tag, null, tag, locale) : " ");
+            while (it.hasNext()) {
+                String tag = it.next();
+                list.add(
+                        StringUtils.isNotBlank(tag) ? messageSource.getMessage(tag, null, tag, locale) : " ");
             }
 
             operation.setTags(list);
-        }else {
+        } else {
             operation.setTags(null);
         }
 
@@ -250,7 +248,7 @@ public class ServiceModelToSwagger2MapperImpl extends ServiceModelToSwagger2Mapp
         for (springfox.documentation.service.Parameter param : list) {
             String description = messageSource.getMessage(param.getDescription(), null, param.getDescription(), locale);
 
-            springfox.documentation.service.Parameter parameter = new springfox.documentation.service.Parameter(param.getName(),description,param.getDefaultValue(),param.isRequired(),param.isAllowMultiple(),param.isAllowEmptyValue(),param.getModelRef(),param.getType(),param.getAllowableValues(),param.getParamType(),param.getParamAccess(),param.isHidden(),param.getPattern(),param.getCollectionFormat(),param.getOrder(),param.getScalarExample(),param.getExamples() ,param.getVendorExtentions());
+            springfox.documentation.service.Parameter parameter = new springfox.documentation.service.Parameter(param.getName(), description, param.getDefaultValue(), param.isRequired(), param.isAllowMultiple(), param.isAllowEmptyValue(), param.getModelRef(), param.getType(), param.getAllowableValues(), param.getParamType(), param.getParamAccess(), param.isHidden(), param.getPattern(), param.getCollectionFormat(), param.getOrder(), param.getScalarExample(), param.getExamples(), param.getVendorExtentions());
             list1.add(parameterMapper.mapParameter(parameter));
         }
 

@@ -1,15 +1,14 @@
 ### 环境准备
 #### 1）基础软件安装
 - MySQL (5.5+) 必选，对应客户端可以选装, Linux服务上若安装mysql的客户端可以通过部署脚本快速初始化数据库
-- JDK (1.8.0_xxx) 必选
+- JDK (1.8.0_141) 必选
 - Maven (3.6.1+) 必选
 - DataX 必选
 - Python (2.x) (支持Python3需要修改替换datax/bin下面的三个python文件，替换文件在doc/datax-web/datax-python3下)
  必选，主要用于调度执行底层DataX的启动脚本，默认的方式是以Java子进程方式执行DataX，用户可以选择以Python方式来做自定义的改造
 
-### DataX安装请参考：[DataX](https://github.com/WeiYe-Jing/datax-web/blob/master/userGuid.md)
 
-### DataX Web安装包准备
+### 安装包准备
 #### 1）下载官方提供的版本tar版本包
 [点击下载](https://pan.baidu.com/s/13yoqhGpD00I82K4lOYtQhg) 提取码：cpsk
 
@@ -71,7 +70,7 @@ vi ./modules/datax-admin/conf/bootstrap.properties
 
 
 在项目目录：
-/modules/datax-admin/bin/env.properties 配置邮件服务(可跳过)
+/module/datax-admin/bin/ev.properties 配置邮件服务(可跳过)
 
 ```
 MAIL_USERNAME=""
@@ -80,7 +79,7 @@ MAIL_PASSWORD=""
 此文件中包括一些默认配置参数，例如：server.port，具体请查看文件。
 
 
-在项目目录下/modules/datax-execute/bin/env.properties 指定PYTHON_PATH的路径
+在项目目录下/module/datax-execute/bin/ev.properties 指定PYTHON_PATH的路径
 
 ```
 vi ./modules/{module_name}/bin/env.properties

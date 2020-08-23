@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Created by jingwk on 2019/11/17
+ * @author  jingwk on 2019/11/17
  */
 public class JwtUser implements UserDetails {
 

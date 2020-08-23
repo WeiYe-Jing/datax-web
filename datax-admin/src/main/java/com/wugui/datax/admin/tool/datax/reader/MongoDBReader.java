@@ -7,6 +7,9 @@ import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 
 import java.util.Map;
 
+/**
+ * @author jingwk
+ */
 public class MongoDBReader extends BaseReaderPlugin implements DataxReaderInterface {
     @Override
     public String getName() {
@@ -18,6 +21,7 @@ public class MongoDBReader extends BaseReaderPlugin implements DataxReaderInterf
         return null;
     }
 
+    @Override
     public Map<String, Object> buildMongoDB(DataxMongoDBPojo plugin) {
         //构建
         JobDatasource dataSource = plugin.getJdbcDatasource();

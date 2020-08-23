@@ -174,7 +174,7 @@
 [linux环境部署](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/datax-web-deploy.md)
 
 
-## 2.开发环境部署
+## 2.开发环境部署（或参考文档 [Debug](https://github.com/WeiYe-Jing/datax-web/files/5082018/datax-web.Debug.pdf)）
 
 ### 2.1 创建数据库
 

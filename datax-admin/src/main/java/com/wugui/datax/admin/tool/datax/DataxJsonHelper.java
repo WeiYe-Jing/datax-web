@@ -12,6 +12,7 @@ import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
 import com.wugui.datax.admin.tool.pojo.*;
 import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.StringUtil;
 import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -312,7 +313,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         });
         dataxHivePojo.setColumns(columns);
         dataxHivePojo.setReaderDefaultFS(hiveReaderDto.getReaderDefaultFS());
-        dataxHivePojo.setReaderFieldDelimiter(hiveReaderDto.getReaderFieldDelimiter());
+        dataxHivePojo.setReaderFieldDelimiter(StringUtil.unicode2String(hiveReaderDto.getReaderFieldDelimiter()));
         dataxHivePojo.setReaderFileType(hiveReaderDto.getReaderFileType());
         dataxHivePojo.setReaderPath(hiveReaderDto.getReaderPath());
         dataxHivePojo.setSkipHeader(hiveReaderDto.getReaderSkipHeader());
@@ -377,7 +378,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         });
         dataxHivePojo.setColumns(columns);
         dataxHivePojo.setWriterDefaultFS(hiveWriterDto.getWriterDefaultFS());
-        dataxHivePojo.setWriteFieldDelimiter(hiveWriterDto.getWriteFieldDelimiter());
+        dataxHivePojo.setWriteFieldDelimiter(StringUtil.unicode2String(hiveWriterDto.getWriteFieldDelimiter()));
         dataxHivePojo.setWriterFileType(hiveWriterDto.getWriterFileType());
         dataxHivePojo.setWriterPath(hiveWriterDto.getWriterPath());
         dataxHivePojo.setWriteMode(hiveWriterDto.getWriteMode());

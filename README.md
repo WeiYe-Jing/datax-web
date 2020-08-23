@@ -6,6 +6,8 @@
 
 # DataX-Web
 
+[![Stargazers over time](https://starchart.cc/WeiYe-Jing/datax-web.svg)](https://starchart.cc/WeiYe-Jing/datax-web)
+
 DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易用的
 操作界面，降低用户使用DataX的学习成本，缩短任务配置时间，避免配置过程中出错。用户可通过页面选择数据源即可创建数据同步任务，RDBMS数据源可批量创建数据同步任务，支持实时查看数据同步进度及日志并提供终止同步功能，集成并二次开发xxl-job可根据时间、自增主键增量同步数据。
 
@@ -262,9 +264,9 @@ Copyright (c) 2020 WeiYe
 
 1. 任务日志过大时，查看日志报错，请求超时；
 
-# 项目规划
+# 提交代码
+[参与贡献](https://github.com/WeiYe-Jing/datax-web/issues/190)
 
-[项目规划](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
 
 # Contact us
 

@@ -411,6 +411,10 @@
                     <groupId>javax.servlet</groupId>
                 </exclusion>
                 <exclusion>
+                    <groupId>org.eclipse.jetty.orbit</groupId>
+                    <artifactId>javax.servlet</artifactId>
+                </exclusion>
+                <exclusion>
                     <artifactId>jsp-api</artifactId>
                     <groupId>javax.servlet</groupId>
                 </exclusion>

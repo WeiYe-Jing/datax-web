@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import static com.wugui.datax.executor.service.command.BuildCommand.buildDataXExecutorCmd;
 import static com.wugui.datax.executor.service.command.BuildCommand.buildDataXParamToMap;
+import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_DATAX_PY;
 import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_JSON;
 import static com.wugui.datax.executor.service.logparse.AnalysisStatistics.analysisStatisticsLog;
 
@@ -166,7 +167,7 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         if (!FileUtil.exist(jsonPath)) {
             FileUtil.mkdir(jsonPath);
         }
-        tmpFilePath = jsonPath + "jobTmp-" + IdUtil.simpleUUID() + ".conf";
+        tmpFilePath = jsonPath + File.separator + "jobTmp-" + IdUtil.simpleUUID() + ".conf";
         // 根据json写入到临时本地文件
         try (PrintWriter writer = new PrintWriter(tmpFilePath, "UTF-8")) {
             writer.println(jobJson);
@@ -201,7 +202,10 @@ public class ExecutorJobHandler extends AbstractJobHandler {
      */
     public Map<Boolean, String> checkDataXPATH() {
         Map<Boolean, String> result = new HashMap<Boolean, String>();
-        if (dataXPyPath == null ||
+        //兼容只配置 DATAX_HOME 情况
+        String dataxHome = SystemUtils.getDataXHomePath();
+        String dataxHomePyFile = dataxHome + "bin" +  File.separator + DEFAULT_DATAX_PY;
+        if (!FileUtil.exist(dataxHomePyFile) || dataXPyPath == null ||
                 !dataXPyPath.endsWith("datax.py")
                 || "".equals(dataXPyPath)
         ) {

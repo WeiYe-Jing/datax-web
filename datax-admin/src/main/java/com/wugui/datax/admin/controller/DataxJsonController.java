@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("api/dataxJsonxx")
+@RequestMapping("api/dataxJson")
 @Api(tags = "组装datax  json的控制器")
 public class DataxJsonController extends BaseController {
 
@@ -26,7 +26,7 @@ public class DataxJsonController extends BaseController {
     private DataxJsonService dataxJsonService;
 
 
-    @PostMapping("/buildJsonxx")
+    @PostMapping("/buildJson")
     @ApiOperation("JSON构建")
     public R<String> buildJobJson(@RequestBody DataXJsonBuildDTO dto) {
         String key = "system_please_choose";

@@ -2,9 +2,10 @@ package com.wugui.datax.admin.tool.query;
 
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.wugui.datatx.core.datasource.HBaseDataSource;
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
-import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datatx.core.util.JSONUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
@@ -29,27 +30,14 @@ public class HBaseQueryTool {
     private Admin admin;
     private Table table;
 
-    public HBaseQueryTool(JobDatasource jobDatasource) throws IOException {
-        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
-            getDataSource(jobDatasource);
-        } else {
-            connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
-            if (connection == null || connection.isClosed()) {
-                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
-                getDataSource(jobDatasource);
-            }
-        }
-        LocalCacheUtil.set(jobDatasource.getDatasourceName(), connection, 4 * 60 * 60 * 1000);
-    }
-
-    private void getDataSource(JobDatasource jobDatasource) throws IOException {
-        String[] zkAdress = jobDatasource.getZkAdress().split(Constants.SPLIT_SCOLON);
-        conf.set("hbase.zookeeper.quorum", zkAdress[0]);
-        conf.set("hbase.zookeeper.property.clientPort", zkAdress[1]);
-        connection = ConnectionFactory.createConnection(conf, pool);
+    public HBaseQueryTool(DbType dbType, String parameter) throws IOException {
+        HBaseDataSource hBaseDataSource = JSONUtils.parseObject(parameter, HBaseDataSource.class);
+        String[] zkAddress = hBaseDataSource.getZkAddress().split(Constants.SPLIT_SCOLON);
+        conf.set("hbase.zookeeper.quorum", zkAddress[0]);
+        conf.set("hbase.zookeeper.property.clientPort", zkAddress[1]);
+        connection =  ConnectionFactory.createConnection(conf, pool);
         admin = connection.getAdmin();
     }
-
 
     /**
      * 关闭连接

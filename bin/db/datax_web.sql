@@ -355,3 +355,35 @@ CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;
 
 ALTER TABLE `job_info`
 CHANGE COLUMN `increment_type` `increment_type` TINYINT(4) NULL DEFAULT 0 COMMENT '增量类型' ;
+
+
+----------------------------------------------------------------------------------------------------------------------
+2.1.3
+----------------------------------------------------------------------------------------------------------------------
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `database_name` `database` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据库名' ;
+
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `jdbc_username` `user_name` VARCHAR(100) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '用户名' ,
+CHANGE COLUMN `jdbc_password` `password` VARCHAR(200) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '密码' ;
+
+
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+DROP COLUMN `database`,
+DROP COLUMN `zk_adress`,
+DROP COLUMN `jdbc_driver_class`,
+DROP COLUMN `jdbc_url`,
+DROP COLUMN `password`,
+DROP COLUMN `user_name`,
+DROP COLUMN `datasource`,
+ADD COLUMN `connection_params` TEXT NOT NULL AFTER `datasource_group`,
+CHANGE COLUMN `comments` `comments` VARCHAR(1000) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '备注' AFTER `status`;
+
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ADD COLUMN `type` VARCHAR(45) NULL COMMENT '数据源类型' AFTER `update_date`;
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `type` `type` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据源类型' AFTER `connection_params`;
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `type` `type` VARCHAR(45) NOT NULL COMMENT '数据源类型' ;
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `type` `datasource` VARCHAR(45) NOT NULL COMMENT '数据源类型' ;

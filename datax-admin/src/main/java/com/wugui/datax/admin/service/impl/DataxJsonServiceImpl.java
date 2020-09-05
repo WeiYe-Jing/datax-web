@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DataxJsonService;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * com.wugui.datax json构建实现类
  *
- * @author jingwk
+ * @author weiye
  * @ClassName DataxJsonServiceImpl
  * @Version 2.0
  * @since 2020/01/11 17:15
@@ -58,7 +59,7 @@ public class DataxJsonServiceImpl implements DataxJsonService {
      * @param tables
      */
     private void processingTableName(JobDatasource jobDatasource, List<String> tables) {
-        if (JdbcConstants.ORACLE.equals(jobDatasource.getDatasource()) || JdbcConstants.POSTGRESQL.equals(jobDatasource.getDatasource())) {
+        if (DbType.ORACLE.equals(jobDatasource.getType()) || DbType.POSTGRESQL.equals(jobDatasource.getType())) {
             for (int i = 0; i < tables.size(); i++) {
                 tables.set(i, TableNameHandle.addDoubleQuotes(tables.get(i)));
             }

@@ -8,7 +8,7 @@ package com.wugui.datax.admin.tool.meta;
  * @Version 2.0
  * @since 2020/01/05 15:45
  */
-public class HiveDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
+public class HiveDatabaseMeta extends BaseDatabaseMeta {
     private volatile static HiveDatabaseMeta single;
 
     public static HiveDatabaseMeta getInstance() {

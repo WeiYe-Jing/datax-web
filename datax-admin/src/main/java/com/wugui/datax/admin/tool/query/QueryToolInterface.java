@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.tool.query;
 
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.TableInfo;
 
@@ -52,7 +53,7 @@ public interface QueryToolInterface {
      * @param tableName
      * @return2
      */
-    List<String> getColumnNames(String tableName,String datasource);
+    List<String> getColumnNames(String tableName, DbType dbType);
 
 
     /**

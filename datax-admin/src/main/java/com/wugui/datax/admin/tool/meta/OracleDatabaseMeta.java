@@ -7,7 +7,7 @@ package com.wugui.datax.admin.tool.meta;
  * @Version 1.0
  * @since 2019/7/17 15:48
  */
-public class OracleDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
+public class OracleDatabaseMeta extends BaseDatabaseMeta{
 
     private volatile static OracleDatabaseMeta single;
 

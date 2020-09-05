@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.service;
 
+import com.wugui.datatx.core.enums.DbType;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -73,4 +75,6 @@ public interface DatasourceQueryService {
      * @return
      */
     List<String> getDbSchema(Long id);
+
+    boolean checkConnection(DbType type, String parameter);
 }

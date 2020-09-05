@@ -220,7 +220,7 @@ public class JobTrigger {
 
     private static long getMaxId(JobInfo jobInfo) {
         JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
-        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource.getType(),datasource.getConnectionParams());
         return qTool.getMaxIdVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
     }
 

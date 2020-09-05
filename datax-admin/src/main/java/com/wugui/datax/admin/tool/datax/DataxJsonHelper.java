@@ -5,13 +5,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.wugui.datatx.core.datasource.HBaseDataSource;
+import com.wugui.datatx.core.datasource.MongoDBDataSource;
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
+import com.wugui.datatx.core.util.JSONUtils;
 import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.*;
 import com.wugui.datax.admin.tool.datax.writer.*;
 import com.wugui.datax.admin.tool.pojo.*;
-import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.StringUtil;
 import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
@@ -23,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.wugui.datax.admin.util.JdbcConstants.*;
 
 /**
  * 构建 com.wugui.datax json的工具类
@@ -101,37 +103,34 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hiveReaderDto = dataxJsonDto.getHiveReader();
         this.rdbmsReaderDto = dataxJsonDto.getRdbmsReader();
         this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
-        // reader 插件
-        String datasource = readerDatasource.getDatasource();
-
-        this.readerColumns = convertKeywordsColumns(datasource, this.readerColumns);
-        if (MYSQL.equals(datasource)) {
-            readerPlugin = new MysqlReader();
-            buildReader = buildReader();
-        } else if (ORACLE.equals(datasource)) {
-            readerPlugin = new OracleReader();
-            buildReader = buildReader();
-        } else if (SQL_SERVER.equals(datasource)) {
-            readerPlugin = new SqlServerReader();
-            buildReader = buildReader();
-        } else if (POSTGRESQL.equals(datasource)) {
-            readerPlugin = new PostgresqlReader();
-            buildReader = buildReader();
-        } else if (GREENPLUM.equals(datasource)) {
-            readerPlugin = new PostgresqlReader();
-            buildReader = buildReader();
-        } else if (CLICKHOUSE.equals(datasource)) {
-            readerPlugin = new ClickHouseReader();
-            buildReader = buildReader();
-        } else if (HIVE.equals(datasource)) {
-            readerPlugin = new HiveReader();
-            buildReader = buildHiveReader();
-        } else if (HBASE.equals(datasource)) {
-            readerPlugin = new HBaseReader();
-            buildReader = buildHBaseReader();
-        } else if (MONGODB.equals(datasource)) {
-            readerPlugin = new MongoDBReader();
-            buildReader = buildMongoDBReader();
+        DbType dbType = readerDatasource.getType();
+        this.readerColumns = convertKeywordsColumns(dbType, this.readerColumns);
+        switch (dbType) {
+            case MYSQL:
+                readerPlugin = new MysqlReader();
+                buildReader = buildReader();
+            case SQLSERVER:
+                readerPlugin = new SqlServerReader();
+                buildReader = buildReader();
+            case POSTGRESQL:
+            case GREENPLUM:
+                readerPlugin = new PostgresqlReader();
+                buildReader = buildReader();
+            case ORACLE:
+                readerPlugin = new OracleReader();
+                buildReader = buildReader();
+            case CLICKHOUSE:
+                readerPlugin = new ClickHouseReader();
+                buildReader = buildReader();
+            case HIVE:
+                readerPlugin = new HBaseReader();
+                buildReader = buildHBaseReader();
+            case MONGODB:
+                readerPlugin = new MongoDBReader();
+                buildReader = buildMongoDBReader();
+            case HBASE:
+                readerPlugin = new HBaseReader();
+                buildReader = buildHBaseReader();
         }
     }
 
@@ -143,36 +142,36 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
         this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
         this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
-        // writer
-        String datasource = readerDatasource.getDatasource();
-        this.writerColumns = convertKeywordsColumns(datasource, this.writerColumns);
-        if (MYSQL.equals(datasource)) {
-            writerPlugin = new MysqlWriter();
-            buildWriter = this.buildWriter();
-        } else if (ORACLE.equals(datasource)) {
-            writerPlugin = new OraclelWriter();
-            buildWriter = this.buildWriter();
-        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
-            writerPlugin = new SqlServerlWriter();
-            buildWriter = this.buildWriter();
-        } else if (POSTGRESQL.equals(datasource)) {
-            writerPlugin = new PostgresqllWriter();
-            buildWriter = this.buildWriter();
-        } else if (GREENPLUM.equals(datasource)) {
-            writerPlugin = new GreenPlumWriter();
-            buildWriter = this.buildWriter();
-        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
-            writerPlugin = new ClickHouseWriter();
-            buildWriter = buildWriter();
-        } else if (JdbcConstants.HIVE.equals(datasource)) {
-            writerPlugin = new HiveWriter();
-            buildWriter = this.buildHiveWriter();
-        } else if (JdbcConstants.HBASE.equals(datasource)) {
-            writerPlugin = new HBaseWriter();
-            buildWriter = this.buildHBaseWriter();
-        } else if (JdbcConstants.MONGODB.equals(datasource)) {
-            writerPlugin = new MongoDBWriter();
-            buildWriter = this.buildMongoDBWriter();
+        DbType dbType = readerDatasource.getType();
+        this.writerColumns = convertKeywordsColumns(dbType, this.writerColumns);
+        switch (dbType) {
+            case MYSQL:
+                writerPlugin = new MysqlWriter();
+                buildWriter = this.buildWriter();
+            case SQLSERVER:
+                writerPlugin = new SqlServerlWriter();
+                buildWriter = this.buildWriter();
+            case POSTGRESQL:
+                writerPlugin = new PostgresqllWriter();
+                buildWriter = this.buildWriter();
+            case GREENPLUM:
+                writerPlugin = new GreenPlumWriter();
+                buildWriter = this.buildWriter();
+            case ORACLE:
+                writerPlugin = new OraclelWriter();
+                buildWriter = this.buildWriter();
+            case CLICKHOUSE:
+                writerPlugin = new ClickHouseWriter();
+                buildWriter = buildWriter();
+            case HIVE:
+                writerPlugin = new HiveWriter();
+                buildWriter = this.buildHiveWriter();
+            case MONGODB:
+                writerPlugin = new MongoDBWriter();
+                buildWriter = this.buildMongoDBWriter();
+            case HBASE:
+                writerPlugin = new HBaseWriter();
+                buildWriter = this.buildHBaseWriter();
         }
     }
 
@@ -186,7 +185,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
      * @param dataXJsonBuildDto
      */
     public void initTransformer(DataXJsonBuildDTO dataXJsonBuildDto) {
-        if( null==dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size()==0){
+        if (null == dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size() == 0) {
             return;
         }
         for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
@@ -201,7 +200,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
                 paras.add("");
                 p.setColumnIndex(i);
 
-            }else if ("md5".equals(t.getName())) {
+            } else if ("md5".equals(t.getName())) {
                 paras.add("");
                 p.setColumnIndex(i);
 
@@ -213,19 +212,19 @@ public class DataxJsonHelper implements DataxJsonInterface {
     }
 
 
-    private List<String> convertKeywordsColumns(String datasource, List<String> columns) {
+    private List<String> convertKeywordsColumns(DbType dbType, List<String> columns) {
         if (columns == null) {
             return null;
         }
 
         List<String> toColumns = new ArrayList<>();
         columns.forEach(s -> {
-            toColumns.add(doConvertKeywordsColumn(datasource, s));
+            toColumns.add(doConvertKeywordsColumn(dbType, s));
         });
         return toColumns;
     }
 
-    private String doConvertKeywordsColumn(String dbType, String column) {
+    private String doConvertKeywordsColumn(DbType dbType, String column) {
         if (column == null) {
             return null;
         }
@@ -240,7 +239,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         switch (dbType) {
             case MYSQL:
                 return String.format("`%s`", column);
-            case SQL_SERVER:
+            case SQLSERVER:
                 return String.format("[%s]", column);
             case POSTGRESQL:
             case ORACLE:
@@ -332,8 +331,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
             columns.add(column);
         }
         dataxHbasePojo.setColumns(columns);
-        dataxHbasePojo.setReaderHbaseConfig(readerDatasource.getZkAdress());
-        String readerTable=!CollectionUtils.isEmpty(readerTables)?readerTables.get(0):Constants.STRING_BLANK;
+        HBaseDataSource HBaseDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), HBaseDataSource.class);
+        dataxHbasePojo.setReaderHbaseConfig(HBaseDataSource.getZkAddress());
+        String readerTable = !CollectionUtils.isEmpty(readerTables) ? readerTables.get(0) : Constants.STRING_BLANK;
         dataxHbasePojo.setReaderTable(readerTable);
         dataxHbasePojo.setReaderMode(hbaseReaderDto.getReaderMode());
         dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
@@ -343,12 +343,14 @@ public class DataxJsonHelper implements DataxJsonInterface {
     @Override
     public Map<String, Object> buildMongoDBReader() {
         DataxMongoDBPojo dataxMongoDBPojo = new DataxMongoDBPojo();
+
         dataxMongoDBPojo.setJdbcDatasource(readerDatasource);
         List<Map<String, Object>> columns = Lists.newArrayList();
         buildColumns(readerColumns, columns);
         dataxMongoDBPojo.setColumns(columns);
-        dataxMongoDBPojo.setAddress(readerDatasource.getJdbcUrl());
-        dataxMongoDBPojo.setDbName(readerDatasource.getDatabaseName());
+        MongoDBDataSource mongoDBDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), MongoDBDataSource.class);
+        dataxMongoDBPojo.setAddress(mongoDBDataSource.getMongoClientURI());
+        dataxMongoDBPojo.setDbName(mongoDBDataSource.getDatabase());
         dataxMongoDBPojo.setReaderTable(readerTables.get(0));
         return readerPlugin.buildMongoDB(dataxMongoDBPojo);
     }
@@ -399,8 +401,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
             columns.add(column);
         }
         dataxHbasePojo.setColumns(columns);
-        dataxHbasePojo.setWriterHbaseConfig(writerDatasource.getZkAdress());
-        String writerTable=!CollectionUtils.isEmpty(writerTables)?writerTables.get(0):Constants.STRING_BLANK;
+        HBaseDataSource HBaseDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), HBaseDataSource.class);
+        dataxHbasePojo.setWriterHbaseConfig(HBaseDataSource.getZkAddress());
+        String writerTable = !CollectionUtils.isEmpty(writerTables) ? writerTables.get(0) : Constants.STRING_BLANK;
         dataxHbasePojo.setWriterTable(writerTable);
         dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWriterVersionColumn());
         dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
@@ -416,8 +419,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         List<Map<String, Object>> columns = Lists.newArrayList();
         buildColumns(writerColumns, columns);
         dataxMongoDBPojo.setColumns(columns);
-        dataxMongoDBPojo.setAddress(writerDatasource.getJdbcUrl());
-        dataxMongoDBPojo.setDbName(writerDatasource.getDatabaseName());
+        MongoDBDataSource mongoDBDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), MongoDBDataSource.class);
+        dataxMongoDBPojo.setAddress(mongoDBDataSource.getMongoClientURI());
+        dataxMongoDBPojo.setDbName(mongoDBDataSource.getDatabase());
         dataxMongoDBPojo.setWriterTable(readerTables.get(0));
         dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
         return writerPlugin.buildMongoDB(dataxMongoDBPojo);

@@ -411,8 +411,8 @@
                     <groupId>javax.servlet</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.eclipse.jetty.orbit</groupId>
                     <artifactId>javax.servlet</artifactId>
+                    <groupId>org.eclipse.jetty.orbit</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>jsp-api</artifactId>

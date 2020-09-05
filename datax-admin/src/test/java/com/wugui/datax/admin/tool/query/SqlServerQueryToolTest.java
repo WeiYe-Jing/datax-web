@@ -1,11 +1,14 @@
 package com.wugui.datax.admin.tool.query;
 
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static com.wugui.datax.admin.tool.query.DriverConnectionFactory.buildParameter;
 
 @Slf4j
 public class SqlServerQueryToolTest {
@@ -15,16 +18,14 @@ public class SqlServerQueryToolTest {
     @Before
     public void before() {
         genMysqlDemo();
-        queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
+        queryTool = QueryToolFactory.getByDbType(jdbcDatasource.getType(),jdbcDatasource.getConnectionParams());
     }
 
     private void genMysqlDemo() {
         jdbcDatasource = new JobDatasource();
         jdbcDatasource.setDatasourceName("test");
-        jdbcDatasource.setJdbcUsername("sa");
-        jdbcDatasource.setJdbcPassword("Sa123");
-        jdbcDatasource.setJdbcUrl("jdbc:sqlserver://10.20.1.196;databaseName=DataCenter");
-        jdbcDatasource.setJdbcDriverClass("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        String parameter = buildParameter("sa", "Sa123", DbType.POSTGRESQL, null, "jdbc:sqlserver://10.20.1.196;databaseName=DataCenter", null, null);
+        jdbcDatasource.setConnectionParams(parameter);
     }
 
     @Test
@@ -35,7 +36,7 @@ public class SqlServerQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("BD_EMR_TYPE",jdbcDatasource.getJdbcDriverClass());
+        List<String> columns = queryTool.getColumnNames("BD_EMR_TYPE",jdbcDatasource.getType());
         log.info(columns.toString());
     }
 }

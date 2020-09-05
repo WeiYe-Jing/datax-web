@@ -8,7 +8,7 @@ package com.wugui.datax.admin.tool.meta;
  * @Version 1.0
  * @since 2019/8/2 11:02
  */
-public class PostgresqlDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
+public class PostgresqlDatabaseMeta extends BaseDatabaseMeta {
 
     private volatile static PostgresqlDatabaseMeta single;
 

@@ -3,25 +3,22 @@ package com.wugui.datax.admin.tool.query;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datatx.core.datasource.BaseDataSource;
+import com.wugui.datatx.core.datasource.DataSourceFactory;
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
-import com.wugui.datax.admin.core.util.LocalCacheUtil;
-import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.database.ColumnInfo;
 import com.wugui.datax.admin.tool.database.DasColumn;
 import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.wugui.datax.admin.tool.table.TableNameHandle;
-import com.wugui.datax.admin.util.AesUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,50 +41,22 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      */
     private DatabaseInterface sqlBuilder;
 
-    private DataSource datasource;
-
     private Connection connection;
-    /**
-     * 当前数据库名
-     */
+
     private String currentSchema;
+
     private String currentDatabase;
 
-    /**
-     * 构造方法
-     *
-     * @param jobDataSource
-     */
-    BaseQueryTool(JobDatasource jobDataSource) throws SQLException {
-        if (LocalCacheUtil.get(jobDataSource.getDatasourceName()) == null) {
-            getDataSource(jobDataSource);
-        } else {
-            this.connection = (Connection) LocalCacheUtil.get(jobDataSource.getDatasourceName());
-            if (!this.connection.isValid(ReturnT.FAIL_CODE)) {
-                LocalCacheUtil.remove(jobDataSource.getDatasourceName());
-                getDataSource(jobDataSource);
-            }
-        }
-        sqlBuilder = DatabaseMetaFactory.getByDbType(jobDataSource.getDatasource());
-        currentSchema = getSchema(jobDataSource.getJdbcUsername());
-        currentDatabase = jobDataSource.getDatasource();
-        LocalCacheUtil.set(jobDataSource.getDatasourceName(), this.connection, 4 * 60 * 60 * 1000L);
-    }
 
-    private void getDataSource(JobDatasource jobDatasource) throws SQLException {
-        String userName = AesUtil.decrypt(jobDatasource.getJdbcUsername());
 
-        //这里默认使用 hikari 数据源
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setUsername(userName);
-        dataSource.setPassword(AesUtil.decrypt(jobDatasource.getJdbcPassword()));
-        dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
-        dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
-        dataSource.setMaximumPoolSize(1);
-        dataSource.setMinimumIdle(0);
-        dataSource.setConnectionTimeout(30000);
-        this.datasource = dataSource;
-        this.connection = this.datasource.getConnection();
+    BaseQueryTool(DbType dbType, String parameter) {
+
+        sqlBuilder = DatabaseMetaFactory.getByDbType(dbType);
+        connection= DriverConnectionFactory.getConnection(dbType,parameter);
+
+        BaseDataSource datasourceForm = DataSourceFactory.getDatasource(dbType, parameter);
+
+        currentSchema = getSchema(datasourceForm.getUser());
     }
 
     /**
@@ -300,14 +269,14 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnNames(String tableName, String datasource) {
+    public List<String> getColumnNames(String tableName, DbType dbType) {
 
         List<String> res = Lists.newArrayList();
         Statement stmt = null;
         ResultSet rs = null;
         try {
             //处理表名
-            if (JdbcConstants.ORACLE.equals(datasource) || JdbcConstants.POSTGRESQL.equals(datasource)){
+            if (DbType.ORACLE.equals(dbType) || DbType.POSTGRESQL.equals(dbType)){
                 tableName = TableNameHandle.addDoubleQuotes(tableName);
             }
 
@@ -323,7 +292,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
-                if (JdbcConstants.HIVE.equals(datasource)) {
+                if (DbType.HIVE.equals(dbType)) {
                     if (columnName.contains(Constants.SPLIT_POINT)) {
                         res.add(i - 1 + Constants.SPLIT_SCOLON + columnName.substring(columnName.indexOf(Constants.SPLIT_POINT) + 1) + Constants.SPLIT_SCOLON + metaData.getColumnTypeName(i));
                     } else {

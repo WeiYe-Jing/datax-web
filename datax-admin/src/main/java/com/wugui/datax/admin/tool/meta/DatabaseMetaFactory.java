@@ -1,11 +1,11 @@
 package com.wugui.datax.admin.tool.meta;
 
-import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datatx.core.enums.DbType;
 
 /**
  * meta信息工厂
  *
- * @author zhouhongfa@gz-yibo.com
+ * @author weiye
  */
 public class DatabaseMetaFactory {
 
@@ -15,25 +15,36 @@ public class DatabaseMetaFactory {
      * @param dbType String
      * @return DatabaseInterface
      */
-    public static DatabaseInterface getByDbType(String dbType) {
-        if (JdbcConstants.MYSQL.equals(dbType)) {
-            return MySQLDatabaseMeta.getInstance();
-        } else if (JdbcConstants.ORACLE.equals(dbType)) {
-            return OracleDatabaseMeta.getInstance();
-        } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
-            return PostgresqlDatabaseMeta.getInstance();
-        } else if (JdbcConstants.GREENPLUM.equals(dbType)) {
-            return PostgresqlDatabaseMeta.getInstance();
-        } else if (JdbcConstants.SQL_SERVER.equals(dbType)) {
-            return SqlServerDatabaseMeta.getInstance();
-        } else if (JdbcConstants.HIVE.equals(dbType)) {
-            return HiveDatabaseMeta.getInstance();
-        } else if (JdbcConstants.CLICKHOUSE.equals(dbType)) {
-            return ClickHouseDataBaseMeta.getInstance();
-        } else if (JdbcConstants.HBASE20XSQL.equals(dbType)) {
-            return Hbase20xsqlMeta.getInstance();
-        } else {
-            throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
+    public static DatabaseInterface getByDbType(DbType dbType) {
+        DatabaseInterface databaseInterface = null;
+        switch (dbType) {
+            case POSTGRESQL:
+            case GREENPLUM:
+                databaseInterface = PostgresqlDatabaseMeta.getInstance();
+                break;
+            case MYSQL:
+                databaseInterface = MySQLDatabaseMeta.getInstance();
+                break;
+            case HIVE:
+                databaseInterface = HiveDatabaseMeta.getInstance();
+                break;
+            case CLICKHOUSE:
+                databaseInterface = ClickHouseDataBaseMeta.getInstance();
+                break;
+            case ORACLE:
+                databaseInterface = OracleDatabaseMeta.getInstance();
+                break;
+            case SQLSERVER:
+                databaseInterface = SqlServerDatabaseMeta.getInstance();
+                break;
+            case HBASE20XSQL:
+                databaseInterface = Hbase20xsqlMeta.getInstance();
+                break;
+            case DB2:
+                break;
+            default:
+                break;
         }
+        return databaseInterface;
     }
 }

@@ -11,77 +11,80 @@ import org.slf4j.LoggerFactory;
  */
 public class DataSourceFactory {
 
-  private static final Logger logger = LoggerFactory.getLogger(DataSourceFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceFactory.class);
 
-  /**
-   * getDatasource
-   * @param dbType dbType
-   * @param parameter parameter
-   * @return getDatasource
-   */
-  public static BaseDataSource getDatasource(DbType dbType, String parameter) {
-    try {
-      switch (dbType) {
-        case MYSQL:
-          return JSONUtils.parseObject(parameter, MySQLDataSource.class);
-        case POSTGRESQL:
-          return JSONUtils.parseObject(parameter, PostgreDataSource.class);
-        case HIVE:
-          return JSONUtils.parseObject(parameter, HiveDataSource.class);
-        case SPARK:
-          return JSONUtils.parseObject(parameter, SparkDataSource.class);
-        case CLICKHOUSE:
-          return JSONUtils.parseObject(parameter, ClickHouseDataSource.class);
-        case ORACLE:
-          return JSONUtils.parseObject(parameter, OracleDataSource.class);
-        case SQLSERVER:
-          return JSONUtils.parseObject(parameter, SQLServerDataSource.class);
-        case DB2:
-          return JSONUtils.parseObject(parameter, DB2ServerDataSource.class);
-        default:
-          return null;
-      }
-    } catch (Exception e) {
-      logger.error("get datasource object error", e);
-      return null;
+    /**
+     * getDatasource
+     *
+     * @param dbType    dbType
+     * @param parameter parameter
+     * @return getDatasource
+     */
+    public static BaseDataSource getDatasource(DbType dbType, String parameter) {
+        BaseDataSource baseDataSource = null;
+        try {
+
+            switch (dbType) {
+                case MYSQL:
+                    baseDataSource = JSONUtils.parseObject(parameter, MySQLDataSource.class);
+                case POSTGRESQL:
+                    baseDataSource = JSONUtils.parseObject(parameter, PostgreDataSource.class);
+                case HIVE:
+                    baseDataSource = JSONUtils.parseObject(parameter, HiveDataSource.class);
+                case SPARK:
+                    baseDataSource = JSONUtils.parseObject(parameter, SparkDataSource.class);
+                case CLICKHOUSE:
+                    baseDataSource = JSONUtils.parseObject(parameter, ClickHouseDataSource.class);
+                case ORACLE:
+                    baseDataSource = JSONUtils.parseObject(parameter, OracleDataSource.class);
+                case SQLSERVER:
+                    baseDataSource = JSONUtils.parseObject(parameter, SQLServerDataSource.class);
+                case DB2:
+                    baseDataSource = JSONUtils.parseObject(parameter, DB2ServerDataSource.class);
+                case PHOENIX:
+                    baseDataSource = JSONUtils.parseObject(parameter, PhoenixDataSource.class);
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            logger.error("get datasource object error", e);
+        }
+        return baseDataSource;
     }
-  }
 
-  /**
-   * load class
-   * @param dbType
-   * @throws Exception
-   */
-  public static void loadClass(DbType dbType) throws Exception{
-    switch (dbType){
-      case MYSQL :
-        Class.forName(Constants.COM_MYSQL_JDBC_DRIVER);
-        break;
-      case POSTGRESQL :
-        Class.forName(Constants.ORG_POSTGRESQL_DRIVER);
-        break;
-      case HIVE :
-        Class.forName(Constants.ORG_APACHE_HIVE_JDBC_HIVE_DRIVER);
-        break;
-      case SPARK :
-        Class.forName(Constants.ORG_APACHE_HIVE_JDBC_HIVE_DRIVER);
-        break;
-      case CLICKHOUSE :
-        Class.forName(Constants.COM_CLICKHOUSE_JDBC_DRIVER);
-        break;
-      case ORACLE :
-        Class.forName(Constants.COM_ORACLE_JDBC_DRIVER);
-        break;
-      case SQLSERVER:
-        Class.forName(Constants.COM_SQLSERVER_JDBC_DRIVER);
-        break;
-      case DB2:
-        Class.forName(Constants.COM_DB2_JDBC_DRIVER);
-        break;
-      default:
-        logger.error("not support sql type: {},can't load class", dbType);
-        throw new IllegalArgumentException("not support sql type,can't load class");
-
+    /**
+     * load class
+     *
+     * @param dbType
+     * @throws Exception
+     */
+    public static void loadClass(DbType dbType) throws Exception {
+        switch (dbType) {
+            case MYSQL:
+                Class.forName(Constants.COM_MYSQL_JDBC_DRIVER);
+                break;
+            case POSTGRESQL:
+                Class.forName(Constants.ORG_POSTGRESQL_DRIVER);
+                break;
+            case HIVE:
+            case SPARK:
+                Class.forName(Constants.ORG_APACHE_HIVE_JDBC_HIVE_DRIVER);
+                break;
+            case CLICKHOUSE:
+                Class.forName(Constants.COM_CLICKHOUSE_JDBC_DRIVER);
+                break;
+            case ORACLE:
+                Class.forName(Constants.COM_ORACLE_JDBC_DRIVER);
+                break;
+            case SQLSERVER:
+                Class.forName(Constants.COM_SQLSERVER_JDBC_DRIVER);
+                break;
+            case DB2:
+                Class.forName(Constants.COM_DB2_JDBC_DRIVER);
+                break;
+            default:
+                logger.error("not support sql type: {},can't load class", dbType);
+                throw new IllegalArgumentException("not support sql type,can't load class");
+        }
     }
-  }
 }

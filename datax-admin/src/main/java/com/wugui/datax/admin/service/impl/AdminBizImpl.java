@@ -151,9 +151,9 @@ public class AdminBizImpl implements AdminBiz {
     }
 
     private void updateIncrementParam(JobLog log, Integer incrementType) {
-        if (IncrementTypeEnum.ID.getCode() == incrementType) {
+        if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
             jobInfoMapper.incrementIdUpdate(log.getJobId(), log.getMaxId());
-        } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
+        } else if (IncrementTypeEnum.TIME.getCode().equals(incrementType)) {
             jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
         }
     }

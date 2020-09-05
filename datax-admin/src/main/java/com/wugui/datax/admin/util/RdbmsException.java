@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.util;
 
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
 
 /**
@@ -17,8 +18,8 @@ public class RdbmsException extends DataXException{
         super(errorCode, errorMessage);
     }
 
-    public static DataXException asConnException(String dataBaseType, Exception e, String userName, String dbName){
-        if (dataBaseType.equals(JdbcConstants.MYSQL)){
+    public static DataXException asConnException(DbType dbType, Exception e, String userName, String dbName){
+        if (dbType.equals(DbType.MYSQL)){
             DBUtilErrorCode dbUtilErrorCode = mySqlConnectionErrorAna(e.getMessage());
             if (dbUtilErrorCode == DBUtilErrorCode.MYSQL_CONN_DB_ERROR && dbName !=null ){
                 return DataXException.asDataXException(dbUtilErrorCode,"该数据库名称为："+dbName+" 具体错误信息为："+e);
@@ -29,7 +30,7 @@ public class RdbmsException extends DataXException{
             return DataXException.asDataXException(dbUtilErrorCode," 具体错误信息为："+e);
         }
 
-        if (dataBaseType.equals(JdbcConstants.ORACLE)){
+        if (dbType.equals(DbType.ORACLE)){
             DBUtilErrorCode dbUtilErrorCode = oracleConnectionErrorAna(e.getMessage());
             if (dbUtilErrorCode == DBUtilErrorCode.ORACLE_CONN_DB_ERROR && dbName != null){
                 return DataXException.asDataXException(dbUtilErrorCode,"该数据库名称为："+dbName+" 具体错误信息为："+e);

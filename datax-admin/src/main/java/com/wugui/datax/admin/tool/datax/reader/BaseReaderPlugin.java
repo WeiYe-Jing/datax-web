@@ -3,6 +3,9 @@ package com.wugui.datax.admin.tool.datax.reader;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.wugui.datatx.core.datasource.BaseDataSource;
+import com.wugui.datatx.core.datasource.MongoDBDataSource;
+import com.wugui.datatx.core.util.JSONUtils;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
@@ -33,8 +36,11 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
 
         JobDatasource jobDatasource = plugin.getJobDatasource();
-        parameterObj.put("username", jobDatasource.getJdbcUsername());
-        parameterObj.put("password", jobDatasource.getJdbcPassword());
+
+        BaseDataSource baseDataSource = JSONUtils.parseObject(jobDatasource.getConnectionParams(), BaseDataSource.class);
+
+        parameterObj.put("username", baseDataSource.getUser());
+        parameterObj.put("password", baseDataSource.getPassword());
 
         //判断是否是 querySql
         if (StrUtil.isNotBlank(plugin.getQuerySql())) {
@@ -48,7 +54,7 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
             connectionObj.put("table", plugin.getTables());
         }
         parameterObj.put("splitPk",plugin.getSplitPk());
-        connectionObj.put("jdbcUrl", ImmutableList.of(jobDatasource.getJdbcUrl()));
+        connectionObj.put("jdbcUrl", ImmutableList.of(baseDataSource.getJdbcUrl()));
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));
 

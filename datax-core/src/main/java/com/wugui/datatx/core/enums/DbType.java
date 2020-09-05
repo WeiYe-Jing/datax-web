@@ -16,6 +16,8 @@ public enum DbType {
      * 5 oracle
      * 6 sqlserver
      * 7 db2
+     * 8 greenplum
+     * 9 hbase20xsql
      */
     MYSQL(0, "mysql"),
     POSTGRESQL(1, "postgresql"),
@@ -24,7 +26,14 @@ public enum DbType {
     CLICKHOUSE(4, "clickhouse"),
     ORACLE(5, "oracle"),
     SQLSERVER(6, "sqlserver"),
-    DB2(7, "db2");
+    DB2(7, "db2"),
+    GREENPLUM(8, "greenplum"),
+    HBASE20XSQL(9, "hbase20xsql"),
+    HBASE(10, "hbase"),
+    MONGODB(11, "mongodb"),
+    PHOENIX(12, "phoenix")
+
+    ;
 
     DbType(int code, String descp) {
         this.code = code;

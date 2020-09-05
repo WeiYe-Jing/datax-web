@@ -2,7 +2,9 @@ package com.wugui.datax.admin.tool.datax.writer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.wugui.datatx.core.datasource.BaseDataSource;
 import com.wugui.datatx.core.util.Constants;
+import com.wugui.datatx.core.util.JSONUtils;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
@@ -36,16 +38,19 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
         writerObj.put("name", getName());
 
         Map<String, Object> parameterObj = Maps.newLinkedHashMap();
+
         JobDatasource jobDatasource = plugin.getJobDatasource();
-        parameterObj.put("username", jobDatasource.getJdbcUsername());
-        parameterObj.put("password", jobDatasource.getJdbcPassword());
+        BaseDataSource baseDataSource = JSONUtils.parseObject(jobDatasource.getConnectionParams(), BaseDataSource.class);
+
+        parameterObj.put("username", baseDataSource.getUser());
+        parameterObj.put("password", baseDataSource.getPassword());
         parameterObj.put("column", plugin.getRdbmsColumns());
         parameterObj.put("preSql", splitSql(plugin.getPreSql()));
         parameterObj.put("postSql", splitSql(plugin.getPostSql()));
 
         Map<String, Object> connectionObj = Maps.newLinkedHashMap();
         connectionObj.put("table", plugin.getTables());
-        connectionObj.put("jdbcUrl", jobDatasource.getJdbcUrl());
+        connectionObj.put("jdbcUrl", baseDataSource.getJdbcUrl());
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));
         writerObj.put("parameter", parameterObj);

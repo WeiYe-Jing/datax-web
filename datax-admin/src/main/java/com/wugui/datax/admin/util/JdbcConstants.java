@@ -121,4 +121,24 @@ public interface JdbcConstants {
     String HBASE20XSQL = "hbase20xsql";
     String HBASE20XSQL_DRIVER = "org.apache.phoenix.jdbc.PhoenixDriver";
 
+    /**
+     * kafka 0.9
+     */
+    String KAFKA09 ="kafka09reader";
+
+    /**
+     * kafka 0.10
+     */
+    String KAFKA10 ="kafka10reader";
+
+    /**
+     * kafka 0.11
+     */
+    String KAFKA11 ="kafka11reader";
+
+    /**
+     * kafka 1.0及以上
+     */
+    String KAFKA ="kafkareader";
+
 }

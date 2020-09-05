@@ -2,33 +2,27 @@ package com.wugui.datax.admin.tool.build;
 
 import cn.hutool.log.Log;
 import com.alibaba.fastjson.JSONObject;
+import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.dto.HiveWriterDTO;
 import com.wugui.datax.admin.dto.RdbmsReaderDTO;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.reader.MysqlReader;
 
-public class DataxBuildHelper implements BaseBuildHelper {
+public class DataxBuildHelper extends BaseBuildHelper {
     // 存放数据同步job运行的配置信息
     private Configuration task;
 
-    @Override
-    public String build(JSONObject jsonObject) {
-        // 创建一个对象存放Job参数
-        this.task = Configuration.from("{}");
 
-        buildReader(jsonObject);
-        buildWriter(jsonObject);
-        buildTransformer(jsonObject);
-        buildSpeed(jsonObject);
-        buildrrorLimit(jsonObject);
-
-        System.out.println(this.task.beautify());
-        return this.task.toJSON();
-    }
 
 
 
     ;
 
+
+    @Override
+    String build(JobDatasource readerDatasource, JobDatasource writerDatasource, DataXJsonBuildDTO dataXJsonBuildDto) {
+        return null;
+    }
 
     @Override
     public void buildReader(JSONObject jsonObject) {
@@ -91,7 +85,7 @@ public class DataxBuildHelper implements BaseBuildHelper {
         jsonObject.put("transformer", new JSONObject());
         jsonObject.put("speed", new JSONObject());
         jsonObject.put("errorLimit", new JSONObject());
-        String build = helper.build(jsonObject);
+//        String build = helper.build(jsonObject);
         // {"job":{"content":[{"reader":{},"transformer":{},"writer":{}}],"setting":{"errorLimit":{},"speed":{}}}}
 
     }

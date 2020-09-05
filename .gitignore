@@ -16,3 +16,4 @@
 *.iml
 /datax-transformer/target/
 /applogs/
+.DS_Store

@@ -37,34 +37,14 @@ public class TriggerParam implements Serializable{
 
     private String partitionInfo;
 
-    public String getMongodbStartId() {
-        return mongodbStartId;
-    }
-
-    public void setMongodbStartId(String mongodbStartId) {
-        this.mongodbStartId = mongodbStartId;
-    }
 
 
-
-    private long startId;
-    private long endId;
-
-    private String mongodbStartId;
-    private String mongodbEndId;
+    private String startId;
+    private String endId;
 
     private Integer incrementType;
 
     private String replaceParamType;
-
-
-    public String getMongodbEndId() {
-        return mongodbEndId;
-    }
-
-    public void setMongodbEndId(String mongodbEndId) {
-        this.mongodbEndId = mongodbEndId;
-    }
 
     public int getJobId() {
         return jobId;
@@ -218,19 +198,19 @@ public class TriggerParam implements Serializable{
         this.partitionInfo = partitionInfo;
     }
 
-    public long getStartId() {
+    public String getStartId() {
         return startId;
     }
 
-    public void setStartId(long startId) {
+    public void setStartId(String startId) {
         this.startId = startId;
     }
 
-    public long getEndId() {
+    public String getEndId() {
         return endId;
     }
 
-    public void setEndId(long endId) {
+    public void setEndId(String endId) {
         this.endId = endId;
     }
 

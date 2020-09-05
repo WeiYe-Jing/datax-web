@@ -65,8 +65,8 @@ public class BuildCommand {
         if (incrementType != null && replaceParam != null) {
 
             if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
-                long startId = tgParam.getStartId();
-                long endId = tgParam.getEndId();
+                String startId = tgParam.getStartId();
+                String endId = tgParam.getEndId();
                 String formatParam = String.format(replaceParam, startId, endId);
                 return getKeyValue(formatParam);
 
@@ -92,8 +92,8 @@ public class BuildCommand {
             }
             // 这里是mongodb主键自增
             if(IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)){
-                String startId = tgParam.getMongodbStartId();
-                String endId = tgParam.getMongodbEndId();
+                String startId = tgParam.getStartId();
+                String endId = tgParam.getEndId();
                 String formatParam = String.format(replaceParam, startId, endId);
                 return getKeyValue(formatParam);
             }

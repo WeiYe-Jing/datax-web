@@ -21,6 +21,7 @@ import com.wugui.datax.admin.util.JsonUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,7 +143,7 @@ public class JobTrigger {
         if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
             long maxId = getMaxId(jobInfo);
             jobLog.setMaxId(maxId);
-            triggerParam.setEndId(maxId);
+            triggerParam.setEndId(String.valueOf(maxId));
             triggerParam.setStartId(jobInfo.getIncStartId());
         } else if (IncrementTypeEnum.TIME.getCode().equals(incrementType)) {
             triggerParam.setStartTime(jobInfo.getIncStartTime());
@@ -151,8 +152,11 @@ public class JobTrigger {
         } else if (IncrementTypeEnum.PARTITION.getCode().equals(incrementType)) {
             triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
         } else if (IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)) {
-//            triggerParam.setMongodbStartId(jobInfo.getMongodbIncStartId());
-//            triggerParam.setTriggerTime(triggerTime);
+
+            triggerParam.setStartId(jobInfo.getIncStartId());
+            String endId = new ObjectId(triggerTime).toHexString();
+            triggerParam.setEndId(endId);
+
         }
         triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         //jvm parameter

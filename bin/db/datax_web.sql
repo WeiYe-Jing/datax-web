@@ -18,8 +18,8 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE DATABASE IF NOT EXISTS dataxweb;
-USE dataxweb;
+CREATE DATABASE IF NOT EXISTS datax_web;
+USE datax_web;
 -- ----------------------------
 -- Table structure for job_group
 -- ----------------------------
@@ -338,6 +338,7 @@ ADD COLUMN `inc_start_id` VARCHAR(20) NULL COMMENT '增量初始id' AFTER `prima
 ADD COLUMN `increment_type` TINYINT(4) NULL COMMENT '增量类型' AFTER `inc_start_id`,
 ADD COLUMN `datasource_id` BIGINT(11) NULL COMMENT '数据源id' AFTER `increment_type`;
 
+DROP TABLE IF EXISTS `job_project`;
 CREATE TABLE `job_project`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'key',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'project name',
@@ -358,7 +359,7 @@ CHANGE COLUMN `increment_type` `increment_type` TINYINT(4) NULL DEFAULT 0 COMMEN
 
 
 ----------------------------------------------------------------------------------------------------------------------
-2.1.3
+--2.1.3
 ----------------------------------------------------------------------------------------------------------------------
 ALTER TABLE `datax_web`.`job_jdbc_datasource`
 CHANGE COLUMN `database_name` `database` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据库名' ;

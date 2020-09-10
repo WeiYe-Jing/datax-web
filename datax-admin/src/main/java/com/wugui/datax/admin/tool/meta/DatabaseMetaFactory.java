@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.tool.meta;
 
+import com.wugui.datax.admin.enums.DatabaseMetaEnum;
 import com.wugui.datax.admin.util.JdbcConstants;
 
 /**
@@ -16,24 +17,6 @@ public class DatabaseMetaFactory {
      * @return DatabaseInterface
      */
     public static DatabaseInterface getByDbType(String dbType) {
-        if (JdbcConstants.MYSQL.equals(dbType)) {
-            return MySQLDatabaseMeta.getInstance();
-        } else if (JdbcConstants.ORACLE.equals(dbType)) {
-            return OracleDatabaseMeta.getInstance();
-        } else if (JdbcConstants.POSTGRESQL.equals(dbType)) {
-            return PostgresqlDatabaseMeta.getInstance();
-        } else if (JdbcConstants.GREENPLUM.equals(dbType)) {
-            return PostgresqlDatabaseMeta.getInstance();
-        } else if (JdbcConstants.SQL_SERVER.equals(dbType)) {
-            return SqlServerDatabaseMeta.getInstance();
-        } else if (JdbcConstants.HIVE.equals(dbType)) {
-            return HiveDatabaseMeta.getInstance();
-        } else if (JdbcConstants.CLICKHOUSE.equals(dbType)) {
-            return ClickHouseDataBaseMeta.getInstance();
-        } else if (JdbcConstants.HBASE20XSQL.equals(dbType)) {
-            return Hbase20xsqlMeta.getInstance();
-        } else {
-            throw new UnsupportedOperationException("暂不支持的类型：".concat(dbType));
-        }
+        return DatabaseMetaEnum.getQueryToolEnum(dbType).getDatabaseInterface();
     }
 }

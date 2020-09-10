@@ -253,10 +253,24 @@ public class DataxJsonHelper implements DataxJsonInterface {
     public Map<String, Object> buildJob() {
         Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> jobMap = Maps.newLinkedHashMap();
+        jobMap.put("core",buildCore());
         jobMap.put("setting", buildSetting());
         jobMap.put("content", ImmutableList.of(buildContent()));
         res.put("job", jobMap);
         return res;
+    }
+
+    @Override
+    public Map<String, Object> buildCore() {
+        Map<String, Object> result = Maps.newLinkedHashMap();
+        Map<String, Object> transportMap = Maps.newLinkedHashMap();
+        Map<String, Object> channelMap = Maps.newLinkedHashMap();
+        Map<String, Object> speedMap = Maps.newLinkedHashMap();
+        speedMap.put("byte",1048576/3);
+        channelMap.put("speed",speedMap);
+        transportMap.put("channel",channelMap);
+        result.put("transport",transportMap);
+        return result;
     }
 
     @Override

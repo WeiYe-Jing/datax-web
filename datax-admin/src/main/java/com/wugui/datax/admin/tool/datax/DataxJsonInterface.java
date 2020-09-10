@@ -20,6 +20,12 @@ public interface DataxJsonInterface {
     Map<String, Object> buildJob();
 
     /**
+     * build core setting
+     */
+    Map<String,Object> buildCore();
+
+
+    /**
      * buildSetting
      *
      * @return

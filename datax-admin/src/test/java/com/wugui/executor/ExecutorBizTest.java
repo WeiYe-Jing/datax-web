@@ -41,7 +41,7 @@ public class ExecutorBizTest {
         triggerParam.setExecutorHandler(jobHandler);
         triggerParam.setExecutorParams(params);
         triggerParam.setExecutorBlockStrategy(ExecutorBlockStrategyEnum.COVER_EARLY.name());
-        triggerParam.setGlueType(GlueTypeEnum.BEAN.name());
+        triggerParam.setGlueType(GlueTypeEnum.DATAX.name());
         triggerParam.setGlueSource(null);
         triggerParam.setGlueUpdatetime(System.currentTimeMillis());
         triggerParam.setLogId(1);

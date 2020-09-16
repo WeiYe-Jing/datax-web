@@ -72,6 +72,7 @@ public class JobServiceImpl implements JobService {
         return maps;
     }
 
+    @Override
     public List<JobInfo> list() {
         return jobInfoMapper.findAll();
     }
@@ -86,7 +87,7 @@ public class JobServiceImpl implements JobService {
         if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
         }
-        if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
+        if (jobInfo.getGlueType().equals(GlueTypeEnum.DATAX.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
         }
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
@@ -104,7 +105,8 @@ public class JobServiceImpl implements JobService {
         if (GlueTypeEnum.match(jobInfo.getGlueType()) == null) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_invalid")));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
+        if ((GlueTypeEnum.DATAX == GlueTypeEnum.match(jobInfo.getGlueType()) || GlueTypeEnum.JAVA_BEAN == GlueTypeEnum.match(jobInfo.getGlueType()))
+                && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
 
@@ -173,7 +175,7 @@ public class JobServiceImpl implements JobService {
         if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_invalid"));
         }
-        if (jobInfo.getGlueType().equals(GlueTypeEnum.BEAN.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
+        if (jobInfo.getGlueType().equals(GlueTypeEnum.DATAX.getDesc()) && jobInfo.getJobJson().trim().length() <= 2) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobjson")));
         }
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
@@ -253,7 +255,7 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setUpdateTime(new Date());
 
-        if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
+        if (GlueTypeEnum.DATAX.getDesc().equals(jobInfo.getGlueType()) || GlueTypeEnum.JAVA_BEAN.getDesc().equals(jobInfo.getGlueType())) {
             exists_jobInfo.setJobJson(jobInfo.getJobJson());
             exists_jobInfo.setGlueSource(null);
         } else {

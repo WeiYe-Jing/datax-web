@@ -41,10 +41,12 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         // reader plugin init
         dataxJsonHelper.initReader(dataXJsonBuildDto, readerDatasource);
 
+
         JobDatasource writerDatasource = jobDataSourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
         //处理writer表名
-        processingTableName(writerDatasource, dataXJsonBuildDto.getWriterTables());
-
+        if(dataXJsonBuildDto.getWriterDatasourceId()>-1) {
+                processingTableName(writerDatasource, dataXJsonBuildDto.getWriterTables());
+         }
         dataxJsonHelper.initWriter(dataXJsonBuildDto, writerDatasource);
 
         return JSON.toJSONString(dataxJsonHelper.buildJob());

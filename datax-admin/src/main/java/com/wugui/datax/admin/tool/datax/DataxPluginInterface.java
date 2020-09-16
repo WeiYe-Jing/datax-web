@@ -56,6 +56,14 @@ public interface DataxPluginInterface {
     Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
 
     /**
+     * txtfile json构建
+     *
+     * @param dataxHivePojo
+     * @return
+     */
+    Map<String,Object> buildTxtFile(DataxHivePojo dataxHivePojo);
+
+    /**
      * 获取示例
      *
      * @return

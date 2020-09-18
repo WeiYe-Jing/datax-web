@@ -24,6 +24,7 @@ public class BuildCommand {
 
     /**
      * DataX command build
+     *
      * @param tgParam
      * @param tmpFilePath
      * @param dataXPyPath
@@ -47,6 +48,14 @@ public class BuildCommand {
         return cmdArr.toArray(new String[cmdArr.size()]);
     }
 
+    /**
+     * 构建datax运行虚拟机参数
+     *
+     * @param tgParam
+     * @return {@link String}
+     * @author Locki
+     * @date 2020/9/18
+     */
     private static String buildDataXParam(TriggerParam tgParam) {
         StringBuilder doc = new StringBuilder();
         String jvmParam = StringUtils.isNotBlank(tgParam.getJvmParam()) ? tgParam.getJvmParam().trim() : tgParam.getJvmParam();
@@ -56,6 +65,14 @@ public class BuildCommand {
         return doc.toString();
     }
 
+    /**
+     * 构建datax增量参数
+     *
+     * @param tgParam
+     * @return {@link HashMap< String, String>}
+     * @author Locki
+     * @date 2020/9/18
+     */
     public static HashMap<String, String> buildDataXParamToMap(TriggerParam tgParam) {
         String partitionStr = tgParam.getPartitionInfo();
         Integer incrementType = tgParam.getIncrementType();
@@ -95,6 +112,14 @@ public class BuildCommand {
         return null;
     }
 
+    /**
+     * 任务参数封装为map
+     *
+     * @param formatParam
+     * @return {@link HashMap< String, String>}
+     * @author Locki
+     * @date 2020/9/18
+     */
     private static HashMap<String, String> getKeyValue(String formatParam) {
         String[] paramArr = formatParam.split(PARAMS_SYSTEM);
         HashMap<String, String> map = new HashMap<String, String>();
@@ -106,6 +131,25 @@ public class BuildCommand {
                 map.put(keyValue[0], keyValue[1]);
             }
         }
+        return map;
+    }
+
+    /**
+     * datax任务内置变量：模仿阿里云商用DataWorks/ODPS提供内置变量<br/>
+     * ${datax_bizdate}
+     * ${datax_biztime}
+     * ${datax_biz_unixtimestamp}
+     *
+     * @param
+     * @return {@link Map< String, String>}
+     * @author Locki
+     * @date 2020/9/18
+     */
+    public static Map<String, String> builtInVar(){
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("datax_biz_date", DateUtil.format(new Date(), "yyyy-MM-dd"));
+        map.put("datax_biz_time", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        map.put("datax_biz_unixtimestamp", System.currentTimeMillis() + "");
         return map;
     }
 

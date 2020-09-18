@@ -23,8 +23,7 @@ import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.wugui.datax.executor.service.command.BuildCommand.buildDataXExecutorCmd;
-import static com.wugui.datax.executor.service.command.BuildCommand.buildDataXParamToMap;
+import static com.wugui.datax.executor.service.command.BuildCommand.*;
 import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_JSON;
 import static com.wugui.datax.executor.service.logparse.AnalysisStatistics.analysisStatisticsLog;
 
@@ -55,7 +54,9 @@ public class ExecutorJobHandler extends IJobHandler {
         LogStatistics logStatistics = null;
 
         HashMap<String, String> keyValueMap = buildDataXParamToMap(trigger);
-        String jobJson = replaceVariable(trigger.getJobJson(),keyValueMap);
+        String jobJson = replaceVariable(trigger.getJobJson(), keyValueMap);
+        Map<String, String> buildin = builtInVar();
+        jobJson = replaceVariable(jobJson, buildin);
 
         //Generate JSON temporary file
         tmpFilePath = generateTemJsonFile(jobJson);
@@ -107,7 +108,19 @@ public class ExecutorJobHandler extends IJobHandler {
         }
     }
 
-    public static String replaceVariable(final String param,HashMap<String, String> variableMap) {
+    /**
+     * 替换json变量
+     *
+     * @param param
+     * @param variableMap
+     * @return {@link String}
+     * @author Locki
+     * @date 2020/9/18
+     */
+    public static String replaceVariable(final String param, Map<String, String> variableMap) {
+        if (variableMap == null || variableMap.size() < 1) {
+            return param;
+        }
         Map<String, String> mapping = new HashMap<String, String>();
 
         Matcher matcher = VARIABLE_PATTERN.matcher(param);

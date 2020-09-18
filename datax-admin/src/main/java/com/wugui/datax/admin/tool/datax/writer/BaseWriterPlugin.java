@@ -79,4 +79,9 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
     public Map<String, Object> buildMongoDB(DataxMongoDBPojo plugin) {
         return null;
     }
+
+    @Override
+    public Map<String, Object> buildTxtFile(DataxHivePojo dataxHivePojo) {
+        return null;
+    }
 }

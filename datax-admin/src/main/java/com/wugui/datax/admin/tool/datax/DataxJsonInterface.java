@@ -83,6 +83,13 @@ public interface DataxJsonInterface {
     Map<String, Object> buildMongoDBWriter();
 
     /**
+     * buildTxtFileWriter
+     *
+     * @return
+     */
+    Map<String, Object> buildTxtFileWriter();
+
+    /**
      * buildWriter
      *
      * @return

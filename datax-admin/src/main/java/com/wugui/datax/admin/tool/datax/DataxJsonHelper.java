@@ -131,6 +131,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
             case HBASE:
                 readerPlugin = new HBaseReader();
                 buildReader = buildHBaseReader();
+            case DB2:
+                readerPlugin = new DB2Reader();
+                buildReader = buildReader();
         }
     }
 
@@ -172,6 +175,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
             case HBASE:
                 writerPlugin = new HBaseWriter();
                 buildWriter = this.buildHBaseWriter();
+            case DB2:
+                readerPlugin = new DB2Writer();
+                buildReader = buildWriter();
         }
     }
 

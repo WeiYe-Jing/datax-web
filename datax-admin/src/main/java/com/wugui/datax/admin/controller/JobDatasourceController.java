@@ -85,9 +85,9 @@ public class JobDatasourceController extends BaseController {
     /**
      * 新增数据
      *
-     * @param userName
+     * @param user
      * @param password
-     * @param dbType
+     * @param type
      * @param jdbcUrl
      * @param principal
      * @param database
@@ -100,16 +100,16 @@ public class JobDatasourceController extends BaseController {
     public R<Integer> createDataSource(@RequestParam(value = "datasourceName", required = false) String datasourceName,
                                        @RequestParam(value = "datasourceGroup", required = false) String datasourceGroup,
                                        @RequestParam(value = "status", required = false, defaultValue = "1") int status,
-                                       @RequestParam(value = "userName", required = false) String userName,
+                                       @RequestParam(value = "user", required = false) String user,
                                        @RequestParam(value = "password", required = false) String password,
-                                       @RequestParam(value = "dbType", required = false) DbType dbType,
+                                       @RequestParam(value = "type", required = false) DbType type,
                                        @RequestParam(value = "jdbcUrl", required = false) String jdbcUrl,
                                        @RequestParam(value = "principal", required = false) String principal,
                                        @RequestParam(value = "database", required = false) String database,
                                        @RequestParam(value = "comments", required = false) String comments,
                                        @RequestParam(value = "other", required = false) String other) {
-        String parameter = buildParameter(userName, password, dbType, database, jdbcUrl, principal, comments);
-        return success(jobDatasourceService.createDataSource(datasourceName, datasourceGroup, dbType, status, comments, parameter));
+        String parameter = buildParameter(user, password, type, database, jdbcUrl, principal, comments);
+        return success(jobDatasourceService.createDataSource(datasourceName, datasourceGroup, type, status, comments, parameter));
     }
 
     /**
@@ -118,9 +118,9 @@ public class JobDatasourceController extends BaseController {
      * @param datasourceName
      * @param datasourceGroup
      * @param status
-     * @param userName
+     * @param user
      * @param password
-     * @param dbType
+     * @param type
      * @param jdbcUrl
      * @param principal
      * @param database
@@ -128,22 +128,22 @@ public class JobDatasourceController extends BaseController {
      * @param other
      * @return
      */
-    @PutMapping
+    @PutMapping("/update")
     @ApiOperation("修改数据")
     public R<Integer> updateDataSource(@RequestParam("id") long id,
                                        @RequestParam(value = "datasourceName", required = false) String datasourceName,
                                        @RequestParam(value = "datasourceGroup", required = false) String datasourceGroup,
-                                       @RequestParam(value = "status", required = false) int status,
-                                       @RequestParam(value = "userName", required = false) String userName,
+                                       @RequestParam(value = "status", required = false,defaultValue = "1") int status,
+                                       @RequestParam(value = "user", required = false) String user,
                                        @RequestParam(value = "password", required = false) String password,
-                                       @RequestParam(value = "dbType", required = false) DbType dbType,
+                                       @RequestParam(value = "type", required = false) DbType type,
                                        @RequestParam(value = "jdbcUrl", required = false) String jdbcUrl,
                                        @RequestParam(value = "principal", required = false) String principal,
                                        @RequestParam(value = "database", required = false) String database,
                                        @RequestParam(value = "comments", required = false) String comments,
                                        @RequestParam(value = "other", required = false) String other) {
-        String parameter = buildParameter(userName, password, dbType, database, jdbcUrl, principal, comments);
-        return success(this.jobDatasourceService.updateDataSource(id, datasourceName, datasourceGroup, dbType, status, comments, parameter));
+        String parameter = buildParameter(user, password, type, database, jdbcUrl, principal, comments);
+        return success(this.jobDatasourceService.updateDataSource(id, datasourceName, datasourceGroup, type, status, comments, parameter));
     }
 
     /**
@@ -167,16 +167,16 @@ public class JobDatasourceController extends BaseController {
      */
     @PostMapping("/test")
     @ApiOperation("测试数据")
-    public R<Boolean> dataSourceTest(@RequestParam(value = "userName", required = false) String userName,
+    public R<Boolean> dataSourceTest(@RequestParam(value = "user", required = false) String user,
                                      @RequestParam(value = "password", required = false) String password,
-                                     @RequestParam(value = "dbType", required = false) DbType dbType,
+                                     @RequestParam(value = "type", required = false) DbType type,
                                      @RequestParam(value = "jdbcUrl", required = false) String jdbcUrl,
                                      @RequestParam(value = "principal", required = false) String principal,
                                      @RequestParam(value = "database", required = false) String database,
                                      @RequestParam(value = "comments", required = false) String comments,
                                      @RequestParam(value = "other", required = false) String other) throws IOException {
-        String parameter = buildParameter(userName, password, dbType, database, jdbcUrl, principal, comments);
-        return success(datasourceQueryService.checkConnection(dbType, parameter));
+        String parameter = buildParameter(user, password, type, database, jdbcUrl, principal, comments);
+        return success(datasourceQueryService.checkConnection(type, parameter));
     }
 
 }

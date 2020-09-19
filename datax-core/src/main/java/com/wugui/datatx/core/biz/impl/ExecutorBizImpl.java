@@ -70,7 +70,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
         AbstractJobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
         String removeOldReason = null;
         GlueTypeEnum glueTypeEnum = GlueTypeEnum.match(triggerParam.getGlueType());
-        if (GlueTypeEnum.BEAN == glueTypeEnum) {
+        if (GlueTypeEnum.DATAX == glueTypeEnum || GlueTypeEnum.JAVA_BEAN == glueTypeEnum) {
             AbstractJobHandler newJobHandler = JobExecutor.loadJobHandler(triggerParam.getExecutorHandler());
             if (jobThread != null && jobHandler != newJobHandler) {
                 removeOldReason = "change jobhandler or glue type, and terminate the old job thread.";

@@ -40,6 +40,7 @@ public class QueryToolFactory {
                 baseQueryTool = new Hbase20XsqlQueryTool(dbType, parameter);
                 break;
             case DB2:
+                baseQueryTool=new DB2SQLQueryTool(dbType, parameter);
                 break;
             default:
                 break;

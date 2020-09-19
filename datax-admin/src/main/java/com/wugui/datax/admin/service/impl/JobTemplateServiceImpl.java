@@ -80,7 +80,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         if (GlueTypeEnum.match(jobTemplate.getGlueType()) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_invalid")));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobTemplate.getGlueType()) && (jobTemplate.getExecutorHandler() == null || jobTemplate.getExecutorHandler().trim().length() == 0)) {
+        if (GlueTypeEnum.DATAX == GlueTypeEnum.match(jobTemplate.getGlueType()) && (jobTemplate.getExecutorHandler() == null || jobTemplate.getExecutorHandler().trim().length() == 0)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
 

@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -58,6 +59,7 @@ public class JobRemotingUtil {
 
             DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
             dataOutputStream.writeBytes(requestBody);
+            dataOutputStream.write(requestBody.getBytes(StandardCharsets.UTF_8));
             dataOutputStream.flush();
             dataOutputStream.close();
 

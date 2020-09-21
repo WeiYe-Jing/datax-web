@@ -129,7 +129,7 @@ public class ExecutorBizImplTest {
         triggerParam.setExecutorHandler("demoJobHandler");
         triggerParam.setExecutorParams(null);
         triggerParam.setExecutorBlockStrategy(ExecutorBlockStrategyEnum.COVER_EARLY.name());
-        triggerParam.setGlueType(GlueTypeEnum.BEAN.name());
+        triggerParam.setGlueType(GlueTypeEnum.DATAX.name());
         triggerParam.setGlueSource(null);
         triggerParam.setGlueUpdatetime(System.currentTimeMillis());
         triggerParam.setLogId(1);

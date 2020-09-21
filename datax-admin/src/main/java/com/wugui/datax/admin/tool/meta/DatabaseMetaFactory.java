@@ -41,6 +41,7 @@ public class DatabaseMetaFactory {
                 databaseInterface = Hbase20xsqlMeta.getInstance();
                 break;
             case DB2:
+                databaseInterface= DB2DatabaseMeta.getInstance();
                 break;
             default:
                 break;

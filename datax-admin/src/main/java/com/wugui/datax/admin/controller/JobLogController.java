@@ -3,6 +3,7 @@ package com.wugui.datax.admin.controller;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.LogResult;
 import com.wugui.datatx.core.biz.model.ReturnT;
+import com.wugui.datatx.core.glue.GlueTypeEnum;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.scheduler.JobScheduler;
@@ -94,7 +95,7 @@ public class JobLogController {
 
     @RequestMapping(value = "/logKill", method = RequestMethod.POST)
     @ApiOperation("kill任务")
-    public ReturnT<String> logKill(int id) {
+    public ReturnT<String> logKill(long id) {
         // base check
         JobLog log = jobLogMapper.load(id);
         JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
@@ -168,6 +169,11 @@ public class JobLogController {
     @ApiOperation("停止该job作业")
     @PostMapping("/killJob")
     public ReturnT<String> killJob(@RequestBody JobLog log) {
-        return KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
+        JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
+        if (GlueTypeEnum.match(jobInfo.getGlueType()) == GlueTypeEnum.DATAX) {
+            return KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
+        } else {
+            return this.logKill(log.getId());
+        }
     }
 }

@@ -8,6 +8,8 @@ import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
+import com.wugui.datax.admin.tool.pojo.DataxParquetFilePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRabbitmqPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import org.apache.commons.lang3.StringUtils;
 
@@ -73,5 +75,15 @@ public abstract class BaseWriterPlugin extends BaseDataxPlugin {
     @Override
     public Map<String, Object> buildMongoDB(DataxMongoDBPojo plugin) {
         return null;
+    }
+    
+    @Override
+    public Map<String, Object> buildRabbitmq(DataxRabbitmqPojo dataxRabbitmqPojo) {
+    	return null;
+    }
+   
+    @Override
+    public Map<String, Object> buildParquetFile(DataxParquetFilePojo dataxParquetFilePojo) {
+    	return null;
     }
 }

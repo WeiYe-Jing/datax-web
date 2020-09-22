@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -10,6 +11,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * jdbc数据源配置实体类(job_jdbc_datasource)
@@ -131,6 +134,19 @@ public class JobDatasource extends Model<JobDatasource> {
      */
     @ApiModelProperty(value = "数据库名", hidden = true)
     private String databaseName;
+    
+    /**
+     * 额外的配置，Json格式保存
+     */
+    @ApiModelProperty(value = "额外配置，Json格式保存", hidden = true)
+    private String extra;
+    
+    /**
+     * 针对file类型的数据源同步字段的配置
+     */
+    @ApiModelProperty(value = "针对file类型的数据源同步字段的配置", hidden = true)
+    private String columnx;
+    
     /**
      * 获取主键值
      *
@@ -139,5 +155,30 @@ public class JobDatasource extends Model<JobDatasource> {
     @Override
     protected Serializable pkVal() {
         return this.id;
+    }
+    
+    /**
+     * 获取扩展属性的Json
+     * @return
+     */
+    public JSONObject getExtraJson() {
+    	if (StringUtils.isNotBlank(this.getExtra())) {
+        	JSONObject extra = JSONObject.parseObject(this.getExtra());
+        	return extra;
+        }
+    	return new JSONObject();
+    }
+    
+    /**
+     * 获取端口
+     * @return
+     */
+    public String getPort() {
+    	String port = "5672";
+        if (StringUtils.isNotBlank(this.getExtra())) {
+        	JSONObject extra = JSONObject.parseObject(this.getExtra());
+        	port = extra.getString("port");
+        }
+        return port;
     }
 }

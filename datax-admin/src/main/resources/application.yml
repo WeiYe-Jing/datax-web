@@ -1,15 +1,15 @@
 server:
-  #port: 8080
-  port: ${server.port}
+  port: 8088
+  #port: ${server.port}
 spring:
   #数据源
   datasource:
-    #    username: root
-    #password: root
-    #url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
-    password: ${DB_PASSWORD:password}
-    username: ${DB_USERNAME:username}
-    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_DATABASE:dataxweb}?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: hitocas
+    url: jdbc:mysql://192.168.20.107:3306/dataxweb?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
+    #password: ${DB_PASSWORD:password}
+    #username: ${DB_USERNAME:username}
+    #url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_DATABASE:dataxweb}?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
 
 
@@ -30,10 +30,10 @@ spring:
   mail:
     host: smtp.qq.com
     port: 25
-    #username: xxx@qq.com
-    #password: xxx
-    username: ${mail.username}
-    password: ${mail.password}
+    username: xxx@qq.com
+    password: xxx
+    #username: ${mail.username}
+    #password: ${mail.password}
     properties:
       mail:
         smtp:
@@ -83,12 +83,12 @@ mybatis-plus:
 
 # 配置mybatis-plus打印sql日志
 logging:
-  #level:
-  #  com.wugui.datax.admin.mapper: info
-#path: ./data/applogs/admin
   level:
-    com.wugui.datax.admin.mapper: error
-    path: ${data.path}/applogs/admin
+     com.wugui.datax.admin.mapper: info
+     path: /users/jiangdw/desktop/tmp/datax-admin
+  #level:
+    #com.wugui.datax.admin.mapper: error
+    #path: ${data.path}/applogs/admin
 
 
 

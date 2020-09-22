@@ -1,6 +1,9 @@
 package com.wugui.datax.admin.tool.datax.reader;
 
-import cn.hutool.core.util.StrUtil;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.datax.admin.entity.JobDatasource;
@@ -8,11 +11,11 @@ import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
+import com.wugui.datax.admin.tool.pojo.DataxParquetFilePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRabbitmqPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
-import com.wugui.datax.admin.util.AESUtil;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Map;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * Reader
@@ -69,5 +72,15 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
     @Override
     public Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo) {
         return null;
+    }
+    
+    @Override
+    public Map<String, Object> buildRabbitmq(DataxRabbitmqPojo dataxRabbitmqPojo) {
+    	return null;
+    }
+    
+    @Override
+    public Map<String, Object> buildParquetFile(DataxParquetFilePojo dataxParquetFilePojo) {
+    	return null;
     }
 }

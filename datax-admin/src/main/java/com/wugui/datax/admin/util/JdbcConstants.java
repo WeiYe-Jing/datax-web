@@ -120,5 +120,9 @@ public interface JdbcConstants {
     // for HBase2.X and Phoenix5.X
     String HBASE20XSQL = "hbase20xsql";
     String HBASE20XSQL_DRIVER = "org.apache.phoenix.jdbc.PhoenixDriver";
+    
+    String PARQUET_FILE = "parquetfile";
+    String RABBITMQ = "rabbitmq";
+    String TEXT_FILE = "textfile";
 
 }

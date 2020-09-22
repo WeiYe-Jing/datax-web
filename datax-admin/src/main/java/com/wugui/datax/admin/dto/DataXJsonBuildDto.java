@@ -1,9 +1,9 @@
 package com.wugui.datax.admin.dto;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * 构建json dto
@@ -43,4 +43,8 @@ public class DataXJsonBuildDto implements Serializable {
     private MongoDBReaderDto mongoDBReader;
 
     private MongoDBWriterDto mongoDBWriter;
+    
+    private RabbitmqWriterDto rabbitmqWriter;
+    
+    private ParquetFileReaderDto parquetFileReader;
 }

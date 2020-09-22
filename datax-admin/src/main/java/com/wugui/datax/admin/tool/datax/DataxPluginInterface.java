@@ -3,6 +3,8 @@ package com.wugui.datax.admin.tool.datax;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
+import com.wugui.datax.admin.tool.pojo.DataxParquetFilePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRabbitmqPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 
 import java.util.Map;
@@ -51,6 +53,20 @@ public interface DataxPluginInterface {
      * @return
      */
     Map<String,Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
+    
+    /**
+     * rabbitmq json构建
+     * @param dataxRabbitmqPojo
+     * @return
+     */
+    Map<String, Object> buildRabbitmq(DataxRabbitmqPojo dataxRabbitmqPojo);
+    
+    /**
+     * parquetFile json构建
+     * @param dataxParquetFilePojo
+     * @return
+     */
+    Map<String, Object> buildParquetFile(DataxParquetFilePojo dataxParquetFilePojo);
 
     /**
      * 获取示例

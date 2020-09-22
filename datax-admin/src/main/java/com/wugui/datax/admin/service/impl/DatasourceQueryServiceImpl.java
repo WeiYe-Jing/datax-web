@@ -1,6 +1,8 @@
 package com.wugui.datax.admin.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+
+import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DatasourceQueryService;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * datasource query
@@ -45,11 +49,17 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
         if (ObjectUtil.isNull(datasource)) {
             return Lists.newArrayList();
         }
-        if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
+        // 数据库类型：hbase，mysql，mongodb，rabbitmq
+        String datasourceType = datasource.getDatasource();
+        if (JdbcConstants.HBASE.equalsIgnoreCase(datasourceType)) {
             return new HBaseQueryTool(datasource).getTableNames();
-        } else if (JdbcConstants.MONGODB.equals(datasource.getDatasource())) {
+        } else if (JdbcConstants.MONGODB.equalsIgnoreCase(datasourceType)) {
             return new MongoDBQueryTool(datasource).getCollectionNames(datasource.getDatabaseName());
-        } else {
+        } else if (JdbcConstants.PARQUET_FILE.equalsIgnoreCase(datasourceType)
+        		|| JdbcConstants.RABBITMQ.equalsIgnoreCase(datasourceType)
+        		|| JdbcConstants.TEXT_FILE.equalsIgnoreCase(datasourceType)) {
+        	return Lists.newArrayList("column");
+    	} else {
             BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
             if(StringUtils.isBlank(tableSchema)){
                 return qTool.getTableNames();
@@ -91,13 +101,26 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
         if (ObjectUtil.isNull(datasource)) {
             return Lists.newArrayList();
         }
-        if (JdbcConstants.HBASE.equals(datasource.getDatasource())) {
+        String datasourceType = datasource.getDatasource();
+        if (JdbcConstants.HBASE.equalsIgnoreCase(datasourceType)) {
             return new HBaseQueryTool(datasource).getColumns(tableName);
-        } else if (JdbcConstants.MONGODB.equals(datasource.getDatasource())) {
+        } else if (JdbcConstants.MONGODB.equalsIgnoreCase(datasourceType)) {
             return new MongoDBQueryTool(datasource).getColumns(tableName);
-        } else {
+        } else if (JdbcConstants.PARQUET_FILE.equalsIgnoreCase(datasourceType)
+        		|| JdbcConstants.RABBITMQ.equalsIgnoreCase(datasourceType)
+        		|| JdbcConstants.TEXT_FILE.equalsIgnoreCase(datasourceType)) {
+        	if (StringUtils.isNotBlank(datasource.getColumnx())) {
+        		List<Map> columnMapList = JSONArray.parseArray(datasource.getColumnx(), Map.class);
+        		List<String> columnList = new ArrayList<>();
+        		for (Map map : columnMapList) {
+        			columnList.add((String)map.get("name"));
+				}
+        		return columnList;
+        	}
+        	return Lists.newArrayList("column");
+    	} else {
             BaseQueryTool queryTool = QueryToolFactory.getByDbType(datasource);
-            return queryTool.getColumnNames(tableName, datasource.getDatasource());
+            return queryTool.getColumnNames(tableName, datasourceType);
         }
     }
 

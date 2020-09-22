@@ -1,29 +1,69 @@
 package com.wugui.datax.admin.tool.datax;
 
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.wugui.datatx.core.util.Constants;
-import com.wugui.datax.admin.dto.*;
-import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.tool.datax.reader.*;
-import com.wugui.datax.admin.tool.datax.writer.*;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
-import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
-import com.wugui.datax.admin.util.JdbcConstants;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
+import static com.wugui.datax.admin.util.JdbcConstants.CLICKHOUSE;
+import static com.wugui.datax.admin.util.JdbcConstants.HBASE;
+import static com.wugui.datax.admin.util.JdbcConstants.HIVE;
+import static com.wugui.datax.admin.util.JdbcConstants.MONGODB;
+import static com.wugui.datax.admin.util.JdbcConstants.MYSQL;
+import static com.wugui.datax.admin.util.JdbcConstants.ORACLE;
+import static com.wugui.datax.admin.util.JdbcConstants.PARQUET_FILE;
+import static com.wugui.datax.admin.util.JdbcConstants.POSTGRESQL;
+import static com.wugui.datax.admin.util.JdbcConstants.RABBITMQ;
+import static com.wugui.datax.admin.util.JdbcConstants.SQL_SERVER;
+import static com.wugui.datax.admin.util.JdbcConstants.TEXT_FILE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.wugui.datax.admin.util.JdbcConstants.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.wugui.datatx.core.util.Constants;
+import com.wugui.datax.admin.dto.DataXJsonBuildDto;
+import com.wugui.datax.admin.dto.HbaseReaderDto;
+import com.wugui.datax.admin.dto.HbaseWriterDto;
+import com.wugui.datax.admin.dto.HiveReaderDto;
+import com.wugui.datax.admin.dto.HiveWriterDto;
+import com.wugui.datax.admin.dto.MongoDBReaderDto;
+import com.wugui.datax.admin.dto.MongoDBWriterDto;
+import com.wugui.datax.admin.dto.ParquetFileReaderDto;
+import com.wugui.datax.admin.dto.RabbitmqWriterDto;
+import com.wugui.datax.admin.dto.RdbmsReaderDto;
+import com.wugui.datax.admin.dto.RdbmsWriterDto;
+import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.tool.datax.reader.ClickHouseReader;
+import com.wugui.datax.admin.tool.datax.reader.HBaseReader;
+import com.wugui.datax.admin.tool.datax.reader.HiveReader;
+import com.wugui.datax.admin.tool.datax.reader.MongoDBReader;
+import com.wugui.datax.admin.tool.datax.reader.MysqlReader;
+import com.wugui.datax.admin.tool.datax.reader.OracleReader;
+import com.wugui.datax.admin.tool.datax.reader.ParquetFileReader;
+import com.wugui.datax.admin.tool.datax.reader.PostgresqlReader;
+import com.wugui.datax.admin.tool.datax.reader.SqlServerReader;
+import com.wugui.datax.admin.tool.datax.writer.ClickHouseWriter;
+import com.wugui.datax.admin.tool.datax.writer.HBaseWriter;
+import com.wugui.datax.admin.tool.datax.writer.HiveWriter;
+import com.wugui.datax.admin.tool.datax.writer.MongoDBWriter;
+import com.wugui.datax.admin.tool.datax.writer.MysqlWriter;
+import com.wugui.datax.admin.tool.datax.writer.OraclelWriter;
+import com.wugui.datax.admin.tool.datax.writer.PostgresqllWriter;
+import com.wugui.datax.admin.tool.datax.writer.RabbitmqWriter;
+import com.wugui.datax.admin.tool.datax.writer.SqlServerlWriter;
+import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
+import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
+import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
+import com.wugui.datax.admin.tool.pojo.DataxParquetFilePojo;
+import com.wugui.datax.admin.tool.pojo.DataxRabbitmqPojo;
+import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.util.JdbcConstants;
+
+import lombok.Data;
 
 /**
  * 构建 com.wugui.datax json的工具类
@@ -86,6 +126,10 @@ public class DataxJsonHelper implements DataxJsonInterface {
     private MongoDBReaderDto mongoDBReaderDto;
 
     private MongoDBWriterDto mongoDBWriterDto;
+    
+    private RabbitmqWriterDto rabbitmqWriterDto;
+    
+    private ParquetFileReaderDto parquetFileReaderDto;
 
 
     //用于保存额外参数
@@ -99,38 +143,47 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hiveReaderDto = dataxJsonDto.getHiveReader();
         this.rdbmsReaderDto = dataxJsonDto.getRdbmsReader();
         this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
+        this.parquetFileReaderDto = dataxJsonDto.getParquetFileReader();
+        
         // reader 插件
         String datasource = readerDatasource.getDatasource();
 
         this.readerColumns = convertKeywordsColumns(datasource, this.readerColumns);
-        if (MYSQL.equals(datasource)) {
+        if (MYSQL.equalsIgnoreCase(datasource)) {
             readerPlugin = new MysqlReader();
             buildReader = buildReader();
-        } else if (ORACLE.equals(datasource)) {
+        } else if (ORACLE.equalsIgnoreCase(datasource)) {
             readerPlugin = new OracleReader();
             buildReader = buildReader();
-        } else if (SQL_SERVER.equals(datasource)) {
+        } else if (SQL_SERVER.equalsIgnoreCase(datasource)) {
             readerPlugin = new SqlServerReader();
             buildReader = buildReader();
-        } else if (POSTGRESQL.equals(datasource)) {
+        } else if (POSTGRESQL.equalsIgnoreCase(datasource)) {
             readerPlugin = new PostgresqlReader();
             buildReader = buildReader();
-        } else if (CLICKHOUSE.equals(datasource)) {
+        } else if (CLICKHOUSE.equalsIgnoreCase(datasource)) {
             readerPlugin = new ClickHouseReader();
             buildReader = buildReader();
-        } else if (HIVE.equals(datasource)) {
+        } else if (HIVE.equalsIgnoreCase(datasource)) {
             readerPlugin = new HiveReader();
             buildReader = buildHiveReader();
-        } else if (HBASE.equals(datasource)) {
+        } else if (HBASE.equalsIgnoreCase(datasource)) {
             readerPlugin = new HBaseReader();
             buildReader = buildHBaseReader();
-        } else if (MONGODB.equals(datasource)) {
+        } else if (MONGODB.equalsIgnoreCase(datasource)) {
             readerPlugin = new MongoDBReader();
             buildReader = buildMongoDBReader();
+        } else if (PARQUET_FILE.equalsIgnoreCase(datasource)) {
+            readerPlugin = new ParquetFileReader();
+            buildReader = buildParquetFileReader();
+        } else if (RABBITMQ.equalsIgnoreCase(datasource)) {
+        	// TODO
+        } else if (TEXT_FILE.equalsIgnoreCase(datasource)) {
+            // TODO
         }
     }
 
-    public void initWriter(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
+	public void initWriter(DataXJsonBuildDto dataxJsonDto, JobDatasource readerDatasource) {
         this.writerDatasource = readerDatasource;
         this.writerTables = dataxJsonDto.getWriterTables();
         this.writerColumns = dataxJsonDto.getWriterColumns();
@@ -138,33 +191,37 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
         this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
         this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
+        this.rabbitmqWriterDto = dataxJsonDto.getRabbitmqWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
         this.writerColumns = convertKeywordsColumns(datasource, this.writerColumns);
-        if (MYSQL.equals(datasource)) {
+        if (MYSQL.equalsIgnoreCase(datasource)) {
             writerPlugin = new MysqlWriter();
             buildWriter = this.buildWriter();
-        } else if (ORACLE.equals(datasource)) {
+        } else if (ORACLE.equalsIgnoreCase(datasource)) {
             writerPlugin = new OraclelWriter();
             buildWriter = this.buildWriter();
-        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
+        } else if (JdbcConstants.SQL_SERVER.equalsIgnoreCase(datasource)) {
             writerPlugin = new SqlServerlWriter();
             buildWriter = this.buildWriter();
-        } else if (POSTGRESQL.equals(datasource)) {
+        } else if (POSTGRESQL.equalsIgnoreCase(datasource)) {
             writerPlugin = new PostgresqllWriter();
             buildWriter = this.buildWriter();
-        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
+        } else if (JdbcConstants.CLICKHOUSE.equalsIgnoreCase(datasource)) {
             writerPlugin = new ClickHouseWriter();
             buildWriter = buildWriter();
-        } else if (JdbcConstants.HIVE.equals(datasource)) {
+        } else if (JdbcConstants.HIVE.equalsIgnoreCase(datasource)) {
             writerPlugin = new HiveWriter();
             buildWriter = this.buildHiveWriter();
-        } else if (JdbcConstants.HBASE.equals(datasource)) {
+        } else if (JdbcConstants.HBASE.equalsIgnoreCase(datasource)) {
             writerPlugin = new HBaseWriter();
             buildWriter = this.buildHBaseWriter();
-        } else if (JdbcConstants.MONGODB.equals(datasource)) {
+        } else if (JdbcConstants.MONGODB.equalsIgnoreCase(datasource)) {
             writerPlugin = new MongoDBWriter();
             buildWriter = this.buildMongoDBWriter();
+        } else if (JdbcConstants.RABBITMQ.equalsIgnoreCase(datasource)) {
+        	readerPlugin = new RabbitmqWriter();
+        	buildWriter = this.buildRabbitmqWriter();
         }
     }
 
@@ -374,6 +431,41 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
         return writerPlugin.buildMongoDB(dataxMongoDBPojo);
     }
+    
+    @Override
+    public Map<String, Object> buildRabbitmqWriter() {
+    	DataxRabbitmqPojo dataxRabbitmqPojo = new DataxRabbitmqPojo();
+    	dataxRabbitmqPojo.setJdbcDatasource(writerDatasource);
+        List<Map<String, Object>> columns = Lists.newArrayList();
+        buildColumns(writerColumns, columns);
+        dataxRabbitmqPojo.setColumns(columns);
+        dataxRabbitmqPojo.setHost(writerDatasource.getJdbcUrl());
+        dataxRabbitmqPojo.setPort(writerDatasource.getExtra());
+        dataxRabbitmqPojo.setBatchSize(rabbitmqWriterDto.getBatchSize());
+        dataxRabbitmqPojo.setExchange(rabbitmqWriterDto.getExchange());
+        dataxRabbitmqPojo.setFieldDelimiter(rabbitmqWriterDto.getFieldDelimiter());
+        dataxRabbitmqPojo.setJointColumn(rabbitmqWriterDto.getJointColumn());
+        dataxRabbitmqPojo.setMessagePrefix(rabbitmqWriterDto.getMessagePrefix());
+        dataxRabbitmqPojo.setMessageSuffix(rabbitmqWriterDto.getMessageSuffix());
+        dataxRabbitmqPojo.setUsername(writerDatasource.getJdbcUsername());
+        dataxRabbitmqPojo.setPassword(writerDatasource.getJdbcPassword());
+        dataxRabbitmqPojo.setQueue(rabbitmqWriterDto.getQueue());
+        dataxRabbitmqPojo.setRoutingKey(rabbitmqWriterDto.getRoutingKey());
+    	return writerPlugin.buildRabbitmq(dataxRabbitmqPojo);
+    }
+    
+    private Map<String, Object> buildParquetFileReader() {
+		DataxParquetFilePojo dataxParquetFilePojo = new DataxParquetFilePojo();
+		dataxParquetFilePojo.setJdbcDatasource(writerDatasource);
+		List<Map<String, Object>> columns = Lists.newArrayList();
+        buildColumns(writerColumns, columns);
+        dataxParquetFilePojo.setColumns(columns);
+        dataxParquetFilePojo.setEncoding(parquetFileReaderDto.getEncoding());
+        dataxParquetFilePojo.setFieldDelimiter(parquetFileReaderDto.getFieldDelimiter());
+        dataxParquetFilePojo.setHost(writerDatasource.getJdbcUrl());
+        dataxParquetFilePojo.setPath(parquetFileReaderDto.getPath());
+		return writerPlugin.buildParquetFile(dataxParquetFilePojo);
+	}
 
     private void buildColumns(List<String> columns, List<Map<String, Object>> returnColumns) {
         columns.forEach(c -> {

@@ -170,7 +170,7 @@ public class JobLogController {
     @PostMapping("/killJob")
     public ReturnT<String> killJob(@RequestBody JobLog log) {
         JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
-        if (GlueTypeEnum.match(jobInfo.getGlueType()) == GlueTypeEnum.DATAX) {
+        if (GlueTypeEnum.match(jobInfo.getGlueType()) == GlueTypeEnum.DATAX || GlueTypeEnum.match(jobInfo.getGlueType()).isScript()) {
             return KillJob.trigger(log.getId(), log.getTriggerTime(), log.getExecutorAddress(), log.getProcessId());
         } else {
             return this.logKill(log.getId());

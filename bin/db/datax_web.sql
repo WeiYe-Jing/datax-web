@@ -86,6 +86,8 @@ CREATE TABLE `job_jdbc_datasource`  (
   `update_by` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `update_date` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `comments` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `extra` varchar(1000) DEFAULT NULL COMMENT '扩展属性，JSON格式存储',
+  `columnx` varchar(1000) DEFAULT NULL COMMENT '需要同步的字段，主要针对datasource_name为parquetfile和rabbitmq',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'jdbc数据源配置' ROW_FORMAT = Dynamic;
 

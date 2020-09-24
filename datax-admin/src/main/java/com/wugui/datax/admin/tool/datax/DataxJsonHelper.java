@@ -20,6 +20,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -220,7 +221,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
             writerPlugin = new MongoDBWriter();
             buildWriter = this.buildMongoDBWriter();
         } else if (JdbcConstants.RABBITMQ.equalsIgnoreCase(datasource)) {
-        	readerPlugin = new RabbitmqWriter();
+        	writerPlugin = new RabbitmqWriter();
         	buildWriter = this.buildRabbitmqWriter();
         }
     }
@@ -361,6 +362,28 @@ public class DataxJsonHelper implements DataxJsonInterface {
         dataxMongoDBPojo.setReaderTable(readerTables.get(0));
         return readerPlugin.buildMongoDB(dataxMongoDBPojo);
     }
+    
+    @Override
+	public Map<String, Object> buildParquetFileReader() {
+		DataxParquetFilePojo dataxParquetFilePojo = new DataxParquetFilePojo();
+		dataxParquetFilePojo.setJdbcDatasource(readerDatasource);
+		List<Map<String, Object>> columns = Lists.newArrayList();
+        
+        for (String c : readerColumns) {
+        	Map<String, Object> column = Maps.newLinkedHashMap();
+			for (JSONObject json : readerDatasource.getColumnxList()) {
+				if (c.equals(json.get("name"))) {
+					 column.put("name", c);
+			         column.put("type", json.get("type"));
+			         columns.add(column);
+				}
+			}
+		}
+        dataxParquetFilePojo.setColumns(columns);
+        dataxParquetFilePojo.setEncoding(readerDatasource.getEncoding());
+        dataxParquetFilePojo.setPath(readerDatasource.getJdbcUrl());
+		return readerPlugin.buildParquetFile(dataxParquetFilePojo);
+	}
 
 
     @Override
@@ -437,7 +460,18 @@ public class DataxJsonHelper implements DataxJsonInterface {
     	DataxRabbitmqPojo dataxRabbitmqPojo = new DataxRabbitmqPojo();
     	dataxRabbitmqPojo.setJdbcDatasource(writerDatasource);
         List<Map<String, Object>> columns = Lists.newArrayList();
-        buildColumns(writerColumns, columns);
+        
+        for (String c : writerColumns) {
+        	Map<String, Object> column = Maps.newLinkedHashMap();
+			for (JSONObject json : writerDatasource.getColumnxList()) {
+				if (c.equals(json.get("name"))) {
+					 column.put("name", c);
+			         column.put("type", json.get("type"));
+			         columns.add(column);
+				}
+			}
+		}
+        
         dataxRabbitmqPojo.setColumns(columns);
         dataxRabbitmqPojo.setHost(writerDatasource.getJdbcUrl());
         dataxRabbitmqPojo.setPort(writerDatasource.getExtra());
@@ -454,19 +488,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
     	return writerPlugin.buildRabbitmq(dataxRabbitmqPojo);
     }
     
-    private Map<String, Object> buildParquetFileReader() {
-		DataxParquetFilePojo dataxParquetFilePojo = new DataxParquetFilePojo();
-		dataxParquetFilePojo.setJdbcDatasource(writerDatasource);
-		List<Map<String, Object>> columns = Lists.newArrayList();
-        buildColumns(writerColumns, columns);
-        dataxParquetFilePojo.setColumns(columns);
-        dataxParquetFilePojo.setEncoding(parquetFileReaderDto.getEncoding());
-        dataxParquetFilePojo.setFieldDelimiter(parquetFileReaderDto.getFieldDelimiter());
-        dataxParquetFilePojo.setHost(writerDatasource.getJdbcUrl());
-        dataxParquetFilePojo.setPath(parquetFileReaderDto.getPath());
-		return writerPlugin.buildParquetFile(dataxParquetFilePojo);
-	}
-
     private void buildColumns(List<String> columns, List<Map<String, Object>> returnColumns) {
         columns.forEach(c -> {
             Map<String, Object> column = Maps.newLinkedHashMap();

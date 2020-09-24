@@ -17,7 +17,7 @@ public class RabbitmqWriterDto implements Serializable {
 	/**
      * 列名
      */
-    private List<Map<String, Object>> columns;
+    private List<String> columns;
 
     /**
      * 端口

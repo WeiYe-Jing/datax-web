@@ -26,11 +26,6 @@ public class DataxParquetFilePojo {
     private JobDatasource jdbcDatasource;
 
     /**
-     * ip地址
-     */
-    private String host;
-    
-    /**
      * 文件路径
      */
     private String path;
@@ -40,9 +35,4 @@ public class DataxParquetFilePojo {
      */
     private String encoding;
     
-    /**
-     * 分隔符
-     */
-    private String fieldDelimiter;
-
 }

@@ -18,15 +18,14 @@ public class ParquetFileReader extends BaseReaderPlugin implements DataxReaderIn
     return null;
   }
 
-  public Map<String, Object> buildHbase(DataxParquetFilePojo plugin) {
+  public Map<String, Object> buildParquetFile(DataxParquetFilePojo plugin) {
     //构建
     Map<String, Object> readerObj = Maps.newLinkedHashMap();
     readerObj.put("name", getName());
     Map<String, Object> parameterObj = Maps.newLinkedHashMap();
     
-    parameterObj.put("path", plugin.getHost());
+    parameterObj.put("path", plugin.getPath());
     parameterObj.put("encoding", StringUtils.isNotBlank(plugin.getEncoding()) ? plugin.getEncoding() : "UTF-8");
-    parameterObj.put("fieldDelimiter", plugin.getFieldDelimiter());
     parameterObj.put("column", plugin.getColumns());
     readerObj.put("parameter", parameterObj);
     return readerObj;

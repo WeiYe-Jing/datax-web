@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.entity;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
@@ -10,7 +11,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -158,15 +162,27 @@ public class JobDatasource extends Model<JobDatasource> {
     }
     
     /**
+     * 获取字段List
+     * @return List
+     */
+    public List<JSONObject> getColumnxList() {
+    	List<JSONObject> columnMapList = null;
+    	if (StringUtils.isNotBlank(this.getColumnx())) {
+    		columnMapList = JSONArray.parseArray(this.getColumnx(), JSONObject.class);
+    	}
+    	return columnMapList == null ? new ArrayList<>() : columnMapList;
+    }
+    
+    /**
      * 获取扩展属性的Json
      * @return
      */
     public JSONObject getExtraJson() {
+    	JSONObject extra = null;
     	if (StringUtils.isNotBlank(this.getExtra())) {
-        	JSONObject extra = JSONObject.parseObject(this.getExtra());
-        	return extra;
+        	extra = JSONObject.parseObject(this.getExtra());
         }
-    	return new JSONObject();
+    	return null == extra ? new JSONObject() : extra;
     }
     
     /**
@@ -174,11 +190,22 @@ public class JobDatasource extends Model<JobDatasource> {
      * @return
      */
     public String getPort() {
-    	String port = "5672";
-        if (StringUtils.isNotBlank(this.getExtra())) {
-        	JSONObject extra = JSONObject.parseObject(this.getExtra());
-        	port = extra.getString("port");
-        }
-        return port;
+        return getExtraJson().getString("port");
+    }
+    
+    /**
+     * 获取编码
+     * @return
+     */
+    public String getEncoding() {
+    	return getExtraJson().getString("encoding");
+    }
+    
+    /**
+     * 获取字段分隔符
+     * @return
+     */
+    public String getFieldDelimiter() {
+    	return getExtraJson().getString("fieldDelimiter");
     }
 }

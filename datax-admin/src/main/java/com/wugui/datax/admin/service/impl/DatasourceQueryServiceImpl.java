@@ -1,23 +1,26 @@
 package com.wugui.datax.admin.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
-
-import com.alibaba.fastjson.JSONArray;
-import com.google.common.collect.Lists;
-import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.service.DatasourceQueryService;
-import com.wugui.datax.admin.service.JobDatasourceService;
-import com.wugui.datax.admin.tool.query.*;
-import com.wugui.datax.admin.util.JdbcConstants;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.service.DatasourceQueryService;
+import com.wugui.datax.admin.service.JobDatasourceService;
+import com.wugui.datax.admin.tool.query.BaseQueryTool;
+import com.wugui.datax.admin.tool.query.HBaseQueryTool;
+import com.wugui.datax.admin.tool.query.MongoDBQueryTool;
+import com.wugui.datax.admin.tool.query.QueryToolFactory;
+import com.wugui.datax.admin.util.JdbcConstants;
+
+import cn.hutool.core.util.ObjectUtil;
 
 /**
  * datasource query
@@ -110,14 +113,14 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
         		|| JdbcConstants.RABBITMQ.equalsIgnoreCase(datasourceType)
         		|| JdbcConstants.TEXT_FILE.equalsIgnoreCase(datasourceType)) {
         	if (StringUtils.isNotBlank(datasource.getColumnx())) {
-        		List<Map> columnMapList = JSONArray.parseArray(datasource.getColumnx(), Map.class);
+        		List<JSONObject> columnMapList = datasource.getColumnxList();
         		List<String> columnList = new ArrayList<>();
-        		for (Map map : columnMapList) {
-        			columnList.add((String)map.get("name"));
+        		for (JSONObject json : columnMapList) {
+        			columnList.add((String)json.get("name"));
 				}
         		return columnList;
         	}
-        	return Lists.newArrayList("column");
+        	return Lists.newArrayList("*");
     	} else {
             BaseQueryTool queryTool = QueryToolFactory.getByDbType(datasource);
             return queryTool.getColumnNames(tableName, datasourceType);

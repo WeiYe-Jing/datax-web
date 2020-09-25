@@ -14,8 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Created by jingwk on 2020/01/30
@@ -56,6 +61,27 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobDatasourceMapper, J
     @Override
     public List<JobDatasource> selectAllDatasource() {
         return datasourceMapper.selectList(null);
+    }
+
+    @Override
+    public List<Map<String,String>> getJdbcJars() {
+        List<Map<String,String>> jdbcJars = new ArrayList<>();
+        try {
+            String baseUrl = this.getClass().getClassLoader().getResource("").toString();
+            File [] files = new File(this.getClass().getClassLoader().getResource("").getPath()).listFiles();
+            for (File file:files) {
+                String fileName = file.getName();
+                if(fileName.endsWith(".jar")){
+                    Map<String,String> map = new HashMap<>();
+                    map.put("label",file.getName());
+                    map.put("value",baseUrl + file.getName());
+                    jdbcJars.add(map);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jdbcJars;
     }
 
 }

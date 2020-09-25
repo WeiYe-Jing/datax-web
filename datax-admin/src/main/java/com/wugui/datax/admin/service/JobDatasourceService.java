@@ -5,6 +5,7 @@ import com.wugui.datax.admin.entity.JobDatasource;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * jdbc数据源配置表服务接口
@@ -33,4 +34,7 @@ public interface JobDatasourceService extends IService<JobDatasource> {
      * @return
      */
     List<JobDatasource> selectAllDatasource();
+
+    List<Map<String,String>> getJdbcJars();
+
 }

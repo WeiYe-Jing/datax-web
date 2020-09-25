@@ -78,6 +78,12 @@ public class JobDatasource extends Model<JobDatasource> {
     private String jdbcDriverClass;
 
     /**
+     * jdbc驱动类
+     */
+    @ApiModelProperty(value = "jdbc驱动类文件")
+    private String jdbcDriverName;
+
+    /**
      * 状态：0删除 1启用 2禁用
      */
     @TableLogic

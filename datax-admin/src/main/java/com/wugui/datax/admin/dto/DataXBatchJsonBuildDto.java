@@ -29,4 +29,8 @@ public class DataXBatchJsonBuildDto implements Serializable {
     private RdbmsReaderDto rdbmsReader;
 
     private RdbmsWriterDto rdbmsWriter;
+
+    private HiveWriterDto hiveWriter;
+
+    private HiveReaderDto hiveReader;
 }

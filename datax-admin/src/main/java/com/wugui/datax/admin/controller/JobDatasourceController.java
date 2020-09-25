@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * jdbc数据源配置控制器层
@@ -128,6 +129,17 @@ public class JobDatasourceController extends BaseController {
     @PostMapping("/test")
     @ApiOperation("测试数据")
     public R<Boolean> dataSourceTest (@RequestBody JobDatasource jobJdbcDatasource) throws IOException {
+        LocalCacheUtil.remove(jobJdbcDatasource.getDatasourceName());
         return success(jobJdbcDatasourceService.dataSourceTest(jobJdbcDatasource));
+    }
+
+    /**
+     * 获取可用的驱动jar名称列表
+     * @return
+     */
+    @GetMapping("/getJdbcJars")
+    @ApiOperation("获取jdbc驱动文件")
+    public R<List<Map<String,String>>> getJdbcJars () throws IOException {
+        return success(jobJdbcDatasourceService.getJdbcJars());
     }
 }

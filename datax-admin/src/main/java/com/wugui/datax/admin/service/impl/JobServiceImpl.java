@@ -10,15 +10,20 @@ import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.DataXJsonBuildDto;
-import com.wugui.datax.admin.entity.JobGroup;
-import com.wugui.datax.admin.entity.JobInfo;
-import com.wugui.datax.admin.entity.JobLogReport;
-import com.wugui.datax.admin.entity.JobTemplate;
+import com.wugui.datax.admin.dto.HiveReaderDto;
+import com.wugui.datax.admin.dto.HiveWriterDto;
+import com.wugui.datax.admin.entity.*;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.DataxJsonService;
+import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.service.JobService;
+import com.wugui.datax.admin.tool.datax.writer.HiveWriter;
+import com.wugui.datax.admin.tool.query.BaseQueryTool;
+import com.wugui.datax.admin.tool.query.QueryToolFactory;
 import com.wugui.datax.admin.util.DateFormatUtils;
+import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +61,8 @@ public class JobServiceImpl implements JobService {
     private JobTemplateMapper jobTemplateMapper;
     @Resource
     private DataxJsonService dataxJsonService;
+    @Resource
+    private JobDatasourceService jobDatasourceService;
 
     @Override
     public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
@@ -438,6 +445,48 @@ public class JobServiceImpl implements JobService {
             jsonBuild.setRdbmsReader(dto.getRdbmsReader());
             jsonBuild.setRdbmsWriter(dto.getRdbmsWriter());
 
+            JobDatasource readerDatasource = jobDatasourceService.getById(dto.getReaderDatasourceId());
+            JobDatasource writerDatasource = jobDatasourceService.getById(dto.getWriterDatasourceId());
+
+            if(dto.getHiveReader() != null && JdbcConstants.HIVE.equals(readerDatasource.getDatasource())){
+                // 构建hiveWriterDto对象
+                HiveReaderDto hiveReaderDto = dto.getHiveReader();
+                BaseQueryTool queryTool = QueryToolFactory.getByDbType(readerDatasource);
+                String ddl = queryTool.getTableDDL(wrTables.get(i));
+                if(ddl.contains("ORCFILE") || ddl.contains("orcfile")){
+                    hiveReaderDto.setReaderFileType("orc");
+                }else{
+                    hiveReaderDto.setReaderFileType("text");
+                }
+                String tag = "FIELDS TERMINATED BY ";
+                String fieldDelimiter = StringUtil.find(ddl,tag);
+                hiveReaderDto.setReaderFieldDelimiter(fieldDelimiter);
+                String location = StringUtil.find(ddl,"LOCATION");
+                hiveReaderDto.setReaderDefaultFS(location.substring(0,StringUtil.getCharacterPosition(location,"/",3)));
+                hiveReaderDto.setReaderPath(location.substring(StringUtil.getCharacterPosition(location,"/",3)));
+                jsonBuild.setHiveReader(hiveReaderDto);
+            }
+
+            if(dto.getHiveWriter() != null && JdbcConstants.HIVE.equals(writerDatasource.getDatasource())){
+                // 构建hiveWriterDto对象
+                HiveWriterDto hiveWriterDto = dto.getHiveWriter();
+                BaseQueryTool queryTool = QueryToolFactory.getByDbType(writerDatasource);
+                String ddl = queryTool.getTableDDL(wrTables.get(i));
+                if(ddl.contains("ORCFILE") || ddl.contains("orcfile")){
+                    hiveWriterDto.setWriterFileType("orc");
+                }else{
+                    hiveWriterDto.setWriterFileType("text");
+                }
+                String tag = "FIELDS TERMINATED BY ";
+                String fieldDelimiter = StringUtil.find(ddl,tag);
+                hiveWriterDto.setWriteFieldDelimiter(fieldDelimiter);
+                String location = StringUtil.find(ddl,"LOCATION");
+                hiveWriterDto.setWriterDefaultFS(location.substring(0,StringUtil.getCharacterPosition(location,"/",3)));
+                hiveWriterDto.setWriterFileName(location.substring(location.lastIndexOf("/") + 1));
+                hiveWriterDto.setWriterPath(location.substring(StringUtil.getCharacterPosition(location,"/",3)));
+                jsonBuild.setHiveWriter(hiveWriterDto);
+            }
+
             List<String> rdTable = new ArrayList<>();
             rdTable.add(rdTables.get(i));
             jsonBuild.setReaderTables(rdTable);
@@ -447,7 +496,7 @@ public class JobServiceImpl implements JobService {
             jsonBuild.setWriterTables(wdTable);
 
             String json = dataxJsonService.buildJobJson(jsonBuild);
-
+            json = json.replace("\\\\","\\");
             JobTemplate jobTemplate = jobTemplateMapper.loadById(dto.getTemplateId());
             JobInfo jobInfo = new JobInfo();
             BeanUtils.copyProperties(jobTemplate, jobInfo);

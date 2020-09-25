@@ -14,12 +14,15 @@ import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.wugui.datax.admin.util.AESUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
+import com.wugui.datax.admin.util.StringUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,7 +45,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      */
     private DatabaseInterface sqlBuilder;
 
-    private DataSource datasource;
+//    private DataSource datasource;
 
     private Connection connection;
     /**
@@ -57,14 +60,17 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * @param jobDatasource
      */
     BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
+//        getDataSource(jobDatasource);
         if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
             getDataSource(jobDatasource);
         } else {
             this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
-            if (!this.connection.isValid(500)) {
-                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
-                getDataSource(jobDatasource);
-            }
+            // 因为jtds不支持。isValid方法的调用（Caused by: java.lang.AbstractMethodError: null）
+            // 但是此处暂时不确定怎么处理比较好
+//            if (!this.connection.isValid(500)) {
+//                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
+//                getDataSource(jobDatasource);
+//            }
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
         currentSchema = getSchema(jobDatasource.getJdbcUsername());
@@ -75,17 +81,38 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     private void getDataSource(JobDatasource jobDatasource) throws SQLException {
         String userName = AESUtil.decrypt(jobDatasource.getJdbcUsername());
 
-        //这里默认使用 hikari 数据源
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setUsername(userName);
-        dataSource.setPassword(AESUtil.decrypt(jobDatasource.getJdbcPassword()));
-        dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
-        dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
-        dataSource.setMaximumPoolSize(1);
-        dataSource.setMinimumIdle(0);
-        dataSource.setConnectionTimeout(30000);
-        this.datasource = dataSource;
-        this.connection = this.datasource.getConnection();
+        try{
+            if(StringUtils.isNotBlank(jobDatasource.getJdbcDriverName())){
+                URL path = new URL(jobDatasource.getJdbcDriverName());
+                URLClassLoader ucl = new URLClassLoader(new URL[] { path });
+                Driver d = (Driver)Class.forName(jobDatasource.getJdbcDriverClass(), true, ucl).newInstance();
+                DriverShim driver = new DriverShim(d);
+                DriverManager.registerDriver(driver);
+                this.connection = DriverManager.getConnection(jobDatasource.getJdbcUrl(),userName,AESUtil.decrypt(jobDatasource.getJdbcPassword()));
+            }else{
+                Class.forName(jobDatasource.getJdbcDriverClass());
+                DriverManager.setLoginTimeout(30000);
+                this.connection = DriverManager.getConnection(jobDatasource.getJdbcUrl(),userName,AESUtil.decrypt(jobDatasource.getJdbcPassword()));
+            }
+        }catch (Exception e){
+            logger.error("jdbc出错!", e);
+        }
+
+//        //这里默认使用 hikari 数据源
+//        HikariDataSource dataSource = new HikariDataSource();
+//        dataSource.setUsername(userName);
+//        dataSource.setPassword(AESUtil.decrypt(jobDatasource.getJdbcPassword()));
+//        dataSource.setJdbcUrl(jobDatasource.getJdbcUrl());
+//        dataSource.setDriverClassName(jobDatasource.getJdbcDriverClass());
+//        dataSource.setMaximumPoolSize(1);
+//        dataSource.setMinimumIdle(0);
+//        dataSource.setConnectionTimeout(30000);
+//        // 这个位置暂时是为了适配jtds,当然也可以根据数据库类型我们给所有的数据库类型都加上testSql
+//        if(jobDatasource.getJdbcDriverClass().contains("jtds")){
+//            dataSource.setConnectionTestQuery("SELECT 1");
+//        }
+//        this.datasource = dataSource;
+//        this.connection = this.datasource.getConnection();
     }
 
     //根据connection获取schema
@@ -511,5 +538,32 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
     protected String getSQLQueryTableSchema() {
         return sqlBuilder.getSQLQueryTableSchema();
+    }
+
+
+    /**
+     * 获取表的DDL语句
+     * @param tableName
+     * @return
+     */
+    public String getTableDDL(String tableName){
+        String ddl = "";
+        String querySql = "show create table " + tableName;
+        if (StringUtils.isNotBlank(tableName)) {
+            Statement stmt = null;
+            try {
+                stmt = connection.createStatement();
+                ResultSet result = stmt.executeQuery(querySql);
+                while(result.next()){
+                    ddl += result.getString(1);
+                }
+            } catch (SQLException e) {
+                logger.error("[executeCreateTableSql Exception] --> "
+                        + "the exception message is:" + e.getMessage());
+            } finally {
+                JdbcUtils.close(stmt);
+            }
+        }
+        return ddl;
     }
 }

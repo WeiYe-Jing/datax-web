@@ -430,6 +430,18 @@ public class JobServiceImpl implements JobService {
 
         DataXJsonBuildDto jsonBuild = new DataXJsonBuildDto();
 
+        List<String> rdTablesBack = new ArrayList<>(rdTables);
+        List<String> wrTablesBack = new ArrayList<>(wrTables);
+
+        if(StringUtils.isNotBlank(dto.getReaderSchema())){
+            rdTables.clear();
+            rdTablesBack.stream().forEach(tableName -> rdTables.add(dto.getReaderSchema() + "." + tableName));
+        }
+        if(StringUtils.isNotBlank(dto.getWriterSchema())){
+            wrTables.clear();
+            wrTablesBack.stream().forEach(tableName -> wrTablesBack.add(dto.getWriterSchema() + "." + tableName));
+        }
+
         List<String> rColumns;
         List<String> wColumns;
         for (int i = 0; i < rdTables.size(); i++) {

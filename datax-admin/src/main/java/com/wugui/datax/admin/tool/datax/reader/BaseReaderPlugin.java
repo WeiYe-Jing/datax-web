@@ -50,6 +50,10 @@ public abstract class BaseReaderPlugin extends BaseDataxPlugin {
         }
         parameterObj.put("splitPk",plugin.getSplitPk());
         connectionObj.put("jdbcUrl", ImmutableList.of(jobDatasource.getJdbcUrl()));
+        connectionObj.put("driverName", jobDatasource.getJdbcDriverClass());
+        if(StringUtils.isNotBlank(jobDatasource.getJdbcDriverName())){
+            connectionObj.put("jdbcJarUrl", jobDatasource.getJdbcDriverName());
+        }
 
         parameterObj.put("connection", ImmutableList.of(connectionObj));
 

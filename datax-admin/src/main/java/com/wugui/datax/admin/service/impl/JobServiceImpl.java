@@ -435,11 +435,25 @@ public class JobServiceImpl implements JobService {
 
         if(StringUtils.isNotBlank(dto.getReaderSchema())){
             rdTables.clear();
-            rdTablesBack.stream().forEach(tableName -> rdTables.add(dto.getReaderSchema() + "." + tableName));
+            rdTablesBack.stream().forEach(tableName -> {
+                String prefix = dto.getReaderSchema() + ".";
+                if(tableName.startsWith(prefix)){
+                    rdTables.add(tableName);
+                }else{
+                    rdTables.add(prefix + tableName);
+                }
+            });
         }
         if(StringUtils.isNotBlank(dto.getWriterSchema())){
             wrTables.clear();
-            wrTablesBack.stream().forEach(tableName -> wrTablesBack.add(dto.getWriterSchema() + "." + tableName));
+            wrTablesBack.stream().forEach(tableName -> {
+                String prefix = dto.getWriterSchema() + ".";
+                if(tableName.startsWith(prefix)){
+                    wrTables.add(tableName);
+                }else{
+                    wrTables.add(prefix + tableName);
+                }
+            });
         }
 
         List<String> rColumns;

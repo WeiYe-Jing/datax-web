@@ -18,3 +18,5 @@
 /build/
 /packages/
 /datax-assembly/target/
+datax-web-sdk/target/*
+datax-web-sdk-spring-boot-starter/target/*

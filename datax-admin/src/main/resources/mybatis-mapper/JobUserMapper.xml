@@ -9,6 +9,8 @@
         <result column="password" property="password"/>
         <result column="role" property="role" />
         <result column="permission" property="permission" />
+        <result column="accesskey" property="accessKey" />
+        <result column="secretkey" property="secretKey" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -16,14 +18,18 @@
 		t.username,
 		t.password,
 		t.role,
-		t.permission
+		t.permission,
+		t.accesskey,
+		t.secretkey
 	</sql>
 
     <sql id="Show_Column_List">
 		t.id,
 		t.username,
 		t.role,
-		t.permission
+		t.permission,
+		t.accesskey,
+		t.secretkey
 	</sql>
 
     <select id="pageList" parameterType="java.util.HashMap" resultMap="JobUser">
@@ -84,6 +90,16 @@
         WHERE t.id = #{userId}
     </select>
 
+    <select id="getUserByAccesskey" parameterType="java.util.HashMap" resultMap="JobUser">
+        SELECT
+        t.id,
+        t.username,
+		t.secretkey,
+		t.role
+        FROM job_user AS t
+        WHERE t.accesskey = #{accesskey}
+    </select>
+
     <insert id="save" parameterType="com.wugui.datax.admin.entity.JobUser" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO job_user (
 			username,
@@ -106,6 +122,13 @@
         </if>
         role = #{role},
         permission = #{permission}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateKey" parameterType="com.wugui.datax.admin.entity.JobUser" >
+        UPDATE job_user
+        SET accesskey = #{accesskey},
+            secretkey = #{secretkey}
         WHERE id = #{id}
     </update>
 

@@ -17,6 +17,10 @@ public class JobUser {
     private String role;
     @ApiModelProperty("权限：执行器ID列表，多个逗号分割")
     private String permission;
+    @ApiModelProperty("应用SDK接入：接入标识")
+    private String accessKey;
+    @ApiModelProperty("应用SDK接入：接入密钥")
+    private String secretKey;
 
     public int getId() {
         return id;
@@ -58,8 +62,24 @@ public class JobUser {
         this.permission = permission;
     }
 
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
     // plugin
-    public boolean validPermission(int jobGroup){
+    public boolean validPermission(int jobGroup) {
         if ("1".equals(this.role)) {
             return true;
         } else {

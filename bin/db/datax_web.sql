@@ -199,6 +199,8 @@ CREATE TABLE `job_user`  (
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '角色：0-普通用户、1-管理员',
   `permission` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限：执行器ID列表，多个逗号分割',
+  `accesskey` varchar(8) DEFAULT NULL COMMENT '应用SDK接入：接入标识',
+  `secretkey` varchar(64) DEFAULT NULL COMMENT '应用SDK接入：接入密钥',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `i_username`(`username`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;

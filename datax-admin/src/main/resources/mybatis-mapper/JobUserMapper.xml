@@ -127,8 +127,8 @@
 
     <update id="updateKey" parameterType="com.wugui.datax.admin.entity.JobUser" >
         UPDATE job_user
-        SET accesskey = #{accesskey},
-            secretkey = #{secretkey}
+        SET accesskey = #{accessKey},
+            secretkey = #{secretKey}
         WHERE id = #{id}
     </update>
 

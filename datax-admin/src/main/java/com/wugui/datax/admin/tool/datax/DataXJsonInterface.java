@@ -10,7 +10,7 @@ import java.util.Map;
  * @Version 2.1.1
  * @since 2020/03/14 12:24
  */
-public interface DataxJsonInterface {
+public interface DataXJsonInterface {
 
     /**
      * buildJob
@@ -23,7 +23,6 @@ public interface DataxJsonInterface {
      * build core setting
      */
     Map<String,Object> buildCore();
-
 
     /**
      * buildSetting

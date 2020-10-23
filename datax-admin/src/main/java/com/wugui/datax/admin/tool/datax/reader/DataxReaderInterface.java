@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.tool.datax.reader;
 
-import com.wugui.datax.admin.tool.datax.DataxPluginInterface;
+import com.wugui.datax.admin.tool.datax.DataXPluginInterface;
 
 /**
  * 用于构建reader的接口
@@ -9,7 +9,5 @@ import com.wugui.datax.admin.tool.datax.DataxPluginInterface;
  * @version 1.0
  * @since 2019/7/30
  */
-public interface DataxReaderInterface extends DataxPluginInterface {
-
-
+public interface DataxReaderInterface extends DataXPluginInterface {
 }

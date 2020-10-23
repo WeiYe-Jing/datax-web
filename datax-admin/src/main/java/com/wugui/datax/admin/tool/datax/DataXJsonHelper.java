@@ -36,7 +36,7 @@ import java.util.Map;
  * @since 2020/03/14 08:24
  */
 @Data
-public class DataxJsonHelper implements DataxJsonInterface {
+public class DataXJsonHelper implements DataXJsonInterface {
 
     /**
      * 读取的表，根据datax示例，支持多个表（先不考虑，后面再去实现， 这里先用list保存吧）

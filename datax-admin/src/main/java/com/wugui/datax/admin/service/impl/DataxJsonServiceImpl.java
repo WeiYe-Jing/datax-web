@@ -6,9 +6,8 @@ import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobDatasourceService;
-import com.wugui.datax.admin.tool.datax.DataxJsonHelper;
+import com.wugui.datax.admin.tool.datax.DataXJsonHelper;
 import com.wugui.datax.admin.tool.table.TableNameHandle;
-import com.wugui.datax.admin.util.JdbcConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class DataxJsonServiceImpl implements DataxJsonService {
 
     @Override
     public String buildJobJson(DataXJsonBuildDTO dataXJsonBuildDto) {
-        DataxJsonHelper dataxJsonHelper = new DataxJsonHelper();
+        DataXJsonHelper dataxJsonHelper = new DataXJsonHelper();
       
         // reader
         JobDatasource readerDatasource = jobDataSourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());

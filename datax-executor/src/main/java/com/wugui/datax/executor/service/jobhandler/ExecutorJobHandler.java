@@ -204,10 +204,18 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         Map<Boolean, String> result = new HashMap<Boolean, String>();
         //兼容只配置 DATAX_HOME 情况
         String dataxHome = SystemUtils.getDataXHomePath();
-        String dataxHomePyFile = dataxHome + "bin" +  File.separator + DEFAULT_DATAX_PY;
-        if (!FileUtil.exist(dataxHomePyFile) || dataXPyPath == null ||
-                !dataXPyPath.endsWith("datax.py")
-                || "".equals(dataXPyPath)
+        String dataxHomePyFile;
+
+        if (StringUtils.isNotEmpty(dataxHome)){
+            dataxHome = dataxHome.endsWith(File.separator) ? dataxHome : dataxHome.concat(File.separator);
+            dataxHomePyFile = dataxHome + "bin" +  File.separator + DEFAULT_DATAX_PY;
+            if (FileUtil.exist(dataxHomePyFile)){
+                result.put(true, "您配置的DataX的地址正确!");
+                return result;
+            }
+        }
+
+        if ( dataXPyPath == null || !dataXPyPath.endsWith("datax.py") || "".equals(dataXPyPath)
         ) {
             result.put(false, String.format("%S %S", "你的datax配置的可能不正确,您配置的DataX的地址为" + dataXPyPath, "应该为:$DATAX_HOME/bin/datax.py"));
             return result;

@@ -28,6 +28,8 @@ public class SdkConfig {
 			throw new RuntimeException("datax.web.admin.secretKey is required!");
 		}
 		client.setWebUrl(urlProperties.getUrl());
+		client.setAccessKey(urlProperties.getAccesskey());
+		client.setSecretKey(urlProperties.getSecretkey());
 		URLProperties.Api api = urlProperties.getApi();
 		if (api == null) {
 			return client;

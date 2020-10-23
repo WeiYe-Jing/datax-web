@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -118,6 +119,13 @@ public class JobServiceImpl implements JobService {
         // fix "\r" in shell
         if (GlueTypeEnum.GLUE_SHELL == GlueTypeEnum.match(jobInfo.getGlueType()) && jobInfo.getGlueSource() != null) {
             jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
+        }
+
+        // compress
+        if (GlueTypeEnum.DATAX == GlueTypeEnum.match(jobInfo.getGlueType()) || GlueTypeEnum.JAVA_BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
+            if (StringUtils.isNotBlank(jobInfo.getJobJson())) {
+                jobInfo.setJobJson(jsonMin(jobInfo.getJobJson()));
+            }
         }
 
         // ChildJobId valid
@@ -255,8 +263,8 @@ public class JobServiceImpl implements JobService {
         exists_jobInfo.setTriggerNextTime(nextTriggerTime);
         exists_jobInfo.setUpdateTime(new Date());
 
-        if (GlueTypeEnum.DATAX.getDesc().equals(jobInfo.getGlueType()) || GlueTypeEnum.JAVA_BEAN.getDesc().equals(jobInfo.getGlueType())) {
-            exists_jobInfo.setJobJson(jobInfo.getJobJson());
+        if (GlueTypeEnum.DATAX == GlueTypeEnum.match(jobInfo.getGlueType()) || GlueTypeEnum.JAVA_BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
+            exists_jobInfo.setJobJson(jsonMin(jobInfo.getJobJson()));
             exists_jobInfo.setGlueSource(null);
         } else {
             exists_jobInfo.setGlueSource(jobInfo.getGlueSource());
@@ -462,4 +470,25 @@ public class JobServiceImpl implements JobService {
         }
         return ReturnT.SUCCESS;
     }
+
+    /**
+     * 压缩JSON字符串，去除多余的空格、换行等，减少数据库存储
+     *
+     * @param json
+     * @return {@link String}
+     * @author jiangyang
+     * @date 2020/10/23
+     */
+    private String jsonMin(String json){
+        String res = null;
+        try {
+            Object object = JSON.parse(json);
+            res = JSON.toJSONString(object);
+        } catch (Exception e) {
+            logger.error("非json字符串");
+            res = json;
+        }
+        return res;
+    }
+
 }

@@ -109,31 +109,40 @@ public class DataxJsonHelper implements DataxJsonInterface {
             case MYSQL:
                 readerPlugin = new MysqlReader();
                 buildReader = buildReader();
+                break;
             case SQLSERVER:
                 readerPlugin = new SqlServerReader();
                 buildReader = buildReader();
+                break;
             case POSTGRESQL:
             case GREENPLUM:
                 readerPlugin = new PostgresqlReader();
                 buildReader = buildReader();
+                break;
             case ORACLE:
                 readerPlugin = new OracleReader();
                 buildReader = buildReader();
+                break;
             case CLICKHOUSE:
                 readerPlugin = new ClickHouseReader();
                 buildReader = buildReader();
+                break;
             case HIVE:
-                readerPlugin = new HBaseReader();
-                buildReader = buildHBaseReader();
+                readerPlugin = new HiveReader();
+                buildReader = buildHiveReader();
+                break;
             case MONGODB:
                 readerPlugin = new MongoDBReader();
                 buildReader = buildMongoDBReader();
+                break;
             case HBASE:
                 readerPlugin = new HBaseReader();
                 buildReader = buildHBaseReader();
+                break;
             case DB2:
                 readerPlugin = new DB2Reader();
                 buildReader = buildReader();
+                break;
         }
     }
 
@@ -151,33 +160,43 @@ public class DataxJsonHelper implements DataxJsonInterface {
             case MYSQL:
                 writerPlugin = new MysqlWriter();
                 buildWriter = this.buildWriter();
+                break;
             case SQLSERVER:
                 writerPlugin = new SqlServerlWriter();
                 buildWriter = this.buildWriter();
+                break;
             case POSTGRESQL:
                 writerPlugin = new PostgresqllWriter();
                 buildWriter = this.buildWriter();
+                break;
             case GREENPLUM:
                 writerPlugin = new GreenPlumWriter();
                 buildWriter = this.buildWriter();
+                break;
             case ORACLE:
                 writerPlugin = new OraclelWriter();
                 buildWriter = this.buildWriter();
+                break;
             case CLICKHOUSE:
                 writerPlugin = new ClickHouseWriter();
                 buildWriter = buildWriter();
+                break;
             case HIVE:
                 writerPlugin = new HiveWriter();
                 buildWriter = this.buildHiveWriter();
+                break;
             case MONGODB:
                 writerPlugin = new MongoDBWriter();
                 buildWriter = this.buildMongoDBWriter();
+                break;
             case HBASE:
                 writerPlugin = new HBaseWriter();
                 buildWriter = this.buildHBaseWriter();
+                break;
             case DB2:
                 readerPlugin = new DB2Writer();
                 buildReader = buildWriter();
+                break;
         }
     }
 

@@ -50,13 +50,11 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 
 
     BaseQueryTool(DbType dbType, String parameter) {
-
         sqlBuilder = DatabaseMetaFactory.getByDbType(dbType);
         connection= DriverConnectionFactory.getConnection(dbType,parameter);
-
-        BaseDataSource datasourceForm = DataSourceFactory.getDatasource(dbType, parameter);
-
-        currentSchema = getSchema(datasourceForm.getUser());
+        BaseDataSource datasource = DataSourceFactory.getDatasource(dbType, parameter);
+        currentSchema = getSchema(datasource.getUser());
+        currentDatabase=datasource.getDatabase();
     }
 
     /**

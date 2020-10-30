@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.datatx.core.datasource.BaseDataSource;
 import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
+import com.wugui.datax.admin.tool.datax.BaseDataXPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @Version 1.0
  * @since 2019/8/2 16:27
  */
-public abstract class BaseReaderPlugin extends BaseDataxPlugin {
+public abstract class BaseReaderPlugin extends BaseDataXPlugin {
 
 
     @Override

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * @Version 1.0
  * @since 2019/7/31 9:45
  */
-public abstract class BaseDataxPlugin implements DataXPluginInterface {
+public abstract class BaseDataXPlugin implements DataXPluginInterface {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 

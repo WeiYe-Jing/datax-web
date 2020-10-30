@@ -39,13 +39,13 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     /**
      * 用于获取查询语句
      */
-    private DatabaseInterface sqlBuilder;
+    private final DatabaseInterface sqlBuilder;
 
-    private Connection connection;
+    private final Connection connection;
 
-    private String currentSchema;
+    private final String currentSchema;
 
-    private String currentDatabase;
+    private final String currentDatabase;
 
 
 

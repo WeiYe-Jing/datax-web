@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.wugui.datatx.core.datasource.BaseDataSource;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
+import com.wugui.datax.admin.tool.datax.BaseDataXPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * @Version 1.0
  * @since 2019/8/2 16:28
  */
-public abstract class BaseWriterPlugin extends BaseDataxPlugin {
+public abstract class BaseWriterPlugin extends BaseDataXPlugin {
 
     /**
      * 不要在方法里定义正则表达式规则,应定义为常量或字段,能加快正则匹配速度

@@ -69,9 +69,9 @@ public class DataXJsonHelper implements DataXJsonInterface {
 
     private Map<String, Object> buildWriter;
 
-    private BaseDataxPlugin readerPlugin;
+    private BaseDataXPlugin readerPlugin;
 
-    private BaseDataxPlugin writerPlugin;
+    private BaseDataXPlugin writerPlugin;
 
     private HiveReaderDTO hiveReaderDto;
 

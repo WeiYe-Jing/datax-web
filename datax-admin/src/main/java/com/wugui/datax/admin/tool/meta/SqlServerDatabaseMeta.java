@@ -39,5 +39,10 @@ public class SqlServerDatabaseMeta extends BaseDatabaseMeta implements DatabaseI
     public String getSQLQueryTableSchema(String... args) {
         return "select distinct schema_name(schema_id) from sys.objects where type ='U';";
     }
-
+    
+    @Override
+    public String getSQLQueryFields(String tableName) {
+        tableName = "[" + tableName.replaceAll("[.]","].[") + "]";
+        return "SELECT * FROM " + tableName + " where 1=0";
+    }
 }

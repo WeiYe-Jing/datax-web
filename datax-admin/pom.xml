@@ -27,13 +27,13 @@
 
     <dependencies>
 
-<!--        <dependency>-->
-<!--            <groupId>com.dazhen</groupId>-->
-<!--            <artifactId>ada-sso-core</artifactId>-->
-<!--            <version>1.1.1-SNAPSHOT</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/src/main/resources/libs/ada-sso-core-1.1.1-SNAPSHOT-jar-with-dependencies.jar</systemPath>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.dazhen</groupId>
+            <artifactId>ada-sso-core</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/lib/ada-sso-core-1.1.1-SNAPSHOT-jar-with-dependencies.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

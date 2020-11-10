@@ -46,10 +46,11 @@ public class ExecutorJobHandler extends AbstractJobHandler {
     private String dataXPyPath;
 
     @Value("${datax.executor.pythonpath}")
-    private  String pythonPath;
+    private String pythonPath;
 
 
-    private  static final Pattern VARIABLE_PATTERN = Pattern.compile("(\\$)\\{?(\\w+)\\}?");
+    private static final Pattern VARIABLE_PATTERN = Pattern.compile("(\\$)\\{?(\\w+)\\}?");
+
     @Override
     public ReturnT<String> execute(TriggerParam trigger) {
 
@@ -68,7 +69,7 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         try {
             //检查运行环境
             checkEnv();
-            String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath,pythonPath);
+            String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath, pythonPath);
             String cmd = StringUtils.join(cmdarrayFinal, " ");
             JobLogger.log("------------------Command CMD is :" + cmd);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
@@ -122,14 +123,14 @@ public class ExecutorJobHandler extends AbstractJobHandler {
      */
     private void checkEnv() {
         //检查是否手动配置PythonHOME
-        Map<Boolean, String> checkPythonHOME = checkpythonPath();
-        JobLogger.log("------------------"+MapUtils.getFirstOrNull(checkPythonHOME));
+        Map<Boolean, String> checkPythonHOME = checkPythonPath();
+        JobLogger.log("------------------" + MapUtils.getFirstOrNull(checkPythonHOME));
         //检查是否正确配置datax.py
         Map<Boolean, String> checkDataXPATH = checkDataXPATH();
-        JobLogger.log("------------------"+MapUtils.getFirstOrNull(checkDataXPATH));
+        JobLogger.log("------------------" + MapUtils.getFirstOrNull(checkDataXPATH));
         //检查python版本是否是2.x版本
         Map<Boolean, String> checkPyVersionIs2X = checkPyVersionIs2X();
-        JobLogger.log("------------------"+MapUtils.getFirstOrNull(checkPyVersionIs2X));
+        JobLogger.log("------------------" + MapUtils.getFirstOrNull(checkPyVersionIs2X));
     }
 
     /**
@@ -142,15 +143,14 @@ public class ExecutorJobHandler extends AbstractJobHandler {
      * @date 2020/9/18
      */
     public static String replaceVariable(final String param, Map<String, String> variableMap) {
-        if (variableMap == null || variableMap.size() < 1) {
+        if (variableMap == null || variableMap.size() == 1) {
             return param;
         }
-        Map<String, String> mapping = new HashMap<String, String>();
+        Map<String, String> mapping = new HashMap<>();
 
         Matcher matcher = VARIABLE_PATTERN.matcher(param);
         while (matcher.find()) {
             String variable = matcher.group(2);
-
             String value = variableMap.get(variable);
             if (StringUtils.isBlank(value)) {
                 value = matcher.group();
@@ -165,7 +165,6 @@ public class ExecutorJobHandler extends AbstractJobHandler {
 
         return retString;
     }
-
 
 
     private String generateTemJsonFile(String jobJson) {
@@ -192,15 +191,14 @@ public class ExecutorJobHandler extends AbstractJobHandler {
      *
      * @return
      */
-    public Map<Boolean, String> checkpythonPath() {
-        Map<Boolean, String> result = new HashMap<Boolean, String>();
+    public Map<Boolean, String> checkPythonPath() {
+        Map<Boolean, String> result = new HashMap<>();
         if (pythonPath == null || pythonPath.equals("python")) {
             result.put(false, "没有手动配置pythonPath");
-            return result;
         } else {
             result.put(true, "手动配置了pythonPath为: " + pythonPath);
-            return result;
         }
+        return result;
     }
 
     /**
@@ -211,26 +209,25 @@ public class ExecutorJobHandler extends AbstractJobHandler {
      * v:msg
      */
     public Map<Boolean, String> checkDataXPATH() {
-        Map<Boolean, String> result = new HashMap<Boolean, String>();
-        //兼容只配置 DATAX_HOME 情况
+        Map<Boolean, String> result = new HashMap<>();
+        //兼容只配置 DataX_HOME 情况
         String dataxHome = SystemUtils.getDataXHomePath();
         String dataxHomePyFile;
 
-        if (StringUtils.isNotEmpty(dataxHome)){
+        if (StringUtils.isNotEmpty(dataxHome)) {
             dataxHome = dataxHome.endsWith(File.separator) ? dataxHome : dataxHome.concat(File.separator);
-            dataxHomePyFile = dataxHome + "bin" +  File.separator + DEFAULT_DATAX_PY;
-            if (FileUtil.exist(dataxHomePyFile)){
-                result.put(true, "您配置的DataX的地址正确!");
+            dataxHomePyFile = dataxHome + "bin" + File.separator + DEFAULT_DATAX_PY;
+            if (FileUtil.exist(dataxHomePyFile)) {
+                result.put(true, "DataX配置地址正确!");
                 return result;
             }
         }
 
-        if ( dataXPyPath == null || !dataXPyPath.endsWith("datax.py") || "".equals(dataXPyPath)
-        ) {
-            result.put(false, String.format("%S %S", "你的datax配置的可能不正确,您配置的DataX的地址为" + dataXPyPath, "应该为:$DATAX_HOME/bin/datax.py"));
+        if (!dataXPyPath.endsWith("datax.py") || StringUtils.isBlank(dataXPyPath)) {
+            result.put(false, String.format("%S %S", "datax执行文件配置可能不正确,配置的DataX的地址为" + dataXPyPath, "应该为:$DATAX_HOME/bin/datax.py"));
             return result;
         }
-        result.put(true, "您配置的DataX的地址正确!");
+        result.put(true, "DataX地址配置正确!");
         return result;
     }
 
@@ -241,21 +238,19 @@ public class ExecutorJobHandler extends AbstractJobHandler {
      * false 则不是 or 检查失败
      */
     public Map<Boolean, String> checkPyVersionIs2X() {
-        Map<Boolean, String> result = new HashMap<Boolean, String>();
+        Map<Boolean, String> result = new HashMap<>();
         String pythonVersion = getPyVersion();
         //判断python版本
-        if (pythonVersion != null && !"".equals(pythonVersion.toString())) {
+        if (StringUtils.isNotBlank(pythonVersion)) {
             if (pythonVersion.toLowerCase().startsWith("python 2.") || pythonVersion.toLowerCase().startsWith("python2.")) {
                 result.put(true, "python版本为2.x!");
-                return result;
             } else {
-                result.put(false, "python版本不是2.x!,您的python版本为: " + pythonVersion.toString());
-                return result;
+                result.put(false, "python版本不是2.x!,您的python版本为: " + pythonVersion);
             }
         } else {
             result.put(false, "检查python版本失败!可能系统中无python环境...");
-            return result;
         }
+        return result;
     }
 
     /**

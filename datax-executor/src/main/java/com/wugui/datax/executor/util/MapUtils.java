@@ -8,24 +8,6 @@ import java.util.Map;
  */
 public class MapUtils {
     /**
-     * 获取map中第一个key值
-     *
-     * @param map 数据源
-     * @return
-     */
-    public static Object getKeyOrNull(Map<Object, Object> map) {
-        Object obj = null;
-        for (Map.Entry<Object, Object> entry : map.entrySet()) {
-            obj = entry.getKey();
-            if (obj != null) {
-                break;
-            }
-        }
-        return  obj;
-    }
-
-
-    /**
      * 获取map中第一个数据值
      *
      * @param map 数据源

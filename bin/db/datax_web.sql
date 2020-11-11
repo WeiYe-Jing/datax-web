@@ -384,10 +384,6 @@ ALTER TABLE `datax_web`.`job_jdbc_datasource`
 ADD COLUMN `type` VARCHAR(45) NULL COMMENT '数据源类型' AFTER `update_date`;
 ALTER TABLE `datax_web`.`job_jdbc_datasource`
 CHANGE COLUMN `type` `type` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据源类型' AFTER `connection_params`;
-ALTER TABLE `datax_web`.`job_jdbc_datasource`
-CHANGE COLUMN `type` `type` VARCHAR(45) NOT NULL COMMENT '数据源类型' ;
-ALTER TABLE `datax_web`.`job_jdbc_datasource`
-CHANGE COLUMN `type` `datasource` VARCHAR(45) NOT NULL COMMENT '数据源类型' ;
 
 # 新增JAVA_BEAN类型任务
 --update `job_info` set glue_type='DATAX' WHERE glue_type='BEAN';

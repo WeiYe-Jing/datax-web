@@ -13,6 +13,8 @@ import com.wugui.datatx.core.util.ProcessUtil;
 import com.wugui.datax.executor.service.logparse.LogStatistics;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -32,17 +34,33 @@ import static com.wugui.datax.executor.service.logparse.AnalysisStatistics.analy
 @JobHandler(value = "executorJobHandler")
 @Component
 public class ExecutorJobHandler extends IJobHandler {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SystemUtils.class);
     @Value("${datax.executor.jsonpath}")
     private String jsonPath;
 
     @Value("${datax.pypath}")
     private String dataXPyPath;
+    String binpath ="/datax/bin/datax.py";
 
 
     @Override
     public ReturnT<String> execute(TriggerParam trigger) {
 
+        String property = System.getProperty("user.dir");
+        LOGGER.info("property="+property);
+        System.out.println("property="+property);
+        String filePath = null;
+        String os = System.getProperty("os.name");
+        if (os != null && os.toLowerCase().startsWith("windows")) {
+            filePath = System.getProperty("user.dir") + File.separator + "src"+ File.separator+"main"+ File.separator+"resources" + File.separator + dataXPyPath;
+        } else if (os != null && (os.toLowerCase().startsWith("linux")||os.toLowerCase().startsWith("mac"))) {
+            filePath = ExecutorJobHandler.class.getClassLoader().getResource("").getPath() + dataXPyPath;
+        }
+        LOGGER.info("os="+os+",filePath="+filePath);
+        System.out.println("os="+os+",filePath="+filePath);
+        String  paths =    dataXPyPath+binpath;
+        LOGGER.info("dataXPyPath="+dataXPyPath);
+        System.out.println("dataXPyPath="+paths);
         int exitValue = -1;
         Thread errThread = null;
         String tmpFilePath;
@@ -51,7 +69,7 @@ public class ExecutorJobHandler extends IJobHandler {
         tmpFilePath = generateTemJsonFile(trigger.getJobJson());
 
         try {
-            String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath,dataXPyPath);
+            String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath,paths);
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
             String prcsId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX process id: " + prcsId);

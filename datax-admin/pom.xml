@@ -793,48 +793,80 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>**/*.yml</exclude>
-                        <exclude>**/*.properties</exclude>
-                        <exclude>**/*.sh</exclude>
-                        <exclude>**/*.xml</exclude>
-                    </excludes>
+                    <mainClass>com.wugui.datax.admin.DataXAdminApplication</mainClass>
+                    <fork>true</fork>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <executions>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
-                        <id>assemble</id>
                         <goals>
-                            <goal>single</goal>
+                            <goal>repackage</goal>
                         </goals>
-                        <!-- install -->
-                        <phase>install</phase>
                     </execution>
                 </executions>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <attach>false</attach>
-                    <descriptors>
-                        <descriptor>${basedir}/src/main/assembly/deploy.xml</descriptor>
-                    </descriptors>
-                    <finalName>${project.artifactId}_${project.version}_1</finalName>
-                    <outputDirectory>${project.parent.basedir}/packages</outputDirectory>
-                </configuration>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-jar-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <excludes>-->
+            <!--                        <exclude>**/*.yml</exclude>-->
+            <!--                        <exclude>**/*.properties</exclude>-->
+            <!--                        <exclude>**/*.sh</exclude>-->
+            <!--                        <exclude>**/*.xml</exclude>-->
+            <!--                    </excludes>-->
+            <!--                    <archive>-->
+            <!--                        <manifest>-->
+            <!--                            <mainClass>com.wugui.datax.admin.DataXAdminApplication</mainClass>-->
+            <!--                            <addClasspath>true</addClasspath>-->
+            <!--                            <classpathPrefix>lib/</classpathPrefix>-->
+            <!--                        </manifest>-->
+
+            <!--                    </archive>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.codehaus.mojo</groupId>-->
+            <!--                <artifactId>exec-maven-plugin</artifactId>-->
+            <!--                <version>1.4.0</version>-->
+            <!--                <executions>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-assembly-plugin</artifactId>-->
+            <!--                <version>2.2.1</version>-->
+
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>assemble</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>single</goal>-->
+            <!--                        </goals>-->
+            <!--                        &lt;!&ndash; install &ndash;&gt;-->
+            <!--                        <phase>install</phase>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--                    <archive>-->
+            <!--                        <manifest>-->
+            <!--                            <mainClass>com.wugui.datax.admin.DataXAdminApplication</mainClass>-->
+            <!--                            <addClasspath>true</addClasspath>-->
+            <!--                            <classpathPrefix>lib/</classpathPrefix>-->
+            <!--                        </manifest>-->
+
+            <!--                    </archive>-->
+            <!--                    <appendAssemblyId>false</appendAssemblyId>-->
+            <!--                    <attach>false</attach>-->
+            <!--                    <descriptors>-->
+            <!--                        <descriptor>${basedir}/src/main/assembly/deploy.xml</descriptor>-->
+            <!--                    </descriptors>-->
+            <!--                    <finalName>${project.artifactId}_${project.version}_1</finalName>-->
+            <!--                    <outputDirectory>${project.parent.basedir}/packages</outputDirectory>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
 
     </build>

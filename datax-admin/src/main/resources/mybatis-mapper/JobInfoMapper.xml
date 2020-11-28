@@ -52,6 +52,7 @@
 		<result column="inc_start_id" property="incStartId" />
 		<result column="increment_type" property="incrementType" />
 		<result column="datasource_id" property="datasourceId" />
+		<result column="param" property="param" />
 	</resultMap>
 
 	<sql id="Base_Column_List">

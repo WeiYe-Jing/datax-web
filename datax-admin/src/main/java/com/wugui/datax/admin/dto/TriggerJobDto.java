@@ -18,4 +18,5 @@ public class TriggerJobDto implements Serializable {
     private String executorParam;
 
     private int jobId;
+
 }

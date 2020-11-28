@@ -1,12 +1,12 @@
 # web port
 server:
-  port: ${server.port}
+  port: 8081
   #port: 8081
 
 # log config
 logging:
   config: classpath:logback.xml
-  path: ${data.path}/applogs/executor/jobhandler
+  path: /Users/longkai/data/applogs/applogs/executor/jobhandler
   #path: ./data/applogs/executor/jobhandler
 
 datax:
@@ -14,15 +14,15 @@ datax:
     admin:
       ### datax admin address list, such as "http://address" or "http://address01,http://address02"
       #addresses: http://127.0.0.1:8080
-      addresses: http://127.0.0.1:${datax.admin.port}
+      addresses: http://127.0.0.1:8085
     executor:
       appname: datax-executor
       ip:
       #port: 9999
-      port: ${executor.port:9999}
+      port: 9999
       ### job log path
       #logpath: ./data/applogs/executor/jobhandler
-      logpath: ${data.path}/applogs/executor/jobhandler
+      logpath: /Users/longkai/data/applogs/executor/jobhandler
       ### job log retention days
       logretentiondays: 30
     ### job, access token
@@ -30,7 +30,8 @@ datax:
 
   executor:
     #jsonpath: D:\\temp\\executor\\json\\
-    jsonpath: ${json.path}
+    jsonpath: /Users/longkai/git_project/myschool/datax-web/doc/json/
 
   #pypath: F:\tools\datax\bin\datax.py
-  pypath: ${python.path}
+  #pypath: /Users/longkai/git_project/myschool/dataxx/bin/datax.py
+  pypath: /Users/longkai/data/service/xyy-datax-plugins

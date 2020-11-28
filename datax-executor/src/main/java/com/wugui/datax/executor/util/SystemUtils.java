@@ -37,4 +37,12 @@ public class SystemUtils {
         //LOGGER.info("DATAX_HOME:{}", DATAX_HOME);
         return DATAX_HOME;
     }
+
+    public static String getDataxHome() {
+        return DATAX_HOME;
+    }
+
+    public static void setDataxHome(String dataxHome) {
+        DATAX_HOME = dataxHome;
+    }
 }

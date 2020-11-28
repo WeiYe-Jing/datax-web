@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
@@ -9,6 +10,7 @@ import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.TriggerJobDto;
+import com.wugui.datax.admin.dto.TriggerJobListDto;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.service.JobService;
 import io.swagger.annotations.Api;
@@ -94,6 +96,21 @@ public class JobInfoController extends BaseController{
             executorParam = "";
         }
         JobTriggerPoolHelper.trigger(dto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam);
+        return ReturnT.SUCCESS;
+    }
+
+    @PostMapping(value = "/triggerList")
+    @ApiOperation("触发任务")
+    public ReturnT<String> triggerListJob(@RequestBody TriggerJobListDto triggerJobListDto) {
+        System.out.println(JSONObject.toJSONString(triggerJobListDto));
+        List<TriggerJobDto> triggerJobDtoList =JSONObject.parseArray(triggerJobListDto.getJobStr(),TriggerJobDto.class);
+        for (TriggerJobDto triggerJobDto : triggerJobDtoList) {
+            String executorParam=triggerJobDto.getExecutorParam();
+            if (executorParam == null) {
+                executorParam = "";
+            }
+            JobTriggerPoolHelper.trigger(triggerJobDto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam);
+        }
         return ReturnT.SUCCESS;
     }
 

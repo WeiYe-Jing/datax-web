@@ -33,6 +33,7 @@ public class BuildCommand {
      * @return
      */
     public static String[] buildDataXExecutorCmd(TriggerParam tgParam, String tmpFilePath, String dataXPyPath) {
+
         // command process
         //"--loglevel=debug"
         List<String> cmdArr = new ArrayList<>();

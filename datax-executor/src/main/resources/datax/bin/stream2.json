@@ -1,0 +1,64 @@
+{
+  "job": {
+    "setting": {
+      "speed": {
+        "channel": 1
+      }
+    },
+    "content": [
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "connection": [
+              {
+                "jdbcUrl": [
+                  "jdbc:mysql://127.0.0.1:3367/lk?characterEncoding=utf8&useSSL=false"
+                ],
+                "querySql": [
+                  "SELECT CONCAT(id,org_code) AS ids,id, drug_code  FROM storage_ledger  "
+                ]
+              }
+            ],
+            "password": "123456",
+            "username": "root"
+          }
+        },
+        "writer": {
+          "name": "elasticsearchwriter",
+          "parameter": {
+            "endpoint": "http://127.0.0.1:9201",
+            "index": "storage_ledger2",
+            "type": "storageLedger2",
+            "cleanup": false,
+            "accessId": "demo",
+            "accessKey": "demo",
+            "settings": {
+              "index": {
+                "number_of_shards": 8,
+                "number_of_replicas": 0
+              }
+            },
+            "discovery": false,
+            "batchSize": 4000,
+            "splitter": ",",
+            "column": [
+              {
+                "name": "ids",
+                "type": "ID"
+              },
+              {
+                "name": "id",
+                "type": "integer"
+              },
+              {
+                "name": "drugCode",
+                "type": "keyword"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

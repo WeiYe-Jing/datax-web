@@ -212,6 +212,20 @@ public class DataxJsonHelper implements DataxJsonInterface {
         jobMap.put("setting", buildSetting());
         jobMap.put("content", ImmutableList.of(buildContent()));
         res.put("job", jobMap);
+
+        Map<String, Object> coreMap = Maps.newLinkedHashMap();
+        coreMap.put("transport", buildSettingCore());
+        res.put("core", coreMap);
+        return res;
+    }
+
+    @Override
+    public Map<String, Object> buildSettingCore() {
+        Map<String, Object> res = Maps.newLinkedHashMap();
+        Map<String, Object> speedMap = Maps.newLinkedHashMap();
+        Map<String, Object> errorLimitMap = Maps.newLinkedHashMap();
+        speedMap.putAll(ImmutableMap.of("byte", 1048576));
+        res.put("channel", ImmutableMap.of("speed", speedMap));
         return res;
     }
 
@@ -226,7 +240,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         res.put("errorLimit", errorLimitMap);
         return res;
     }
-
     @Override
     public Map<String, Object> buildContent() {
         Map<String, Object> res = Maps.newLinkedHashMap();

@@ -30,21 +30,32 @@ import java.util.Date;
  * xxl-job trigger
  * Created by xuxueli on 17/7/13.
  */
-public class JobTrigger {
-    private static Logger logger = LoggerFactory.getLogger(JobTrigger.class);
+public class XxlJobTrigger {
+    private static Logger logger = LoggerFactory.getLogger(XxlJobTrigger.class);
 
     /**
      * trigger job
      *
      * @param jobId
      * @param triggerType
-     * @param failRetryCount        >=0: use this param
-     *                              <0: use param from job info config
+     * @param failRetryCount
+     * 			>=0: use this param
+     * 			<0: use param from job info config
      * @param executorShardingParam
-     * @param executorParam         null: use job param
-     *                              not null: cover job param
+     * @param executorParam
+     *          null: use job param
+     *          not null: cover job param
+     * @param addressList
+     *          null: use executor addressList
+     *          not null: cover
      */
-    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam) {
+    public static void trigger(int jobId,
+                               TriggerTypeEnum triggerType,
+                               int failRetryCount,
+                               String executorShardingParam,
+                               String executorParam,
+                               String addressList) {
+
         JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoMapper().loadById(jobId);
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
@@ -60,6 +71,13 @@ public class JobTrigger {
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
         JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupMapper().load(jobInfo.getJobGroup());
+
+        // cover addressList
+        if (addressList!=null && addressList.trim().length()>0) {
+            group.setAddressType(1);
+            group.setAddressList(addressList.trim());
+        }
+
 
         // sharding param
         int[] shardingParam = null;
@@ -85,7 +103,6 @@ public class JobTrigger {
         }
 
     }
-
 
 
 
@@ -255,5 +272,6 @@ public class JobTrigger {
         runResult.setMsg(runResultSB.toString());
         return runResult;
     }
+
 
 }

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wugui.datax.admin.mapper.JobParamMapper">
+  <resultMap id="BaseResultMap" type="com.wugui.datax.admin.entity.JobParam">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="job_id" jdbcType="INTEGER" property="jobId" />
+    <result column="job_param" jdbcType="VARCHAR" property="jobParam" />
+    <result column="job_value" jdbcType="VARCHAR" property="jobValue" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, job_id, job_param, job_value, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from job_param
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByJobId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from job_param
+    where job_id = #{jobId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from job_param
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wugui.datax.admin.entity.JobParam">
+    insert into job_param (id, job_id, job_param, 
+      job_value, remark)
+    values (#{id,jdbcType=INTEGER}, #{jobId,jdbcType=INTEGER}, #{jobParam,jdbcType=VARCHAR}, 
+      #{jobValue,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wugui.datax.admin.entity.JobParam">
+    insert into job_param
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="jobParam != null">
+        job_param,
+      </if>
+      <if test="jobValue != null">
+        job_value,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="jobParam != null">
+        #{jobParam,jdbcType=VARCHAR},
+      </if>
+      <if test="jobValue != null">
+        #{jobValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wugui.datax.admin.entity.JobParam">
+    update job_param
+    <set>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=INTEGER},
+      </if>
+      <if test="jobParam != null">
+        job_param = #{jobParam,jdbcType=VARCHAR},
+      </if>
+      <if test="jobValue != null">
+        job_value = #{jobValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wugui.datax.admin.entity.JobParam">
+    update job_param
+    set job_id = #{jobId,jdbcType=INTEGER},
+      job_param = #{jobParam,jdbcType=VARCHAR},
+      job_value = #{jobValue,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="batchUpdate" parameterType="java.util.List">
+    update job_param
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="job_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.jobId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="job_param = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.jobParam,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="job_value = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.jobValue,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="remark = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="batchUpdateSelective" parameterType="java.util.List">
+    update job_param
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="job_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.jobId != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.jobId,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="job_param = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.jobParam != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.jobParam,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="job_value = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.jobValue != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.jobValue,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="remark = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.remark != null">
+            when id = #{item.id,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into job_param (id, job_id, job_param, 
+      job_value, remark)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=INTEGER}, #{item.jobId,jdbcType=INTEGER}, #{item.jobParam,jdbcType=VARCHAR}, 
+        #{item.jobValue,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <update id="batchUpdateList" parameterType="java.util.List">
+    <foreach collection="list" item="item" separator=";">
+      update job_param
+      <set>
+        <if test="jobId != null  ">
+          job_id = #{item.jobId,jdbcType=INTEGER},
+        </if>
+        <if test="jobParam != null  ">
+          job_param = #{item.jobParam,jdbcType=VARCHAR},
+        </if>
+        <if test="jobValue != null  ">
+          job_value = #{item.jobValue,jdbcType=VARCHAR},
+        </if>
+        <if test="remark != null  ">
+          remark = #{item.remark,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where id = #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

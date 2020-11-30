@@ -3,6 +3,7 @@ package com.wugui.datax.admin.core.thread;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.trigger.JobTrigger;
+import com.wugui.datax.admin.core.trigger.XxlJobTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +105,58 @@ public class JobTriggerPoolHelper {
         });
     }
 
+    /**
+     * add trigger
+     */
+    public void addTrigger(final int jobId,
+                           final TriggerTypeEnum triggerType,
+                           final int failRetryCount,
+                           final String executorShardingParam,
+                           final String executorParam,
+                           final String addressList) {
+
+        // choose thread pool
+        ThreadPoolExecutor triggerPool_ = fastTriggerPool;
+        AtomicInteger jobTimeoutCount = jobTimeoutCountMap.get(jobId);
+        if (jobTimeoutCount!=null && jobTimeoutCount.get() > 10) {      // job-timeout 10 times in 1 min
+            triggerPool_ = slowTriggerPool;
+        }
+
+        // trigger
+        triggerPool_.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                long start = System.currentTimeMillis();
+
+                try {
+                    // do trigger
+                    XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                } finally {
+
+                    // check timeout-count-map
+                    long minTim_now = System.currentTimeMillis()/60000;
+                    if (minTim != minTim_now) {
+                        minTim = minTim_now;
+                        jobTimeoutCountMap.clear();
+                    }
+
+                    // incr timeout-count-map
+                    long cost = System.currentTimeMillis()-start;
+                    if (cost > 500) {       // ob-timeout threshold 500ms
+                        AtomicInteger timeoutCount = jobTimeoutCountMap.putIfAbsent(jobId, new AtomicInteger(1));
+                        if (timeoutCount != null) {
+                            timeoutCount.incrementAndGet();
+                        }
+                    }
+
+                }
+
+            }
+        });
+    }
 
     // ---------------------- helper ----------------------
 
@@ -128,6 +181,20 @@ public class JobTriggerPoolHelper {
      */
     public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam) {
         helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam);
+    }
+
+
+    /**
+     * @param jobId
+     * @param triggerType
+     * @param failRetryCount        >=0: use this param
+     *                              <0: use param from job info config
+     * @param executorShardingParam
+     * @param executorParam         null: use job param
+     *                              not null: cover job param
+     */
+    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
+        helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam,addressList);
     }
 
 }

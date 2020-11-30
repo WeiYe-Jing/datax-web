@@ -11,10 +11,12 @@ import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
 import com.wugui.datax.admin.dto.TriggerJobDto;
 import com.wugui.datax.admin.dto.TriggerJobListDto;
+import com.wugui.datax.admin.dto.TriggerJobParamDto;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.service.JobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -104,12 +106,19 @@ public class JobInfoController extends BaseController{
     public ReturnT<String> triggerListJob(@RequestBody TriggerJobListDto triggerJobListDto) {
         System.out.println(JSONObject.toJSONString(triggerJobListDto));
         List<TriggerJobDto> triggerJobDtoList =JSONObject.parseArray(triggerJobListDto.getJobStr(),TriggerJobDto.class);
+
+        TriggerJobParamDto triggerJobParamDto =  new TriggerJobParamDto();
+        if(StringUtils.isNotBlank(triggerJobListDto.getParamStr())){
+            triggerJobParamDto=   JSONObject.parseObject(triggerJobListDto.getParamStr(), TriggerJobParamDto.class);
+        }
+
+
         for (TriggerJobDto triggerJobDto : triggerJobDtoList) {
             String executorParam=triggerJobDto.getExecutorParam();
             if (executorParam == null) {
                 executorParam = "";
             }
-            JobTriggerPoolHelper.trigger(triggerJobDto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam);
+            JobTriggerPoolHelper.trigger(triggerJobDto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam,triggerJobParamDto.getAddressIp());
         }
         return ReturnT.SUCCESS;
     }

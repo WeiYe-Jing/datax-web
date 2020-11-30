@@ -52,7 +52,9 @@
 		<result column="inc_start_id" property="incStartId" />
 		<result column="increment_type" property="incrementType" />
 		<result column="datasource_id" property="datasourceId" />
-		<result column="param" property="param" />
+		<result column="job_param" property="jobParam" />
+		<result column="job_value" property="jobValue" />
+
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -90,7 +92,7 @@
 		t.primary_key,
 		t.inc_start_id,
 		t.increment_type,
-		t.datasource_id
+		t.datasource_id,t.job_param,t.job_value
 	</sql>
 
 	<sql id="Project_Column_List">
@@ -199,7 +201,9 @@
 			primary_key,
 			inc_start_id,
 			increment_type,
-			datasource_id
+			datasource_id,
+		job_param,
+		job_value
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -234,7 +238,9 @@
 			#{primaryKey},
 			#{incStartId},
 			#{incrementType},
-			#{datasourceId}
+			#{datasourceId},
+		#{jobParam},
+		#{jobValue}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()
@@ -243,6 +249,12 @@
 	</insert>
 
 	<select id="loadById" parameterType="java.util.HashMap" resultMap="JobInfo">
+		SELECT <include refid="Base_Column_List" />
+		FROM job_info AS t
+		WHERE t.id = #{id}
+	</select>
+
+	<select id="loadByParamId" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM job_info AS t
 		WHERE t.id = #{id}
@@ -283,7 +295,9 @@
 		    primary_key = #{primaryKey},
 		    inc_start_id = #{incStartId},
 		    increment_type = #{incrementType},
-		    datasource_id= #{datasourceId}
+		    datasource_id= #{datasourceId},
+		    job_param= #{jobParam},
+		    job_value= #{jobValue}
 		WHERE id = #{id}
 	</update>
 

@@ -40,6 +40,8 @@ public interface JobInfoMapper {
 
     JobInfo loadById(@Param("id") int id);
 
+    JobInfo loadByParamId(@Param("id") int id);
+
     int update(JobInfo jobInfo);
 
     int delete(@Param("id") long id);

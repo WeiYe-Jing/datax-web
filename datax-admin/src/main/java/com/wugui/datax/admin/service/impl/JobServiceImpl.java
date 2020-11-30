@@ -19,11 +19,13 @@ import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobService;
 import com.wugui.datax.admin.util.DateFormatUtils;
+import com.wugui.datax.admin.util.MatcherUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -149,6 +151,13 @@ public class JobServiceImpl implements JobService {
         jobInfo.setJobJson(jobInfo.getJobJson());
         jobInfo.setUpdateTime(new Date());
         jobInfo.setGlueUpdatetime(new Date());
+        List<String> strings = MatcherUtils.PatternMatcher(jobInfo.getJobJson());
+        jobInfo.setJobParam(StringUtils.join(strings.toArray(), ",") );
+        String jobvalue="";
+        for (String string : strings) {
+            jobvalue+=",";
+        }
+        jobInfo.setJobValue(jobvalue);
         jobInfoMapper.save(jobInfo);
         if (jobInfo.getId() < 1) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
@@ -261,6 +270,13 @@ public class JobServiceImpl implements JobService {
             exists_jobInfo.setJobJson(null);
         }
         exists_jobInfo.setGlueUpdatetime(new Date());
+        List<String> strings = MatcherUtils.PatternMatcher(exists_jobInfo.getJobJson());
+        exists_jobInfo.setJobParam(StringUtils.join(strings.toArray(), ",") );
+        String jobvalue="";
+        for (String string : strings) {
+            jobvalue+=",";
+        }
+        exists_jobInfo.setJobValue(jobvalue);
         jobInfoMapper.update(exists_jobInfo);
 
 
@@ -456,6 +472,13 @@ public class JobServiceImpl implements JobService {
             jobInfo.setAddTime(new Date());
             jobInfo.setUpdateTime(new Date());
             jobInfo.setGlueUpdatetime(new Date());
+            List<String> strings = MatcherUtils.PatternMatcher(jobInfo.getJobJson());
+            jobInfo.setJobParam(StringUtils.join(strings.toArray(), ",") );
+            String jobvalue="";
+            for (String string : strings) {
+                jobvalue+=",";
+            }
+            jobInfo.setJobValue(jobvalue);
             jobInfoMapper.save(jobInfo);
         }
         return ReturnT.SUCCESS;

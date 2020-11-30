@@ -118,7 +118,7 @@ public class JobInfoController extends BaseController{
             if (executorParam == null) {
                 executorParam = "";
             }
-            JobTriggerPoolHelper.trigger(triggerJobDto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam,triggerJobParamDto.getAddressIp());
+            JobTriggerPoolHelper.trigger(triggerJobDto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam,triggerJobParamDto.getAddressIp(),triggerJobListDto.getParamStr());
         }
         return ReturnT.SUCCESS;
     }

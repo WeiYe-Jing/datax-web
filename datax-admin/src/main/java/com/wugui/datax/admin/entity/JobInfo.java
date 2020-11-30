@@ -122,4 +122,13 @@ public class JobInfo {
 
 	@TableField(exist=false)
 	private String userName;
+
+
+
+
+	private String jobParam;
+
+	private String jobValue;
+
+	private String remark;
 }

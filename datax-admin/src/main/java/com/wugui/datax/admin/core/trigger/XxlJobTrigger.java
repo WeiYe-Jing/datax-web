@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.core.trigger;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
@@ -10,6 +12,7 @@ import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.scheduler.JobScheduler;
 import com.wugui.datax.admin.core.util.I18nUtil;
+import com.wugui.datax.admin.dto.TriggerJobParamDto;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.entity.JobGroup;
 import com.wugui.datax.admin.entity.JobInfo;
@@ -22,9 +25,10 @@ import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * xxl-job trigger
@@ -54,9 +58,9 @@ public class XxlJobTrigger {
                                int failRetryCount,
                                String executorShardingParam,
                                String executorParam,
-                               String addressList) {
+                               String addressList,String jobParam)  {
 
-        JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoMapper().loadById(jobId);
+        JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoMapper().loadByParamId(jobId);
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
@@ -69,9 +73,33 @@ public class XxlJobTrigger {
         if (StringUtils.isNotBlank(executorParam)) {
             jobInfo.setExecutorParam(executorParam);
         }
+       List<String> paramList= new ArrayList<>();
+        List<String> paramValueList= new ArrayList<>();
+        if(StringUtils.isNotBlank(jobInfo.getJobParam())){
+            paramList= Arrays.asList(jobInfo.getJobParam().split(","));
+        }
+        if(StringUtils.isNotBlank(jobInfo.getJobValue())){
+            paramValueList= Arrays.asList(jobInfo.getJobValue().split(","));
+        }
+        Map<String,Object> paramMap = new LinkedHashMap<>();
+        try {
+            if(StringUtils.isNotBlank(jobParam)&& !CollectionUtils.isEmpty(paramList)){
+                Map<String, Object> objectMap = JSONObject.parseObject(jobParam, new TypeReference<Map<String, Object>>() {
+                });
+                for (String s : objectMap.keySet()) {
+                    jobInfo.setJobJson(jobInfo.getJobJson().replaceAll("\\$\\{"+s+"\\}","'"+objectMap.get(s).toString())+"'");
+                }
+            }else if(!CollectionUtils.isEmpty(paramValueList)){
+                for (int i = 0; i < paramList.size(); i++) {
+                    jobInfo.setJobJson(jobInfo.getJobJson().replaceAll(paramList.get(i).replace("$","\\\\$").replace("{","\\\\{").replace("}","\\\\}"),"'"+paramValueList.get(i)+"'"));
+                }
+            }
+            System.out.println(jobInfo.getJobJson());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
         JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupMapper().load(jobInfo.getJobGroup());
-
         // cover addressList
         if (addressList!=null && addressList.trim().length()>0) {
             group.setAddressType(1);

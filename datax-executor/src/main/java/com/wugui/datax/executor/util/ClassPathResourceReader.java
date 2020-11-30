@@ -70,7 +70,8 @@ public final class ClassPathResourceReader {
         try {
             getFileListame(oldDirectory, fileNameList, filterDirectory);
             for (String filePath : fileNameList) {
-                copyFileByPath(filePath, targetDirectory + File.separator + filePath,flg);
+                String replace = filePath.replace(oldDirectory, "");
+                copyFileByPath(filePath, targetDirectory + File.separator + replace,flg);
             }
         } catch (FileNotFoundException e) {
             logger.error("出现异常,", e);
@@ -90,7 +91,8 @@ public final class ClassPathResourceReader {
     }
 
     public static List<String> getFileListame(String strPath, List<String> fileNameList, List<String> filterDirectory) throws FileNotFoundException {
-        String path = ResourceUtils.getURL(CLASSPATH + strPath).getPath();
+        String path = ResourceUtils.getURL(CLASSPATH ).getPath();
+        path =path+strPath;
         logger.info("ResourceUtils.getURL="+path);
         File dir = new File(path);
         // 该文件目录下文件全部放入数组

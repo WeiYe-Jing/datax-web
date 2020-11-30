@@ -88,7 +88,7 @@ logging:
   #path: ./data/applogs/admin
   level:
     com.wugui.datax.admin.mapper: error
-    path: /Users/longkai/data/applogs/admin
+    path: /data/applogs/admin
 
 
 

@@ -49,18 +49,8 @@ public class ExecutorJobHandler extends IJobHandler {
         String property = System.getProperty("user.dir");
         LOGGER.info("property="+property);
         System.out.println("property="+property);
-        String filePath = null;
-        String os = System.getProperty("os.name");
-        if (os != null && os.toLowerCase().startsWith("windows")) {
-            filePath = System.getProperty("user.dir") + File.separator + "src"+ File.separator+"main"+ File.separator+"resources" + File.separator + dataXPyPath;
-        } else if (os != null && (os.toLowerCase().startsWith("linux")||os.toLowerCase().startsWith("mac"))) {
-            filePath = ExecutorJobHandler.class.getClassLoader().getResource("").getPath() + dataXPyPath;
-        }
-        LOGGER.info("os="+os+",filePath="+filePath);
-        System.out.println("os="+os+",filePath="+filePath);
         String  paths =    dataXPyPath+binpath;
         LOGGER.info("dataXPyPath="+dataXPyPath);
-        System.out.println("dataXPyPath="+paths);
         int exitValue = -1;
         Thread errThread = null;
         String tmpFilePath;

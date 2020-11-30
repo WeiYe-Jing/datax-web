@@ -65,6 +65,17 @@ public final class ClassPathResourceReader {
         }
     }
 
+    public static void copyDirectoryFile(String oldDirectory, String targetDirectory, List<String> filterDirectory,boolean flg) {
+        List<String> fileNameList = new ArrayList<>();
+        try {
+            getFileListame(oldDirectory, fileNameList, filterDirectory);
+            for (String filePath : fileNameList) {
+                copyFileByPath(filePath, targetDirectory + File.separator + filePath,flg);
+            }
+        } catch (FileNotFoundException e) {
+            logger.error("出现异常,", e);
+        }
+    }
 
     public static void copyDirectoryFile(String oldDirectory, String targetDirectory, List<String> filterDirectory) {
         List<String> fileNameList = new ArrayList<>();
@@ -105,16 +116,34 @@ public final class ClassPathResourceReader {
         }
         return fileNameList;
     }
-
+    public static void copyFileByPath(String oldFilePath, String newFilePath,boolean flg) {
+        //生成目标文件
+        InputStream inputStream = null;
+        try {
+            ClassPathResource classPathResource = new ClassPathResource(oldFilePath);
+            inputStream = classPathResource.getInputStream();
+            File somethingFile = new File(newFilePath);
+            if(!somethingFile.exists()||flg){
+                logger.info("oldFilePath:{},newFilePath:{}",oldFilePath,newFilePath);
+                FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+            }
+        } catch (Exception e) {
+            logger.error("出现异常，", e);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+    }
     public static void copyFileByPath(String oldFilePath, String newFilePath) {
         //生成目标文件
         InputStream inputStream = null;
         try {
-            logger.info("oldFilePath:{},newFilePath:{}",oldFilePath,newFilePath);
             ClassPathResource classPathResource = new ClassPathResource(oldFilePath);
             inputStream = classPathResource.getInputStream();
             File somethingFile = new File(newFilePath);
-            FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+            if(!somethingFile.exists()){
+                logger.info("oldFilePath:{},newFilePath:{}",oldFilePath,newFilePath);
+                FileUtils.copyInputStreamToFile(inputStream, somethingFile);
+            }
         } catch (Exception e) {
             logger.error("出现异常，", e);
         } finally {

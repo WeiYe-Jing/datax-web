@@ -9,6 +9,8 @@ logging:
   path: /data/applogs/applogs/executor/jobhandler
   #path: ./data/applogs/executor/jobhandler
 
+python:
+  /datax/bin/getPythonVersion.py
 datax:
   job:
     admin:

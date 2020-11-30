@@ -30,8 +30,8 @@ datax:
 
   executor:
     #jsonpath: D:\\temp\\executor\\json\\
-    jsonpath: git_project/myschool/datax-web/doc/json/
+    jsonpath: /data/service/datax-web/doc/json/
 
   #pypath: F:\tools\datax\bin\datax.py
-  #pypath: /Users/longkai/git_project/myschool/dataxx/bin/datax.py
-  pypath: /data/service/datax-web-plugins
+  #pypath: /git_project/myschool/dataxx/bin/datax.py
+  pypath: /data/service/xyy-datax-plugins

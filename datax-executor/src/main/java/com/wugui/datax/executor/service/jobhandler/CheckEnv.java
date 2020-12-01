@@ -14,13 +14,10 @@ public class CheckEnv {
      * 打印到日志中
      */
     public static void checkEnv(String dataXPyPath,String pythonPath) {
-        //检查是否手动配置PythonHOME
         String checkPythonHOME = checkPythonPath(pythonPath);
         JobLogger.log("------------------" + checkPythonHOME);
-        //检查是否正确配置datax.py
         String checkDataXPATH = checkDataXPATH(dataXPyPath);
         JobLogger.log("------------------" + checkDataXPATH);
-        //检查python版本是否是2.x版本
         String checkPyVersionIs2X = checkPyVersionIs2X();
         JobLogger.log("------------------" + (checkPyVersionIs2X));
     }
@@ -66,10 +63,9 @@ public class CheckEnv {
      * @return
      */
     public static String getPyVersion() {
-        Process p = null;
         String pythonVersion = null;
         try {
-            p = Runtime.getRuntime().exec(new String[]{
+            Process p = Runtime.getRuntime().exec(new String[]{
                     "python", "--version"
             });
             try (

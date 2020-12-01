@@ -39,9 +39,9 @@ public class BuildCommand {
             dataXPyPath = dataXHomePath.contains("bin") ? dataXHomePath + DEFAULT_DATAX_PY : dataXHomePath + "bin" + File.separator + DEFAULT_DATAX_PY;
         }
         cmdArr.add(dataXPyPath);
-        String doc = buildDataXParam(tgParam);
+        String doc = buildJVMParam(tgParam);
         if (StringUtils.isNotBlank(doc)) {
-            cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
+            cmdArr.add(doc);
         }
         cmdArr.add(tmpFilePath);
         return cmdArr.toArray(new String[cmdArr.size()]);
@@ -55,11 +55,11 @@ public class BuildCommand {
      * @author Locki
      * @date 2020/9/18
      */
-    private static String buildDataXParam(TriggerParam tgParam) {
+    private static String buildJVMParam(TriggerParam tgParam) {
         StringBuilder doc = new StringBuilder();
         String jvmParam = StringUtils.isNotBlank(tgParam.getJvmParam()) ? tgParam.getJvmParam().trim() : tgParam.getJvmParam();
         if (StringUtils.isNotBlank(jvmParam)) {
-            doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam).append(TRANSFORM_QUOTES);
+            doc.append(JVM_CM).append(TRANSFORM_QUOTES).append(jvmParam.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE)).append(TRANSFORM_QUOTES);
         }
         return doc.toString();
     }
@@ -138,7 +138,7 @@ public class BuildCommand {
      */
     private static HashMap<String, String> getKeyValue(String formatParam) {
         String[] paramArr = formatParam.split(PARAMS_SYSTEM);
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
 
         for (String param : paramArr) {
             if (StringUtils.isNotBlank(param)) {
@@ -163,20 +163,13 @@ public class BuildCommand {
      * @date 2020/9/18
      */
     public static Map<String, String> builtInVar(){
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("datax_biz_date", DateUtil.format(new Date(), "yyyy-MM-dd"));
         map.put("datax_biz_time", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
         map.put("datax_biz_unixtimestamp", System.currentTimeMillis() + "");
         return map;
     }
 
-    private void buildPartitionCM(StringBuilder doc, String partitionStr) {
-        if (StringUtils.isNotBlank(partitionStr)) {
-            doc.append(SPLIT_SPACE);
-            List<String> partitionInfo = Arrays.asList(partitionStr.split(SPLIT_COMMA));
-            doc.append(String.format(PARAMS_CM_V_PT, buildPartition(partitionInfo)));
-        }
-    }
 
     private static String buildPartition(List<String> partitionInfo) {
         String field = partitionInfo.get(0);

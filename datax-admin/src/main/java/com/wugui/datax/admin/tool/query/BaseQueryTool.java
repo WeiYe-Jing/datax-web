@@ -527,7 +527,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                 schemas.add(tableName);
             }
         } catch (SQLException e) {
-            logger.error("[getTableNames Exception] --> "
+            logger.error("[getTableSchemas Exception] --> "
                     + "the exception message is:" + e.getMessage());
         } finally {
             JdbcUtils.close(rs);

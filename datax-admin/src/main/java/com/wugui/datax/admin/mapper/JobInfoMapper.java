@@ -57,4 +57,6 @@ public interface JobInfoMapper {
 	public int updateLastHandleCode(@Param("id") int id,@Param("lastHandleCode")int lastHandleCode);
 
     void incrementIdUpdate(@Param("id") int id, @Param("incStartId")Long incStartId);
+
+    List<JobInfo> loadByIds(@Param("ids") List<Integer> ids);
 }

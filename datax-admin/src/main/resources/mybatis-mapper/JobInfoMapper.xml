@@ -342,4 +342,11 @@
 		inc_start_id = #{incStartId}
 		WHERE id = #{id}
 	</update>
+    <select id="loadByIds" resultMap="JobInfo">
+		select * from job_info where id IN (
+		<foreach collection="ids" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</select>
 </mapper>

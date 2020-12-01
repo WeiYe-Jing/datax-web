@@ -8,10 +8,7 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.DataXJsonBuildDto;
-import com.wugui.datax.admin.dto.HiveReaderDto;
-import com.wugui.datax.admin.dto.HiveWriterDto;
+import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.*;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.DatasourceQueryService;
@@ -534,5 +531,24 @@ public class JobServiceImpl implements JobService {
             jobInfoMapper.save(jobInfo);
         }
         return ReturnT.SUCCESS;
+    }
+
+    @Override
+    public List<JobConnDto> connList(List<Integer> ids) {
+        List<JobInfo> infos = jobInfoMapper.loadByIds(ids);
+        List<JobConnDto> list = new ArrayList<>();
+        for (JobInfo info : infos) {
+
+            if(StringUtils.isNotBlank(info.getChildJobId())){
+                String [] childIds = info.getChildJobId().split(",");
+                for (String id: childIds) {
+                    JobConnDto jobConnDto = new JobConnDto();
+                    jobConnDto.setSourceId(info.getId());
+                    jobConnDto.setTargetId(Integer.valueOf(id));
+                    list.add(jobConnDto);
+                }
+            }
+        }
+        return list;
     }
 }

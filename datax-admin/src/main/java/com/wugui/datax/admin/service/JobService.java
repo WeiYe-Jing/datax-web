@@ -3,6 +3,7 @@ package com.wugui.datax.admin.service;
 
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
+import com.wugui.datax.admin.dto.JobConnDto;
 import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobInfo;
 
@@ -93,4 +94,6 @@ public interface JobService {
      * @return
      */
     ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException;
+
+    List<JobConnDto> connList(List<Integer> ids);
 }

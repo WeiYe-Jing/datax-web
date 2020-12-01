@@ -8,6 +8,7 @@ import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
+import com.wugui.datax.admin.dto.JobConnDto;
 import com.wugui.datax.admin.dto.TriggerJobDto;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.service.JobService;
@@ -19,10 +20,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * index controller
@@ -51,6 +49,12 @@ public class JobInfoController extends BaseController{
     @ApiOperation("全部任务列表")
     public ReturnT<List<JobInfo>> list(){
         return new ReturnT<>(jobService.list());
+    }
+
+    @RequestMapping("/connList")
+    @ApiOperation("获取ids集合的所有关联关系")
+    public ReturnT<List<JobConnDto>> connList(Integer [] ids){
+        return new ReturnT<>(jobService.connList(Arrays.asList(ids)));
     }
 
     @PostMapping("/add")

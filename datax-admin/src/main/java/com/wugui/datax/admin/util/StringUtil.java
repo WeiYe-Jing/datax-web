@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class StringUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(StringUtil.class);
 
     /**
      * 查询字符串ddl中 以tag开始第一个'与第二个'之间的内容
@@ -70,7 +70,7 @@ public class StringUtil {
     public static String unicode2String(String unicode) {
         try{
             unicode = (unicode == null ? "" : unicode);
-            if (unicode.indexOf("\\") == -1)//如果不是unicode码则原样返回
+            if (!unicode.contains("\\"))//如果不是unicode码则原样返回
                 return unicode;
             // 该步骤可以处理掉\\t \\n \\u0001等类似字符串
             String resulr = StringEscapeUtils.unescapeJava(unicode);

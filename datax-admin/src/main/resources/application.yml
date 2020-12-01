@@ -7,20 +7,22 @@ spring:
     username: ${DB_USERNAME:username}
     url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_DATABASE:dataxweb}?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
-
-
-    hikari:
-      ## 最小空闲连接数量
-      minimum-idle: 5
-      ## 空闲连接存活最大时间，默认600000（10分钟）
-      idle-timeout: 180000
-      ## 连接池最大连接数，默认是10
-      maximum-pool-size: 10
-      ## 数据库连接超时时间,默认30秒，即30000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
-      ##此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-      max-lifetime: 1800000
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 10
+      max-wait: 60000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      use-global-data-source-stat: true
+      min-evictable-idle-time-millis: 300000
+      time-between-eviction-runs-millis: 60000
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      remove-abandoned-timeout: 180
 
   # datax-web email
   mail:

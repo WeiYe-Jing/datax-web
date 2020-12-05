@@ -14,9 +14,12 @@
  Date: 15/12/2019 22:27:10
 */
 
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+CREATE DATABASE IF NOT EXISTS datax_web;
+USE datax_web;
 -- ----------------------------
 -- Table structure for job_group
 -- ----------------------------
@@ -335,6 +338,7 @@ ADD COLUMN `inc_start_id` VARCHAR(20) NULL COMMENT '增量初始id' AFTER `prima
 ADD COLUMN `increment_type` TINYINT(4) NULL COMMENT '增量类型' AFTER `inc_start_id`,
 ADD COLUMN `datasource_id` BIGINT(11) NULL COMMENT '数据源id' AFTER `increment_type`;
 
+DROP TABLE IF EXISTS `job_project`;
 CREATE TABLE `job_project`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'key',
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'project name',
@@ -352,3 +356,34 @@ CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;
 
 ALTER TABLE `job_info`
 CHANGE COLUMN `increment_type` `increment_type` TINYINT(4) NULL DEFAULT 0 COMMENT '增量类型' ;
+
+
+----------------------------------------------------------------------------------------------------------------------
+--2.1.3
+----------------------------------------------------------------------------------------------------------------------
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `database_name` `database` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据库名' ;
+
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `jdbc_username` `user_name` VARCHAR(100) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '用户名' ,
+CHANGE COLUMN `jdbc_password` `password` VARCHAR(200) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '密码' ;
+
+
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+DROP COLUMN `database`,
+DROP COLUMN `zk_adress`,
+DROP COLUMN `jdbc_driver_class`,
+DROP COLUMN `jdbc_url`,
+DROP COLUMN `password`,
+DROP COLUMN `user_name`,
+DROP COLUMN `datasource`,
+ADD COLUMN `connection_params` TEXT NOT NULL AFTER `datasource_group`,
+CHANGE COLUMN `comments` `comments` VARCHAR(1000) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL COMMENT '备注' AFTER `status`;
+
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+ADD COLUMN `type` VARCHAR(45) NULL COMMENT '数据源类型' AFTER `update_date`;
+ALTER TABLE `datax_web`.`job_jdbc_datasource`
+CHANGE COLUMN `type` `type` VARCHAR(45) NULL DEFAULT NULL COMMENT '数据源类型' AFTER `connection_params`;
+
+# 新增JAVA_BEAN类型任务
+--update `job_info` set glue_type='DATAX' WHERE glue_type='BEAN';

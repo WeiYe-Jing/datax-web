@@ -1,11 +1,14 @@
 package com.wugui.datax.admin.tool.query;
 
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.entity.JobDatasource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static com.wugui.datax.admin.tool.query.DriverConnectionFactory.buildParameter;
 
 @Slf4j
 public class OracleQueryToolTest {
@@ -16,16 +19,14 @@ public class OracleQueryToolTest {
     @Before
     public void before() {
         genMysqlDemo();
-        queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
+        queryTool = QueryToolFactory.getByDbType(jdbcDatasource.getType(),jdbcDatasource.getConnectionParams());
     }
 
     private void genMysqlDemo() {
         jdbcDatasource = new JobDatasource();
         jdbcDatasource.setDatasourceName("test");
-        jdbcDatasource.setJdbcUsername("scott");
-        jdbcDatasource.setJdbcPassword("tiger");
-        jdbcDatasource.setJdbcUrl("jdbc:oracle:thin:@localhost:1521/orcl");
-        jdbcDatasource.setJdbcDriverClass("oracle.jdbc.OracleDriver");
+        String parameter = buildParameter("scott", "tiger", DbType.ORACLE, null, "jdbc:oracle:thin:@localhost:1521/orcl", null, null);
+        jdbcDatasource.setConnectionParams(parameter);
     }
 
     @Test
@@ -36,7 +37,7 @@ public class OracleQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("EMP",jdbcDatasource.getJdbcDriverClass());
+        List<String> columns = queryTool.getColumnNames("EMP",jdbcDatasource.getType());
         log.info(columns.toString());
     }
 }

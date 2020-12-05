@@ -29,6 +29,9 @@ public interface JdbcConstants {
     String POSTGRESQL                 = "postgresql";
     String POSTGRESQL_DRIVER          = "org.postgresql.Driver";
 
+    String GREENPLUM                 = "greenplum";
+    String GREENPLUM_DRIVER          = "org.postgresql.Driver";
+
     String SYBASE                     = "sybase";
 
     String SQL_SERVER                 = "sqlserver";

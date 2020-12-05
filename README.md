@@ -2,14 +2,20 @@
 ![GitHub issues](https://img.shields.io/github/issues/WeiYe-Jing/datax-web)
 ![GitHub](https://img.shields.io/github/license/WeiYe-Jing/datax-web)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/WeiYe-Jing/datax-web)
-![](https://img.shields.io/badge/qq%E7%BE%A4-795380631-green.svg)
+![](https://img.shields.io/badge/qq%E7%BE%A4-776939467-green.svg)
 
 # DataX-Web
+
+[![Stargazers over time](https://starchart.cc/WeiYe-Jing/datax-web.svg)](https://starchart.cc/WeiYe-Jing/datax-web)
 
 DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易用的
 操作界面，降低用户使用DataX的学习成本，缩短任务配置时间，避免配置过程中出错。用户可通过页面选择数据源即可创建数据同步任务，RDBMS数据源可批量创建数据同步任务，支持实时查看数据同步进度及日志并提供终止同步功能，集成并二次开发xxl-job可根据时间、自增主键增量同步数据。
 
 任务"执行器"支持集群部署，支持执行器多节点路由策略选择，支持超时控制、失败重试、失败告警、任务依赖，执行器CPU.内存.负载的监控等等。后续还将提供更多的数据源支持、数据转换UDF、表结构同步、数据同步血缘等更为复杂的业务场景。
+
+# Architecture diagram：
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/DataX-Web.png)
 
 # System Requirements
 
@@ -130,30 +136,20 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 ### 6.任务创建介绍（关联模版创建任务不再介绍，具体参考4. 构建JSON脚本）
 
-#### DataX任务
+#### 支持DataX任务,Shell任务，Python任务，PowerShell任务
 
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/datax.png)
 
-#### Shell任务
-
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/shell.png)
 
-#### Python任务
-
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/python.png)
-
-#### PowerShell任务
-
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/powershell.png)
-
-- 任务类型：目前支持DataX任务、Shell任务、Python任务、PowerShell任务；
 - 阻塞处理策略：调度过于密集执行器来不及处理时的处理策略；
     - 单机串行：调度请求进入单机执行器后，调度请求进入FIFO队列并以串行方式运行；
     - 丢弃后续调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，本次请求将会被丢弃并标记为失败；
     - 覆盖之前调度：调度请求进入单机执行器后，发现执行器存在运行的调度任务，将会终止运行中的调度任务并清空队列，然后运行本地调度任务；
 - 增量增新建议将阻塞策略设置为丢弃后续调度或者单机串行
     - 设置单机串行时应该注意合理设置重试次数(失败重试的次数*每次执行时间<任务的调度周期)，重试的次数如果设置的过多会导致数据重复，例如任务30秒执行一次，每次执行时间需要20秒，设置重试三次，如果任务失败了，第一个重试的时间段为1577755680-1577756680，重试任务没结束，新任务又开启，那新任务的时间段会是1577755680-1577758680
-- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/time-increment-desc.md)
+
+- [增量参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/increment-desc.md)
 - [分区参数设置](https://github.com/WeiYe-Jing/datax-web/blob/master/doc/datax-web/partition-dynamic-param.md)
 
 ### 7. 任务列表
@@ -162,13 +158,12 @@ DataX Web是在DataX之上开发的分布式数据同步工具，提供简单易
 
 ### 8. 可以点击查看日志，实时获取日志信息,终止正在执行的datax进程
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/job_log.png)
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/log_stat.png)
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/log_detail.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/log_detail.png)
 
 ### 9.任务资源监控
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/monitor.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/img/monitor.png)
 
 ### 10. admin可以创建用户，编辑用户信息
 
@@ -269,10 +264,14 @@ Copyright (c) 2020 WeiYe
 
 1. 任务日志过大时，查看日志报错，请求超时；
 
-# 项目规划
+# 提交代码
+[参与贡献](https://github.com/WeiYe-Jing/datax-web/issues/190)
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/plan.png)
 
 # Contact us
 
-### QQ交流群 795380631
+### QQ交流群 776939467
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
+
+

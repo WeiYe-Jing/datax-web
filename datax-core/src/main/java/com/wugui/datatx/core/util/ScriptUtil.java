@@ -4,6 +4,7 @@ package com.wugui.datatx.core.util;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -69,7 +70,9 @@ public class ScriptUtil {
             cmdarray.add(scriptFile);
             if (params != null && params.length > 0) {
                 for (String param : params) {
-                    cmdarray.add(param);
+                    if(StringUtils.isNotBlank(param)){
+                        cmdarray.add(param);
+                    }
                 }
             }
             String[] cmdarrayFinal = cmdarray.toArray(new String[cmdarray.size()]);

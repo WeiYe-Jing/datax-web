@@ -76,6 +76,7 @@ vi ./modules/datax-admin/conf/bootstrap.properties
 MAIL_USERNAME=""
 MAIL_PASSWORD=""
 ```
+此文件中包括一些默认配置参数，例如：server.port，具体请查看文件。
 
 
 在项目目录下/module/datax-execute/bin/ev.properties 指定PYTHON_PATH的路径
@@ -90,7 +91,7 @@ PYTHON_PATH=
 DATAX_ADMIN_PORT=
 
 ````
-
+此文件中包括一些默认配置参数，例如：executor.port,json.path,data.path等，具体请查看文件。
 
 #### 5）启动服务
 ##### - 一键启动所有服务
@@ -132,8 +133,11 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
    输入用户名 admin  密码 123456 就可以直接访问系统
    
 ### 8) 运行日志
+
    部署完成之后，在modules/对应的项目/data/applogs下(用户也可以自己指定日志，修改application.yml
    中的logpath地址即可)，用户可以根据此日志跟踪项目实际启动情况   
+   
+   如果执行器启动比admin快，执行器会连接失败，日志报"拒绝连接"的错误，一般是先启动admin,再启动executor,30秒之后会重连，如果成功请忽略这个异常。
    
 ### 9）集群部署
 
@@ -161,4 +165,6 @@ Tips: 脚本使用的都是bash指令集，如若使用sh调用脚本，可能�
         
 ### 10) Contact us
 
-### QQ交流群 795380631   
+### QQ交流群
+
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)

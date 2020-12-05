@@ -22,6 +22,7 @@ public interface DatabaseInterface {
      * @return
      */
     String getSQLQueryTableNameComment();
+
     /**
      * getSQLQueryTablesNameComments
      * @return

@@ -1,10 +1,13 @@
 package com.wugui.datax.admin.tool.query;
 
+import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.entity.JobDatasource;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static com.wugui.datax.admin.tool.query.DriverConnectionFactory.buildParameter;
 
 public class PostgresqlQueryToolTest {
 
@@ -14,16 +17,14 @@ public class PostgresqlQueryToolTest {
     @Before
     public void before() {
         genDs();
-        queryTool = QueryToolFactory.getByDbType(jdbcDatasource);
+        queryTool = QueryToolFactory.getByDbType(jdbcDatasource.getType(),jdbcDatasource.getConnectionParams());
     }
 
     private void genDs() {
         jdbcDatasource = new JobDatasource();
         jdbcDatasource.setDatasourceName("test");
-        jdbcDatasource.setJdbcUsername("postgres");
-        jdbcDatasource.setJdbcPassword("postgres");
-        jdbcDatasource.setJdbcUrl("jdbc:postgresql://localhost:5432/data");
-        jdbcDatasource.setJdbcDriverClass("org.postgresql.Driver");
+        String parameter = buildParameter("postgres", "postgres", DbType.POSTGRESQL, null, "jdbc:postgresql://localhost:5432/data", null, null);
+        jdbcDatasource.setConnectionParams(parameter);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class PostgresqlQueryToolTest {
 
     @Test
     public void getTableColumns() {
-        List<String> tableNames = queryTool.getColumnNames("BD_EMR_TYPE",jdbcDatasource.getJdbcDriverClass());
+        List<String> tableNames = queryTool.getColumnNames("BD_EMR_TYPE",jdbcDatasource.getType());
         tableNames.forEach(System.out::println);
     }
 

@@ -43,6 +43,8 @@
             <artifactId>datax-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+ 
     </dependencies>
 
     <build>

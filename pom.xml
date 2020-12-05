@@ -15,6 +15,7 @@
         <module>datax-executor</module>
         <module>datax-rpc</module>
         <module>datax-assembly</module>
+        <module>datax-transformer</module>
     </modules>
 
     <properties>
@@ -54,6 +55,9 @@
         <oshi.core.version>3.5.0</oshi.core.version>
 
         <phoenix.version>5.0.0-HBase-2.0</phoenix.version>
+
+        <druid.version>1.2.3</druid.version>
+        <db2jcc.version>db2jcc4</db2jcc.version>
     </properties>
 
 </project>

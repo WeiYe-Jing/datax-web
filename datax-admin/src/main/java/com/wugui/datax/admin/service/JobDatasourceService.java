@@ -15,12 +15,6 @@ import java.util.List;
  * @since 2020-01-10
  */
 public interface JobDatasourceService extends IService<JobDatasource> {
-    /**
-     * 测试数据源
-     * @param jdbcDatasource
-     * @return
-     */
-    Boolean dataSourceTest(JobDatasource jdbcDatasource) throws IOException;
 
     /**
      *更新数据源信息
@@ -35,8 +29,7 @@ public interface JobDatasourceService extends IService<JobDatasource> {
      */
     List<JobDatasource> selectAllDatasource();
 
+    int createDataSource(String datasourceName, String datasourceGroup,DbType type, int status, String comments, String parameter);
 
-    boolean checkConnection(DbType type, String parameter);
-
-    String buildParameter(String userName, String password, DbType type, String database,String jdbcUrl,String principal,String comments);
+    int updateDataSource(long id,String datasourceName, String datasourceGroup,DbType type, int status, String comments, String parameter);
 }

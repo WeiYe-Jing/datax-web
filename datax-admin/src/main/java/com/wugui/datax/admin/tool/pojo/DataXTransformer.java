@@ -12,7 +12,8 @@ public class DataXTransformer {
 
     @Data
     public static class Parameter {
-        private int columnIndex;
         private List<String> paras;
+        private int columnIndex;
+        private List<String> extraPackage;
     }
 }

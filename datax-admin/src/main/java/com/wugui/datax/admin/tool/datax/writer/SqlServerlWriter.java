@@ -11,13 +11,9 @@ import java.util.Map;
  * @since 2019/8/2
  */
 public class SqlServerlWriter extends BaseWriterPlugin implements DataxWriterInterface {
+
     @Override
     public String getName() {
         return "sqlserverwriter";
-    }
-
-    @Override
-    public Map<String, Object> sample() {
-        return null;
     }
 }

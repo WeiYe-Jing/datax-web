@@ -12,20 +12,14 @@ import java.util.List;
 public class Hbase11xsqlToolTest {
 
     public static void main(String[] args) throws Exception {
-        String connectionString="jdbc:phoenix:hadoop1,hadoop2,hadoop3:2181";
+        String connectionString = "jdbc:phoenix:hadoop1,hadoop2,hadoop3:2181";
 //        String tableName = "SYSTEM.CATALOG";
         String tableName = "STOCK_SYMBOL";
-
 //        getPColumns(connectionString,tableName);
-
-
         showTables(connectionString);
-
-        getColumns(connectionString,tableName);
-
+        getColumns(connectionString, tableName);
 //        showFields(connectionString,null);
     }
-
 
     private static int getSize(ResultSet rs) {
         try {
@@ -45,38 +39,30 @@ public class Hbase11xsqlToolTest {
     }
 
 
-
     private static void getColumns(String connectionString, String tableName) throws SQLException {
         Connection conn = DriverManager.getConnection(connectionString);
         DatabaseMetaData metaData = conn.getMetaData();
         ResultSet columns = metaData.getColumns(conn.getCatalog(), null, tableName, "%");
+        try {
+            int total = getSize(columns);
+            int index = 0;
 
+            while (columns.next()) {
 
-            try {
-                int total = getSize(columns);
-                int index = 0;
-
-                while (columns.next()) {
-
-                    System.out.println(columns.getString("COLUMN_NAME")+"  "+columns.getString("TYPE_NAME"));
-                }
-
-            } finally {
-                columns.close();
+                System.out.println(columns.getString("COLUMN_NAME") + "  " + columns.getString("TYPE_NAME"));
             }
 
-
+        } finally {
+            columns.close();
+        }
     }
-
-
 
 
     // 查询所有的表
     private static void showTables(String connectionString) throws SQLException, IOException {
         Connection conn = DriverManager.getConnection(connectionString);
         DatabaseMetaData metaData = conn.getMetaData();
-        ResultSet rs = metaData.getTables(conn.getCatalog(), null, "%", new String[] {"TABLE"});
-
+        ResultSet rs = metaData.getTables(conn.getCatalog(), null, "%", new String[]{"TABLE"});
         try {
             while (rs.next()) {
                 System.out.println(rs.getString("TABLE_NAME"));
@@ -87,17 +73,12 @@ public class Hbase11xsqlToolTest {
             } catch (Exception e) {
             }
         }
-
     }
 
 
     // 查询所有的表
-    private static void showFields(String connectionString,String tableName) throws SQLException, NoSuchFieldException, IllegalAccessException {
-
+    private static void showFields(String connectionString, String tableName) throws SQLException, NoSuchFieldException, IllegalAccessException {
         Connection conn = DriverManager.getConnection(connectionString);
-
-
-
         Statement stat = conn.createStatement();
         ResultSet rs = stat.executeQuery("select * from   LKY_STOCK_SYMBOL limit 1");
         RowProjector row = (RowProjector) ReflectionUtil.getPrivateField(rs, "rowProjector");

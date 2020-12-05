@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @author water
+ * @author jingwk
  */
 @Data
 public class HbaseReaderDTO implements Serializable {

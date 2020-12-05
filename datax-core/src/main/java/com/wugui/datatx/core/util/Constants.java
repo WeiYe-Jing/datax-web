@@ -55,6 +55,7 @@ public final class Constants {
     public static final String COM_ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
     public static final String COM_SQLSERVER_JDBC_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     public static final String COM_DB2_JDBC_DRIVER = "com.ibm.db2.jcc.DB2Driver";
+    public static final String COM_PHOENIX_JDBC_DRIVER = "org.apache.phoenix.jdbc.PhoenixDriver";
 
     /**
      * database type

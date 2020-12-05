@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
 /**
  * os utils
  *
- * @author water
+ * @author jingwk
  */
 public class OsUtils {
 

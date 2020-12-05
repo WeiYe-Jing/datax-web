@@ -13,4 +13,8 @@
 /build/
 /packages/
 /datax-assembly/target/
+/datax-assembly/datax-assembly.iml
+/datax-web.iml
 *.iml
+/datax-transformer/target/
+/applogs/

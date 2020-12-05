@@ -1,101 +1,50 @@
 package com.wugui.datax.admin.tool.query;
 
-import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.util.JdbcConstants;
-import com.wugui.datax.admin.util.RdbmsException;
-
-import java.sql.SQLException;
+import com.wugui.datatx.core.enums.DbType;
 
 /**
- * 工具类，获取单例实体
+ * 获取单例实体
  *
- * @author zhouhongfa@gz-yibo.com
+ * @author weiye
  * @ClassName QueryToolFactory
- * @Version 1.0
- * @since 2019/7/18 9:36
+ * @Version 2.1.3
+ * @since 2020/08/02 9:36
  */
 public class QueryToolFactory {
 
-    public static BaseQueryTool getByDbType(JobDatasource jobDatasource) {
-        //获取dbType
-        String datasource = jobDatasource.getDatasource();
-        if (JdbcConstants.MYSQL.equals(datasource)) {
-            return getMySQLQueryToolInstance(jobDatasource);
-        } else if (JdbcConstants.ORACLE.equals(datasource)) {
-            return getOracleQueryToolInstance(jobDatasource);
-        } else if (JdbcConstants.POSTGRESQL.equals(datasource)) {
-            return getPostgresqlQueryToolInstance(jobDatasource);
-        } else if (JdbcConstants.SQL_SERVER.equals(datasource)) {
-            return getSqlserverQueryToolInstance(jobDatasource);
-        }else if (JdbcConstants.HIVE.equals(datasource)) {
-            return getHiveQueryToolInstance(jobDatasource);
-        } else if (JdbcConstants.CLICKHOUSE.equals(datasource)) {
-            return getClickHouseQueryToolInstance(jobDatasource);
-        }else if (JdbcConstants.HBASE20XSQL.equals(datasource)) {
-            return getHbase20XsqlQueryToolQueryToolInstance(jobDatasource);
-        }
-        throw new UnsupportedOperationException("找不到该类型: ".concat(datasource));
-    }
+    public static BaseQueryTool getByDbType(DbType dbType, String parameter) {
 
-    private static BaseQueryTool getMySQLQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new MySQLQueryTool(jdbcDatasource);
-        } catch (Exception e) {
-            throw RdbmsException.asConnException(JdbcConstants.MYSQL,
-                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
-        }
-    }
+        BaseQueryTool baseQueryTool = null;
 
-    private static BaseQueryTool getOracleQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new OracleQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.ORACLE,
-                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
+        switch (dbType) {
+            case POSTGRESQL:
+            case GREENPLUM:
+                baseQueryTool = new PostgresqlQueryTool(dbType, parameter);
+                break;
+            case MYSQL:
+                baseQueryTool = new MySQLQueryTool(dbType, parameter);
+                break;
+            case HIVE:
+                baseQueryTool = new HiveQueryTool(dbType, parameter);
+                break;
+            case CLICKHOUSE:
+                baseQueryTool = new ClickHouseQueryTool(dbType, parameter);
+                break;
+            case ORACLE:
+                baseQueryTool = new OracleQueryTool(dbType, parameter);
+                break;
+            case SQLSERVER:
+                baseQueryTool = new SqlServerQueryTool(dbType, parameter);
+                break;
+            case HBASE20XSQL:
+                baseQueryTool = new Hbase20XsqlQueryTool(dbType, parameter);
+                break;
+            case DB2:
+                baseQueryTool=new DB2SQLQueryTool(dbType, parameter);
+                break;
+            default:
+                break;
         }
-    }
-
-    private static BaseQueryTool getPostgresqlQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new PostgresqlQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.POSTGRESQL,
-                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
-        }
-    }
-
-    private static BaseQueryTool getSqlserverQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new SqlServerQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.SQL_SERVER,
-                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
-        }
-    }
-
-    private static BaseQueryTool getHiveQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new HiveQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.HIVE,
-                    e,jdbcDatasource.getJdbcUsername(),jdbcDatasource.getDatasourceName());
-        }
-    }
-    private static BaseQueryTool getClickHouseQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new ClickHouseQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.CLICKHOUSE,
-                    e, jdbcDatasource.getJdbcUsername(), jdbcDatasource.getDatasourceName());
-        }
-    }
-
-    private static Hbase20XsqlQueryTool getHbase20XsqlQueryToolQueryToolInstance(JobDatasource jdbcDatasource) {
-        try {
-            return new Hbase20XsqlQueryTool(jdbcDatasource);
-        } catch (SQLException e) {
-            throw RdbmsException.asConnException(JdbcConstants.HBASE20XSQL,
-                    e, jdbcDatasource.getJdbcUsername(), jdbcDatasource.getDatasourceName());
-        }
+        return baseQueryTool;
     }
 }

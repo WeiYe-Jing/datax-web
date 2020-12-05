@@ -21,6 +21,7 @@ import com.wugui.datax.admin.util.JsonUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class JobTrigger {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
         }
-        if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
+        if (GlueTypeEnum.DATAX.getDesc().equals(jobInfo.getGlueType())) {
             //解密账密
             String json = JsonUtils.changeJson(jobInfo.getJobJson(), JsonUtils.decrypt);
             jobInfo.setJobJson(json);
@@ -138,22 +139,24 @@ public class JobTrigger {
 
         //increment parameter
         Integer incrementType = jobInfo.getIncrementType();
-        if (incrementType != null) {
-            triggerParam.setIncrementType(incrementType);
-            if (IncrementTypeEnum.ID.getCode() == incrementType) {
-                long maxId = getMaxId(jobInfo);
-                jobLog.setMaxId(maxId);
-                triggerParam.setEndId(maxId);
-                triggerParam.setStartId(jobInfo.getIncStartId());
-            } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-                triggerParam.setStartTime(jobInfo.getIncStartTime());
-                triggerParam.setTriggerTime(triggerTime);
-                triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
-            } else if (IncrementTypeEnum.PARTITION.getCode() == incrementType) {
-                triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
-            }
-            triggerParam.setReplaceParam(jobInfo.getReplaceParam());
+        triggerParam.setIncrementType(incrementType);
+        if (IncrementTypeEnum.ID.getCode().equals(incrementType)) {
+            long maxId = getMaxId(jobInfo);
+            jobLog.setMaxId(maxId);
+            triggerParam.setEndId(String.valueOf(maxId));
+            triggerParam.setStartId(jobInfo.getIncStartId());
+        } else if (IncrementTypeEnum.TIME.getCode().equals(incrementType)) {
+            triggerParam.setStartTime(jobInfo.getIncStartTime());
+            triggerParam.setTriggerTime(triggerTime);
+            triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
+        } else if (IncrementTypeEnum.PARTITION.getCode().equals(incrementType)) {
+            triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
+        } else if (IncrementTypeEnum.MONGODB_ID.getCode().equals(incrementType)) {
+            triggerParam.setStartId(jobInfo.getIncStartId());
+            String endId = new ObjectId(triggerTime).toHexString();
+            triggerParam.setEndId(endId);
         }
+        triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         //jvm parameter
         triggerParam.setJvmParam(jobInfo.getJvmParam());
 
@@ -217,7 +220,7 @@ public class JobTrigger {
 
     private static long getMaxId(JobInfo jobInfo) {
         JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
-        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource.getType(),datasource.getConnectionParams());
         return qTool.getMaxIdVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
     }
 

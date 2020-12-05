@@ -12,7 +12,7 @@ import java.util.Map;
  * @author xuxueli 2018-11-30
  */
 public class BasicJsonReader {
-    private static Logger logger = LoggerFactory.getLogger(BasicJsonwriter.class);
+    private static Logger logger = LoggerFactory.getLogger(BasicJsonReader.class);
 
 
     public Map<String, Object> parseMap(String json) {

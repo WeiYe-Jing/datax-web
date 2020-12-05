@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wugui.datatx.core.enums.DbType;
-import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
+import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,9 +14,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+
+import static com.wugui.datax.admin.tool.query.DriverConnectionFactory.buildParameter;
+
 
 /**
  * jdbc数据源配置控制器层
@@ -29,11 +31,12 @@ import java.util.List;
 @RequestMapping("/api/jobJdbcDatasource")
 @Api(tags = "jdbc数据源配置接口")
 public class JobDatasourceController extends BaseController {
-    /**
-     * 服务对象
-     */
+
     @Autowired
     private JobDatasourceService jobDatasourceService;
+
+    @Autowired
+    private DatasourceQueryService datasourceQueryService;
 
     /**
      * 分页查询所有数据
@@ -81,33 +84,65 @@ public class JobDatasourceController extends BaseController {
     /**
      * 新增数据
      *
-     * @param entity 实体对象
-     * @return 新增结果
+     * @param user
+     * @param password
+     * @param type
+     * @param jdbcUrl
+     * @param principal
+     * @param database
+     * @param comments
+     * @param other
+     * @return
      */
     @ApiOperation("新增数据")
-    @PostMapping
-    public R<Boolean> insert(@RequestBody JobDatasource entity) {
-        return success(this.jobDatasourceService.save(entity));
+    @PostMapping("/create")
+    public R<Integer> createDataSource(@RequestParam(value = "datasourceName", required = false) String datasourceName,
+                                       @RequestParam(value = "datasourceGroup", required = false) String datasourceGroup,
+                                       @RequestParam(value = "status", required = false, defaultValue = "1") int status,
+                                       @RequestParam(value = "user", required = false) String user,
+                                       @RequestParam(value = "password", required = false) String password,
+                                       @RequestParam(value = "type", required = false) DbType type,
+                                       @RequestParam(value = "jdbcUrl", required = false) String jdbcUrl,
+                                       @RequestParam(value = "principal", required = false) String principal,
+                                       @RequestParam(value = "database", required = false) String database,
+                                       @RequestParam(value = "comments", required = false) String comments,
+                                       @RequestParam(value = "other", required = false) String other) {
+        String parameter = buildParameter(user, password, type, database, jdbcUrl, principal, comments);
+        return success(jobDatasourceService.createDataSource(datasourceName, datasourceGroup, type, status, comments, parameter));
     }
 
     /**
      * 修改数据
      *
-     * @param entity 实体对象
-     * @return 修改结果
+     * @param datasourceName
+     * @param datasourceGroup
+     * @param status
+     * @param user
+     * @param password
+     * @param type
+     * @param jdbcUrl
+     * @param principal
+     * @param database
+     * @param comments
+     * @param other
+     * @return
      */
-    @PutMapping
+    @PutMapping("/update")
     @ApiOperation("修改数据")
-    public R<Boolean> update(@RequestBody JobDatasource entity) {
-        LocalCacheUtil.remove(entity.getDatasourceName());
-        JobDatasource d = jobDatasourceService.getById(entity.getId());
-        if (null != d.getJdbcUsername() && entity.getJdbcUsername().equals(d.getJdbcUsername())) {
-            entity.setJdbcUsername(null);
-        }
-        if (null != entity.getJdbcPassword() && entity.getJdbcPassword().equals(d.getJdbcPassword())) {
-            entity.setJdbcPassword(null);
-        }
-        return success(this.jobDatasourceService.updateById(entity));
+    public R<Integer> updateDataSource(@RequestParam("id") long id,
+                                       @RequestParam(value = "datasourceName", required = false) String datasourceName,
+                                       @RequestParam(value = "datasourceGroup", required = false) String datasourceGroup,
+                                       @RequestParam(value = "status", required = false,defaultValue = "1") int status,
+                                       @RequestParam(value = "user", required = false) String user,
+                                       @RequestParam(value = "password", required = false) String password,
+                                       @RequestParam(value = "type", required = false) DbType type,
+                                       @RequestParam(value = "jdbcUrl", required = false) String jdbcUrl,
+                                       @RequestParam(value = "principal", required = false) String principal,
+                                       @RequestParam(value = "database", required = false) String database,
+                                       @RequestParam(value = "comments", required = false) String comments,
+                                       @RequestParam(value = "other", required = false) String other) {
+        String parameter = buildParameter(user, password, type, database, jdbcUrl, principal, comments);
+        return success(this.jobDatasourceService.updateDataSource(id, datasourceName, datasourceGroup, type, status, comments, parameter));
     }
 
     /**
@@ -122,6 +157,7 @@ public class JobDatasourceController extends BaseController {
         return success(this.jobDatasourceService.removeByIds(idList));
     }
 
+
     /**
      * 测试数据源
      *
@@ -130,8 +166,16 @@ public class JobDatasourceController extends BaseController {
      */
     @PostMapping("/test")
     @ApiOperation("测试数据")
-    public R<Boolean> dataSourceTest (@RequestBody JobDatasource jobJdbcDatasource) throws IOException {
-        return success(jobDatasourceService.dataSourceTest(jobJdbcDatasource));
+    public R<Boolean> dataSourceTest(@RequestParam(value = "user", required = false) String user,
+                                     @RequestParam(value = "password", required = false) String password,
+                                     @RequestParam(value = "type", required = false) DbType type,
+                                     @RequestParam(value = "jdbcUrl", required = false) String jdbcUrl,
+                                     @RequestParam(value = "principal", required = false) String principal,
+                                     @RequestParam(value = "database", required = false) String database,
+                                     @RequestParam(value = "comments", required = false) String comments,
+                                     @RequestParam(value = "other", required = false) String other) {
+        String parameter = buildParameter(user, password, type, database, jdbcUrl, principal, comments);
+        return success(datasourceQueryService.checkConnection(type, parameter));
     }
 
 }

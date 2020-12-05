@@ -8,7 +8,7 @@ package com.wugui.datax.admin.tool.meta;
  * @Version 1.0
  * @since 2019/7/17 15:48
  */
-public class MySQLDatabaseMeta extends BaseDatabaseMeta implements DatabaseInterface {
+public class MySQLDatabaseMeta extends BaseDatabaseMeta{
 
     private volatile static MySQLDatabaseMeta single;
 
@@ -41,5 +41,17 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta implements DatabaseInter
     @Override
     public String getSQLQueryColumns(String... args) {
         return "select column_name from information_schema.columns where table_schema=? and table_name=?";
+    }
+
+    /**
+     * 在mysql中 scheme与database同义词。
+     * 如果需要schema 则return "show databases";
+     *
+     * @param args
+     * @return
+     */
+    @Override
+    public String getSQLQueryTableSchema(String... args) {
+        return "show databases";
     }
 }

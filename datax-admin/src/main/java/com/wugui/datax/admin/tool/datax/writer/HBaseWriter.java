@@ -11,33 +11,31 @@ import java.util.Map;
  * @author jingwk
  */
 public class HBaseWriter extends BaseWriterPlugin implements DataxWriterInterface {
+
     @Override
     public String getName() {
         return "hbase11xwriter";
     }
 
     @Override
-    public Map<String, Object> sample() {
-        return null;
-    }
-
-    @Override
     public Map<String, Object> buildHbase(DataxHbasePojo plugin) {
-        //构建
-        Map<String, Object> writerObj = Maps.newLinkedHashMap();
-        writerObj.put("name", getName());
-        Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-        Map<String, Object> confige = Maps.newLinkedHashMap();
-        confige.put("hbase.zookeeper.quorum", plugin.getWriterHbaseConfig());
-        parameterObj.put("hbaseConfig", confige);
-        parameterObj.put("table", plugin.getWriterTable());
-        parameterObj.put("mode", plugin.getWriterMode());
-        parameterObj.put("column", plugin.getColumns());
-        parameterObj.put("rowkeyColumn", JSON.parseArray(plugin.getWriterRowkeyColumn()));
+
+        Map<String, Object> config = Maps.newLinkedHashMap();
+        config.put("hbase.zookeeper.quorum", plugin.getWriterHbaseConfig());
+
+        Map<String, Object> parameter = Maps.newLinkedHashMap();
+        parameter.put("hbaseConfig", config);
+        parameter.put("table", plugin.getWriterTable());
+        parameter.put("mode", plugin.getWriterMode());
+        parameter.put("column", plugin.getColumns());
+        parameter.put("rowkeyColumn", JSON.parseArray(plugin.getWriterRowkeyColumn()));
         if (StringUtils.isNotBlank(plugin.getWriterVersionColumn().getValue())) {
-            parameterObj.put("versionColumn", plugin.getWriterVersionColumn());
+            parameter.put("versionColumn", plugin.getWriterVersionColumn());
         }
-        writerObj.put("parameter", parameterObj);
-        return writerObj;
+
+        Map<String, Object> writer = Maps.newLinkedHashMap();
+        writer.put("name", getName());
+        writer.put("parameter", parameter);
+        return writer;
     }
 }

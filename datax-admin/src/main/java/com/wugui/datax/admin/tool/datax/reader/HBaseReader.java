@@ -7,33 +7,30 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
 public class HBaseReader extends BaseReaderPlugin implements DataxReaderInterface {
+
   @Override
   public String getName() {
     return "hbase11xreader";
   }
 
   @Override
-  public Map<String, Object> sample() {
-    return null;
-  }
-
-  @Override
   public Map<String, Object> buildHbase(DataxHbasePojo plugin) {
-    //构建
-    Map<String, Object> readerObj = Maps.newLinkedHashMap();
-    readerObj.put("name", getName());
-    Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-    Map<String, Object> confige = Maps.newLinkedHashMap();
-    confige.put("hbase.zookeeper.quorum",plugin.getReaderHbaseConfig());
-    parameterObj.put("hbaseConfig", confige);
-    parameterObj.put("table", plugin.getReaderTable());
-    parameterObj.put("mode", plugin.getReaderMode());
-    parameterObj.put("column", plugin.getColumns());
+
+    Map<String, Object> config = Maps.newLinkedHashMap();
+    config.put("hbase.zookeeper.quorum",plugin.getReaderHbaseConfig());
+    Map<String, Object> parameter = Maps.newLinkedHashMap();
+    parameter.put("hbaseConfig", config);
+    parameter.put("table", plugin.getReaderTable());
+    parameter.put("mode", plugin.getReaderMode());
+    parameter.put("column", plugin.getColumns());
     if(StringUtils.isNotBlank(plugin.getReaderRange().getStartRowkey()) && StringUtils.isNotBlank(plugin.getReaderRange().getEndRowkey())){
-      parameterObj.put("range", plugin.getReaderRange());
+      parameter.put("range", plugin.getReaderRange());
     }
-    parameterObj.put("maxVersion", plugin.getReaderMaxVersion());
-    readerObj.put("parameter", parameterObj);
-    return readerObj;
+    parameter.put("maxVersion", plugin.getReaderMaxVersion());
+
+    Map<String, Object> reader = Maps.newLinkedHashMap();
+    reader.put("name", getName());
+    reader.put("parameter", parameter);
+    return reader;
   }
 }

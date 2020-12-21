@@ -4,14 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.datatx.core.datasource.BaseDataSource;
-import com.wugui.datatx.core.datasource.MongoDBDataSource;
-import com.wugui.datatx.core.util.JSONUtils;
 import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.tool.datax.BaseDataxPlugin;
+import com.wugui.datax.admin.tool.datax.BaseDataXPlugin;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
+import com.wugui.datax.admin.tool.query.DriverConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -24,43 +23,38 @@ import java.util.Map;
  * @Version 1.0
  * @since 2019/8/2 16:27
  */
-public abstract class BaseReaderPlugin extends BaseDataxPlugin {
+public abstract class BaseReaderPlugin extends BaseDataXPlugin {
 
 
     @Override
     public Map<String, Object> build(DataxRdbmsPojo plugin) {
         //构建
-        Map<String, Object> readerObj = Maps.newLinkedHashMap();
-        readerObj.put("name", getName());
-        Map<String, Object> parameterObj = Maps.newLinkedHashMap();
-        Map<String, Object> connectionObj = Maps.newLinkedHashMap();
+        Map<String, Object> parameter = Maps.newLinkedHashMap();
+        Map<String, Object> connection = Maps.newLinkedHashMap();
 
         JobDatasource jobDatasource = plugin.getJobDatasource();
-
-        BaseDataSource baseDataSource = JSONUtils.parseObject(jobDatasource.getConnectionParams(), BaseDataSource.class);
-
-        parameterObj.put("username", baseDataSource.getUser());
-        parameterObj.put("password", baseDataSource.getPassword());
-
+        BaseDataSource baseDataSource = DriverConnectionFactory.getBaseDataSource(jobDatasource.getType(), jobDatasource.getConnectionParams());
         //判断是否是 querySql
         if (StrUtil.isNotBlank(plugin.getQuerySql())) {
-            connectionObj.put("querySql", ImmutableList.of(plugin.getQuerySql()));
+            connection.put("querySql", ImmutableList.of(plugin.getQuerySql()));
         } else {
-            parameterObj.put("column", plugin.getRdbmsColumns());
+            parameter.put("column", plugin.getRdbmsColumns());
             //判断是否有where
             if (StringUtils.isNotBlank(plugin.getWhereParam())) {
-                parameterObj.put("where", plugin.getWhereParam());
+                parameter.put("where", plugin.getWhereParam());
             }
-            connectionObj.put("table", plugin.getTables());
+            connection.put("table", plugin.getTables());
         }
-        parameterObj.put("splitPk",plugin.getSplitPk());
-        connectionObj.put("jdbcUrl", ImmutableList.of(baseDataSource.getJdbcUrl()));
+        connection.put("jdbcUrl", ImmutableList.of(baseDataSource.getJdbcUrl()));
+        parameter.put("username", baseDataSource.getUser());
+        parameter.put("password", baseDataSource.getPassword());
+        parameter.put("splitPk",plugin.getSplitPk());
+        parameter.put("connection", ImmutableList.of(connection));
 
-        parameterObj.put("connection", ImmutableList.of(connectionObj));
-
-        readerObj.put("parameter", parameterObj);
-
-        return readerObj;
+        Map<String, Object> reader = Maps.newLinkedHashMap();
+        reader.put("name", getName());
+        reader.put("parameter", parameter);
+        return reader;
     }
 
     @Override

@@ -123,7 +123,6 @@ public abstract class BaseDataSource {
           separator = ":";
           break;
         case HIVE:
-        case SPARK:
         case SQLSERVER:
           separator = ";";
           break;
@@ -198,5 +197,6 @@ public abstract class BaseDataSource {
   public void setOther(String other) {
     this.other = other;
   }
+
 
 }

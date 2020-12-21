@@ -24,7 +24,6 @@ public class ReplaceNewLineSymbolTransformer extends ComplexTransformer {
 
         int columnIndex;
 
-
         try {
             if (paras.length != 2) {
                 throw new RuntimeException("replaceNewLineSymbol paras must be 3");
@@ -37,7 +36,6 @@ public class ReplaceNewLineSymbolTransformer extends ComplexTransformer {
         }
 
         Column column = record.getColumn(columnIndex);
-
 
         String columnStr = column.asString();
         if (null != columnStr) {

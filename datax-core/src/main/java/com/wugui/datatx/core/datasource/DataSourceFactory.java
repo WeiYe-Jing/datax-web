@@ -27,22 +27,31 @@ public class DataSourceFactory {
             switch (dbType) {
                 case MYSQL:
                     baseDataSource = JSONUtils.parseObject(parameter, MySQLDataSource.class);
+                    break;
                 case POSTGRESQL:
                     baseDataSource = JSONUtils.parseObject(parameter, PostgreDataSource.class);
+                    break;
                 case HIVE:
                     baseDataSource = JSONUtils.parseObject(parameter, HiveDataSource.class);
+                    break;
                 case SPARK:
                     baseDataSource = JSONUtils.parseObject(parameter, SparkDataSource.class);
+                    break;
                 case CLICKHOUSE:
                     baseDataSource = JSONUtils.parseObject(parameter, ClickHouseDataSource.class);
+                    break;
                 case ORACLE:
                     baseDataSource = JSONUtils.parseObject(parameter, OracleDataSource.class);
+                    break;
                 case SQLSERVER:
                     baseDataSource = JSONUtils.parseObject(parameter, SQLServerDataSource.class);
+                    break;
                 case DB2:
                     baseDataSource = JSONUtils.parseObject(parameter, DB2ServerDataSource.class);
+                    break;
                 case PHOENIX:
                     baseDataSource = JSONUtils.parseObject(parameter, PhoenixDataSource.class);
+                    break;
                 default:
                     break;
             }

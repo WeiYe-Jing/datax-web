@@ -15,7 +15,7 @@ import java.util.Map;
  * @Version 1.0
  * @since 2019/7/30 22:59
  */
-public interface DataxPluginInterface {
+public interface DataXPluginInterface {
     /**
      * 获取reader插件名称
      *
@@ -29,7 +29,6 @@ public interface DataxPluginInterface {
      * @return dataxPluginPojo
      */
     Map<String, Object> build(DataxRdbmsPojo dataxPluginPojo);
-
 
     /**
      * hive json构建
@@ -54,11 +53,4 @@ public interface DataxPluginInterface {
      * @return
      */
     Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
-
-    /**
-     * 获取示例
-     *
-     * @return
-     */
-    Map<String, Object> sample();
 }

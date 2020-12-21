@@ -1,8 +1,6 @@
 package com.wugui.datax.admin.tool.datax;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.util.concurrent.AbstractScheduledService;
 import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.entity.JobDatasource;
 import org.junit.Assert;
@@ -30,7 +28,7 @@ public class DataxJsonHelperTest {
 
     @Test
     public void testBuildCore(){
-        DataxJsonHelper jsonHelper = new DataxJsonHelper();
+        DataXJsonHelper jsonHelper = new DataXJsonHelper();
         String result = JSON.toJSONString(jsonHelper.buildCore());
         System.out.println(result);
         Assert.assertTrue(result.contains("byte"));

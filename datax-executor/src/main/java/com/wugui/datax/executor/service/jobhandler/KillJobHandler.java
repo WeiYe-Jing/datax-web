@@ -24,7 +24,7 @@ public class KillJobHandler extends AbstractJobHandler {
 
     @Override
     public ReturnT<String> execute(TriggerParam tgParam) {
-        String processId = tgParam.getProcessId();
+        final String processId = tgParam.getProcessId();
         boolean result = ProcessUtil.killProcessByPid(processId);
         //  删除临时文件
         if (!CollectionUtils.isEmpty(JOB_TEM_FILES)) {

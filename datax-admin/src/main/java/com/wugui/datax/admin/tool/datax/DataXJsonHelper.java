@@ -194,8 +194,8 @@ public class DataXJsonHelper implements DataXJsonInterface {
                 buildWriter = this.buildHBaseWriter();
                 break;
             case DB2:
-                readerPlugin = new DB2Writer();
-                buildReader = buildWriter();
+                writerPlugin = new DB2Writer();
+                buildWriter = buildWriter();
                 break;
         }
     }
@@ -225,7 +225,7 @@ public class DataXJsonHelper implements DataXJsonInterface {
                 paras.add("");
                 p.setColumnIndex(i);
 
-            } else if ("md5".equals(t.getName())) {
+            } else if ("dx_md5".equals(t.getName())) {
                 paras.add("");
                 p.setColumnIndex(i);
 

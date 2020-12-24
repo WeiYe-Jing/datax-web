@@ -23,37 +23,8 @@ public class DataSourceFactory {
     public static BaseDataSource getDatasource(DbType dbType, String parameter) {
         BaseDataSource baseDataSource = null;
         try {
-
-            switch (dbType) {
-                case MYSQL:
-                    baseDataSource = JSONUtils.parseObject(parameter, MySQLDataSource.class);
-                    break;
-                case POSTGRESQL:
-                    baseDataSource = JSONUtils.parseObject(parameter, PostgreDataSource.class);
-                    break;
-                case HIVE:
-                    baseDataSource = JSONUtils.parseObject(parameter, HiveDataSource.class);
-                    break;
-                case SPARK:
-                    baseDataSource = JSONUtils.parseObject(parameter, SparkDataSource.class);
-                    break;
-                case CLICKHOUSE:
-                    baseDataSource = JSONUtils.parseObject(parameter, ClickHouseDataSource.class);
-                    break;
-                case ORACLE:
-                    baseDataSource = JSONUtils.parseObject(parameter, OracleDataSource.class);
-                    break;
-                case SQLSERVER:
-                    baseDataSource = JSONUtils.parseObject(parameter, SQLServerDataSource.class);
-                    break;
-                case DB2:
-                    baseDataSource = JSONUtils.parseObject(parameter, DB2ServerDataSource.class);
-                    break;
-                case PHOENIX:
-                    baseDataSource = JSONUtils.parseObject(parameter, PhoenixDataSource.class);
-                    break;
-                default:
-                    break;
+            if (dbType.getClazz() != null) {
+                baseDataSource = JSONUtils.parseObject(parameter, dbType.getClazz());
             }
         } catch (Exception e) {
             logger.error("get datasource object error", e);
@@ -68,32 +39,11 @@ public class DataSourceFactory {
      * @throws Exception
      */
     public static void loadClass(DbType dbType) throws Exception {
-        switch (dbType) {
-            case MYSQL:
-                Class.forName(Constants.COM_MYSQL_JDBC_DRIVER);
-                break;
-            case POSTGRESQL:
-                Class.forName(Constants.ORG_POSTGRESQL_DRIVER);
-                break;
-            case HIVE:
-            case SPARK:
-                Class.forName(Constants.ORG_APACHE_HIVE_JDBC_HIVE_DRIVER);
-                break;
-            case CLICKHOUSE:
-                Class.forName(Constants.COM_CLICKHOUSE_JDBC_DRIVER);
-                break;
-            case ORACLE:
-                Class.forName(Constants.COM_ORACLE_JDBC_DRIVER);
-                break;
-            case SQLSERVER:
-                Class.forName(Constants.COM_SQLSERVER_JDBC_DRIVER);
-                break;
-            case DB2:
-                Class.forName(Constants.COM_DB2_JDBC_DRIVER);
-                break;
-            default:
-                logger.error("not support sql type: {},can't load class", dbType);
-                throw new IllegalArgumentException("not support sql type,can't load class");
+        if (dbType.getDriver() != null) {
+            Class.forName(dbType.getDriver());
+        } else {
+            logger.error("not support sql type: {},can't load class", dbType);
+            throw new IllegalArgumentException("not support sql type,can't load class");
         }
     }
 }

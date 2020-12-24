@@ -12,7 +12,7 @@ import com.wugui.datatx.core.enums.DbType;
  */
 public class OracleQueryTool extends BaseQueryTool implements QueryToolInterface {
 
-    OracleQueryTool(DbType dbType, String parameter) {
+    public OracleQueryTool(DbType dbType, String parameter) {
         super(dbType, parameter);
     }
 }

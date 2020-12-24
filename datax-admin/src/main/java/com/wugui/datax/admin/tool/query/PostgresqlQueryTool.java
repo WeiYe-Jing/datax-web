@@ -11,7 +11,7 @@ import com.wugui.datatx.core.enums.DbType;
  * @since 2019/8/2 11:28
  */
 public class PostgresqlQueryTool extends BaseQueryTool implements QueryToolInterface {
-    PostgresqlQueryTool(DbType dbType, String parameter) {
+    public PostgresqlQueryTool(DbType dbType, String parameter) {
         super(dbType, parameter);
     }
 

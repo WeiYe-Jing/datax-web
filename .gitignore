@@ -1,11 +1,7 @@
-/datax-executor/target/
-/datax-core/target/
-/datax-admin/target/
+*/target/
 /.idea/
 /datax-admin/.idea/
 /datax-registry/datax-registry.iml
-/datax-registry/target/
-/datax-rpc/target/
 /datax-all.iml
 /logs/
 *-dev*

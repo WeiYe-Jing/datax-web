@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.tool.datax;
 
+import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
+import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
 import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
@@ -22,35 +24,4 @@ public interface DataXPluginInterface {
      * @return
      */
     String getName();
-
-    /**
-     * 构建
-     *
-     * @return dataxPluginPojo
-     */
-    Map<String, Object> build(DataxRdbmsPojo dataxPluginPojo);
-
-    /**
-     * hive json构建
-     *
-     * @param dataxHivePojo
-     * @return
-     */
-    Map<String, Object> buildHive(DataxHivePojo dataxHivePojo);
-
-    /**
-     * hbase json构建
-     *
-     * @param dataxHbasePojo
-     * @return
-     */
-    Map<String, Object> buildHbase(DataxHbasePojo dataxHbasePojo);
-
-    /**
-     * mongodb json构建
-     *
-     * @param dataxMongoDBPojo
-     * @return
-     */
-    Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo);
 }

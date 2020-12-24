@@ -1,6 +1,9 @@
 package com.wugui.datax.admin.tool.query;
 
 import com.wugui.datatx.core.enums.DbType;
+import com.wugui.datax.admin.tool.enums.DbTypePlugin;
+
+import java.lang.reflect.Constructor;
 
 /**
  * 获取单例实体
@@ -13,37 +16,16 @@ import com.wugui.datatx.core.enums.DbType;
 public class QueryToolFactory {
 
     public static BaseQueryTool getByDbType(DbType dbType, String parameter) {
-
+        Class clazz = DbTypePlugin.getDbTypePlugin(dbType).getClazz();
         BaseQueryTool baseQueryTool = null;
-
-        switch (dbType) {
-            case POSTGRESQL:
-            case GREENPLUM:
-                baseQueryTool = new PostgresqlQueryTool(dbType, parameter);
-                break;
-            case MYSQL:
-                baseQueryTool = new MySQLQueryTool(dbType, parameter);
-                break;
-            case HIVE:
-                baseQueryTool = new HiveQueryTool(dbType, parameter);
-                break;
-            case CLICKHOUSE:
-                baseQueryTool = new ClickHouseQueryTool(dbType, parameter);
-                break;
-            case ORACLE:
-                baseQueryTool = new OracleQueryTool(dbType, parameter);
-                break;
-            case SQLSERVER:
-                baseQueryTool = new SqlServerQueryTool(dbType, parameter);
-                break;
-            case HBASE20XSQL:
-                baseQueryTool = new Hbase20XsqlQueryTool(dbType, parameter);
-                break;
-            case DB2:
-                baseQueryTool=new DB2SQLQueryTool(dbType, parameter);
-                break;
-            default:
-                break;
+        if (clazz != null) {
+            try {
+                Constructor<BaseQueryTool> c = clazz.getConstructor(DbType.class, String.class);
+                baseQueryTool = c.newInstance(dbType, parameter);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
         return baseQueryTool;
     }

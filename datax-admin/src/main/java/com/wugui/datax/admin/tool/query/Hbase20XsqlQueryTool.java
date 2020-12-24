@@ -9,7 +9,7 @@ import com.wugui.datatx.core.enums.DbType;
 public class Hbase20XsqlQueryTool extends BaseQueryTool implements QueryToolInterface {
 
 
-    Hbase20XsqlQueryTool(DbType dbType, String parameter){
+    public Hbase20XsqlQueryTool(DbType dbType, String parameter){
         super(dbType,parameter);
     }
 

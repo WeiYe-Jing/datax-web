@@ -7,7 +7,6 @@ import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.JSONUtils;
 import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.dto.HbaseReaderDTO;
-import com.wugui.datax.admin.dto.HbaseWriterDTO;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
 import org.apache.commons.lang3.StringUtils;

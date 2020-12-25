@@ -1,7 +1,5 @@
 package com.wugui.datax.admin.tool.datax.writer;
 
-import java.util.Map;
-
 /**
  * postgresql writer构建类
  *

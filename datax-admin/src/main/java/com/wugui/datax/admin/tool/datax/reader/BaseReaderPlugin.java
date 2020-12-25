@@ -4,21 +4,14 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.datatx.core.datasource.BaseDataSource;
-import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
-import com.wugui.datax.admin.dto.HbaseReaderDTO;
-import com.wugui.datax.admin.dto.HiveReaderDTO;
 import com.wugui.datax.admin.dto.RdbmsReaderDTO;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataXPlugin;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import com.wugui.datax.admin.tool.query.DriverConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

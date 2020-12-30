@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.netty:netty-handler:4.1.34.Final">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/io/netty/netty-handler/4.1.34.Final/netty-handler-4.1.34.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/io/netty/netty-handler/4.1.34.Final/netty-handler-4.1.34.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/io/netty/netty-handler/4.1.34.Final/netty-handler-4.1.34.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

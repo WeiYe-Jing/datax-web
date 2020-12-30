@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="datax-rpc" />
+        <module name="datax-admin" />
+        <module name="datax-executor" />
+        <module name="datax-assembly" />
+        <module name="datax-core" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="datax-admin" target="1.8" />
+      <module name="datax-assembly" target="1.8" />
+      <module name="datax-core" target="1.8" />
+      <module name="datax-executor" target="1.8" />
+      <module name="datax-rpc" target="1.8" />
+      <module name="datax-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="datax-executor" options="-extdirs $PROJECT_DIR$/../../erp_date/push/datax-web/datax-executor/lib" />
+    </option>
+  </component>
+</project>

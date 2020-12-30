@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.lmax:disruptor:3.3.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/com/lmax/disruptor/3.3.6/disruptor-3.3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/com/lmax/disruptor/3.3.6/disruptor-3.3.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/com/lmax/disruptor/3.3.6/disruptor-3.3.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

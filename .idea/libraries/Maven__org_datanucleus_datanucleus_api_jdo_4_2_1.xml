@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.datanucleus:datanucleus-api-jdo:4.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/org/datanucleus/datanucleus-api-jdo/4.2.1/datanucleus-api-jdo-4.2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/org/datanucleus/datanucleus-api-jdo/4.2.1/datanucleus-api-jdo-4.2.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/org/datanucleus/datanucleus-api-jdo/4.2.1/datanucleus-api-jdo-4.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

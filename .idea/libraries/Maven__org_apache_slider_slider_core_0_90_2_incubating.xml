@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.slider:slider-core:0.90.2-incubating">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/slider/slider-core/0.90.2-incubating/slider-core-0.90.2-incubating.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/slider/slider-core/0.90.2-incubating/slider-core-0.90.2-incubating-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/slider/slider-core/0.90.2-incubating/slider-core-0.90.2-incubating-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

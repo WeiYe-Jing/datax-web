@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.swagger:swagger-models:1.5.21">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/io/swagger/swagger-models/1.5.21/swagger-models-1.5.21.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/io/swagger/swagger-models/1.5.21/swagger-models-1.5.21-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/io/swagger/swagger-models/1.5.21/swagger-models-1.5.21-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

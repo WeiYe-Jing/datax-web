@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.salesforce.i18n:i18n-util:1.0.4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/com/salesforce/i18n/i18n-util/1.0.4/i18n-util-1.0.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/com/salesforce/i18n/i18n-util/1.0.4/i18n-util-1.0.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/com/salesforce/i18n/i18n-util/1.0.4/i18n-util-1.0.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

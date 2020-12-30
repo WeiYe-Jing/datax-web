@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.commons:commons-collections4:4.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

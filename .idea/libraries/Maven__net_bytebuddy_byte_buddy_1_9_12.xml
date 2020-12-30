@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: net.bytebuddy:byte-buddy:1.9.12">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/net/bytebuddy/byte-buddy/1.9.12/byte-buddy-1.9.12.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/net/bytebuddy/byte-buddy/1.9.12/byte-buddy-1.9.12-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/net/bytebuddy/byte-buddy/1.9.12/byte-buddy-1.9.12-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

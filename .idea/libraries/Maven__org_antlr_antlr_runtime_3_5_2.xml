@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.antlr:antlr-runtime:3.5.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.tephra:tephra-core:0.14.0-incubating">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/tephra/tephra-core/0.14.0-incubating/tephra-core-0.14.0-incubating.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/tephra/tephra-core/0.14.0-incubating/tephra-core-0.14.0-incubating-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/tephra/tephra-core/0.14.0-incubating/tephra-core-0.14.0-incubating-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

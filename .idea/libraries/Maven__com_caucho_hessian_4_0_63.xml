@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.caucho:hessian:4.0.63">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/com/caucho/hessian/4.0.63/hessian-4.0.63.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/com/caucho/hessian/4.0.63/hessian-4.0.63-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/com/caucho/hessian/4.0.63/hessian-4.0.63-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.twill:twill-zookeeper:0.8.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/twill/twill-zookeeper/0.8.0/twill-zookeeper-0.8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/twill/twill-zookeeper/0.8.0/twill-zookeeper-0.8.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/org/apache/twill/twill-zookeeper/0.8.0/twill-zookeeper-0.8.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

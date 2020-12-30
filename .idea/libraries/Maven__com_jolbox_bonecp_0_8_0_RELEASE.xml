@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.jolbox:bonecp:0.8.0.RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/work/repository/com/jolbox/bonecp/0.8.0.RELEASE/bonecp-0.8.0.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/work/repository/com/jolbox/bonecp/0.8.0.RELEASE/bonecp-0.8.0.RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/work/repository/com/jolbox/bonecp/0.8.0.RELEASE/bonecp-0.8.0.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

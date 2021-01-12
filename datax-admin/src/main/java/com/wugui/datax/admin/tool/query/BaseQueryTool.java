@@ -446,7 +446,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     public long getMaxIdVal(String tableName, String primaryKey) {
         Statement stmt = null;
         ResultSet rs = null;
-        long maxVal = 0;
+        Long maxVal = null;
         try {
             stmt = connection.createStatement();
             //获取sql

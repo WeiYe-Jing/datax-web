@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.tool.query;
 
 import com.wugui.datatx.core.datasource.*;
+import com.wugui.datatx.core.enums.DbConnectType;
 import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.JSONUtils;
@@ -10,6 +11,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -63,6 +65,15 @@ public class DriverConnectionFactory {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+        }
+
+        if (datasource instanceof OracleDataSource) {
+            Map<String, String> parameters = JSONUtils.toMap(parameter);
+            if (parameters.get("jdbcUrl").indexOf("//") == -1) {
+                ((OracleDataSource) datasource).setConnectType(DbConnectType.ORACLE_SID);
+            }else {
+                ((OracleDataSource) datasource).setConnectType(DbConnectType.ORACLE_SERVICE_NAME);
+            }
         }
         return datasource;
     }

@@ -71,6 +71,15 @@ public abstract class BaseQueryTool implements QueryToolInterface {
 //                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
 //                getDataSource(jobDatasource);
 //            }
+
+            // 暂时使用这种方式代替
+            try{
+                connection.getMetaData();
+            }catch (Exception e){
+                logger.error("缓存的数据源不可用了!", e);
+                LocalCacheUtil.remove(jobDatasource.getDatasourceName());
+                getDataSource(jobDatasource);
+            }
         }
         sqlBuilder = DatabaseMetaFactory.getByDbType(jobDatasource.getDatasource());
         currentSchema = getSchema(jobDatasource.getJdbcUsername());

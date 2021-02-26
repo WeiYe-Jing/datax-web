@@ -7,9 +7,6 @@ import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataXPlugin;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import com.wugui.datax.admin.tool.query.DriverConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -29,9 +26,6 @@ import java.util.regex.Pattern;
  */
 public abstract class BaseWriterPlugin extends BaseDataXPlugin implements DataxWriterInterface {
 
-    /**
-     * 不要在方法里定义正则表达式规则,应定义为常量或字段,能加快正则匹配速度
-     */
     private static Pattern p = Pattern.compile("\r\n|\r|\n|\n\r");
 
     /**

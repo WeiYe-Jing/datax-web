@@ -67,9 +67,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
 
     private Map<String, Object> buildWriter;
 
-    /* ----  */
-    private Map<String, Object> buildTransformer;
-
     private BaseDataxPlugin readerPlugin;
 
     private BaseDataxPlugin writerPlugin;
@@ -235,8 +232,6 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         res.put("reader", this.buildReader);
         res.put("writer", this.buildWriter);
-        if(null != this.buildTransformer)
-            res.put("transformer", this.buildTransformer);
         return res;
     }
 

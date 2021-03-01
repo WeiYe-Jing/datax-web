@@ -43,6 +43,4 @@ public class DataXJsonBuildDto implements Serializable {
     private MongoDBReaderDto mongoDBReader;
 
     private MongoDBWriterDto mongoDBWriter;
-
-    private List<TransformerDto> transformerDtos;
 }

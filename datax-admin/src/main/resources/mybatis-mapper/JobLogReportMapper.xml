@@ -20,7 +20,7 @@
 	</sql>
 	
 	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobLogReport" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO job_log_report (
+		INSERT IGNORE INTO job_log_report (
 			`trigger_day`,
 			`running_count`,
 			`suc_count`,

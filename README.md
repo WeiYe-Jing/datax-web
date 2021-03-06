@@ -271,13 +271,12 @@ Copyright (c) 2020 WeiYe
 # Contact us
 
 ### 个人微信
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/WechatIMG2.jpeg?x-oss-process=image/resize,w_100,h_100)
-
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/WechatIMG2.jpeg?x-oss-process=image/resize,w_200,h_200)
 
 ### QQ交流群 776939467
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode3.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png?x-oss-process=image/resize,w_200,h_300)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode3.png?x-oss-process=image/resize,w_200,h_300)
 
 
 

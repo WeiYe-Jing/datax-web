@@ -270,8 +270,15 @@ Copyright (c) 2020 WeiYe
 
 # Contact us
 
+### 个人微信
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/WechatIMG2.jpeg)
+
+
 ### QQ交流群 776939467
 
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode3.png)
+
+
 
 

@@ -275,7 +275,7 @@ Copyright (c) 2020 WeiYe
 
 ### QQ交流群 776939467
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode1.jpeg?x-oss-process=image/resize,w_230,h_280)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode1.jpeg?x-oss-process=image/resize,w_250,h_350)
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode2.jpeg?x-oss-process=image/resize,w_230,h_280)
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode3.jpeg?x-oss-process=image/resize,w_230,h_280)
 

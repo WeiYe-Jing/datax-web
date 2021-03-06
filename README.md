@@ -271,7 +271,7 @@ Copyright (c) 2020 WeiYe
 # Contact us
 
 ### 个人微信
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/WechatIMG2.jpeg)
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/WechatIMG2.jpeg?x-oss-process=image/resize,w_100,h_100)
 
 
 ### QQ交流群 776939467

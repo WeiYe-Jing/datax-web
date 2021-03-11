@@ -82,6 +82,6 @@ public interface QueryToolInterface {
      * @param primaryKey
      * @return
      */
-    long getMaxIdVal(String tableName,String primaryKey);
+    Long getMaxIdVal(String tableName, String primaryKey);
 
 }

@@ -16,6 +16,9 @@ import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLog;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
+import com.wugui.datax.admin.util.DBUtilErrorCode;
+import com.wugui.datax.admin.util.DataXException;
+import com.wugui.datax.admin.util.ErrorCode;
 import com.wugui.datax.admin.util.JSONUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
@@ -146,7 +149,11 @@ public class JobTrigger {
         if (incrementType != null) {
             triggerParam.setIncrementType(incrementType);
             if (IncrementTypeEnum.ID.getCode() == incrementType) {
-                long maxId = getMaxId(jobInfo);
+                Long maxId = getMaxId(jobInfo);
+//                long maxId = getMaxId(jobInfo);
+                if (maxId == null) {
+                    throw new DataXException(DBUtilErrorCode.CONN_DB_ERROR, "查询最大ID失败! 任务结束");
+                }
                 jobLog.setMaxId(maxId);
                 triggerParam.setEndId(maxId);
                 triggerParam.setStartId(jobInfo.getIncStartId());
@@ -221,7 +228,7 @@ public class JobTrigger {
         logger.debug(">>>>>>>>>>> datax-web trigger end, jobId:{}", jobLog.getId());
     }
 
-    private static long getMaxId(JobInfo jobInfo) {
+    private static Long getMaxId(JobInfo jobInfo) {
         JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
         BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
         return qTool.getMaxIdVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());

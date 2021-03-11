@@ -14,13 +14,10 @@ import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.wugui.datax.admin.util.AESUtil;
 import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
-import com.wugui.datax.admin.util.StringUtil;
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.*;
@@ -479,10 +476,10 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public long getMaxIdVal(String tableName, String primaryKey) {
+    public Long getMaxIdVal(String tableName, String primaryKey) {
         Statement stmt = null;
         ResultSet rs = null;
-        long maxVal = 0;
+        Long maxVal = null;
         try {
             stmt = connection.createStatement();
             //获取sql

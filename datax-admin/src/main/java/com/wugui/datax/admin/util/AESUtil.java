@@ -62,7 +62,8 @@ public class AESUtil {
      */
     private static KeyGenerator getKeyGenerator() {
 
-        String key = JobAdminConfig.getAdminConfig().getDataSourceAESKey();
+//        String key = JobAdminConfig.getAdminConfig().getDataSourceAESKey();
+        String key = "AD42F6697B035B75";
 
         KeyGenerator keygen = null;
         try {
@@ -85,7 +86,7 @@ public class AESUtil {
         } catch (Exception e) {
             log.warn("content encrypt error {}", e.getMessage());
         }
-        return null;
+        return message;
     }
 
     public static String decrypt(String ciphertext) {
@@ -96,11 +97,11 @@ public class AESUtil {
         } catch (Exception e) {
             log.warn("content decrypt error {}", e.getMessage());
         }
-        return null;
+        return ciphertext;
     }
 
     public static void main(String[] args) {
-        String message = "root";
+        String message = "C##JK";
         String ciphertext = encrypt(message);
 
         System.out.println("加密后密文为: " + ciphertext);

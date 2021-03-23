@@ -274,7 +274,6 @@ Copyright (c) 2020 WeiYe
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/WechatIMG2.jpeg?x-oss-process=image/resize,w_230,h_230)
 
 ### QQ交流群
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode1.jpeg?x-oss-process=image/resize,w_250,h_300)
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode3.jpeg?x-oss-process=image/resize,w_250,h_300)
 
 

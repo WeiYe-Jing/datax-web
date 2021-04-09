@@ -63,4 +63,7 @@ public class JobLog {
 
     @ApiModelProperty("增量最大id")
     private Long maxId;
+
+    @ApiModelProperty("增量最大time")
+    private Date maxTime;
 }

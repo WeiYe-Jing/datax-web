@@ -352,3 +352,19 @@ CHANGE COLUMN `author` `user_id` INT(11) NOT NULL COMMENT '修改用户' ;
 
 ALTER TABLE `job_info`
 CHANGE COLUMN `increment_type` `increment_type` TINYINT(4) NULL DEFAULT 0 COMMENT '增量类型' ;
+
+
+/**
+驱动文件名称地址
+ */
+ALTER TABLE `job_jdbc_datasource`
+    ADD COLUMN `jdbc_driver_name` VARCHAR(1000) NULL DEFAULT NULL COMMENT 'jdbc驱动类文件名称' AFTER `jdbc_driver_class`;
+
+/**
+  设置增量条件查询位置(0在同步之前查询源库      1在同步之后查询目标库)
+ */
+ALTER TABLE `job_info`
+    ADD COLUMN `inc_flag` tinyint(1) NULL DEFAULT 0 COMMENT '查询增量位置(同步前0    同步后1)' AFTER `datasource_id`;
+
+ALTER TABLE `job_log`
+    ADD COLUMN `max_time` datetime(0) NULL COMMENT '增量表max_time' AFTER `max_id`;

@@ -23,6 +23,7 @@ import com.wugui.datax.admin.util.JSONUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,23 +149,40 @@ public class JobTrigger {
         Integer incrementType = jobInfo.getIncrementType();
         if (incrementType != null) {
             triggerParam.setIncrementType(incrementType);
-            if (IncrementTypeEnum.ID.getCode() == incrementType) {
-                Long maxId = getMaxId(jobInfo);
-//                long maxId = getMaxId(jobInfo);
-                if (maxId == null) {
-                    throw new DataXException(DBUtilErrorCode.CONN_DB_ERROR, "查询最大ID失败! 任务结束");
+            if(jobInfo.getIncFlag() == 0){
+                if (IncrementTypeEnum.ID.getCode() == incrementType) {
+                    Long maxId = getMaxId(jobInfo);
+                    if (maxId == null) {
+                        throw new DataXException(DBUtilErrorCode.CONN_DB_ERROR, "查询最大ID失败! 任务结束");
+                    }
+                    jobLog.setMaxId(maxId);
+                    triggerParam.setEndId(maxId);
+                    triggerParam.setStartId(jobInfo.getIncStartId());
+                } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
+                    Date maxTime = getMaxTime(jobInfo);
+                    if (maxTime == null) {
+                        throw new DataXException(DBUtilErrorCode.CONN_DB_ERROR, "查询最大时间失败! 任务结束");
+                    }
+                    jobLog.setMaxTime(maxTime);
+                    triggerParam.setStartTime(jobInfo.getIncStartTime());
+                    triggerParam.setTriggerTime(triggerTime);
+                    triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
+                } else if (IncrementTypeEnum.PARTITION.getCode() == incrementType) {
+                    triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
                 }
-                jobLog.setMaxId(maxId);
-                triggerParam.setEndId(maxId);
-                triggerParam.setStartId(jobInfo.getIncStartId());
-            } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-                triggerParam.setStartTime(jobInfo.getIncStartTime());
-                triggerParam.setTriggerTime(triggerTime);
-                triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
-            } else if (IncrementTypeEnum.PARTITION.getCode() == incrementType) {
-                triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
+                triggerParam.setReplaceParam(jobInfo.getReplaceParam());
+            }else{
+                if (IncrementTypeEnum.ID.getCode() == incrementType) {
+                    triggerParam.setStartId(jobInfo.getIncStartId());
+                } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
+                    triggerParam.setStartTime(jobInfo.getIncStartTime());
+                    triggerParam.setTriggerTime(triggerTime);
+                    triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
+                } else if (IncrementTypeEnum.PARTITION.getCode() == incrementType) {
+                    triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
+                }
+                triggerParam.setReplaceParam(jobInfo.getReplaceParam());
             }
-            triggerParam.setReplaceParam(jobInfo.getReplaceParam());
         }
         //jvm parameter
         triggerParam.setJvmParam(jobInfo.getJvmParam());
@@ -193,6 +211,8 @@ public class JobTrigger {
         ReturnT<String> triggerResult = null;
         if (address != null) {
             triggerResult = runExecutor(triggerParam, address);
+
+
         } else {
             triggerResult = new ReturnT<String>(ReturnT.FAIL_CODE, null);
         }
@@ -228,10 +248,30 @@ public class JobTrigger {
         logger.debug(">>>>>>>>>>> datax-web trigger end, jobId:{}", jobLog.getId());
     }
 
-    private static Long getMaxId(JobInfo jobInfo) {
+    public static Long getMaxId(JobInfo jobInfo) {
         JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
         BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
         return qTool.getMaxIdVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
+    }
+
+    public static Long getMaxId(Integer datasourceId, String tableName, String primaryKey) {
+        JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(datasourceId);
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        return qTool.getMaxIdVal(tableName, primaryKey);
+    }
+
+    public static Date getMaxTime(JobInfo jobInfo) {
+        JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        Date date = qTool.getMaxTime(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
+        return date;
+    }
+
+    public static Date getMaxTime(Integer datasourceId, String tableName, String primaryKey) {
+        JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(datasourceId);
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        Date date = qTool.getMaxTime(tableName, primaryKey);
+        return date;
     }
 
     /**

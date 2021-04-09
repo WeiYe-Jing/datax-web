@@ -130,4 +130,21 @@ public class JobInfoController extends BaseController{
         }
         return jobService.batchAdd(dto);
     }
+
+    @GetMapping("/getMaxId")
+    @ApiOperation("获取最大ID")
+    public ReturnT<Long> getMaxId(@RequestParam("datasourceId") Integer datasourceId,
+                                    @RequestParam("tableName") String tableName,
+                                    @RequestParam("primaryKey") String primaryKey) throws IOException {
+        return jobService.getMaxId(datasourceId,tableName,primaryKey);
+    }
+
+    @GetMapping("/getMaxTime")
+    @ApiOperation("获取最新事件")
+    public ReturnT<Date> getMaxTime(@RequestParam("datasourceId") Integer datasourceId,
+                                    @RequestParam("tableName") String tableName,
+                                    @RequestParam("primaryKey") String primaryKey) throws IOException {
+        return jobService.getMaxTime(datasourceId,tableName,primaryKey);
+    }
+
 }

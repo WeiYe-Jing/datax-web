@@ -52,6 +52,7 @@
 		<result column="inc_start_id" property="incStartId" />
 		<result column="increment_type" property="incrementType" />
 		<result column="datasource_id" property="datasourceId" />
+		<result column="inc_flag" property="incFlag" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -89,7 +90,8 @@
 		t.primary_key,
 		t.inc_start_id,
 		t.increment_type,
-		t.datasource_id
+		t.datasource_id,
+		t.inc_flag
 	</sql>
 
 	<sql id="Project_Column_List">

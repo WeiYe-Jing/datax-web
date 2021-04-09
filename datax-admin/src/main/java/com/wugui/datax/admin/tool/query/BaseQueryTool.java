@@ -23,6 +23,7 @@ import java.net.URLClassLoader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -571,5 +572,26 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             }
         }
         return ddl;
+    }
+
+    public Date getMaxTime(String tableName, String primaryKey){
+        Statement stmt = null;
+        ResultSet rs = null;
+        Date maxVal = null;
+        try {
+            stmt = connection.createStatement();
+            //获取sql
+            String sql = getSQLMaxID(tableName, primaryKey);
+            rs = stmt.executeQuery(sql);
+            rs.next();
+            maxVal = rs.getTimestamp(1);
+        } catch (SQLException e) {
+            logger.error("[getMaxIdVal Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        } finally {
+            JdbcUtils.close(rs);
+            JdbcUtils.close(stmt);
+        }
+        return maxVal;
     }
 }

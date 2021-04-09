@@ -117,6 +117,9 @@ public class JobInfo {
 	@ApiModelProperty("数据源id")
 	private int datasourceId;
 
+	@ApiModelProperty("增量条件获取位置")
+	private int incFlag;
+
 	@TableField(exist=false)
 	private String projectName;
 

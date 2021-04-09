@@ -7,6 +7,7 @@ import com.wugui.datatx.core.util.DateUtil;
 import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.route.ExecutorRouteStrategyEnum;
 import com.wugui.datax.admin.core.thread.JobScheduleHelper;
+import com.wugui.datax.admin.core.trigger.JobTrigger;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.*;
 import com.wugui.datax.admin.entity.*;
@@ -550,5 +551,17 @@ public class JobServiceImpl implements JobService {
             }
         }
         return list;
+    }
+
+    @Override
+    public ReturnT<Long> getMaxId(Integer datasourceId, String tableName, String primaryKey) {
+        Long result = JobTrigger.getMaxId(datasourceId,tableName,primaryKey);
+        return new ReturnT<>(result);
+    }
+
+    @Override
+    public ReturnT<Date> getMaxTime(Integer datasourceId, String tableName, String primaryKey) {
+        Date result = JobTrigger.getMaxTime(datasourceId,tableName,primaryKey);
+        return new ReturnT<>(result);
     }
 }

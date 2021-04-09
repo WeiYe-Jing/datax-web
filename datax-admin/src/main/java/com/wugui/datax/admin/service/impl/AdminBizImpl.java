@@ -9,6 +9,7 @@ import com.wugui.datatx.core.enums.IncrementTypeEnum;
 import com.wugui.datatx.core.handler.IJobHandler;
 import com.wugui.datax.admin.core.kill.KillJob;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
+import com.wugui.datax.admin.core.trigger.JobTrigger;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobInfo;
@@ -16,6 +17,8 @@ import com.wugui.datax.admin.entity.JobLog;
 import com.wugui.datax.admin.mapper.JobInfoMapper;
 import com.wugui.datax.admin.mapper.JobLogMapper;
 import com.wugui.datax.admin.mapper.JobRegistryMapper;
+import com.wugui.datax.admin.util.DBUtilErrorCode;
+import com.wugui.datax.admin.util.DataXException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -85,6 +88,25 @@ public class AdminBizImpl implements AdminBiz {
 
             JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
 
+            Integer incrementType = jobInfo.getIncrementType();
+            if (incrementType != null) {
+                if(jobInfo.getIncFlag() == 1){
+                    if (IncrementTypeEnum.ID.getCode() == incrementType) {
+                        Long maxId = JobTrigger.getMaxId(jobInfo);
+                        if (maxId == null) {
+                            throw new DataXException(DBUtilErrorCode.CONN_DB_ERROR, "查询最大ID失败! 任务结束");
+                        }
+                        log.setMaxId(maxId);
+                    } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
+                        Date maxTime = JobTrigger.getMaxTime(jobInfo);
+                        if (maxTime == null) {
+                            throw new DataXException(DBUtilErrorCode.CONN_DB_ERROR, "查询最大时间失败! 任务结束");
+                        }
+                        log.setMaxTime(maxTime);
+                    }
+                }
+            }
+
             updateIncrementParam(log, jobInfo.getIncrementType());
 
             if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
@@ -152,7 +174,7 @@ public class AdminBizImpl implements AdminBiz {
         if (IncrementTypeEnum.ID.getCode() == incrementType) {
             jobInfoMapper.incrementIdUpdate(log.getJobId(),log.getMaxId());
         } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getTriggerTime());
+            jobInfoMapper.incrementTimeUpdate(log.getJobId(), log.getMaxTime());
         }
     }
 

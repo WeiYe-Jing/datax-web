@@ -8,6 +8,7 @@ import com.wugui.datax.admin.dto.TaskScheduleDto;
 import com.wugui.datax.admin.entity.JobInfo;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -96,4 +97,8 @@ public interface JobService {
     ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException;
 
     List<JobConnDto> connList(List<Integer> ids);
+
+    ReturnT<Long> getMaxId(Integer datasourceId, String tableName, String primaryKey);
+
+    ReturnT<Date> getMaxTime(Integer datasourceId, String tableName, String primaryKey);
 }

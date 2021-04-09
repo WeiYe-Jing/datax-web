@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobLogMapper">
-	
+
 	<resultMap id="JobLog" type="com.wugui.datax.admin.entity.JobLog" >
 		<result column="id" property="id" />
 
@@ -16,11 +16,11 @@
 	    <result column="executor_param" property="executorParam" />
 		<result column="executor_sharding_param" property="executorShardingParam" />
 		<result column="executor_fail_retry_count" property="executorFailRetryCount" />
-	    
+
 	    <result column="trigger_time" property="triggerTime" />
 	    <result column="trigger_code" property="triggerCode" />
 	    <result column="trigger_msg" property="triggerMsg" />
-	    
+
 	    <result column="handle_time" property="handleTime" />
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
@@ -29,6 +29,7 @@
 
 		<result column="process_id" property="processId" />
 		<result column="max_id" property="maxId" />
+		<result column="max_time" property="maxTime" />
 
 		<result column="job_desc" property="jobDesc" />
 	</resultMap>
@@ -51,9 +52,10 @@
 		t.alarm_status,
 		t.process_id,
 		t.max_id,
+		t.max_time,
 		t.job_desc
 	</sql>
-	
+
 	<select id="pageList" resultMap="JobLog">
 		SELECT <include refid="Base_Column_List" />
 		FROM job_log AS t
@@ -87,7 +89,7 @@
 		ORDER BY t.trigger_time DESC
 		LIMIT #{offset}, #{pagesize}
 	</select>
-	
+
 	<select id="pageListCount" resultType="int">
 		SELECT count(1)
 		FROM job_log AS t
@@ -119,14 +121,14 @@
 			</if>
 		</trim>
 	</select>
-	
+
 	<select id="load" parameterType="java.lang.Long" resultMap="JobLog">
 		SELECT <include refid="Base_Column_List" />
 		FROM job_log AS t
 		WHERE t.id = #{id}
 	</select>
 
-	
+
 	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobLog" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO job_log (
 			`job_group`,
@@ -144,7 +146,7 @@
 			#{handleCode}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID() 
+			SELECT LAST_INSERT_ID()
 		</selectKey>-->
 	</insert>
 
@@ -159,14 +161,15 @@
 			`executor_param`= #{executorParam},
 			`executor_sharding_param`= #{executorShardingParam},
 			`executor_fail_retry_count`= #{executorFailRetryCount},
-			`max_id` = #{maxId}
+			`max_id` = #{maxId},
+			`max_time` = #{maxTime}
 		WHERE `id`= #{id}
 	</update>
 
 	<update id="updateHandleInfo">
 		UPDATE job_log
-		SET 
-			`handle_time`= #{handleTime}, 
+		SET
+			`handle_time`= #{handleTime},
 			`handle_code`= #{handleCode},
 			`handle_msg`= #{handleMsg}
 		WHERE `id`= #{id}
@@ -178,7 +181,7 @@
 			`process_id`= #{processId}
 		WHERE `id`= #{id}
 	</update>
-	
+
 	<delete id="delete" >
 		delete from job_log
 		WHERE job_id = #{jobId}
@@ -265,5 +268,5 @@
 			`alarm_status` = #{newAlarmStatus}
 		WHERE `id`= #{logId} AND `alarm_status` = #{oldAlarmStatus}
 	</update>
-	
+
 </mapper>

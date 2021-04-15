@@ -44,6 +44,12 @@ public class ApiAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
+        String[] api = new String[]{"/api/callback", "/api/processCallback", "/api/registry", "/api/registryRemove"};
+        String uri = request.getRequestURI();
+        if (Arrays.stream(api).anyMatch(e -> e.equals(uri))) {
+            chain.doFilter(request, response);
+            return;
+        }
         RequestWrapper requestWrapper = new RequestWrapper(request);
         //优先取request body参数
         Map<String, String> map = JSON.parseObject(requestWrapper.getBodyString(), new TypeReference<Map<String, String>>() {
@@ -105,7 +111,7 @@ public class ApiAuthorizationFilter extends BasicAuthenticationFilter {
 
     // 获取用户信息并新建一个token
     private UsernamePasswordAuthenticationToken getAuthentication(JobUser jobUser, RequestWrapper request) throws TokenIsExpiredException {
-        String token = JwtTokenUtils.createToken(jobUser.getId(),jobUser.getUsername(), jobUser.getRole(), false);
+        String token = JwtTokenUtils.createToken(jobUser.getId(), jobUser.getUsername(), jobUser.getRole(), false);
         request.putHeader("Authorization", JwtTokenUtils.TOKEN_PREFIX + token);
         return new UsernamePasswordAuthenticationToken(jobUser.getUsername(), null,
                 Collections.singleton(new SimpleGrantedAuthority(jobUser.getRole())));
@@ -114,7 +120,8 @@ public class ApiAuthorizationFilter extends BasicAuthenticationFilter {
     public static void main(String[] args) {
         String s = "{\"alarmEmail\":\"1\",\"executorParam\":\"{\\\"type\\\":\\\" DB2\\\",\\\"url\\\":\\\"jdbc:db2://10.0.0.65:50000/DATANALY\\\",\\\"user\\\":\\\"db2admin\\\",\\\"code\\\":\\\"db2admin\\\",\\\"pros\\\":[\\\"PD_ZM_K_RLIC_D\\\",\\\"PD_ZM_K_CASEINFO_D(5)\\\"]}\",\"jobJson\":\"{\\\"type\\\":\\\" DB2\\\",\\\"url\\\":\\\"jdbc:db2://10.0.0.65:50000/DATANALY\\\",\\\"user\\\":\\\"db2admin\\\",\\\"code\\\":\\\"db2admin\\\",\\\"pros\\\":[\\\"PD_ZM_K_RLIC_D\\\",\\\"PD_ZM_K_CASEINFO_D(5)\\\"]}\",\"executorBlockStrategy\":\"SERIAL_EXECUTION\",\"author\":\"蒋洋\",\"executorRouteStrategy\":\"FIRST\",\"jobCron\":\"0 0 12 * * ? *\",\"sign\":\"8FEA9EA8FD200F94CF2596AEB071B608\",\"jobGroup\":\"1\",\"jobDesc\":\"system测试任务\",\"userId\":\"1\",\"accessKey\":\"vCTez6oi\",\"glueType\":\"JAVA_BEAN\",\"executorHandler\":\"procedureHandler\",\"executorFailRetryCount\":\"0\",\"executorTimeout\":\"0\",\"projectId\":null,\"timestamp\":\"1602745949221\"}";
         System.out.println(s);
-        Map<String, String> map = JSON.parseObject(s, new TypeReference<Map<String, String>>(){});
+        Map<String, String> map = JSON.parseObject(s, new TypeReference<Map<String, String>>() {
+        });
         map.forEach((k, v) -> System.out.println("key=" + k + ";value=" + v));
     }
 }

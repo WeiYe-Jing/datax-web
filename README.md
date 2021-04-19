@@ -275,3 +275,58 @@ Copyright (c) 2020 WeiYe
 ![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
 
 
+# 《阿里巴巴 DataX 源码解读专栏》系类文章
+
+[DataX(1):编译打包使用](https://waterwang.blog.csdn.net/article/details/110952589)
+
+[DataX(2): 通过idea搭建源码阅读+调试环境](https://waterwang.blog.csdn.net/article/details/111034241)
+
+[DataX(3): win环境cmd乱码](https://waterwang.blog.csdn.net/article/details/111036461)
+
+[DataX(4): DataX.py解读](https://waterwang.blog.csdn.net/article/details/112234435)
+
+[DataX(5):改造升级-自动识别py环境，执行DataX任务](https://waterwang.blog.csdn.net/article/details/112241390)
+
+[DataX(6):启动步骤解析](https://waterwang.blog.csdn.net/article/details/112617108)
+
+[DataX(7):JobContainer源码解读](https://waterwang.blog.csdn.net/article/details/112718493)
+
+[DataX(8):TaskGroupContainer源码解读](https://waterwang.blog.csdn.net/article/details/112794237)
+
+[DataX(9):Job和TaskGroup的通讯机制](https://waterwang.blog.csdn.net/article/details/112795294)
+
+[DataX(10):源码解读Communication（DataX通讯类） ](https://waterwang.blog.csdn.net/article/details/112850175)
+
+[DataX(11):源码解读 ContainerCommunicator ](https://waterwang.blog.csdn.net/article/details/112855025)
+
+[DataX(12):调度源码解读AbstractScheduler ](https://waterwang.blog.csdn.net/article/details/112911089)
+
+[DataX(13)：源码解读Column-dDataX中的数据类型 ](https://waterwang.blog.csdn.net/article/details/112911316)
+
+[DataX(14):源码解读Channel       ](https://waterwang.blog.csdn.net/article/details/112956397)
+
+[DataX(15):源码解读AbstractCollector](https://waterwang.blog.csdn.net/article/details/112983377)
+
+[DataX(16):源码解读AbstractReporter](https://waterwang.blog.csdn.net/article/details/112985829)
+
+[DataX(17):源码解读AbstractRunner       ](https://waterwang.blog.csdn.net/article/details/113033822)
+
+[DataX(18):源码解读Transformer       ](https://waterwang.blog.csdn.net/article/details/113084048)
+
+[DataX(19):源码解读内置Transformer       ](https://waterwang.blog.csdn.net/article/details/113090919)
+
+[DataX(20):内置transformer使用    ](https://waterwang.blog.csdn.net/article/details/113093413)
+
+[DataX(21):编写自己的Transformer       ](https://waterwang.blog.csdn.net/article/details/113095114)
+
+[DataX(22):任务分配规则       ](https://waterwang.blog.csdn.net/article/details/112968136)
+
+[DataX(23):dDataX调优      ](https://waterwang.blog.csdn.net/article/details/112947868)
+
+[DataX(24):远程调试dDataX       ](https://waterwang.blog.csdn.net/article/details/113353200)
+
+[DataX(25):插件加载原理      ](https://waterwang.blog.csdn.net/article/details/113357535)
+
+[DataX(26):各个数据库与DataX字段映射    ](https://waterwang.blog.csdn.net/article/details/113499474)
+
+[DataX(27):不太常见配置项querySql、preSql、postSql、splitPk](https://waterwang.blog.csdn.net/article/details/113505791)

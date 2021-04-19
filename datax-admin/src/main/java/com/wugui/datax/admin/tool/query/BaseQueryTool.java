@@ -48,7 +48,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     private final String currentDatabase;
 
 
-    BaseQueryTool(final DbType dbType, final String parameter) {
+    public BaseQueryTool(final DbType dbType, final String parameter) {
         sqlBuilder = DatabaseMetaFactory.getByDbType(dbType);
         connection = DriverConnectionFactory.getConnection(dbType, parameter);
         BaseDataSource datasource = DataSourceFactory.getDatasource(dbType, parameter);

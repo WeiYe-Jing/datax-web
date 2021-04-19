@@ -3,24 +3,17 @@ package com.wugui.datax.admin.tool.datax;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.wugui.datatx.core.datasource.HBaseDataSource;
-import com.wugui.datatx.core.datasource.MongoDBDataSource;
 import com.wugui.datatx.core.enums.DbType;
-import com.wugui.datatx.core.util.Constants;
-import com.wugui.datatx.core.util.JSONUtils;
-import com.wugui.datax.admin.dto.*;
+import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
 import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.tool.datax.reader.*;
-import com.wugui.datax.admin.tool.datax.writer.*;
-import com.wugui.datax.admin.tool.pojo.*;
-import com.wugui.datax.admin.util.StringUtil;
+import com.wugui.datax.admin.tool.datax.reader.DataxReaderInterface;
+import com.wugui.datax.admin.tool.datax.writer.DataxWriterInterface;
+import com.wugui.datax.admin.tool.enums.DbTypePlugin;
+import com.wugui.datax.admin.tool.pojo.DataXTransformer;
 import com.wugui.datax.admin.util.TransformerUtil;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.util.TextUtils;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,58 +29,15 @@ import java.util.Map;
  * @since 2020/03/14 08:24
  */
 @Data
-public class DataXJsonHelper implements DataXJsonInterface {
-
-    /**
-     * 读取的表，根据datax示例，支持多个表（先不考虑，后面再去实现， 这里先用list保存吧）
-     * <p>
-     * 目的表的表名称。支持写入一个或者多个表。当配置为多张表时，必须确保所有表结构保持一致
-     */
-    private List<String> readerTables;
-    /**
-     * 读取的字段列表
-     */
-    private List<String> readerColumns;
-    /**
-     * reader jdbc 数据源
-     */
-    private JobDatasource readerDatasource;
-    /**
-     * writer jdbc 数据源
-     */
-    private JobDatasource writerDatasource;
-    /**
-     * 写入的表
-     */
-    private List<String> writerTables;
-    /**
-     * 写入的字段列表
-     */
-    private List<String> writerColumns;
+public class DataXJsonHelper {
 
     private Map<String, Object> buildReader;
 
     private Map<String, Object> buildWriter;
 
-    private BaseDataXPlugin readerPlugin;
+    private DataxReaderInterface readerPlugin;
 
-    private BaseDataXPlugin writerPlugin;
-
-    private HiveReaderDTO hiveReaderDto;
-
-    private HiveWriterDTO hiveWriterDto;
-
-    private HbaseReaderDTO hbaseReaderDto;
-
-    private HbaseWriterDTO hbaseWriterDto;
-
-    private RdbmsReaderDTO rdbmsReaderDto;
-
-    private RdbmsWriterDTO rdbmsWriterDto;
-
-    private MongoDBReaderDTO mongoDBReaderDto;
-
-    private MongoDBWriterDTO mongoDBWriterDto;
+    private DataxWriterInterface writerPlugin;
 
     private List<DataXTransformer> transformers = new ArrayList<>();
 
@@ -95,148 +45,50 @@ public class DataXJsonHelper implements DataXJsonInterface {
     //用于保存额外参数
     private Map<String, Object> extraParams = Maps.newHashMap();
 
+    /**
+     * 构建reader对象
+     *
+     * @param dataxJsonDto
+     * @param readerDatasource
+     * @return
+     * @author Locki
+     * @date 2020/12/24
+     */
     public void initReader(DataXJsonBuildDTO dataxJsonDto, JobDatasource readerDatasource) {
-
-        this.readerDatasource = readerDatasource;
-        this.readerTables = dataxJsonDto.getReaderTables();
-        this.readerColumns = dataxJsonDto.getReaderColumns();
-        this.hiveReaderDto = dataxJsonDto.getHiveReader();
-        this.rdbmsReaderDto = dataxJsonDto.getRdbmsReader();
-        this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
         DbType dbType = readerDatasource.getType();
-        this.readerColumns = convertKeywordsColumns(dbType, this.readerColumns);
-        switch (dbType) {
-            case MYSQL:
-                readerPlugin = new MysqlReader();
-                buildReader = buildReader();
-                break;
-            case SQLSERVER:
-                readerPlugin = new SqlServerReader();
-                buildReader = buildReader();
-                break;
-            case POSTGRESQL:
-            case GREENPLUM:
-                readerPlugin = new PostgresqlReader();
-                buildReader = buildReader();
-                break;
-            case ORACLE:
-                readerPlugin = new OracleReader();
-                buildReader = buildReader();
-                break;
-            case CLICKHOUSE:
-                readerPlugin = new ClickHouseReader();
-                buildReader = buildReader();
-                break;
-            case HIVE:
-                readerPlugin = new HiveReader();
-                buildReader = buildHiveReader();
-                break;
-            case MONGODB:
-                readerPlugin = new MongoDBReader();
-                buildReader = buildMongoDBReader();
-                break;
-            case HBASE:
-                readerPlugin = new HBaseReader();
-                buildReader = buildHBaseReader();
-                break;
-            case DB2:
-                readerPlugin = new DB2Reader();
-                buildReader = buildReader();
-                break;
-        }
+        List<String> readerColumns = dataxJsonDto.getReaderColumns();
+        dataxJsonDto.setReaderColumns(convertKeywordsColumns(dbType, readerColumns));
+        readerPlugin = DbTypePlugin.getDbTypePlugin(dbType).getReaderPlugin();
+        buildReader = readerPlugin.buildReader(dataxJsonDto, readerDatasource);
     }
-
-    public void initWriter(DataXJsonBuildDTO dataxJsonDto, JobDatasource readerDatasource) {
-        this.writerDatasource = readerDatasource;
-        this.writerTables = dataxJsonDto.getWriterTables();
-        this.writerColumns = dataxJsonDto.getWriterColumns();
-        this.hiveWriterDto = dataxJsonDto.getHiveWriter();
-        this.rdbmsWriterDto = dataxJsonDto.getRdbmsWriter();
-        this.hbaseWriterDto = dataxJsonDto.getHbaseWriter();
-        this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
-        DbType dbType = readerDatasource.getType();
-        this.writerColumns = convertKeywordsColumns(dbType, this.writerColumns);
-        switch (dbType) {
-            case MYSQL:
-                writerPlugin = new MysqlWriter();
-                buildWriter = this.buildWriter();
-                break;
-            case SQLSERVER:
-                writerPlugin = new SqlServerlWriter();
-                buildWriter = this.buildWriter();
-                break;
-            case POSTGRESQL:
-                writerPlugin = new PostgresqllWriter();
-                buildWriter = this.buildWriter();
-                break;
-            case GREENPLUM:
-                writerPlugin = new GreenPlumWriter();
-                buildWriter = this.buildWriter();
-                break;
-            case ORACLE:
-                writerPlugin = new OraclelWriter();
-                buildWriter = this.buildWriter();
-                break;
-            case CLICKHOUSE:
-                writerPlugin = new ClickHouseWriter();
-                buildWriter = buildWriter();
-                break;
-            case HIVE:
-                writerPlugin = new HiveWriter();
-                buildWriter = this.buildHiveWriter();
-                break;
-            case MONGODB:
-                writerPlugin = new MongoDBWriter();
-                buildWriter = this.buildMongoDBWriter();
-                break;
-            case HBASE:
-                writerPlugin = new HBaseWriter();
-                buildWriter = this.buildHBaseWriter();
-                break;
-            case DB2:
-                readerPlugin = new DB2Writer();
-                buildReader = buildWriter();
-                break;
-        }
-    }
-
 
     /**
-     * 初始化脱敏规则
-     * 暂时实现
-     * 1.对字段进行MD5脱敏
-     * 2.对字段替换换行符
+     * 构建writer对象
      *
-     * @param dataXJsonBuildDto
+     * @param dataxJsonDto
+     * @param writerDatasource
+     * @return
+     * @author Locki
+     * @date 2020/12/24
      */
-    public void initTransformer(DataXJsonBuildDTO dataXJsonBuildDto) {
-        if (null == dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size() == 0) {
-            return;
-        }
-        for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
-            if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
-                continue;
-            }
-            DataXTransformer t = new DataXTransformer();
-            t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
-            DataXTransformer.Parameter p = new DataXTransformer.Parameter();
-            List<String> paras = new ArrayList<>();
-            if ("replaceNewLineSymbol".equals(t.getName())) {
-                paras.add("");
-                p.setColumnIndex(i);
+    public void initWriter(DataXJsonBuildDTO dataxJsonDto, JobDatasource writerDatasource) {
+        DbType dbType = writerDatasource.getType();
+        List<String> writerColumns = dataxJsonDto.getWriterColumns();
+        dataxJsonDto.setWriterColumns(convertKeywordsColumns(dbType, writerColumns));
 
-            } else if ("md5".equals(t.getName())) {
-                paras.add("");
-                p.setColumnIndex(i);
-
-            }
-            p.setParas(paras);
-            t.setParameter(p);
-            transformers.add(t);
-        }
+        writerPlugin = DbTypePlugin.getDbTypePlugin(dbType).getWriterPlugin();
+        buildWriter = writerPlugin.buildWriter(dataxJsonDto,writerDatasource);
     }
 
-
+    /**
+     * 处理数据源关键字
+     *
+     * @param dbType
+     * @param columns
+     * @return {@link List< String>}
+     * @author Locki
+     * @date 2020/12/24
+     */
     private List<String> convertKeywordsColumns(DbType dbType, List<String> columns) {
         if (columns == null) {
             return null;
@@ -249,6 +101,15 @@ public class DataXJsonHelper implements DataXJsonInterface {
         return toColumns;
     }
 
+    /**
+     * 处理数据源关键字
+     *
+     * @param dbType
+     * @param column
+     * @return {@link String}
+     * @author Locki
+     * @date 2020/12/24
+     */
     private String doConvertKeywordsColumn(DbType dbType, String column) {
         if (column == null) {
             return null;
@@ -274,7 +135,49 @@ public class DataXJsonHelper implements DataXJsonInterface {
         }
     }
 
-    @Override
+    /**
+     * 初始化脱敏规则
+     * 暂时实现
+     * 1.对字段进行MD5脱敏
+     * 2.对字段替换换行符
+     *
+     * @param dataXJsonBuildDto
+     */
+    public void initTransformer(DataXJsonBuildDTO dataXJsonBuildDto) {
+        if (null == dataXJsonBuildDto.getTransformer() || dataXJsonBuildDto.getTransformer().size() == 0) {
+            return;
+        }
+        for (int i = 0; i < dataXJsonBuildDto.getTransformer().size(); i++) {
+            if (TextUtils.isBlank(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)))) {
+                continue;
+            }
+            DataXTransformer t = new DataXTransformer();
+            t.setName(TransformerUtil.getTransformerName(dataXJsonBuildDto.getTransformer().get(i)));
+            DataXTransformer.Parameter p = new DataXTransformer.Parameter();
+            List<String> paras = new ArrayList<>();
+            if ("replaceNewLineSymbol".equals(t.getName())) {
+                paras.add("");
+                p.setColumnIndex(i);
+
+            } else if ("dx_md5".equals(t.getName())) {
+                paras.add("");
+                p.setColumnIndex(i);
+
+            }
+            p.setParas(paras);
+            t.setParameter(p);
+            transformers.add(t);
+        }
+    }
+
+    /**
+     * 构建任务Job任务对象
+     *
+     * @param
+     * @return {@link Map< String, Object>}
+     * @author Locki
+     * @date 2020/12/24
+     */
     public Map<String, Object> buildJob() {
         Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> jobMap = Maps.newLinkedHashMap();
@@ -285,7 +188,14 @@ public class DataXJsonHelper implements DataXJsonInterface {
         return res;
     }
 
-    @Override
+    /**
+     * 构建任务core对象
+     *
+     * @param
+     * @return {@link Map< String, Object>}
+     * @author Locki
+     * @date 2020/12/24
+     */
     public Map<String, Object> buildCore() {
         Map<String, Object> result = Maps.newLinkedHashMap();
         Map<String, Object> transportMap = Maps.newLinkedHashMap();
@@ -298,7 +208,14 @@ public class DataXJsonHelper implements DataXJsonInterface {
         return result;
     }
 
-    @Override
+    /**
+     * 构建任务setting对象
+     *
+     * @param
+     * @return {@link Map< String, Object>}
+     * @author Locki
+     * @date 2020/12/24
+     */
     public Map<String, Object> buildSetting() {
         Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> speedMap = Maps.newLinkedHashMap();
@@ -310,7 +227,14 @@ public class DataXJsonHelper implements DataXJsonInterface {
         return res;
     }
 
-    @Override
+    /**
+     * 构建任务content对象（reader/writer）
+     *
+     * @param
+     * @return {@link Map< String, Object>}
+     * @author Locki
+     * @date 2020/12/24
+     */
     public Map<String, Object> buildContent() {
         Map<String, Object> res = Maps.newLinkedHashMap();
         res.put("reader", this.buildReader);
@@ -319,159 +243,5 @@ public class DataXJsonHelper implements DataXJsonInterface {
             res.put("transformer", transformers);
         }
         return res;
-    }
-
-    @Override
-    public Map<String, Object> buildReader() {
-        DataxRdbmsPojo dataxPluginPojo = new DataxRdbmsPojo();
-        dataxPluginPojo.setJobDatasource(readerDatasource);
-        dataxPluginPojo.setTables(readerTables);
-        dataxPluginPojo.setRdbmsColumns(readerColumns);
-        dataxPluginPojo.setSplitPk(rdbmsReaderDto.getReaderSplitPk());
-        if (StringUtils.isNotBlank(rdbmsReaderDto.getQuerySql())) {
-            dataxPluginPojo.setQuerySql(rdbmsReaderDto.getQuerySql());
-        }
-        //where
-        if (StringUtils.isNotBlank(rdbmsReaderDto.getWhereParams())) {
-            dataxPluginPojo.setWhereParam(rdbmsReaderDto.getWhereParams());
-        }
-        return readerPlugin.build(dataxPluginPojo);
-    }
-
-    @Override
-    public Map<String, Object> buildHiveReader() {
-        DataxHivePojo dataxHivePojo = new DataxHivePojo();
-        dataxHivePojo.setJdbcDatasource(readerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        readerColumns.forEach(c -> {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("index", c.split(Constants.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constants.SPLIT_SCOLON)[2]);
-            columns.add(column);
-        });
-        dataxHivePojo.setColumns(columns);
-        dataxHivePojo.setReaderDefaultFS(hiveReaderDto.getReaderDefaultFS());
-        dataxHivePojo.setReaderFieldDelimiter(StringUtil.unicode2String(hiveReaderDto.getReaderFieldDelimiter()));
-        dataxHivePojo.setReaderFileType(hiveReaderDto.getReaderFileType());
-        dataxHivePojo.setReaderPath(hiveReaderDto.getReaderPath());
-        dataxHivePojo.setSkipHeader(hiveReaderDto.getReaderSkipHeader());
-        return readerPlugin.buildHive(dataxHivePojo);
-    }
-
-    @Override
-    public Map<String, Object> buildHBaseReader() {
-        DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
-        dataxHbasePojo.setJdbcDatasource(readerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        for (int i = 0; i < readerColumns.size(); i++) {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("name", readerColumns.get(i));
-            column.put("type", "string");
-            columns.add(column);
-        }
-        dataxHbasePojo.setColumns(columns);
-        HBaseDataSource HBaseDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), HBaseDataSource.class);
-        dataxHbasePojo.setReaderHbaseConfig(HBaseDataSource.getZkAddress());
-        String readerTable = !CollectionUtils.isEmpty(readerTables) ? readerTables.get(0) : Constants.STRING_BLANK;
-        dataxHbasePojo.setReaderTable(readerTable);
-        dataxHbasePojo.setReaderMode(hbaseReaderDto.getReaderMode());
-        dataxHbasePojo.setReaderRange(hbaseReaderDto.getReaderRange());
-        return readerPlugin.buildHbase(dataxHbasePojo);
-    }
-
-    @Override
-    public Map<String, Object> buildMongoDBReader() {
-        DataxMongoDBPojo dataxMongoDBPojo = new DataxMongoDBPojo();
-
-        dataxMongoDBPojo.setJdbcDatasource(readerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        buildColumns(readerColumns, columns);
-        dataxMongoDBPojo.setColumns(columns);
-        MongoDBDataSource mongoDBDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), MongoDBDataSource.class);
-        dataxMongoDBPojo.setAddress(mongoDBDataSource.getMongoClientURI());
-        dataxMongoDBPojo.setDbName(mongoDBDataSource.getDatabase());
-        dataxMongoDBPojo.setReaderTable(readerTables.get(0));
-        return readerPlugin.buildMongoDB(dataxMongoDBPojo);
-    }
-
-
-    @Override
-    public Map<String, Object> buildWriter() {
-        DataxRdbmsPojo dataxPluginPojo = new DataxRdbmsPojo();
-        dataxPluginPojo.setJobDatasource(writerDatasource);
-        dataxPluginPojo.setTables(writerTables);
-        dataxPluginPojo.setRdbmsColumns(writerColumns);
-        dataxPluginPojo.setPreSql(rdbmsWriterDto.getPreSql());
-        dataxPluginPojo.setPostSql(rdbmsWriterDto.getPostSql());
-        return writerPlugin.build(dataxPluginPojo);
-    }
-
-    @Override
-    public Map<String, Object> buildHiveWriter() {
-        DataxHivePojo dataxHivePojo = new DataxHivePojo();
-        dataxHivePojo.setJdbcDatasource(writerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        writerColumns.forEach(c -> {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constants.SPLIT_SCOLON)[1]);
-            column.put("type", c.split(Constants.SPLIT_SCOLON)[2]);
-            columns.add(column);
-        });
-        dataxHivePojo.setColumns(columns);
-        dataxHivePojo.setWriterDefaultFS(hiveWriterDto.getWriterDefaultFS());
-        dataxHivePojo.setWriteFieldDelimiter(StringUtil.unicode2String(hiveWriterDto.getWriteFieldDelimiter()));
-        dataxHivePojo.setWriterFileType(hiveWriterDto.getWriterFileType());
-        dataxHivePojo.setWriterPath(hiveWriterDto.getWriterPath());
-        dataxHivePojo.setWriteMode(hiveWriterDto.getWriteMode());
-        dataxHivePojo.setWriterFileName(hiveWriterDto.getWriterFileName());
-        return writerPlugin.buildHive(dataxHivePojo);
-    }
-
-    @Override
-    public Map<String, Object> buildHBaseWriter() {
-        DataxHbasePojo dataxHbasePojo = new DataxHbasePojo();
-        dataxHbasePojo.setJdbcDatasource(writerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        for (int i = 0; i < writerColumns.size(); i++) {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("index", i + 1);
-            column.put("name", writerColumns.get(i));
-            column.put("type", "string");
-            columns.add(column);
-        }
-        dataxHbasePojo.setColumns(columns);
-        HBaseDataSource HBaseDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), HBaseDataSource.class);
-        dataxHbasePojo.setWriterHbaseConfig(HBaseDataSource.getZkAddress());
-        String writerTable = !CollectionUtils.isEmpty(writerTables) ? writerTables.get(0) : Constants.STRING_BLANK;
-        dataxHbasePojo.setWriterTable(writerTable);
-        dataxHbasePojo.setWriterVersionColumn(hbaseWriterDto.getWriterVersionColumn());
-        dataxHbasePojo.setWriterRowkeyColumn(hbaseWriterDto.getWriterRowkeyColumn());
-        dataxHbasePojo.setWriterMode(hbaseWriterDto.getWriterMode());
-        return writerPlugin.buildHbase(dataxHbasePojo);
-    }
-
-
-    @Override
-    public Map<String, Object> buildMongoDBWriter() {
-        DataxMongoDBPojo dataxMongoDBPojo = new DataxMongoDBPojo();
-        dataxMongoDBPojo.setJdbcDatasource(writerDatasource);
-        List<Map<String, Object>> columns = Lists.newArrayList();
-        buildColumns(writerColumns, columns);
-        dataxMongoDBPojo.setColumns(columns);
-        MongoDBDataSource mongoDBDataSource = JSONUtils.parseObject(readerDatasource.getConnectionParams(), MongoDBDataSource.class);
-        dataxMongoDBPojo.setAddress(mongoDBDataSource.getMongoClientURI());
-        dataxMongoDBPojo.setDbName(mongoDBDataSource.getDatabase());
-        dataxMongoDBPojo.setWriterTable(readerTables.get(0));
-        dataxMongoDBPojo.setUpsertInfo(mongoDBWriterDto.getUpsertInfo());
-        return writerPlugin.buildMongoDB(dataxMongoDBPojo);
-    }
-
-    private void buildColumns(List<String> columns, List<Map<String, Object>> returnColumns) {
-        columns.forEach(c -> {
-            Map<String, Object> column = Maps.newLinkedHashMap();
-            column.put("name", c.split(Constants.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constants.SPLIT_SCOLON)[1]);
-            returnColumns.add(column);
-        });
     }
 }

@@ -33,44 +33,19 @@ public class DriverConnectionFactory {
         Connection connection = null;
         BaseDataSource datasource = null;
         try {
-            switch (dbType) {
-                case POSTGRESQL:
-                    Class.forName(Constants.ORG_POSTGRESQL_DRIVER);
-                    break;
-                case MYSQL:
-                    Class.forName(Constants.COM_MYSQL_JDBC_DRIVER);
-                    break;
-                case HIVE:
-                    if (CommonUtils.getKerberosStartupState()) {
-                        System.setProperty(Constants.JAVA_SECURITY_KRB5_CONF,
-                                getString(Constants.JAVA_SECURITY_KRB5_CONF_PATH));
-                        Configuration configuration = new Configuration();
-                        configuration.set(Constants.HADOOP_SECURITY_AUTHENTICATION, "kerberos");
-                        UserGroupInformation.setConfiguration(configuration);
-                        UserGroupInformation.loginUserFromKeytab(getString(Constants.LOGIN_USER_KEY_TAB_USERNAME),
-                                getString(Constants.LOGIN_USER_KEY_TAB_PATH));
-                    }
-                    Class.forName(Constants.ORG_APACHE_HIVE_JDBC_HIVE_DRIVER);
-                    break;
-                case CLICKHOUSE:
-                    Class.forName(Constants.COM_CLICKHOUSE_JDBC_DRIVER);
-                    break;
-                case ORACLE:
-                    Class.forName(Constants.COM_ORACLE_JDBC_DRIVER);
-                    break;
-                case SQLSERVER:
-                    Class.forName(Constants.COM_SQLSERVER_JDBC_DRIVER);
-                    break;
-                case DB2:
-                    Class.forName(Constants.COM_DB2_JDBC_DRIVER);
-                    break;
-                case PHOENIX:
-                    Class.forName(Constants.COM_PHOENIX_JDBC_DRIVER);
-                    break;
-                default:
-                    break;
+            if (DbType.HIVE == dbType) {
+                if (CommonUtils.getKerberosStartupState()) {
+                    System.setProperty(Constants.JAVA_SECURITY_KRB5_CONF, getString(Constants.JAVA_SECURITY_KRB5_CONF_PATH));
+                    Configuration configuration = new Configuration();
+                    configuration.set(Constants.HADOOP_SECURITY_AUTHENTICATION, "kerberos");
+                    UserGroupInformation.setConfiguration(configuration);
+                    UserGroupInformation.loginUserFromKeytab(getString(Constants.LOGIN_USER_KEY_TAB_USERNAME), getString(Constants.LOGIN_USER_KEY_TAB_PATH));
+                }
             }
-            datasource=getBaseDataSource(dbType,parameter);
+            if (dbType.getDriver() != null) {
+                Class.forName(dbType.getDriver());
+            }
+            datasource = getBaseDataSource(dbType, parameter);
             if (datasource != null) {
                 connection = DriverManager.getConnection(datasource.getJdbcUrl(), datasource.getUser(), datasource.getPassword());
             }
@@ -83,39 +58,15 @@ public class DriverConnectionFactory {
     public static BaseDataSource getBaseDataSource(DbType dbType, String parameter) {
         BaseDataSource datasource = null;
         try {
-            switch (dbType) {
-                case POSTGRESQL:
-                    datasource = JSONUtils.parseObject(parameter, PostgreDataSource.class);
-                    break;
-                case MYSQL:
-                    datasource = JSONUtils.parseObject(parameter, MySQLDataSource.class);
-                    break;
-                case HIVE:
-                    datasource = JSONUtils.parseObject(parameter, HiveDataSource.class);
-                    break;
-                case CLICKHOUSE:
-                    datasource = JSONUtils.parseObject(parameter, ClickHouseDataSource.class);
-                    break;
-                case ORACLE:
-                    datasource = JSONUtils.parseObject(parameter, OracleDataSource.class);
-                    break;
-                case SQLSERVER:
-                    datasource = JSONUtils.parseObject(parameter, SQLServerDataSource.class);
-                    break;
-                case DB2:
-                    datasource = JSONUtils.parseObject(parameter, DB2ServerDataSource.class);
-                    break;
-                case PHOENIX:
-                    datasource = JSONUtils.parseObject(parameter, PhoenixDataSource.class);
-                    break;
-                default:
-                    break;
+            if (dbType.getClazz() != null) {
+                datasource = JSONUtils.parseObject(parameter, dbType.getClazz());
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
         return datasource;
     }
+
     /**
      * build paramters
      *

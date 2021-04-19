@@ -12,7 +12,7 @@ import com.wugui.datatx.core.enums.DbType;
  */
 public class MySQLQueryTool extends BaseQueryTool implements QueryToolInterface {
 
-    MySQLQueryTool(DbType dbType, String parameter) {
+    public MySQLQueryTool(DbType dbType, String parameter) {
         super(dbType, parameter);
     }
 

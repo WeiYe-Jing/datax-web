@@ -4,15 +4,15 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.wugui.datatx.core.datasource.BaseDataSource;
+import com.wugui.datax.admin.dto.DataXJsonBuildDTO;
+import com.wugui.datax.admin.dto.RdbmsReaderDTO;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.tool.datax.BaseDataXPlugin;
-import com.wugui.datax.admin.tool.pojo.DataxHbasePojo;
-import com.wugui.datax.admin.tool.pojo.DataxHivePojo;
-import com.wugui.datax.admin.tool.pojo.DataxMongoDBPojo;
 import com.wugui.datax.admin.tool.pojo.DataxRdbmsPojo;
 import com.wugui.datax.admin.tool.query.DriverConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,10 +23,38 @@ import java.util.Map;
  * @Version 1.0
  * @since 2019/8/2 16:27
  */
-public abstract class BaseReaderPlugin extends BaseDataXPlugin {
+public abstract class BaseReaderPlugin extends BaseDataXPlugin implements DataxReaderInterface {
 
-
+    /**
+     * 构建reader对象通用实现
+     *
+     * @param dataxJsonDto
+     * @param readerDatasource
+     * @return {@link Map< String, Object>}
+     * @author Locki
+     * @date 2020/12/24
+     */
     @Override
+    public Map<String, Object> buildReader(DataXJsonBuildDTO dataxJsonDto, JobDatasource readerDatasource) {
+        List<String> readerTables = dataxJsonDto.getReaderTables();
+        List<String> readerColumns = dataxJsonDto.getReaderColumns();
+        RdbmsReaderDTO rdbmsReaderDto = dataxJsonDto.getRdbmsReader();
+
+        DataxRdbmsPojo dataxPluginPojo = new DataxRdbmsPojo();
+        dataxPluginPojo.setJobDatasource(readerDatasource);
+        dataxPluginPojo.setTables(readerTables);
+        dataxPluginPojo.setRdbmsColumns(readerColumns);
+        dataxPluginPojo.setSplitPk(rdbmsReaderDto.getReaderSplitPk());
+        if (StringUtils.isNotBlank(rdbmsReaderDto.getQuerySql())) {
+            dataxPluginPojo.setQuerySql(rdbmsReaderDto.getQuerySql());
+        }
+        //where
+        if (StringUtils.isNotBlank(rdbmsReaderDto.getWhereParams())) {
+            dataxPluginPojo.setWhereParam(rdbmsReaderDto.getWhereParams());
+        }
+        return build(dataxPluginPojo);
+    }
+
     public Map<String, Object> build(DataxRdbmsPojo plugin) {
         //构建
         Map<String, Object> parameter = Maps.newLinkedHashMap();
@@ -48,25 +76,12 @@ public abstract class BaseReaderPlugin extends BaseDataXPlugin {
         connection.put("jdbcUrl", ImmutableList.of(baseDataSource.getJdbcUrl()));
         parameter.put("username", baseDataSource.getUser());
         parameter.put("password", baseDataSource.getPassword());
-        parameter.put("splitPk",plugin.getSplitPk());
+        parameter.put("splitPk", plugin.getSplitPk());
         parameter.put("connection", ImmutableList.of(connection));
 
         Map<String, Object> reader = Maps.newLinkedHashMap();
         reader.put("name", getName());
         reader.put("parameter", parameter);
         return reader;
-    }
-
-    @Override
-    public Map<String, Object> buildHive(DataxHivePojo dataxHivePojo) {
-        return null;
-    }
-
-    @Override
-    public Map<String, Object> buildHbase(DataxHbasePojo dataxHbasePojo) { return null; }
-
-    @Override
-    public Map<String, Object> buildMongoDB(DataxMongoDBPojo dataxMongoDBPojo) {
-        return null;
     }
 }

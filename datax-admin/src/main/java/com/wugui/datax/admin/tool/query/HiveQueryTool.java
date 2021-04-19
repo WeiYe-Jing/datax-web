@@ -11,7 +11,7 @@ import com.wugui.datatx.core.enums.DbType;
  * @since 2020/01/05
  */
 public class HiveQueryTool extends BaseQueryTool implements QueryToolInterface {
-    HiveQueryTool(DbType dbType, String parameter) {
+    public HiveQueryTool(DbType dbType, String parameter) {
         super(dbType, parameter);
     }
 }

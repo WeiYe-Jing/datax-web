@@ -1,0 +1,24 @@
+# web port
+server:
+  port: 9505
+
+# log config
+logging:
+  config: classpath:logback.xml
+  path: ./data/applogs/executor/jobhandler
+
+datax:
+  job:
+    admin:
+      addresses: http://127.0.0.1:9504
+    executor:
+      appname: datax-executor
+      ip:
+      port: 9999
+      logpath: ./data/applogs/executor/jobhandler
+      logretentiondays: 30
+    accessToken:
+
+  executor:
+    jsonpath: D:\\temp\\executor\\json\\
+  pypath: D:\BigData\DataTransfer\datax\bin\datax.py

@@ -15,6 +15,8 @@
         <module>datax-executor</module>
         <module>datax-rpc</module>
         <module>datax-assembly</module>
+        <module>datax-web-sdk-spring-boot-starter</module>
+        <module>datax-web-sdk</module>
     </modules>
 
     <properties>

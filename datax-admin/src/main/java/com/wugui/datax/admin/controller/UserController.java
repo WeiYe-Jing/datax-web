@@ -5,6 +5,7 @@ import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobUser;
 import com.wugui.datax.admin.mapper.JobUserMapper;
+import com.wugui.datax.client.util.AppUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -119,6 +120,17 @@ public class UserController {
         // write
         jobUserMapper.update(jobUser);
         return ReturnT.SUCCESS;
+    }
+
+    @PostMapping(value = "/updateKey")
+    @ApiOperation("更新用户AccessKey/SecretKey")
+    public ReturnT<JobUser> updateKey(@RequestBody JobUser jobUser) {
+        String accesskey = AppUtil.getAccessKey();
+        String secretkey = AppUtil.getSecretKey(jobUser.getUsername(), accesskey);
+        jobUser.setAccessKey(accesskey);
+        jobUser.setSecretKey(secretkey);
+        this.jobUserMapper.updateKey(jobUser);
+        return new ReturnT<>(jobUser);
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.POST)

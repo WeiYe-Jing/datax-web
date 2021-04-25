@@ -462,4 +462,9 @@ public class JobServiceImpl implements JobService {
         }
         return ReturnT.SUCCESS;
     }
+
+    @Override
+    public JobInfo loadJob(int id) {
+        return jobInfoMapper.loadById(id);
+    }
 }

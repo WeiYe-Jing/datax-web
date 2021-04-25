@@ -41,7 +41,7 @@ public class JobLogController {
     @GetMapping("/pageList")
     @ApiOperation("运行日志列表")
     public ReturnT<Map<String, Object>> pageList(
-            @RequestParam(required = false, defaultValue = "0") int current,
+            @RequestParam(required = false, defaultValue = "1") int current,
             @RequestParam(required = false, defaultValue = "10") int size,
             int jobGroup, int jobId, int logStatus, String filterTime) {
 

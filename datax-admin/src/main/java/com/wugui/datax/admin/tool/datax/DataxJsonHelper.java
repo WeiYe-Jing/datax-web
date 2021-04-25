@@ -130,6 +130,9 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (DB2.equals(datasource)) {
             readerPlugin = new DB2Reader();
             buildReader = buildReader();
+        } else if (OSCAR.equals(datasource)) {
+            readerPlugin = new OscarReader();
+            buildReader = buildReader();
         }
     }
 
@@ -168,8 +171,11 @@ public class DataxJsonHelper implements DataxJsonInterface {
         } else if (JdbcConstants.MONGODB.equals(datasource)) {
             writerPlugin = new MongoDBWriter();
             buildWriter = this.buildMongoDBWriter();
-        }else if (DB2.equals(datasource)) {
+        } else if (DB2.equals(datasource)) {
             writerPlugin = new DB2Writer();
+            buildWriter = this.buildWriter();
+        } else if (OSCAR.equals(datasource)) {
+            writerPlugin = new OscarWriter();
             buildWriter = this.buildWriter();
         }
     }

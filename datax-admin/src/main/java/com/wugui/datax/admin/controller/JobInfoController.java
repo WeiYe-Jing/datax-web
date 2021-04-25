@@ -85,6 +85,12 @@ public class JobInfoController extends BaseController{
         return jobService.start(id);
     }
 
+    @RequestMapping(value = "/loadJob", method = RequestMethod.POST)
+    @ApiOperation("查询任务详情")
+    public JobInfo loadJob(int id) {
+        return jobService.loadJob(id);
+    }
+
     @PostMapping(value = "/trigger")
     @ApiOperation("触发任务")
     public ReturnT<String> triggerJob(@RequestBody TriggerJobDto dto) {

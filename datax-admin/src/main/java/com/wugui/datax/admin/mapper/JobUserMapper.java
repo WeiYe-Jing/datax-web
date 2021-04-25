@@ -28,11 +28,15 @@ public interface JobUserMapper {
 
     JobUser getUserById(@Param("id") int id);
 
+    JobUser getUserByAccesskey(@Param("accesskey") String accesskey);
+
     List<JobUser> getUsersByIds(@Param("ids") String[] ids);
 
     int save(JobUser jobUser);
 
     int update(JobUser jobUser);
+
+    int updateKey(JobUser jobUser);
 
     int delete(@Param("id") int id);
 

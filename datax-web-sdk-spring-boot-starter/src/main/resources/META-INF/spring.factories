@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.wugui.datax.client.starter.config.SdkConfig

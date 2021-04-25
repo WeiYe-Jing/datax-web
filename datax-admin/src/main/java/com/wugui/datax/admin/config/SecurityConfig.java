@@ -2,8 +2,10 @@ package com.wugui.datax.admin.config;
 
 
 import com.wugui.datatx.core.util.Constants;
+import com.wugui.datax.admin.filter.ApiAuthorizationFilter;
 import com.wugui.datax.admin.filter.JWTAuthenticationFilter;
 import com.wugui.datax.admin.filter.JWTAuthorizationFilter;
+import com.wugui.datax.admin.mapper.JobUserMapper;
 import com.wugui.datax.admin.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private JobUserMapper jobUserMapper;
 
     @Bean
     UserDetailsService customUserService(){ //注册UserDetailsService 的bean
@@ -57,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .addFilter(new ApiAuthorizationFilter(authenticationManager(), jobUserMapper))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

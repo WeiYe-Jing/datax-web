@@ -28,7 +28,7 @@ public interface JobService {
      * @param userId
      * @return
      */
-    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId,Integer[] projectIds);
+    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds);
 
     List<JobInfo> list();
 
@@ -89,8 +89,19 @@ public interface JobService {
 
     /**
      * batch add
+     *
      * @param dto
      * @return
      */
     ReturnT<String> batchAdd(DataXBatchJsonBuildDto dto) throws IOException;
+
+    /**
+     * get job
+     *
+     * @param id
+     * @return {@link JobInfo}
+     * @author jiangyang
+     * @date 2020/10/15
+     */
+    JobInfo loadJob(int id);
 }

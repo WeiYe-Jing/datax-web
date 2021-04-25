@@ -799,6 +799,13 @@
             <version>db2jcc4</version>
         </dependency>
         <dependency>
+            <groupId>com.oscar</groupId>
+            <artifactId>oscar</artifactId>
+            <version>7.0.8</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/lib/oscarJDBC.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>

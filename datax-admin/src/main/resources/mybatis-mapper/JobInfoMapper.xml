@@ -53,6 +53,7 @@
 		<result column="increment_type" property="incrementType" />
 		<result column="datasource_id" property="datasourceId" />
 		<result column="inc_flag" property="incFlag" />
+		<result column="job_status" property="jobStatus" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -91,7 +92,8 @@
 		t.inc_start_id,
 		t.increment_type,
 		t.datasource_id,
-		t.inc_flag
+		t.inc_flag,
+		t.job_status
 	</sql>
 
 	<sql id="Project_Column_List">
@@ -344,7 +346,10 @@
 		inc_start_id = #{incStartId}
 		WHERE id = #{id}
 	</update>
-    <select id="loadByIds" resultMap="JobInfo">
+	<update id="updateJobStatus">
+		update job_info set job_status = #{jobStatus} where id = #{id}
+	</update>
+	<select id="loadByIds" resultMap="JobInfo">
 		select * from job_info where id IN (
 		<foreach collection="ids" item="id" separator=",">
 			#{id}

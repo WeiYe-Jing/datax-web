@@ -120,6 +120,9 @@ public class JobInfo {
 	@ApiModelProperty("增量条件获取位置")
 	private int incFlag;
 
+	@ApiModelProperty("任务执行状态")
+	private int jobStatus;
+
 	@TableField(exist=false)
 	private String projectName;
 

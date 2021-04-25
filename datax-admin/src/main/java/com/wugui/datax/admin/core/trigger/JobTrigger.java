@@ -54,6 +54,7 @@ public class JobTrigger {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
         }
+        JobAdminConfig.getAdminConfig().getJobInfoMapper().updateJobStatus(jobId, 1);
         if (GlueTypeEnum.BEAN.getDesc().equals(jobInfo.getGlueType())) {
             //解密账密
             String json = JSONUtils.changeJson(jobInfo.getJobJson(), JSONUtils.decrypt);
@@ -149,7 +150,7 @@ public class JobTrigger {
         Integer incrementType = jobInfo.getIncrementType();
         if (incrementType != null) {
             triggerParam.setIncrementType(incrementType);
-            if(jobInfo.getIncFlag() == 0){
+            if (jobInfo.getIncFlag() == 0) {
                 if (IncrementTypeEnum.ID.getCode() == incrementType) {
                     Long maxId = getMaxId(jobInfo);
                     if (maxId == null) {
@@ -171,7 +172,7 @@ public class JobTrigger {
                     triggerParam.setPartitionInfo(jobInfo.getPartitionInfo());
                 }
                 triggerParam.setReplaceParam(jobInfo.getReplaceParam());
-            }else{
+            } else {
                 if (IncrementTypeEnum.ID.getCode() == incrementType) {
                     triggerParam.setStartId(jobInfo.getIncStartId());
                 } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
@@ -215,7 +216,9 @@ public class JobTrigger {
 
         } else {
             triggerResult = new ReturnT<String>(ReturnT.FAIL_CODE, null);
+            JobAdminConfig.getAdminConfig().getJobInfoMapper().updateJobStatus(jobInfo.getId(), 0);
         }
+
 
         // 5、collection trigger info
         StringBuffer triggerMsgSb = new StringBuffer();

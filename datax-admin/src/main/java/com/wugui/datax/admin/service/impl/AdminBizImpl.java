@@ -84,9 +84,8 @@ public class AdminBizImpl implements AdminBiz {
         String callbackMsg = null;
         int resultCode = handleCallbackParam.getExecuteResult().getCode();
 
+        JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
         if (IJobHandler.SUCCESS.getCode() == resultCode) {
-
-            JobInfo jobInfo = jobInfoMapper.loadById(log.getJobId());
 
             Integer incrementType = jobInfo.getIncrementType();
             if (incrementType != null) {
@@ -166,6 +165,7 @@ public class AdminBizImpl implements AdminBiz {
 
         jobLogMapper.updateHandleInfo(log);
         jobInfoMapper.updateLastHandleCode(log.getJobId(), resultCode);
+        jobInfoMapper.updateJobStatus(jobInfo.getId(),0);
 
         return ReturnT.SUCCESS;
     }

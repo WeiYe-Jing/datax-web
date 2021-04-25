@@ -368,3 +368,6 @@ ALTER TABLE `job_info`
 
 ALTER TABLE `job_log`
     ADD COLUMN `max_time` datetime(0) NULL COMMENT '增量表max_time' AFTER `max_id`;
+
+// 增加任务执行状态
+ALTER TABLE job_info ADD job_status TINYINT(4) DEFAULT 0 NULL COMMENT '0 未执行    1 执行中';

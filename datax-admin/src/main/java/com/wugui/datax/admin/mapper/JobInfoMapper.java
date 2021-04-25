@@ -59,4 +59,6 @@ public interface JobInfoMapper {
     void incrementIdUpdate(@Param("id") int id, @Param("incStartId")Long incStartId);
 
     List<JobInfo> loadByIds(@Param("ids") List<Integer> ids);
+
+    void updateJobStatus(@Param("id") int id,@Param("jobStatus") int jobStatus);
 }

@@ -36,7 +36,8 @@ public enum DbType {
     HBASE20XSQL(9, null, null, "hbase20xsql"),
     HBASE(10, null, null, "hbase"),
     MONGODB(11, null, null, "mongodb"),
-    PHOENIX(12, Constants.COM_PHOENIX_JDBC_DRIVER, PhoenixDataSource.class, "phoenix");
+    PHOENIX(12, Constants.COM_PHOENIX_JDBC_DRIVER, PhoenixDataSource.class, "phoenix"),
+    OSCAR(13, Constants.COM_OSCAR_JDBC_DRIVER, OscarServerDataSource.class, "oscar");
 
     DbType(int code, String driver, Class<? extends BaseDataSource> clazz, String descp) {
         this.code = code;

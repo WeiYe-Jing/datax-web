@@ -26,6 +26,7 @@ public enum DbTypePlugin {
     ORACLE(DbType.ORACLE, OracleDatabaseMeta.getInstance(), OracleQueryTool.class, new OracleReader(), new OraclelWriter()),
     SQLSERVER(DbType.SQLSERVER, SqlServerDatabaseMeta.getInstance(), SqlServerQueryTool.class, new SqlServerReader(), new SqlServerlWriter()),
     DB2(DbType.DB2, DB2DatabaseMeta.getInstance(), DB2SQLQueryTool.class, new DB2Reader(), new DB2Writer()),
+    OSCAR(DbType.OSCAR, OscarDatabaseMeta.getInstance(), OscarQueryTool.class, new OscarReader(), new OscarWriter()),
     GREENPLUM(DbType.GREENPLUM, PostgresqlDatabaseMeta.getInstance(), PostgresqlQueryTool.class, new PostgresqlReader(), new PostgresqllWriter()),
     HBASE20XSQL(DbType.HBASE20XSQL, Hbase20xsqlMeta.getInstance(), Hbase20XsqlQueryTool.class, null, null),
     HBASE(DbType.HBASE, null, null, new HBaseReader(), new HBaseWriter()),

@@ -47,6 +47,8 @@ public class DriverConnectionFactory {
             }
             datasource = getBaseDataSource(dbType, parameter);
             if (datasource != null) {
+                datasource.setUser(AesUtil.decrypt(datasource.getUser()));
+                datasource.setPassword(AesUtil.decrypt(datasource.getPassword()));
                 connection = DriverManager.getConnection(datasource.getJdbcUrl(), datasource.getUser(), datasource.getPassword());
             }
         } catch (Exception e) {
@@ -60,10 +62,6 @@ public class DriverConnectionFactory {
         try {
             if (dbType.getClazz() != null) {
                 datasource = JSONUtils.parseObject(parameter, dbType.getClazz());
-            }
-            if (datasource != null) {
-                datasource.setUser(AesUtil.decrypt(datasource.getUser()));
-                datasource.setPassword(AesUtil.decrypt(datasource.getPassword()));
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

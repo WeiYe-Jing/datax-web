@@ -88,7 +88,7 @@ public class AesUtil {
         } catch (Exception e) {
             log.warn("content encrypt error {}", e.getMessage());
         }
-        return null;
+        return message;
     }
 
     public static String decrypt(String ciphertext) {
@@ -99,7 +99,7 @@ public class AesUtil {
         } catch (Exception e) {
             log.warn("content decrypt error {}", e.getMessage());
         }
-        return null;
+        return ciphertext;
     }
 
     public static void main(String[] args) {

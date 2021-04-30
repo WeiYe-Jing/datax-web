@@ -20,8 +20,8 @@ public class JobInfoMapperTest {
 	
 	@Test
 	public void pageList(){
-		List<JobInfo> list = jobInfoMapper.pageList(0, 20, 0, -1, null, null, 0,null);
-		int list_count = jobInfoMapper.pageListCount(0, 20, 0, -1, null, null, 0,null);
+		List<JobInfo> list = jobInfoMapper.pageList(0, 20, 0, -1, null, null, 0,null, -1);
+		int list_count = jobInfoMapper.pageListCount(0, 20, 0, -1, null, null, 0,null, -1);
 		
 		System.out.println(list);
 		System.out.println(list_count);

@@ -94,7 +94,7 @@ public class JobScheduleHelper {
                                     // 2.2、trigger-expire < 5s：direct-trigger && make next-trigger-time
 
                                     // 1、trigger
-                                    JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null);
+                                    JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null, 0);
                                     logger.debug(">>>>>>>>>>> datax-web, schedule push trigger : jobId = " + jobInfo.getId());
 
                                     // 2、fresh next
@@ -240,7 +240,7 @@ public class JobScheduleHelper {
                         // do trigger
                         for (int jobId : ringItemData) {
                             // do trigger
-                            JobTriggerPoolHelper.trigger(jobId, TriggerTypeEnum.CRON, -1, null, null);
+                            JobTriggerPoolHelper.trigger(jobId, TriggerTypeEnum.CRON, -1, null, null, 0);
                         }
                         // clear
                         ringItemData.clear();

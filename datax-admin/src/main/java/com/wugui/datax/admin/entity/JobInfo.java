@@ -123,6 +123,15 @@ public class JobInfo {
 	@ApiModelProperty("任务执行状态")
 	private int jobStatus;
 
+	@ApiModelProperty("是否是任务链")
+	private int chainFlag;
+
+	@ApiModelProperty("任务链执行状态")
+	private int chainStatus;
+
+	@ApiModelProperty("任务链执行关系Json")
+	private String chainJson;
+
 	@TableField(exist=false)
 	private String projectName;
 

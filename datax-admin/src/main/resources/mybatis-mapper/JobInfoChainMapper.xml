@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wugui.datax.admin.mapper.JobInfoChainMapper">
+
+    <resultMap id="BaseResultMap" type="com.wugui.datax.admin.entity.JobInfoChain">
+        <result column="id" property="id" />
+        <result column="job_id" property="jobId" />
+        <result column="child_id" property="childId" />
+        <result column="group_id" property="groupId" />
+    </resultMap>
+    <insert id="insert">
+        insert into job_info_chain(job_id,child_id,group_id) values (#{jobId},#{childId},#{groupId})
+    </insert>
+    <delete id="removeAll">
+        delete from job_info_chain where group_id = #{groupId}
+    </delete>
+    <select id="getNextJobList" resultType="java.lang.Integer">
+        select child_id from job_info_chain where job_id = #{jobId} and group_id = #{groupId}
+    </select>
+
+
+</mapper>

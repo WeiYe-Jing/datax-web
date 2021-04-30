@@ -32,6 +32,7 @@
 		<result column="max_time" property="maxTime" />
 
 		<result column="job_desc" property="jobDesc" />
+		<result column="group_id" property="groupId" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -53,7 +54,8 @@
 		t.process_id,
 		t.max_id,
 		t.max_time,
-		t.job_desc
+		t.job_desc,
+		t.group_id
 	</sql>
 
 	<select id="pageList" resultMap="JobLog">
@@ -136,14 +138,16 @@
 			`job_desc`,
 			`trigger_time`,
 			`trigger_code`,
-			`handle_code`
+			`handle_code`,
+			`group_id`
 		) VALUES (
 			#{jobGroup},
 			#{jobId},
 			#{jobDesc},
 			#{triggerTime},
 			#{triggerCode},
-			#{handleCode}
+			#{handleCode},
+			#{groupId}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID()

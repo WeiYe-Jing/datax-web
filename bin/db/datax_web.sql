@@ -370,4 +370,25 @@ ALTER TABLE `job_log`
     ADD COLUMN `max_time` datetime(0) NULL COMMENT '增量表max_time' AFTER `max_id`;
 
 // 增加任务执行状态
-ALTER TABLE job_info ADD job_status TINYINT(4) DEFAULT 0 NULL COMMENT '0 未执行    1 执行中';
+ALTER TABLE job_info ADD COLUMN job_status TINYINT(4) DEFAULT 0 NULL COMMENT '0 未执行    1 执行中';
+
+// 增加任务链功能
+
+-- dataxweb_dev.job_info_chain definition
+
+CREATE TABLE `job_info_chain` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `job_id` int(11) NOT NULL COMMENT '当前jobId',
+  `child_id` int(11) DEFAULT NULL COMMENT '下一个任务id',
+  `group_id` int(11) NOT NULL COMMENT '分组ID(也就是首任务id)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+ALTER TABLE job_info ADD COLUMN chain_flag TINYINT(4) NOT NULL DEFAULT 0 NULL COMMENT '是否是任务链 0 否   1 是';
+ALTER TABLE job_info ADD COLUMN chain_status TINYINT(4) NOT NULL DEFAULT 0 NULL COMMENT '任务链执行状态 0 未开始   1 进行中   2 成功  3 失败';
+ALTER TABLE job_info ADD COLUMN chain_json text DEFAULT 0 NULL COMMENT '任务关系json';
+
+
+ALTER TABLE `job_log`
+    ADD COLUMN `group_id` int(11) DEFAULT NULL COMMENT '任务链分组id用于查看任务连日志以及调用下一个任务';
+

@@ -7,9 +7,8 @@ import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.thread.JobTriggerPoolHelper;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.JobConnDto;
-import com.wugui.datax.admin.dto.TriggerJobDto;
+import com.wugui.datax.admin.dto.*;
+import com.wugui.datax.admin.dto.chain.ChainDto;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.service.JobService;
 import io.swagger.annotations.Api;
@@ -40,15 +39,42 @@ public class JobInfoController extends BaseController{
     @ApiOperation("任务列表")
     public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
                                         @RequestParam(required = false, defaultValue = "10") int size,
-                                        int jobGroup, int triggerStatus, String jobDesc, String glueType, Integer[] projectIds) {
+                                        int jobGroup, int triggerStatus, String jobDesc, String glueType, Integer[] projectIds,
+                                                 int chainFlag) {
 
-        return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, 0, projectIds));
+        return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, 0, projectIds, chainFlag));
     }
 
     @GetMapping("/list")
     @ApiOperation("全部任务列表")
     public ReturnT<List<JobInfo>> list(){
         return new ReturnT<>(jobService.list());
+    }
+
+    @GetMapping("/getNodeMenuList")
+    @ApiOperation("全部任务列表按项目分组")
+    public ReturnT<List<ProjectDto>> projectJobList(){
+        return new ReturnT<>(jobService.getNodeMenuList());
+    }
+
+    @PostMapping("/saveChain")
+    @ApiOperation("保存任务关系")
+    public ReturnT<String> saveChain(@RequestBody ChainDto dto){
+        jobService.saveChain(dto);
+        return new ReturnT<>("SUCCESS");
+    }
+
+    @PostMapping("/saveChainJson")
+    @ApiOperation("保存任务关系")
+    public ReturnT<String> saveChainJson(@RequestBody ChainDto dto){
+        jobService.saveChainJson(dto);
+        return new ReturnT<>("SUCCESS");
+    }
+
+    @PostMapping("/getChainJson")
+    @ApiOperation("获取任务链Json")
+    public ReturnT<String> getChainJson(@RequestParam("id") String id){
+        return new ReturnT<>(jobService.getChainJson(id));
     }
 
     @RequestMapping("/connList")
@@ -97,7 +123,7 @@ public class JobInfoController extends BaseController{
         if (executorParam == null) {
             executorParam = "";
         }
-        JobTriggerPoolHelper.trigger(dto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam);
+        JobTriggerPoolHelper.trigger(dto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam, 0);
         return ReturnT.SUCCESS;
     }
 

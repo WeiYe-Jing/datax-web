@@ -2,9 +2,8 @@ package com.wugui.datax.admin.service;
 
 
 import com.wugui.datatx.core.biz.model.ReturnT;
-import com.wugui.datax.admin.dto.DataXBatchJsonBuildDto;
-import com.wugui.datax.admin.dto.JobConnDto;
-import com.wugui.datax.admin.dto.TaskScheduleDto;
+import com.wugui.datax.admin.dto.*;
+import com.wugui.datax.admin.dto.chain.ChainDto;
 import com.wugui.datax.admin.entity.JobInfo;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public interface JobService {
      * @param userId
      * @return
      */
-    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId,Integer[] projectIds);
+    Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId,Integer[] projectIds,int chainFlag);
 
     List<JobInfo> list();
 
@@ -101,4 +100,12 @@ public interface JobService {
     ReturnT<Long> getMaxId(Integer datasourceId, String tableName, String primaryKey);
 
     ReturnT<Date> getMaxTime(Integer datasourceId, String tableName, String primaryKey);
+
+    List<ProjectDto> getNodeMenuList();
+
+    void saveChain(ChainDto dto);
+
+    void saveChainJson(ChainDto dto);
+
+    String getChainJson(String id);
 }

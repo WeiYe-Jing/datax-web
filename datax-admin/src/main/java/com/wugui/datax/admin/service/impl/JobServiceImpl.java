@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -10,25 +11,32 @@ import com.wugui.datax.admin.core.thread.JobScheduleHelper;
 import com.wugui.datax.admin.core.trigger.JobTrigger;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.dto.*;
+import com.wugui.datax.admin.dto.chain.ChainDto;
+import com.wugui.datax.admin.dto.chain.LineDto;
 import com.wugui.datax.admin.entity.*;
 import com.wugui.datax.admin.mapper.*;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.DataxJsonService;
 import com.wugui.datax.admin.service.JobDatasourceService;
 import com.wugui.datax.admin.service.JobService;
-import com.wugui.datax.admin.tool.datax.writer.HiveWriter;
 import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
 import com.wugui.datax.admin.util.DateFormatUtils;
 import com.wugui.datax.admin.util.JdbcConstants;
+import com.wugui.datax.admin.util.JsonUtil;
 import com.wugui.datax.admin.util.StringUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.jdo.annotations.Transactional;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -48,6 +56,8 @@ public class JobServiceImpl implements JobService {
     @Resource
     private JobInfoMapper jobInfoMapper;
     @Resource
+    private JobInfoChainMapper jobInfoChainMapper;
+    @Resource
     private JobLogMapper jobLogMapper;
     @Resource
     private JobLogGlueMapper jobLogGlueMapper;
@@ -63,11 +73,11 @@ public class JobServiceImpl implements JobService {
     private JobDatasourceService jobDatasourceService;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
+    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds, int chainFlag) {
 
         // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds, chainFlag);
+        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds, chainFlag);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -97,7 +107,7 @@ public class JobServiceImpl implements JobService {
         if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_jobdesc")));
         }
-        if (jobInfo.getUserId() == 0 ) {
+        if (jobInfo.getUserId() == 0) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_author")));
         }
         if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
@@ -157,6 +167,11 @@ public class JobServiceImpl implements JobService {
         jobInfoMapper.save(jobInfo);
         if (jobInfo.getId() < 1) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
+        }
+        if(jobInfo.getChainFlag() == 1){
+            // 保存chainJson
+            String chainJson = "{\"id\":\""+jobInfo.getId()+"\",\"name\":\""+jobInfo.getJobDesc()+"\",\"nodeList\":[{\"id\":\""+jobInfo.getId()+"\",\"name\":\""+jobInfo.getJobDesc()+"\",\"type\":\"task\",\"left\":\"18px\",\"top\":\"223px\",\"ico\":\"el-icon-user-solid\",\"state\":\"success\"}],\"lineList\":[]}";
+            jobInfoMapper.saveChainJson(String.valueOf(jobInfo.getId()),chainJson);
         }
 
         return new ReturnT<>(String.valueOf(jobInfo.getId()));
@@ -431,24 +446,24 @@ public class JobServiceImpl implements JobService {
         List<String> rdTablesBack = new ArrayList<>(rdTables);
         List<String> wrTablesBack = new ArrayList<>(wrTables);
 
-        if(StringUtils.isNotBlank(dto.getReaderSchema())){
+        if (StringUtils.isNotBlank(dto.getReaderSchema())) {
             rdTables.clear();
             rdTablesBack.stream().forEach(tableName -> {
                 String prefix = dto.getReaderSchema() + ".";
-                if(tableName.startsWith(prefix)){
+                if (tableName.startsWith(prefix)) {
                     rdTables.add(tableName);
-                }else{
+                } else {
                     rdTables.add(prefix + tableName);
                 }
             });
         }
-        if(StringUtils.isNotBlank(dto.getWriterSchema())){
+        if (StringUtils.isNotBlank(dto.getWriterSchema())) {
             wrTables.clear();
             wrTablesBack.stream().forEach(tableName -> {
                 String prefix = dto.getWriterSchema() + ".";
-                if(tableName.startsWith(prefix)){
+                if (tableName.startsWith(prefix)) {
                     wrTables.add(tableName);
-                }else{
+                } else {
                     wrTables.add(prefix + tableName);
                 }
             });
@@ -472,42 +487,42 @@ public class JobServiceImpl implements JobService {
             JobDatasource readerDatasource = jobDatasourceService.getById(dto.getReaderDatasourceId());
             JobDatasource writerDatasource = jobDatasourceService.getById(dto.getWriterDatasourceId());
 
-            if(dto.getHiveReader() != null && JdbcConstants.HIVE.equals(readerDatasource.getDatasource())){
+            if (dto.getHiveReader() != null && JdbcConstants.HIVE.equals(readerDatasource.getDatasource())) {
                 // 构建hiveWriterDto对象
                 HiveReaderDto hiveReaderDto = dto.getHiveReader();
                 BaseQueryTool queryTool = QueryToolFactory.getByDbType(readerDatasource);
                 String ddl = queryTool.getTableDDL(wrTables.get(i));
-                if(ddl.contains("ORCFILE") || ddl.contains("orcfile")){
+                if (ddl.contains("ORCFILE") || ddl.contains("orcfile")) {
                     hiveReaderDto.setReaderFileType("orc");
-                }else{
+                } else {
                     hiveReaderDto.setReaderFileType("text");
                 }
                 String tag = "FIELDS TERMINATED BY ";
-                String fieldDelimiter = StringUtil.find(ddl,tag);
+                String fieldDelimiter = StringUtil.find(ddl, tag);
                 hiveReaderDto.setReaderFieldDelimiter(fieldDelimiter);
-                String location = StringUtil.find(ddl,"LOCATION");
-                hiveReaderDto.setReaderDefaultFS(location.substring(0,StringUtil.getCharacterPosition(location,"/",3)));
-                hiveReaderDto.setReaderPath(location.substring(StringUtil.getCharacterPosition(location,"/",3)));
+                String location = StringUtil.find(ddl, "LOCATION");
+                hiveReaderDto.setReaderDefaultFS(location.substring(0, StringUtil.getCharacterPosition(location, "/", 3)));
+                hiveReaderDto.setReaderPath(location.substring(StringUtil.getCharacterPosition(location, "/", 3)));
                 jsonBuild.setHiveReader(hiveReaderDto);
             }
 
-            if(dto.getHiveWriter() != null && JdbcConstants.HIVE.equals(writerDatasource.getDatasource())){
+            if (dto.getHiveWriter() != null && JdbcConstants.HIVE.equals(writerDatasource.getDatasource())) {
                 // 构建hiveWriterDto对象
                 HiveWriterDto hiveWriterDto = dto.getHiveWriter();
                 BaseQueryTool queryTool = QueryToolFactory.getByDbType(writerDatasource);
                 String ddl = queryTool.getTableDDL(wrTables.get(i));
-                if(ddl.contains("ORCFILE") || ddl.contains("orcfile")){
+                if (ddl.contains("ORCFILE") || ddl.contains("orcfile")) {
                     hiveWriterDto.setWriterFileType("orc");
-                }else{
+                } else {
                     hiveWriterDto.setWriterFileType("text");
                 }
                 String tag = "FIELDS TERMINATED BY ";
-                String fieldDelimiter = StringUtil.find(ddl,tag);
+                String fieldDelimiter = StringUtil.find(ddl, tag);
                 hiveWriterDto.setWriteFieldDelimiter(fieldDelimiter);
-                String location = StringUtil.find(ddl,"LOCATION");
-                hiveWriterDto.setWriterDefaultFS(location.substring(0,StringUtil.getCharacterPosition(location,"/",3)));
+                String location = StringUtil.find(ddl, "LOCATION");
+                hiveWriterDto.setWriterDefaultFS(location.substring(0, StringUtil.getCharacterPosition(location, "/", 3)));
                 hiveWriterDto.setWriterFileName(location.substring(location.lastIndexOf("/") + 1));
-                hiveWriterDto.setWriterPath(location.substring(StringUtil.getCharacterPosition(location,"/",3)));
+                hiveWriterDto.setWriterPath(location.substring(StringUtil.getCharacterPosition(location, "/", 3)));
                 jsonBuild.setHiveWriter(hiveWriterDto);
             }
 
@@ -520,7 +535,7 @@ public class JobServiceImpl implements JobService {
             jsonBuild.setWriterTables(wdTable);
 
             String json = dataxJsonService.buildJobJson(jsonBuild);
-            json = json.replace("\\\\","\\");
+            json = json.replace("\\\\", "\\");
             JobTemplate jobTemplate = jobTemplateMapper.loadById(dto.getTemplateId());
             JobInfo jobInfo = new JobInfo();
             BeanUtils.copyProperties(jobTemplate, jobInfo);
@@ -540,9 +555,9 @@ public class JobServiceImpl implements JobService {
         List<JobConnDto> list = new ArrayList<>();
         for (JobInfo info : infos) {
 
-            if(StringUtils.isNotBlank(info.getChildJobId())){
-                String [] childIds = info.getChildJobId().split(",");
-                for (String id: childIds) {
+            if (StringUtils.isNotBlank(info.getChildJobId())) {
+                String[] childIds = info.getChildJobId().split(",");
+                for (String id : childIds) {
                     JobConnDto jobConnDto = new JobConnDto();
                     jobConnDto.setSourceId(info.getId());
                     jobConnDto.setTargetId(Integer.valueOf(id));
@@ -555,13 +570,59 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public ReturnT<Long> getMaxId(Integer datasourceId, String tableName, String primaryKey) {
-        Long result = JobTrigger.getMaxId(datasourceId,tableName,primaryKey);
+        Long result = JobTrigger.getMaxId(datasourceId, tableName, primaryKey);
         return new ReturnT<>(result);
     }
 
     @Override
     public ReturnT<Date> getMaxTime(Integer datasourceId, String tableName, String primaryKey) {
-        Date result = JobTrigger.getMaxTime(datasourceId,tableName,primaryKey);
+        Date result = JobTrigger.getMaxTime(datasourceId, tableName, primaryKey);
         return new ReturnT<>(result);
+    }
+
+    @Override
+    public List<ProjectDto> getNodeMenuList() {
+        return jobInfoMapper.getNodeMenuList();
+    }
+
+    @Override
+    @Transactional
+    public void saveChain(ChainDto dto) {
+        try {
+            jobInfoMapper.saveChainJson(dto.getId(), JsonUtil.formatObjectToJson(dto));
+            jobInfoChainMapper.removeAll(dto.getId());
+            // 保存关系
+            if (CollectionUtils.isNotEmpty(dto.getLineList())) {
+                for (LineDto lineDto : dto.getLineList()) {
+                    jobInfoChainMapper.insert(getId(lineDto.getFrom()), getId(lineDto.getTo()), dto.getId());
+                }
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Integer getId(String value){
+        if(StringUtils.isNotBlank(value)){
+            if(value.contains("-")){
+                value = value.substring(value.lastIndexOf("-") + 1);
+            }
+            return Integer.valueOf(value);
+        }
+        return null;
+    }
+
+    @Override
+    public void saveChainJson(ChainDto dto) {
+        try {
+            jobInfoMapper.saveChainJson(dto.getId(), JsonUtil.formatObjectToJson(dto));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getChainJson(String id) {
+        return jobInfoMapper.getChainJson(id);
     }
 }

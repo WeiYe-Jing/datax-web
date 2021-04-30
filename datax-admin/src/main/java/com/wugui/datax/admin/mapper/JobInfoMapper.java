@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.mapper;
 
+import com.wugui.datax.admin.dto.ProjectDto;
 import com.wugui.datax.admin.entity.JobInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,8 @@ public interface JobInfoMapper {
                            @Param("jobDesc") String jobDesc,
                            @Param("glueType") String glueType,
                            @Param("userId") int userId,
-                           @Param("projectIds") Integer[] projectIds);
+                           @Param("projectIds") Integer[] projectIds,
+                           @Param("chainFlag") int chainFlag);
 
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
@@ -32,7 +34,8 @@ public interface JobInfoMapper {
                       @Param("jobDesc") String jobDesc,
                       @Param("glueType") String glueType,
                       @Param("userId") int userId,
-                      @Param("projectIds") Integer[] projectIds);
+                      @Param("projectIds") Integer[] projectIds,
+                      @Param("chainFlag") int chainFlag);
 
     List<JobInfo> findAll();
 
@@ -61,4 +64,10 @@ public interface JobInfoMapper {
     List<JobInfo> loadByIds(@Param("ids") List<Integer> ids);
 
     void updateJobStatus(@Param("id") int id,@Param("jobStatus") int jobStatus);
+
+    List<ProjectDto> getNodeMenuList();
+
+    void saveChainJson(@Param("id") String id,@Param("chainJson") String chainJson);
+
+    String getChainJson(@Param("id")String id);
 }

@@ -54,6 +54,9 @@
 		<result column="datasource_id" property="datasourceId" />
 		<result column="inc_flag" property="incFlag" />
 		<result column="job_status" property="jobStatus" />
+		<result column="chain_flag" property="chainFlag" />
+		<result column="chain_status" property="chainStatus" />
+		<result column="chain_json" property="chainJson" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -93,7 +96,10 @@
 		t.increment_type,
 		t.datasource_id,
 		t.inc_flag,
-		t.job_status
+		t.job_status,
+		t.chain_flag,
+		t.chain_status,
+		t.chain_json
 	</sql>
 
 	<sql id="Project_Column_List">
@@ -112,6 +118,9 @@
             <if test="triggerStatus gte 0">
                 AND t.trigger_status = #{triggerStatus}
             </if>
+			<if test="chainFlag gte 0">
+				AND t.chain_flag = #{chainFlag}
+			</if>
 			<if test="jobDesc != null and jobDesc != ''">
 				AND t.job_desc like CONCAT(CONCAT('%', #{jobDesc}), '%')
 			</if>
@@ -168,6 +177,10 @@
 	</select>
 
 	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobInfo" useGeneratedKeys="true" keyProperty="id" >
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+			/*SELECT @@IDENTITY AS id*/
+		</selectKey>
 		INSERT INTO job_info (
 			job_group,
 			job_cron,
@@ -202,7 +215,9 @@
 			primary_key,
 			inc_start_id,
 			increment_type,
-			datasource_id
+			datasource_id,
+		    chain_flag,
+		    inc_flag
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
@@ -237,12 +252,10 @@
 			#{primaryKey},
 			#{incStartId},
 			#{incrementType},
-			#{datasourceId}
+			#{datasourceId},
+		    #{chainFlag},
+			#{incFlag}
 		);
-		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID()
-			/*SELECT @@IDENTITY AS id*/
-		</selectKey>-->
 	</insert>
 
 	<select id="loadById" parameterType="java.util.HashMap" resultMap="JobInfo">
@@ -286,7 +299,9 @@
 		    primary_key = #{primaryKey},
 		    inc_start_id = #{incStartId},
 		    increment_type = #{incrementType},
-		    datasource_id= #{datasourceId}
+		    datasource_id = #{datasourceId},
+		    chain_flag = #{chainFlag},
+			inc_flag = #{incFlag}
 		WHERE id = #{id}
 	</update>
 
@@ -349,11 +364,32 @@
 	<update id="updateJobStatus">
 		update job_info set job_status = #{jobStatus} where id = #{id}
 	</update>
+	<update id="saveChainJson">
+		update job_info set chain_json = #{chainJson} where id = #{id}
+	</update>
 	<select id="loadByIds" resultMap="JobInfo">
 		select * from job_info where id IN (
 		<foreach collection="ids" item="id" separator=",">
 			#{id}
 		</foreach>
 		)
+	</select>
+
+	<resultMap type="com.wugui.datax.admin.dto.ProjectDto" id="ProjectJobInfoMap">
+		<id column="pid" property="id"/>
+		<result column="pname" property="name"/>
+		<collection property="children" ofType="com.wugui.datax.admin.dto.JobInfoDto">
+			<id column="jid" property="id"/>
+			<result column="jname" property="name"/>
+		</collection>
+	</resultMap>
+
+    <select id="getNodeMenuList" resultMap="ProjectJobInfoMap">
+		select p.id pid,p.name pname,ji.id jid,ji.job_desc jname from job_project p
+	    left join job_info ji on p.id = ji.project_id
+		where ji.chain_flag != 1
+	</select>
+    <select id="getChainJson" resultType="java.lang.String">
+		select chain_json from job_info where id = #{id}
 	</select>
 </mapper>

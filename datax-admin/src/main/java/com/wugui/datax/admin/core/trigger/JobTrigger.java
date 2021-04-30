@@ -18,12 +18,10 @@ import com.wugui.datax.admin.tool.query.BaseQueryTool;
 import com.wugui.datax.admin.tool.query.QueryToolFactory;
 import com.wugui.datax.admin.util.DBUtilErrorCode;
 import com.wugui.datax.admin.util.DataXException;
-import com.wugui.datax.admin.util.ErrorCode;
 import com.wugui.datax.admin.util.JSONUtils;
 import com.wugui.datax.rpc.util.IpUtil;
 import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,16 +37,15 @@ public class JobTrigger {
 
     /**
      * trigger job
-     *
-     * @param jobId
+     *  @param jobId
      * @param triggerType
      * @param failRetryCount        >=0: use this param
-     *                              <0: use param from job info config
+ *                              <0: use param from job info config
      * @param executorShardingParam
      * @param executorParam         null: use job param
-     *                              not null: cover job param
+     * @param groupId
      */
-    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam) {
+    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, int groupId) {
         JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoMapper().loadById(jobId);
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
@@ -80,13 +77,13 @@ public class JobTrigger {
                 && group.getRegistryList() != null && !group.getRegistryList().isEmpty()
                 && shardingParam == null) {
             for (int i = 0; i < group.getRegistryList().size(); i++) {
-                processTrigger(group, jobInfo, finalFailRetryCount, triggerType, i, group.getRegistryList().size());
+                processTrigger(group, jobInfo, finalFailRetryCount, triggerType, i, group.getRegistryList().size(), groupId);
             }
         } else {
             if (shardingParam == null) {
                 shardingParam = new int[]{0, 1};
             }
-            processTrigger(group, jobInfo, finalFailRetryCount, triggerType, shardingParam[0], shardingParam[1]);
+            processTrigger(group, jobInfo, finalFailRetryCount, triggerType, shardingParam[0], shardingParam[1], groupId);
         }
 
     }
@@ -107,8 +104,9 @@ public class JobTrigger {
      * @param triggerType
      * @param index               sharding index
      * @param total               sharding index
+     * @param groupId
      */
-    private static void processTrigger(JobGroup group, JobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total) {
+    private static void processTrigger(JobGroup group, JobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total, int groupId) {
 
         TriggerParam triggerParam = new TriggerParam();
 
@@ -127,6 +125,15 @@ public class JobTrigger {
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(triggerTime);
         jobLog.setJobDesc(jobInfo.getJobDesc());
+        if(groupId > 0){
+            jobLog.setGroupId(groupId);
+        } else {
+            if (jobInfo.getChainFlag() == 1){
+                jobLog.setGroupId(jobInfo.getId());
+            } else {
+                jobLog.setGroupId(0);
+            }
+        }
 
         JobAdminConfig.getAdminConfig().getJobLogMapper().save(jobLog);
         logger.debug(">>>>>>>>>>> datax-web trigger start, jobId:{}", jobLog.getId());

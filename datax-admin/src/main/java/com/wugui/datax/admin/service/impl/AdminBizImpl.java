@@ -14,11 +14,13 @@ import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.entity.JobLog;
+import com.wugui.datax.admin.mapper.JobInfoChainMapper;
 import com.wugui.datax.admin.mapper.JobInfoMapper;
 import com.wugui.datax.admin.mapper.JobLogMapper;
 import com.wugui.datax.admin.mapper.JobRegistryMapper;
 import com.wugui.datax.admin.util.DBUtilErrorCode;
 import com.wugui.datax.admin.util.DataXException;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,8 @@ public class AdminBizImpl implements AdminBiz {
     private JobInfoMapper jobInfoMapper;
     @Resource
     private JobRegistryMapper jobRegistryMapper;
+    @Resource
+    private JobInfoChainMapper jobInfoChainMapper;
 
     @Override
     public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList) {
@@ -108,33 +112,63 @@ public class AdminBizImpl implements AdminBiz {
 
             updateIncrementParam(log, jobInfo.getIncrementType());
 
-            if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
-                callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
+            if(log.getGroupId() > 0){
+                // 任务链流程
+                List<Integer> childJobIds = jobInfoChainMapper.getNextJobList(log.getGroupId(), jobInfo.getId());
+                if(CollectionUtils.isNotEmpty(childJobIds)){
+                    callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_chain_run") + "<<<<<<<<<<< </span><br>";
+                    for (int i = 0; i < childJobIds.size(); i++) {
+                        int childJobId = childJobIds.get(i);
+                        if (childJobId > 0) {
+                            JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.CHAIN, -1, null, null, log.getGroupId());
+                            ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
+                            // add msg
+                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
+                                    (i + 1),
+                                    childJobIds.size(),
+                                    childJobIds.get(i),
+                                    (triggerChildResult.getCode() == ReturnT.SUCCESS_CODE ? I18nUtil.getString("system_success") : I18nUtil.getString("system_fail")),
+                                    triggerChildResult.getMsg());
 
-                String[] childJobIds = jobInfo.getChildJobId().split(",");
-                for (int i = 0; i < childJobIds.length; i++) {
-                    int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.valueOf(childJobIds[i]) : -1;
-                    if (childJobId > 0) {
-
-                        JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null);
-                        ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
-
-                        // add msg
-                        callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
-                                (i + 1),
-                                childJobIds.length,
-                                childJobIds[i],
-                                (triggerChildResult.getCode() == ReturnT.SUCCESS_CODE ? I18nUtil.getString("system_success") : I18nUtil.getString("system_fail")),
-                                triggerChildResult.getMsg());
-                    } else {
-                        callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg2"),
-                                (i + 1),
-                                childJobIds.length,
-                                childJobIds[i]);
+                        } else {
+                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg2"),
+                                    (i + 1),
+                                    childJobIds.size(),
+                                    childJobIds.get(i));
+                        }
                     }
                 }
+            }else{
+                // 子任务流程
+                if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
+                    callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
+                    String[] childJobIds = jobInfo.getChildJobId().split(",");
+                    for (int i = 0; i < childJobIds.length; i++) {
+                        int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.valueOf(childJobIds[i]) : -1;
+                        if (childJobId > 0) {
+
+                            JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null, log.getGroupId());
+                            ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
+
+                            // add msg
+                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
+                                    (i + 1),
+                                    childJobIds.length,
+                                    childJobIds[i],
+                                    (triggerChildResult.getCode() == ReturnT.SUCCESS_CODE ? I18nUtil.getString("system_success") : I18nUtil.getString("system_fail")),
+                                    triggerChildResult.getMsg());
+                        } else {
+                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg2"),
+                                    (i + 1),
+                                    childJobIds.length,
+                                    childJobIds[i]);
+                        }
+                    }
+
+                }
             }
+
         }
 
         //kill execution timeout DataX process

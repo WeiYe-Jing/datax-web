@@ -580,10 +580,10 @@
                     <artifactId>hbase-annotations</artifactId>
                     <groupId>org.apache.hbase</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>hbase-protocol</artifactId>
-                    <groupId>org.apache.hbase</groupId>
-                </exclusion>
+<!--                <exclusion>-->
+<!--                    <artifactId>hbase-protocol</artifactId>-->
+<!--                    <groupId>org.apache.hbase</groupId>-->
+<!--                </exclusion>-->
                 <exclusion>
                     <artifactId>jackson-mapper-asl</artifactId>
                     <groupId>org.codehaus.jackson</groupId>

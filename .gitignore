@@ -18,3 +18,5 @@
 /build/
 /packages/
 /datax-assembly/target/
+.DS_Store
+*.iml

@@ -70,8 +70,9 @@ public class HBaseQueryTool {
      */
     public boolean dataSourceTest() throws IOException {
         Admin admin = connection.getAdmin();
-        HTableDescriptor[] tableDescriptor = admin.listTables();
-        return tableDescriptor.length > 0;
+        NamespaceDescriptor[] descriptors = admin.listNamespaceDescriptors();
+        //HTableDescriptor[] tableDescriptor = admin.listTables();
+        return descriptors.length > 0;
     }
 
     /**

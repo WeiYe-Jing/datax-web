@@ -301,7 +301,8 @@
 		    increment_type = #{incrementType},
 		    datasource_id = #{datasourceId},
 		    chain_flag = #{chainFlag},
-			inc_flag = #{incFlag}
+			inc_flag = #{incFlag},
+		    chain_json = #{chainJson}
 		WHERE id = #{id}
 	</update>
 

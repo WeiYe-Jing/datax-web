@@ -280,6 +280,13 @@ public class JobServiceImpl implements JobService {
             exists_jobInfo.setGlueSource(jobInfo.getGlueSource());
             exists_jobInfo.setJobJson(null);
         }
+
+        if(jobInfo.getChainFlag() == 1 && StringUtils.isEmpty(exists_jobInfo.getChainJson())){
+            // 保存chainJson
+            String chainJson = "{\"id\":\""+jobInfo.getId()+"\",\"name\":\""+jobInfo.getJobDesc()+"\",\"nodeList\":[{\"id\":\""+jobInfo.getId()+"\",\"name\":\""+jobInfo.getJobDesc()+"\",\"type\":\"task\",\"left\":\"18px\",\"top\":\"223px\",\"ico\":\"el-icon-user-solid\",\"state\":\"success\"}],\"lineList\":[]}";
+            exists_jobInfo.setChainJson(chainJson);
+        }
+
         exists_jobInfo.setGlueUpdatetime(new Date());
         jobInfoMapper.update(exists_jobInfo);
 

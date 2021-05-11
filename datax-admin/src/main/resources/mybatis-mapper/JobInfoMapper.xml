@@ -158,6 +158,9 @@
             <if test="triggerStatus gte 0">
                 AND t.trigger_status = #{triggerStatus}
             </if>
+			<if test="chainFlag gte 0">
+				AND t.chain_flag = #{chainFlag}
+			</if>
 			<if test="jobDesc != null and jobDesc != ''">
 				AND t.job_desc like CONCAT(CONCAT('%', #{jobDesc}), '%')
 			</if>
@@ -389,6 +392,7 @@
 		select p.id pid,p.name pname,ji.id jid,ji.job_desc jname from job_project p
 	    left join job_info ji on p.id = ji.project_id
 		where ji.chain_flag != 1
+		order by p.name,ji.job_desc
 	</select>
     <select id="getChainJson" resultType="java.lang.String">
 		select chain_json from job_info where id = #{id}

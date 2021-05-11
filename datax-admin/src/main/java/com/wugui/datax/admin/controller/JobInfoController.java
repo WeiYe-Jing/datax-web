@@ -123,7 +123,7 @@ public class JobInfoController extends BaseController{
         if (executorParam == null) {
             executorParam = "";
         }
-        JobTriggerPoolHelper.trigger(dto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam, 0);
+        JobTriggerPoolHelper.trigger(dto.getJobId(), TriggerTypeEnum.MANUAL, -1, null, executorParam, dto.getGroupId());
         return ReturnT.SUCCESS;
     }
 

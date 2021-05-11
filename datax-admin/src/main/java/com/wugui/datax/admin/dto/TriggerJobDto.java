@@ -18,4 +18,9 @@ public class TriggerJobDto implements Serializable {
     private String executorParam;
 
     private int jobId;
+
+    /**
+     * 任务链触发  组id
+     */
+    private int groupId;
 }

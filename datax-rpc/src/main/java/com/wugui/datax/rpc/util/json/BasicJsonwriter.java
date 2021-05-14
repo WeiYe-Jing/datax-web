@@ -70,7 +70,7 @@ public class BasicJsonwriter {
         } else if (value instanceof String
                 || value instanceof Byte
                 || value instanceof CharSequence) {
-            json.append(STR_SLASH).append(value.toString()).append(STR_SLASH);
+            json.append(STR_SLASH).append(value.toString().replaceAll("\"", "\\\\\"")).append(STR_SLASH);
         } else if (value instanceof Boolean
                 || value instanceof Short
                 || value instanceof Integer

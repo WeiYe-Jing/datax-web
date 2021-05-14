@@ -55,6 +55,7 @@ public final class Constants {
     public static final String COM_ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
     public static final String COM_SQLSERVER_JDBC_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     public static final String COM_DB2_JDBC_DRIVER = "com.ibm.db2.jcc.DB2Driver";
+    public static final String COM_OSCAR_JDBC_DRIVER = "com.oscar.Driver";
     public static final String COM_PHOENIX_JDBC_DRIVER = "org.apache.phoenix.jdbc.PhoenixDriver";
 
     /**
@@ -68,6 +69,7 @@ public final class Constants {
     public static final String ORACLE = "ORACLE";
     public static final String SQLSERVER = "SQLSERVER";
     public static final String DB2 = "DB2";
+    public static final String OSCAR = "OSCAR";
 
     /**
      * jdbc url
@@ -80,6 +82,7 @@ public final class Constants {
     public static final String JDBC_ORACLE_SERVICE_NAME = "jdbc:oracle:thin:@//";
     public static final String JDBC_SQLSERVER = "jdbc:sqlserver://";
     public static final String JDBC_DB2 = "jdbc:db2://";
+    public static final String JDBC_OSCAR = "jdbc:oscar://";
 
 
     public static final String ADDRESS = "address";

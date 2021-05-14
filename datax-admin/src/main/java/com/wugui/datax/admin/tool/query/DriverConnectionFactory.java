@@ -2,6 +2,7 @@ package com.wugui.datax.admin.tool.query;
 
 import com.wugui.datatx.core.datasource.*;
 import com.wugui.datatx.core.enums.DbConnectType;
+import com.wugui.datatx.core.datasource.BaseDataSource;
 import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.JSONUtils;
@@ -49,6 +50,8 @@ public class DriverConnectionFactory {
             }
             datasource = getBaseDataSource(dbType, parameter);
             if (datasource != null) {
+                datasource.setUser(AesUtil.decrypt(datasource.getUser()));
+                datasource.setPassword(AesUtil.decrypt(datasource.getPassword()));
                 connection = DriverManager.getConnection(datasource.getJdbcUrl(), datasource.getUser(), datasource.getPassword());
             }
         } catch (Exception e) {
@@ -81,11 +84,14 @@ public class DriverConnectionFactory {
     /**
      * build paramters
      *
-     * @param type      data source  type
-     * @param database  data source database name
      * @param userName  user name
      * @param password  password
+     * @param type      data source  type
+     * @param database  data source database name
+     * @param jdbcUrl   jdbcUrl
      * @param principal principal
+     * @param comments  comments
+     *
      * @return datasource parameter
      */
     public static String buildParameter(String userName, String password, DbType type, String database, String jdbcUrl, String principal, String comments) {
@@ -102,8 +108,8 @@ public class DriverConnectionFactory {
         parameterMap.put(Constants.ADDRESS, address);
         parameterMap.put(Constants.JDBC_URL, jdbcUrl);
         parameterMap.put(Constants.DATABASE, database);
-        parameterMap.put(Constants.USER, decrypt(userName));
-        parameterMap.put(Constants.PASSWORD, decrypt(password));
+        parameterMap.put(Constants.USER, AesUtil.encrypt(userName));
+        parameterMap.put(Constants.PASSWORD, AesUtil.encrypt(password));
         if (type == DbType.HIVE) {
             parameterMap.put(Constants.PRINCIPAL, principal);
         }
@@ -112,10 +118,5 @@ public class DriverConnectionFactory {
             logger.info("parameters map:{}", JSONUtils.toJsonString(parameterMap));
         }
         return JSONUtils.toJsonString(parameterMap);
-    }
-
-    private static String decrypt(String account) {
-        String decryptUsername = AesUtil.decrypt(account);
-        return decryptUsername == null ? account : decryptUsername;
     }
 }

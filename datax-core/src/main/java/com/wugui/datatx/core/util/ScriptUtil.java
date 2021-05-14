@@ -71,7 +71,7 @@ public class ScriptUtil {
             if (params != null && params.length > 0) {
                 for (String param : params) {
                     if(StringUtils.isNotBlank(param)){
-                        cmdarray.add(param);
+                        cmdarray.add(param == null ? "" : param);
                     }
                 }
             }

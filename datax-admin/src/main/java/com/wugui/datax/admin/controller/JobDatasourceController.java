@@ -3,10 +3,13 @@ package com.wugui.datax.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.wugui.datatx.core.datasource.BaseDataSource;
 import com.wugui.datatx.core.enums.DbType;
+import com.wugui.datatx.core.util.JSONUtils;
 import com.wugui.datax.admin.entity.JobDatasource;
 import com.wugui.datax.admin.service.DatasourceQueryService;
 import com.wugui.datax.admin.service.JobDatasourceService;
+import com.wugui.datax.admin.util.AesUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -78,7 +81,12 @@ public class JobDatasourceController extends BaseController {
     @ApiOperation("通过主键查询单条数据")
     @GetMapping("{id}")
     public R<JobDatasource> selectOne(@PathVariable Serializable id) {
-        return success(this.jobDatasourceService.getById(id));
+        JobDatasource datasource = this.jobDatasourceService.getById(id);
+        BaseDataSource baseDataSource = JSONUtils.parseObject(datasource.getConnectionParams(), datasource.getType().getClazz());
+        baseDataSource.setUser(AesUtil.decrypt(baseDataSource.getUser()));
+        baseDataSource.setPassword(AesUtil.decrypt(baseDataSource.getPassword()));
+        datasource.setConnectionParams(JSONUtils.toJsonString(baseDataSource));
+        return success(datasource);
     }
 
     /**

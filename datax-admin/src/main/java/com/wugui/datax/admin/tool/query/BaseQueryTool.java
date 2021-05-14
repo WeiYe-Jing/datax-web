@@ -14,7 +14,6 @@ import com.wugui.datax.admin.tool.database.TableInfo;
 import com.wugui.datax.admin.tool.meta.DatabaseInterface;
 import com.wugui.datax.admin.tool.meta.DatabaseMetaFactory;
 import com.wugui.datax.admin.tool.table.TableNameHandle;
-import com.wugui.datax.admin.util.JdbcConstants;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -205,7 +204,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
                 res.add(dasColumn);
             }
             try (Statement statement = connection.createStatement()) {
-                if (currentDatabase.equals(JdbcConstants.MYSQL) || currentDatabase.equals(JdbcConstants.ORACLE)) {
+                if (currentDatabase.equals(Constants.MYSQL) || currentDatabase.equals(Constants.ORACLE)) {
                     DatabaseMetaData databaseMetaData = connection.getMetaData();
                     ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, tableName);
                     while (resultSet.next()) {

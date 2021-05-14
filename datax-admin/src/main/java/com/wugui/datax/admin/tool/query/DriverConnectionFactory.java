@@ -1,6 +1,8 @@
 package com.wugui.datax.admin.tool.query;
 
 import com.wugui.datatx.core.datasource.*;
+import com.wugui.datatx.core.enums.DbConnectType;
+import com.wugui.datatx.core.datasource.BaseDataSource;
 import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datatx.core.util.JSONUtils;
@@ -10,6 +12,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -47,6 +50,8 @@ public class DriverConnectionFactory {
             }
             datasource = getBaseDataSource(dbType, parameter);
             if (datasource != null) {
+                datasource.setUser(AesUtil.decrypt(datasource.getUser()));
+                datasource.setPassword(AesUtil.decrypt(datasource.getPassword()));
                 connection = DriverManager.getConnection(datasource.getJdbcUrl(), datasource.getUser(), datasource.getPassword());
             }
         } catch (Exception e) {
@@ -64,17 +69,29 @@ public class DriverConnectionFactory {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+
+        if (datasource instanceof OracleDataSource) {
+            Map<String, String> parameters = JSONUtils.toMap(parameter);
+            if (parameters.get("jdbcUrl").indexOf("//") == -1) {
+                ((OracleDataSource) datasource).setConnectType(DbConnectType.ORACLE_SID);
+            }else {
+                ((OracleDataSource) datasource).setConnectType(DbConnectType.ORACLE_SERVICE_NAME);
+            }
+        }
         return datasource;
     }
 
     /**
      * build paramters
      *
-     * @param type      data source  type
-     * @param database  data source database name
      * @param userName  user name
      * @param password  password
+     * @param type      data source  type
+     * @param database  data source database name
+     * @param jdbcUrl   jdbcUrl
      * @param principal principal
+     * @param comments  comments
+     *
      * @return datasource parameter
      */
     public static String buildParameter(String userName, String password, DbType type, String database, String jdbcUrl, String principal, String comments) {
@@ -91,8 +108,8 @@ public class DriverConnectionFactory {
         parameterMap.put(Constants.ADDRESS, address);
         parameterMap.put(Constants.JDBC_URL, jdbcUrl);
         parameterMap.put(Constants.DATABASE, database);
-        parameterMap.put(Constants.USER, decrypt(userName));
-        parameterMap.put(Constants.PASSWORD, decrypt(password));
+        parameterMap.put(Constants.USER, AesUtil.encrypt(userName));
+        parameterMap.put(Constants.PASSWORD, AesUtil.encrypt(password));
         if (type == DbType.HIVE) {
             parameterMap.put(Constants.PRINCIPAL, principal);
         }
@@ -101,10 +118,5 @@ public class DriverConnectionFactory {
             logger.info("parameters map:{}", JSONUtils.toJsonString(parameterMap));
         }
         return JSONUtils.toJsonString(parameterMap);
-    }
-
-    private static String decrypt(String account) {
-        String decryptUsername = AesUtil.decrypt(account);
-        return decryptUsername == null ? account : decryptUsername;
     }
 }

@@ -1,8 +1,8 @@
 package com.wugui.datax.admin.tool.query;
 
+import com.alibaba.druid.util.JdbcConstants;
 import com.wugui.datatx.core.enums.DbType;
 import com.wugui.datax.admin.entity.JobDatasource;
-import com.wugui.datax.admin.util.JdbcConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class Hbase20xsqlQueryToolTest {
         jdbcDatasource = new JobDatasource();
         String parameter = buildParameter("", "", DbType.HBASE20XSQL, null, "jdbc:phoenix:hadoop1,hadoop2,hadoop3:2181", null, null);
         jdbcDatasource.setConnectionParams(parameter);
-        jdbcDatasource.setDatasourceName(JdbcConstants.HBASE20XSQL);
+        jdbcDatasource.setDatasourceName(DbType.HBASE20XSQL.getDescp());
 
     }
 

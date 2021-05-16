@@ -264,8 +264,7 @@ Copyright (c) 2020 WeiYe
 
 # Contact us
 
-### QQ交流群 776939467
+### QQ交流群 860715260
 
-![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode.png)
-
+![](https://datax-web.oss-cn-hangzhou.aliyuncs.com/doc/qrcode3.jpeg?x-oss-process=image/resize,w_250,h_300)
 

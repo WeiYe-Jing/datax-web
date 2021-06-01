@@ -65,8 +65,9 @@ public class ProcessUtil {
         if (Platform.isWindows()) {
             command = "cmd.exe /c taskkill /PID " + pid + " /F /T ";
         } else if (Platform.isLinux() || Platform.isAIX()) {
-            command = "kill " + pid;
+            command = "kill -9 " + pid;
         }
+        logger.info("kill process command: {0}", command);
         try {
             //杀掉进程
             process = Runtime.getRuntime().exec(command);

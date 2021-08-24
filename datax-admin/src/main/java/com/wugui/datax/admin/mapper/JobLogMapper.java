@@ -25,6 +25,15 @@ public interface JobLogMapper {
                           @Param("triggerTimeEnd") Date triggerTimeEnd,
                           @Param("logStatus") int logStatus);
 
+    List<JobLog> pageList(@Param("offset") int offset,
+                          @Param("pagesize") int pagesize,
+                          @Param("jobGroup") int jobGroup,
+                          @Param("jobId") int jobId,
+                          @Param("triggerTimeStart") Date triggerTimeStart,
+                          @Param("triggerTimeEnd") Date triggerTimeEnd,
+                          @Param("logStatus") int logStatus,
+                          @Param("userId") Integer userId);
+
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
                       @Param("jobGroup") int jobGroup,
@@ -32,6 +41,15 @@ public interface JobLogMapper {
                       @Param("triggerTimeStart") Date triggerTimeStart,
                       @Param("triggerTimeEnd") Date triggerTimeEnd,
                       @Param("logStatus") int logStatus);
+
+    int pageListCount(@Param("offset") int offset,
+                      @Param("pagesize") int pagesize,
+                      @Param("jobGroup") int jobGroup,
+                      @Param("jobId") int jobId,
+                      @Param("triggerTimeStart") Date triggerTimeStart,
+                      @Param("triggerTimeEnd") Date triggerTimeEnd,
+                      @Param("logStatus") int logStatus,
+                      @Param("userId") Integer userId);
 
     JobLog load(@Param("id") long id);
 

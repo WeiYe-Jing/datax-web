@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/log")
 @Api(tags = "任务运行日志接口")
-public class JobLogController {
+public class JobLogController extends BaseController{
     private static Logger logger = LoggerFactory.getLogger(JobLogController.class);
 
     @Resource
@@ -39,14 +40,13 @@ public class JobLogController {
 
     @GetMapping("/pageList")
     @ApiOperation("运行日志列表")
-    public ReturnT<Map<String, Object>> pageList(
-            @RequestParam(required = false, defaultValue = "0") int current,
-            @RequestParam(required = false, defaultValue = "10") int size,
-            int jobGroup, int jobId, int logStatus, String filterTime) {
+    public ReturnT<Map<String, Object>> pageList(HttpServletRequest request,
+                                                 @RequestParam(required = false, defaultValue = "0") int current,
+                                                 @RequestParam(required = false, defaultValue = "10") int size,
+                                                 int jobGroup, int jobId, int logStatus, String filterTime) {
 
-        // valid permission
-        //JobInfoController.validPermission(request, jobGroup);	// 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
-
+        Integer currentUserId = getCurrentUserId(request);
+        if(currentUserId ==1) currentUserId=null ;
         // parse param
         Date triggerTimeStart = null;
         Date triggerTimeEnd = null;
@@ -59,8 +59,8 @@ public class JobLogController {
         }
 
         // page query
-        List<JobLog> data = jobLogMapper.pageList((current - 1) * size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-        int cnt = jobLogMapper.pageListCount((current - 1) * size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+        List<JobLog> data = jobLogMapper.pageList((current - 1) * size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus,currentUserId);
+        int cnt = jobLogMapper.pageListCount((current - 1) * size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus,currentUserId);
 
         // package result
         Map<String, Object> maps = new HashMap<>();

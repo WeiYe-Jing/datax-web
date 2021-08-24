@@ -26,4 +26,6 @@ public interface JobProjectService extends IService<JobProject> {
      */
 
     IPage<JobProject> getProjectListPaging(Integer pageSize, Integer pageNo, String searchName);
+
+    IPage<JobProject> getProjectListPaging(Integer pageSize, Integer pageNo, String searchName,Integer userId);
 }

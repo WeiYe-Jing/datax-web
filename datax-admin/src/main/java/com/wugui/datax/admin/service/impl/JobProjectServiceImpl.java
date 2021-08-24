@@ -26,4 +26,9 @@ public class JobProjectServiceImpl extends ServiceImpl<JobProjectMapper, JobProj
         Page<JobProject> page = new Page(pageNo, pageSize);
         return jobProjectMapper.getProjectListPaging(page, searchName);
     }
+
+    public IPage<JobProject> getProjectListPaging(Integer pageSize, Integer pageNo, String searchName,Integer userId) {
+        Page<JobProject> page = new Page(pageNo, pageSize);
+        return jobProjectMapper.getProjectListPagingByUser(page, searchName,userId);
+    }
 }

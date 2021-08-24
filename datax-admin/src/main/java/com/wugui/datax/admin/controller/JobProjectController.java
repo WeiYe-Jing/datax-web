@@ -35,11 +35,13 @@ public class JobProjectController extends BaseController {
      */
     @GetMapping
     @ApiOperation("分页查询所有数据")
-    public R<IPage<JobProject>> selectAll(@RequestParam(value = "searchVal", required = false) String searchVal,
+    public R<IPage<JobProject>> selectAll(HttpServletRequest request,@RequestParam(value = "searchVal", required = false) String searchVal,
                                           @RequestParam("pageSize") Integer pageSize,
                                           @RequestParam("pageNo") Integer pageNo) {
 
-        return success(jobProjectService.getProjectListPaging(pageSize, pageNo, searchVal));
+        Integer currentUserId = getCurrentUserId(request);
+        if(currentUserId ==1) currentUserId=0 ;
+        return success(jobProjectService.getProjectListPaging(pageSize, pageNo, searchVal,currentUserId));
     }
 
     /**

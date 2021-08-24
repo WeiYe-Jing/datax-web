@@ -40,12 +40,22 @@ public class JobInfoController extends BaseController{
 
     @GetMapping("/pageList")
     @ApiOperation("任务列表")
-    public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
+    //增加权校验功能
+    public ReturnT<Map<String, Object>> pageList(HttpServletRequest request,@RequestParam(required = false, defaultValue = "0") int current,
+                                                 @RequestParam(required = false, defaultValue = "10") int size,
+                                                 int jobGroup, int triggerStatus, String jobDesc, String glueType, Integer[] projectIds) {
+
+        Integer currentUserId = getCurrentUserId(request);
+        if(currentUserId ==1) currentUserId=0 ;
+        return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, currentUserId, projectIds));
+    }
+/*    public ReturnT<Map<String, Object>> pageList(@RequestParam(required = false, defaultValue = "0") int current,
                                         @RequestParam(required = false, defaultValue = "10") int size,
                                         int jobGroup, int triggerStatus, String jobDesc, String glueType, Integer[] projectIds) {
 
+
         return new ReturnT<>(jobService.pageList((current-1)*size, size, jobGroup, triggerStatus, jobDesc, glueType, 0, projectIds));
-    }
+    }*/
 
     @GetMapping("/list")
     @ApiOperation("全部任务列表")

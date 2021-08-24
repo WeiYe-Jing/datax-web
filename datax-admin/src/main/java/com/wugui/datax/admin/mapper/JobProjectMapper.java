@@ -24,4 +24,8 @@ public interface JobProjectMapper extends BaseMapper<JobProject> {
      */
     IPage<JobProject> getProjectListPaging(IPage<JobProject> page,
                                           @Param("searchName") String searchName);
+
+    IPage<JobProject> getProjectListPagingByUser(IPage<JobProject> page,
+                                           @Param("searchName") String searchName,
+                                           @Param("userId") Integer userId);
 }

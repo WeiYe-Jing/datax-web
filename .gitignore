@@ -1,7 +1,16 @@
-*/target/
+
+/datax-executor/target/
+/datax-executor/datax-executor.iml
+/datax-core/datax-core.iml
+/datax-core/target/
+/datax-admin/datax-admin.iml
+/datax-admin/target/
 /.idea/
 /datax-admin/.idea/
 /datax-registry/datax-registry.iml
+/datax-registry/target/
+/datax-rpc/datax-rpc.iml
+/datax-rpc/target/
 /datax-all.iml
 /logs/
 *-dev*
@@ -9,8 +18,3 @@
 /build/
 /packages/
 /datax-assembly/target/
-/datax-assembly/datax-assembly.iml
-/datax-web.iml
-*.iml
-/datax-transformer/target/
-/applogs/

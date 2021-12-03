@@ -83,7 +83,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public TableInfo buildTableInfo(final String tableName) {
+    public TableInfo buildTableInfo(String tableSchema, String tableName) {
         //获取表信息
         List<Map<String, Object>> tableInfos = this.getTableInfo(tableName);
         if (tableInfos.isEmpty()) {
@@ -98,7 +98,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         tableInfo.setComment(StrUtil.toString(tValues.get(1)));
 
         //获取所有字段
-        List<ColumnInfo> fullColumn = getColumns(tableName);
+        List<ColumnInfo> fullColumn = getColumns(tableSchema, tableName);
         tableInfo.setColumns(fullColumn);
 
         //获取主键列
@@ -148,10 +148,10 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<ColumnInfo> getColumns(final String tableName) {
+    public List<ColumnInfo> getColumns(String tableSchema, String tableName) {
         List<ColumnInfo> fullColumn = Lists.newArrayList();
         //获取查询指定表所有字段的sql语句
-        String querySql = sqlBuilder.getSQLQueryFields(tableName);
+        String querySql = sqlBuilder.getSQLQueryFields(tableSchema, tableName);
         logger.info("querySql: {}", querySql);
         //获取指定表的所有字段
         try (Statement statement = connection.createStatement();
@@ -255,7 +255,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
     }
 
     @Override
-    public List<String> getColumnNames(String tableName, final DbType dbType) {
+    public List<String> getColumnNames(String tableName, String tableSchema, final DbType dbType) {
 
         List<String> res = Lists.newArrayList();
         //处理表名
@@ -263,7 +263,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
             tableName = TableNameHandle.addDoubleQuotes(tableName);
         }
         //获取查询指定表所有字段的sql语句
-        String querySql = sqlBuilder.getSQLQueryFields(tableName);
+        String querySql = sqlBuilder.getSQLQueryFields(tableSchema, tableName);
         logger.info("querySql: {}", querySql);
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(querySql);

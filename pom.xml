@@ -58,6 +58,8 @@
 
         <druid.version>1.2.3</druid.version>
         <db2jcc.version>db2jcc4</db2jcc.version>
+
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
 </project>

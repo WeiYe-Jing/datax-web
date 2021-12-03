@@ -41,7 +41,7 @@ public class Hbase20xsqlQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("STOCK_SYMBOL", null);
+        List<String> columns = queryTool.getColumnNames("STOCK_SYMBOL", null, null);
 
         for (String column : columns) {
             System.out.println(column);

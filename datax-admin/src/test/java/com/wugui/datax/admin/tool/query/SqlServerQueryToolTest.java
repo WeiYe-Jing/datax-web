@@ -36,7 +36,7 @@ public class SqlServerQueryToolTest {
 
     @Test
     public void getColumnNames() {
-        List<String> columns = queryTool.getColumnNames("BD_EMR_TYPE",jdbcDatasource.getType());
+        List<String> columns = queryTool.getColumnNames("BD_EMR_TYPE", null, jdbcDatasource.getType());
         log.info(columns.toString());
     }
 }

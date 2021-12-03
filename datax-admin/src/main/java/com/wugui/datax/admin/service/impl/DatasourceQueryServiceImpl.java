@@ -95,7 +95,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
 
 
     @Override
-    public List<String> getColumns(Long id, String tableName) throws IOException {
+    public List<String> getColumns(Long id, String tableName, String tableSchema) throws IOException {
         //获取数据源对象
         JobDatasource datasource = jobDatasourceService.getById(id);
         //queryTool组装
@@ -108,7 +108,7 @@ public class DatasourceQueryServiceImpl implements DatasourceQueryService {
             return new MongoDBQueryTool(datasource.getType(),datasource.getConnectionParams()).getColumns(tableName);
         } else {
             BaseQueryTool queryTool = QueryToolFactory.getByDbType(datasource.getType(),datasource.getConnectionParams());
-            return queryTool.getColumnNames(tableName, datasource.getType());
+            return queryTool.getColumnNames(tableName, tableSchema, datasource.getType());
         }
     }
 

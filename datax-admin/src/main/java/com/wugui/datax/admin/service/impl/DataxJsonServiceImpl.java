@@ -30,21 +30,24 @@ public class DataxJsonServiceImpl implements DataxJsonService {
     @Override
     public String buildJobJson(DataXJsonBuildDTO dataXJsonBuildDto) {
         DataXJsonHelper dataxJsonHelper = new DataXJsonHelper();
-      
+
         // reader
         JobDatasource readerDatasource = jobDataSourceService.getById(dataXJsonBuildDto.getReaderDatasourceId());
-      
+
         dataxJsonHelper.initTransformer(dataXJsonBuildDto);
-      
+
         //处理reader表名
         processingTableName(readerDatasource, dataXJsonBuildDto.getReaderTables());
+        //处理reader模式
+        processingTableSchema(dataXJsonBuildDto.getReaderTableSchema(), dataXJsonBuildDto.getReaderTables());
         // reader plugin init
         dataxJsonHelper.initReader(dataXJsonBuildDto, readerDatasource);
 
         JobDatasource writerDatasource = jobDataSourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
         //处理writer表名
         processingTableName(writerDatasource, dataXJsonBuildDto.getWriterTables());
-
+        //处理writer模式
+        processingTableSchema(dataXJsonBuildDto.getWriterTableSchema(), dataXJsonBuildDto.getWriterTables());
         dataxJsonHelper.initWriter(dataXJsonBuildDto, writerDatasource);
 
         return JSON.toJSONString(dataxJsonHelper.buildJob());
@@ -54,6 +57,7 @@ public class DataxJsonServiceImpl implements DataxJsonService {
      * 处理表名称
      * 解决生成json中的表名称大小写敏感问题
      * 目前针对Oracle和postgreSQL
+     *
      * @param jobDatasource
      * @param tables
      */
@@ -65,5 +69,20 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         }
     }
 
-
+    /**
+     * 处理表模式名
+     *
+     * @param tableSchema
+     * @param tables
+     * @return
+     * @author Locki
+     * @date 2021/12/3
+     */
+    private void processingTableSchema(String tableSchema, List<String> tables) {
+        if (tableSchema != null && tableSchema.trim().length() > 0) {
+            for (int i = 0; i < tables.size(); i++) {
+                tables.set(i, tableSchema.trim() + "." + tables.get(i));
+            }
+        }
+    }
 }

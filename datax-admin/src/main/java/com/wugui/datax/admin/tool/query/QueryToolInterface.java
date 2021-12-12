@@ -19,10 +19,11 @@ public interface QueryToolInterface {
     /**
      * 构建 tableInfo对象
      *
-     * @param tableName 表名
+     * @param tableSchema 模式名
+     * @param tableName   表名
      * @return
      */
-    TableInfo buildTableInfo(String tableName);
+    TableInfo buildTableInfo(String tableSchema, String tableName);
 
     /**
      * 获取指定表信息
@@ -41,19 +42,22 @@ public interface QueryToolInterface {
     /**
      * 根据表名获取所有字段
      *
-     * @param tableName
+     * @param tableSchema 模式名
+     * @param tableName   表名
      * @return2
      */
-    List<ColumnInfo> getColumns(String tableName);
+    List<ColumnInfo> getColumns(String tableSchema, String tableName);
 
 
     /**
      * 根据表名和获取所有字段名称（不包括表名）
      *
      * @param tableName
+     * @param tableSchema
+     * @param dbType
      * @return2
      */
-    List<String> getColumnNames(String tableName, DbType dbType);
+    List<String> getColumnNames(String tableName, String tableSchema, DbType dbType);
 
 
     /**
@@ -72,6 +76,7 @@ public interface QueryToolInterface {
 
     /**
      * 通过查询sql获取columns
+     *
      * @param querySql
      * @return
      */
@@ -79,10 +84,11 @@ public interface QueryToolInterface {
 
     /**
      * 获取当前表maxId
+     *
      * @param tableName
      * @param primaryKey
      * @return
      */
-    long getMaxIdVal(String tableName,String primaryKey);
+    long getMaxIdVal(String tableName, String primaryKey);
 
 }

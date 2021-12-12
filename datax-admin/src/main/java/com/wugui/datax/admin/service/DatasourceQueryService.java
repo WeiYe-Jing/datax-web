@@ -53,10 +53,11 @@ public interface DatasourceQueryService {
      * 根据数据源id，表名查询出该表所有字段
      * @param id
      * @param tableName
+     * @param tableSchema
      * @return
      * @throws IOException
      */
-    List<String> getColumns(Long id, String tableName) throws IOException;
+    List<String> getColumns(Long id, String tableName, String tableSchema) throws IOException;
 
 
     /**

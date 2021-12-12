@@ -436,11 +436,14 @@ public class JobServiceImpl implements JobService {
         List<String> rColumns;
         List<String> wColumns;
         for (int i = 0; i < rdTables.size(); i++) {
-            rColumns = datasourceQueryService.getColumns(dto.getReaderDatasourceId(), rdTables.get(i));
-            wColumns = datasourceQueryService.getColumns(dto.getWriterDatasourceId(), wrTables.get(i));
+            rColumns = datasourceQueryService.getColumns(dto.getReaderDatasourceId(), rdTables.get(i), dto.getReaderTableSchema());
+            wColumns = datasourceQueryService.getColumns(dto.getWriterDatasourceId(), wrTables.get(i), dto.getWriterTableSchema());
 
             jsonBuild.setReaderDatasourceId(dto.getReaderDatasourceId());
             jsonBuild.setWriterDatasourceId(dto.getWriterDatasourceId());
+
+            jsonBuild.setReaderTableSchema(dto.getReaderTableSchema());
+            jsonBuild.setWriterTableSchema(dto.getWriterTableSchema());
 
             jsonBuild.setReaderColumns(rColumns);
             jsonBuild.setWriterColumns(wColumns);

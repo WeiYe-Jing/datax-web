@@ -18,9 +18,13 @@ public class DataXBatchJsonBuildDTO implements Serializable {
 
     private Long readerDatasourceId;
 
+    private String readerTableSchema;
+
     private List<String> readerTables;
 
     private Long writerDatasourceId;
+
+    private String writerTableSchema;
 
     private List<String> writerTables;
 

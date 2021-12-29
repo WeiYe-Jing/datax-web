@@ -22,7 +22,12 @@ datax:
       logretentiondays: 30
     ### job, access token
     accessToken:
-
+    yarn:
+      run: false
+      client-jar: ${data.path}/applogs/executor/jobhandler/datax-on-yarn.jar
+      hdfs-tar: /hadoop/datax.tar.gz
+      queue: default
+      memory: 1024
   executor:
     jsonpath: ${JSON_PATH:.}
     pythonpath: python

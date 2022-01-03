@@ -1,7 +1,11 @@
 package com.wugui.datax.executor.service.jobhandler;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
@@ -11,22 +15,19 @@ import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
 import com.wugui.datatx.core.util.ProcessUtil;
 import com.wugui.datax.executor.service.logparse.LogStatistics;
-import com.wugui.datax.executor.util.MapUtils;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.wugui.datax.executor.service.command.BuildCommand.*;
 import static com.wugui.datax.executor.service.jobhandler.CheckEnv.checkEnv;
-import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_DATAX_PY;
 import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_JSON;
 import static com.wugui.datax.executor.service.logparse.AnalysisStatistics.analysisStatisticsLog;
 
@@ -49,6 +50,20 @@ public class ExecutorJobHandler extends AbstractJobHandler {
     @Value("${datax.executor.pythonpath}")
     private String pythonPath;
 
+    @Value("${datax.job.yarn.run:false}")
+    private boolean run;
+
+    @Value("${datax.job.yarn.client-jar}")
+    private String clientJarPath;
+
+    @Value("${datax.job.yarn.hdfs-tar}")
+    private String hdfsTarPath;
+
+    @Value("${datax.job.yarn.queue:default}")
+    private String queue;
+
+    @Value("${datax.job.yarn.queue:memory:1024}")
+    private String memory;
 
 
     private static final Pattern VARIABLE_PATTERN = Pattern.compile("(\\$)\\{?(\\w+)\\}?");
@@ -74,7 +89,12 @@ public class ExecutorJobHandler extends AbstractJobHandler {
             String[] cmdarrayFinal = buildDataXExecutorCmd(trigger, tmpFilePath, dataXPyPath, pythonPath);
             String cmd = StringUtils.join(cmdarrayFinal, " ");
             JobLogger.log("------------------Command CMD is :" + cmd);
-            final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
+            Process process;
+            if (run){
+                process = RuntimeUtil.exec(yarnCmd(trigger, tmpFilePath));
+            }else {
+                process = Runtime.getRuntime().exec(cmdarrayFinal);
+            }
             String prcsId = ProcessUtil.getProcessId(process);
             JobLogger.log("------------------DataX process id: " + prcsId);
             JOB_TEM_FILES.put(prcsId, tmpFilePath);
@@ -170,6 +190,49 @@ public class ExecutorJobHandler extends AbstractJobHandler {
             JobLogger.log("JSON temporary file write exception：" + e.getMessage());
         }
         return tmpFilePath;
+    }
+
+    /**
+     * 处理yarn脚本
+     * @param tgParam
+     * @param tmpFilePath
+     * @return
+     */
+    private String yarnCmd(TriggerParam tgParam, String tmpFilePath){
+        return StrUtil.format(DataXConstant.DATAX_SCRIPT_YARN,clientJarPath,clientJarPath,
+                "datax_web_jobid_"+tgParam.getJobId(),
+                memory(tgParam.getJvmParam(),false),
+                queue,
+                tmpFilePath,
+                hdfsTarPath);
+    }
+
+    /**
+     * 处理内存参数
+     * @param jvmParam
+     * @return
+     */
+    private String memory(String jvmParam,boolean unit){
+        String xmx;
+        List<String> resultFindAll = ReUtil.findAll("Xmx[\\w]+", jvmParam, 0, new ArrayList<String>());
+        if (CollUtil.isEmpty(resultFindAll))
+            xmx = memory;
+        else {
+            xmx = resultFindAll.get(0).toLowerCase(Locale.ROOT).replace("xmx","");
+            if (xmx.endsWith("m")){
+                xmx = xmx.replace("m","");
+            }else if (xmx.endsWith("g")){
+                xmx = xmx.replace("g","");
+                final Integer xmxInt = Integer.valueOf(xmx);
+                xmx = xmxInt * 1024 + "";
+            }
+        }
+
+        if (unit){
+            return xmx + "m";
+        }else {
+            return xmx;
+        }
     }
 
 }

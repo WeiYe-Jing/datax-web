@@ -56,7 +56,7 @@ public class DB2DatabaseMeta extends BaseDatabaseMeta implements DatabaseInterfa
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
-        return String.format("SELECT TABNAME, REMARKS FROM SYSCAT.TABLES WHERE TABSCHEMA = '%s'", tableSchema[0]);
+    public String getSQLQueryTables(String tableSchema) {
+        return String.format("SELECT TABNAME, REMARKS FROM SYSCAT.TABLES WHERE TABSCHEMA = '%s'", tableSchema);
     }
 }

@@ -51,10 +51,10 @@ public class OracleDatabaseMeta extends BaseDatabaseMeta{
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
-        return "select owner||'.'||table_name as table_name from all_tables where owner='" + tableSchema[0] + "' " +
+    public String getSQLQueryTables(String tableSchema) {
+        return "select owner||'.'||table_name as table_name from all_tables where owner='" + tableSchema + "' " +
                 "union " +
-                "select (owner||'.'||view_name) as table_name from all_views where owner='" + tableSchema[0] + "'" +
+                "select (owner||'.'||view_name) as table_name from all_views where owner='" + tableSchema + "'" +
                 "order by table_name";
     }
 

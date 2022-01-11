@@ -54,4 +54,9 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta{
     public String getSQLQueryTableSchema(String... args) {
         return "show databases";
     }
+
+    @Override
+    public String getSQLQueryTables(String tableSchema) {
+        return String.format("select table_name from information_schema.tables where table_schema = '%s'", tableSchema);
+    }
 }

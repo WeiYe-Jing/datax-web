@@ -48,8 +48,8 @@ public class OscarDatabaseMeta extends BaseDatabaseMeta implements DatabaseInter
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
-        return "select table_name from dba_tables where owner='" + tableSchema[0] + "'";
+    public String getSQLQueryTables(String tableSchema) {
+        return "select table_name from dba_tables where owner='" + tableSchema + "'";
     }
 
     @Override

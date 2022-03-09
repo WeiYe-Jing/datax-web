@@ -260,7 +260,12 @@ public class DataxJsonHelper implements DataxJsonInterface {
         readerColumns.forEach(c -> {
             Map<String, Object> column = Maps.newLinkedHashMap();
             column.put("index", c.split(Constants.SPLIT_SCOLON)[0]);
-            column.put("type", c.split(Constants.SPLIT_SCOLON)[2]);
+            String tyep = c.split(Constants.SPLIT_SCOLON)[2];
+            if ("bigint".equals(tyep)) {
+                column.put("type", "long");
+            }else {
+                column.put("type", tyep);
+            }
             columns.add(column);
         });
         dataxHivePojo.setColumns(columns);

@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.HEAD;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +45,6 @@ public class DataxJsonServiceImpl implements DataxJsonService {
         dataxJsonHelper.initReader(dataXJsonBuildDto, readerDatasource);
         JobDatasource writerDatasource = jobJdbcDatasourceService.getById(dataXJsonBuildDto.getWriterDatasourceId());
         dataxJsonHelper.initWriter(dataXJsonBuildDto, writerDatasource);
-
         return JSON.toJSONString(dataxJsonHelper.buildJob());
     }
 }

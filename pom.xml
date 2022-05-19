@@ -16,6 +16,13 @@
         <module>datax-rpc</module>
         <module>datax-assembly</module>
     </modules>
+     <dependencies>
+            <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>1.0</version>
+    </dependency>
+    </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

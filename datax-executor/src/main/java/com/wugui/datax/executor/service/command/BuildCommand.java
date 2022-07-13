@@ -45,7 +45,17 @@ public class BuildCommand {
             cmdArr.add(doc.replaceAll(SPLIT_SPACE, TRANSFORM_SPLIT_SPACE));
         }
         cmdArr.add(tmpFilePath);
+        cmdArr.add(buildDataXCustomParam(tgParam));
         return cmdArr.toArray(new String[cmdArr.size()]);
+    }
+
+    private static String buildDataXCustomParam(TriggerParam tgParam) {
+        StringBuilder doc = new StringBuilder();
+        String customParam = StringUtils.isNotBlank(tgParam.getCustomParam()) ? tgParam.getCustomParam().trim() : tgParam.getCustomParam();
+        if (StringUtils.isNotBlank(customParam)) {
+            doc.append(PARAMS_CM).append(SPLIT_SPACE).append(customParam);
+        }
+        return doc.toString();
     }
 
     /**

@@ -32,6 +32,7 @@ public class TriggerParam implements Serializable{
 
     private String replaceParam;
     private String jvmParam;
+    private String customParam;
     private Date startTime;
     private Date triggerTime;
 
@@ -44,6 +45,13 @@ public class TriggerParam implements Serializable{
 
     private String replaceParamType;
 
+    public String getCustomParam() {
+        return customParam;
+    }
+
+    public void setCustomParam(String customParam) {
+        this.customParam = customParam;
+    }
 
     public int getJobId() {
         return jobId;

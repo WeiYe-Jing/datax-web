@@ -162,6 +162,9 @@ public class JobTrigger {
         //jvm parameter
         triggerParam.setJvmParam(jobInfo.getJvmParam());
 
+        //custom parameter
+        triggerParam.setCustomParam(jobInfo.getCustomParam());
+
         // 3、init address
         String address = null;
         ReturnT<String> routeAddressResult = null;

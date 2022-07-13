@@ -216,7 +216,8 @@ v2.1.1脚本更新
 ALTER TABLE `job_info`
 ADD COLUMN `replace_param` VARCHAR(100) NULL DEFAULT NULL COMMENT '动态参数' AFTER `job_json`,
 ADD COLUMN `jvm_param` VARCHAR(200) NULL DEFAULT NULL COMMENT 'jvm参数' AFTER `replace_param`,
-ADD COLUMN `time_offset` INT(11) NULL DEFAULT '0'COMMENT '时间偏移量'  AFTER `jvm_param`;
+ADD COLUMN `custom_param` VARCHAR(200) NULL DEFAULT NULL COMMENT '自定义参数' AFTER `jvm_param`,
+ADD COLUMN `time_offset` INT(11) NULL DEFAULT '0'COMMENT '时间偏移量'  AFTER `custom_param`;
 /**
 增量改版脚本更新
  */
@@ -252,6 +253,7 @@ CREATE TABLE `job_template`  (
   `trigger_next_time` bigint(13) NOT NULL DEFAULT 0 COMMENT '下次调度时间',
   `job_json` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'datax运行脚本',
   `jvm_param` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'jvm参数',
+  `custom_param` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自定义参数',
   `project_id` int(11) NULL DEFAULT NULL COMMENT '所属项目Id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;

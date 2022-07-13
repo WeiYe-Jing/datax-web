@@ -90,6 +90,9 @@ public class JobInfo {
 	@ApiModelProperty("jvm参数")
 	private String jvmParam;
 
+	@ApiModelProperty("自定义参数")
+	private String customParam;
+
 	@ApiModelProperty("增量初始时间")
 	private Date incStartTime;
 

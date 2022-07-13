@@ -40,6 +40,7 @@
 
 		<result column="replace_param" property="replaceParam" />
 		<result column="jvm_param" property="jvmParam" />
+		<result column="custom_param" property="customParam" />
 		<result column="inc_start_time" property="incStartTime" />
 		<result column="partition_info" property="partitionInfo" />
 
@@ -80,6 +81,7 @@
 		t.job_json,
 		t.replace_param,
 		t.jvm_param,
+		t.custom_param,
 		t.inc_start_time,
 		t.partition_info,
 		t.last_handle_code,
@@ -189,6 +191,7 @@
 			job_json,
 			replace_param,
 			jvm_param,
+			custom_param,
 			inc_start_time,
 			partition_info,
 			last_handle_code,
@@ -224,6 +227,7 @@
 			#{jobJson},
 			#{replaceParam},
 			#{jvmParam},
+			#{customParam},
 			#{incStartTime},
 			#{partitionInfo},
 			#{lastHandleCode},
@@ -273,6 +277,7 @@
 			job_json=#{jobJson},
 			replace_param=#{replaceParam},
 			jvm_param=#{jvmParam},
+			custom_param=#{customParam},
 			inc_start_time=#{incStartTime},
 			partition_info=#{partitionInfo},
 			last_handle_code=#{lastHandleCode},

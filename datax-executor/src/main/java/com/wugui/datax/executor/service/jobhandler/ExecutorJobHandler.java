@@ -13,6 +13,7 @@ import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
+import com.wugui.datatx.core.util.PlaceHolder;
 import com.wugui.datatx.core.util.ProcessUtil;
 import com.wugui.datax.executor.service.logparse.LogStatistics;
 import com.wugui.datax.executor.util.SystemUtils;
@@ -80,7 +81,7 @@ public class ExecutorJobHandler extends AbstractJobHandler {
         String jobJson = replaceVariable(trigger.getJobJson(), keyValueMap);
         Map<String, String> buildin = builtInVar();
         jobJson = replaceVariable(jobJson, buildin);
-
+        jobJson = PlaceHolder.replaces(PlaceHolder.toZonedDateTime(), jobJson);
         //Generate JSON temporary file
         tmpFilePath = generateTemJsonFile(jobJson);
         try {

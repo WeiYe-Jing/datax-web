@@ -1,5 +1,8 @@
 package com.wugui.datax.executor.service.command;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import com.wugui.datatx.core.biz.model.TriggerParam;
 import com.wugui.datatx.core.enums.IncrementTypeEnum;
 import com.wugui.datatx.core.util.Constants;
@@ -177,6 +180,25 @@ public class BuildCommand {
         String timeFormat = partitionInfo.get(2);
         String partitionTime = DateUtil.format(DateUtil.addDays(new Date(), timeOffset), timeFormat);
         return field + Constants.EQUAL + partitionTime;
+    }
+
+    public static Integer insufficientResourcesWaiting(TriggerParam tgParam) {
+        int xmx = 1024;
+        if (StringUtils.isNotBlank(tgParam.getJvmParam())) {
+            String jvmParam = tgParam.getJvmParam().trim().toLowerCase();
+            if (StrUtil.containsAny(jvmParam, "-xmx")) {
+                String resultExtractMulti = ReUtil.extractMulti("\\-xmx.*?\\s", jvmParam, "$0");
+                resultExtractMulti = StrUtil.trim(StrUtil.removePrefix(resultExtractMulti, "-xmx"));
+                if (StrUtil.endWith(resultExtractMulti, "mb") || StrUtil.endWith(resultExtractMulti, "m")) {
+                    resultExtractMulti = StrUtil.removeSuffix(StrUtil.removeSuffix(resultExtractMulti, "mb"), "m");
+                    xmx = Convert.toInt(resultExtractMulti);
+                } else if (StrUtil.endWith(resultExtractMulti, "gb") || StrUtil.endWith(resultExtractMulti, "g")) {
+                    resultExtractMulti = StrUtil.removeSuffix(StrUtil.removeSuffix(resultExtractMulti, "gb"), "g");
+                    xmx = Convert.toInt(resultExtractMulti) * 1024;
+                }
+            }
+        }
+        return xmx;
     }
 
 }

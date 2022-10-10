@@ -45,4 +45,6 @@ public class DataXConstant {
             "-queue {} " +
             "-datax_job {} " +
             "-datax_home_hdfs {} ";
+
+    public static final String INSUFFICIENT_MEMORY = "ip: {},insufficient memory, Need to memory: {}MB, The remaining memory: {}MB, waiting......";
 }

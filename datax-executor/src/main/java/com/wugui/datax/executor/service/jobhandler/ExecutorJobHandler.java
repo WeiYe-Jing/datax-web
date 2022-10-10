@@ -2,10 +2,8 @@ package com.wugui.datax.executor.service.jobhandler;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.*;
 import com.wugui.datatx.core.biz.model.HandleProcessCallbackParam;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
@@ -13,8 +11,10 @@ import com.wugui.datatx.core.handler.AbstractJobHandler;
 import com.wugui.datatx.core.handler.annotation.JobHandler;
 import com.wugui.datatx.core.log.JobLogger;
 import com.wugui.datatx.core.thread.ProcessCallbackThread;
+import com.wugui.datatx.core.util.OsUtils;
 import com.wugui.datatx.core.util.PlaceHolder;
 import com.wugui.datatx.core.util.ProcessUtil;
+import com.wugui.datax.executor.service.command.BuildCommand;
 import com.wugui.datax.executor.service.logparse.LogStatistics;
 import com.wugui.datax.executor.util.SystemUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import static com.wugui.datax.executor.service.command.BuildCommand.*;
 import static com.wugui.datax.executor.service.jobhandler.CheckEnv.checkEnv;
 import static com.wugui.datax.executor.service.jobhandler.DataXConstant.DEFAULT_JSON;
+import static com.wugui.datax.executor.service.jobhandler.DataXConstant.INSUFFICIENT_MEMORY;
 import static com.wugui.datax.executor.service.logparse.AnalysisStatistics.analysisStatisticsLog;
 
 /**
@@ -71,7 +72,7 @@ public class ExecutorJobHandler extends AbstractJobHandler {
 
     @Override
     public ReturnT<String> execute(TriggerParam trigger) {
-
+        insufficientResourcesWaiting(trigger);
         int exitValue = -1;
         Thread errThread = null;
         String tmpFilePath;
@@ -233,6 +234,22 @@ public class ExecutorJobHandler extends AbstractJobHandler {
             return xmx + "m";
         }else {
             return xmx;
+        }
+    }
+
+    /**
+     * 检查内存是否充足,不足时每五秒检查一次
+     *
+     * @param trigger
+     */
+    public void insufficientResourcesWaiting(TriggerParam trigger) {
+        int freePhysicalMemorySize = OsUtils.getAvailableMemorySize();
+        int memory = (int) (BuildCommand.insufficientResourcesWaiting(trigger) * 1.5);
+        while (freePhysicalMemorySize < memory) {
+            String logStr = StrUtil.format(INSUFFICIENT_MEMORY, NetUtil.getLocalhostStr(), memory, freePhysicalMemorySize);
+            JobLogger.log(logStr);
+            ThreadUtil.sleep(5000);
+            freePhysicalMemorySize = OsUtils.getAvailableMemorySize();
         }
     }
 

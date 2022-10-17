@@ -28,10 +28,10 @@ public class SqlServerDatabaseMeta extends BaseDatabaseMeta{
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
+    public String getSQLQueryTables(String tableSchema) {
         return "select schema_name(schema_id)+'.'+object_name(object_id) from sys.objects \n" +
                 "where type ='U' \n" +
-                "and schema_name(schema_id) ='" + tableSchema[0] + "'";
+                "and schema_name(schema_id) ='" + tableSchema + "'";
 
     }
 

@@ -30,7 +30,7 @@
         <fastjson.version>1.2.70</fastjson.version>
         <slf4j-api.version>1.7.28</slf4j-api.version>
         <logback-classic.version>1.2.2</logback-classic.version>
-        <log4j.version>2.15.0</log4j.version>
+        <log4j.version>2.19.0</log4j.version>
         <commons-io.version>2.4</commons-io.version>
         <junit.version>4.12</junit.version>
         <hutool.version>5.7.2</hutool.version>
@@ -74,6 +74,16 @@
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-web</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-1.2-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-to-slf4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
             <dependency>

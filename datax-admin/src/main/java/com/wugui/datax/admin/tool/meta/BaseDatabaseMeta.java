@@ -61,7 +61,7 @@ public abstract class BaseDatabaseMeta implements DatabaseInterface {
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
+    public String getSQLQueryTables(String tableSchema) {
         return null;
     }
 }

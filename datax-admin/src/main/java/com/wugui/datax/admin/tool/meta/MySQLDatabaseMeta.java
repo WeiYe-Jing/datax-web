@@ -39,8 +39,8 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta{
     }
 
     @Override
-    public String getSQLQueryTables(String... tableSchema) {
-        return "show tables";
+    public String getSQLQueryTables(String tableSchema) {
+        return String.format("show tables FROM %s", tableSchema);
     }
 
     @Override
@@ -59,4 +59,5 @@ public class MySQLDatabaseMeta extends BaseDatabaseMeta{
     public String getSQLQueryTableSchema(String... args) {
         return "show databases";
     }
+
 }

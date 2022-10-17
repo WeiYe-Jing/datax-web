@@ -36,7 +36,7 @@ public interface DatabaseInterface {
      * @param tableSchema
      * @return
      */
-    String getSQLQueryTables(String... tableSchema);
+    String getSQLQueryTables(String tableSchema);
 
 
     /**

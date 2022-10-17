@@ -30,7 +30,7 @@
         <fastjson.version>1.2.70</fastjson.version>
         <slf4j-api.version>1.7.28</slf4j-api.version>
         <logback-classic.version>1.2.2</logback-classic.version>
-        <log4j.version>2.15.0</log4j.version>
+        <log4j.version>2.19.0</log4j.version>
         <commons-io.version>2.4</commons-io.version>
         <junit.version>4.12</junit.version>
         <hutool.version>4.5.1</hutool.version>

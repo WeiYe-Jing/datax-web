@@ -33,7 +33,7 @@
         <log4j.version>2.19.0</log4j.version>
         <commons-io.version>2.4</commons-io.version>
         <junit.version>4.12</junit.version>
-        <hutool.version>4.5.1</hutool.version>
+        <hutool.version>5.7.2</hutool.version>
         <postgresql.version>42.2.5</postgresql.version>
         <mysql-connector.version>5.1.47</mysql-connector.version>
         <jna.version>4.1.0</jna.version>

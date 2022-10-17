@@ -1,6 +1,6 @@
 package com.wugui.datax.admin.util;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import org.springframework.http.HttpHeaders;
@@ -218,7 +218,7 @@ public class ServletUtils {
      */
     public static Map<String, Object> getParameters(ServletRequest request) {
         if (request == null) {
-            return CollectionUtil.newHashMap();
+            return MapUtil.newHashMap();
         }
         return getParametersStartingWith(request, "");
     }

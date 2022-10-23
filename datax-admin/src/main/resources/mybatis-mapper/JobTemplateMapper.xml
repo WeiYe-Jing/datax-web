@@ -35,6 +35,7 @@
 		<result column="job_json" property="jobJson" />
 
 		<result column="jvm_param" property="jvmParam" />
+		<result column="custom_param" property="customParam" />
 		<result column="project_id" property="projectId"/>
 	</resultMap>
 
@@ -62,6 +63,7 @@
 		t.trigger_next_time,
 		t.job_json,
 		t.jvm_param,
+		t.custom_param,
 		t.project_id
 	</sql>
 
@@ -148,6 +150,7 @@
 			trigger_next_time,
 			job_json,
 			jvm_param,
+			custom_param,
 			project_id
 		) VALUES (
 			#{jobGroup},
@@ -172,6 +175,7 @@
 			#{triggerNextTime},
 			#{jobJson},
 			#{jvmParam},
+		    #{customParam},
 			#{projectId}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
@@ -210,6 +214,7 @@
 			trigger_next_time = #{triggerNextTime},
 			job_json=#{jobJson},
 			jvm_param=#{jvmParam},
+			custom_param=#{customParam},
 			project_id=#{projectId}
 		WHERE id = #{id}
 	</update>

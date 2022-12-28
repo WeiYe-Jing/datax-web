@@ -66,6 +66,12 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        
         <!-- starter-actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

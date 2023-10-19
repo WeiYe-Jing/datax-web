@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -60,18 +61,19 @@ public class JobServiceImpl implements JobService {
     @Override
     public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String glueType, int userId, Integer[] projectIds) {
 
-        // page list
-        List<JobInfo> list = jobInfoMapper.pageList(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
-        int list_count = jobInfoMapper.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        // page page
+        Page<JobInfo> page = jobInfoMapper.pageList(new Page(start, length), jobGroup, triggerStatus, jobDesc, glueType, userId, projectIds);
+        long list_count = page.getTotal();
 
         // package result
         Map<String, Object> maps = new HashMap<>();
         maps.put("recordsTotal", list_count);        // 总记录数
         maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
+        maps.put("data", page.getRecords());                    // 分页列表
         return maps;
     }
 
+    @Override
     public List<JobInfo> list() {
         return jobInfoMapper.findAll();
     }
@@ -149,7 +151,7 @@ public class JobServiceImpl implements JobService {
         jobInfo.setJobJson(jobInfo.getJobJson());
         jobInfo.setUpdateTime(new Date());
         jobInfo.setGlueUpdatetime(new Date());
-        jobInfoMapper.save(jobInfo);
+        jobInfoMapper.insert(jobInfo);
         if (jobInfo.getId() < 1) {
             return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
         }
@@ -456,7 +458,7 @@ public class JobServiceImpl implements JobService {
             jobInfo.setAddTime(new Date());
             jobInfo.setUpdateTime(new Date());
             jobInfo.setGlueUpdatetime(new Date());
-            jobInfoMapper.save(jobInfo);
+            jobInfoMapper.insert(jobInfo);
         }
         return ReturnT.SUCCESS;
     }

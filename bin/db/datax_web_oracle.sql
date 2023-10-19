@@ -2,7 +2,7 @@ CREATE TABLE job_group (
                            id NUMBER(11) NOT NULL,
                            app_name VARCHAR2(64) NOT NULL,
                            title VARCHAR2(32) NOT NULL,
-                           "order" NUMBER(11) DEFAULT 0 NOT NULL,
+                           "order_sn" NUMBER(11) DEFAULT 0 NOT NULL,
                            address_type NUMBER(4) DEFAULT 0 NOT NULL,
                            address_list VARCHAR2(512),
                            CONSTRAINT job_group_pk PRIMARY KEY (id)
@@ -10,7 +10,7 @@ CREATE TABLE job_group (
 
 COMMENT ON COLUMN job_group.app_name IS '执行器AppName';
 COMMENT ON COLUMN job_group.title IS '执行器名称';
-COMMENT ON COLUMN job_group."order" IS '排序';
+COMMENT ON COLUMN job_group.order_sn IS '排序';
 COMMENT ON COLUMN job_group.address_type IS '执行器地址类型：0=自动注册、1=手动录入';
 COMMENT ON COLUMN job_group.address_list IS '执行器地址列表，多地址逗号分隔';
 
@@ -454,3 +454,11 @@ INSERT INTO job_log_report VALUES (25, TIMESTAMP '2019-12-14 00:00:00', 78, 45, 
 INSERT INTO job_log_report VALUES (26, TIMESTAMP '2019-12-15 00:00:00', 24, 76, 9);
 INSERT INTO job_log_report VALUES (27, TIMESTAMP '2019-12-16 00:00:00', 23, 85, 10);
 INSERT INTO job_user VALUES (1, 'admin', '$2a$10$2KCqRbra0Yn2TwvkZxtfLuWuUP5KyCWsljO/ci5pLD27pqR3TV1vy', 'ROLE_ADMIN', NULL);
+
+-----创建自增长序列----
+create sequence SEQ_ID
+    minvalue 1
+    nomaxvalue
+start with 1
+increment by 1
+cache 50 ;

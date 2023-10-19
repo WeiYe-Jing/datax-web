@@ -1,5 +1,6 @@
 package com.wugui.admin.dao;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datax.admin.entity.JobLog;
 import com.wugui.datax.admin.mapper.JobLogMapper;
 import org.junit.Test;
@@ -20,14 +21,13 @@ public class JobLogMapperTest {
 
     @Test
     public void test(){
-        List<JobLog> list = jobLogMapper.pageList(0, 10, 1, 1, null, null, 1);
-        int list_count = jobLogMapper.pageListCount(0, 10, 1, 1, null, null, 1);
+        Page<JobLog> list = jobLogMapper.pageList(new Page(0,10), 1, 1, null, null, 1);
 
         JobLog log = new JobLog();
         log.setJobGroup(1);
         log.setJobId(1);
 
-        long ret1 = jobLogMapper.save(log);
+        long ret1 = jobLogMapper.insert(log);
         JobLog dto = jobLogMapper.load(log.getId());
 
         log.setTriggerTime(new Date());
@@ -47,7 +47,7 @@ public class JobLogMapperTest {
         dto = jobLogMapper.load(log.getId());
 
 
-        List<Long> ret4 = jobLogMapper.findClearLogIds(1, 1, new Date(), 100, 100);
+        Page<Long> ret4 = jobLogMapper.findClearLogIds(new Page(0, 100), 1, 1, new Date(), 100 );
 
         int ret2 = jobLogMapper.delete(log.getJobId());
 

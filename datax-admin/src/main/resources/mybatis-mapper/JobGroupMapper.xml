@@ -7,7 +7,7 @@
         <result column="id" property="id"/>
         <result column="app_name" property="appName"/>
         <result column="title" property="title"/>
-        <result column="order" property="order"/>
+        <result column="order_sn" property="orderSn"/>
         <result column="address_type" property="addressType"/>
         <result column="address_list" property="addressList"/>
     </resultMap>
@@ -16,7 +16,7 @@
 		t.id,
 		t.app_name,
 		t.title,
-		t.`order`,
+		t.order_sn,
 		t.address_type,
 		t.address_list
 	</sql>
@@ -24,13 +24,13 @@
     <select id="findAll" resultMap="JobGroup">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM job_group AS t
-        ORDER BY t.order ASC
+        FROM job_group t
+        ORDER BY t.order_sn ASC
     </select>
 
     <select id="find" resultMap="JobGroup">
         select
-        id,app_name,title,`order`,address_type,address_list
+        id,app_name,title,order_sn,address_type,address_list
         from job_group
         <where>
             <if test="appName != null and appName != ''">
@@ -48,23 +48,18 @@
     <select id="findByAddressType" parameterType="java.lang.Integer" resultMap="JobGroup">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM job_group AS t
+        FROM job_group t
         WHERE t.address_type = #{addressType}
-        ORDER BY t.order ASC
+        ORDER BY t.order_sn ASC
     </select>
-
-    <insert id="save" parameterType="com.wugui.datax.admin.entity.JobGroup" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO job_group ( `app_name`, `title`, `order`, `address_type`, `address_list`)
-		values ( #{appName}, #{title}, #{order}, #{addressType}, #{addressList});
-	</insert>
 
     <update id="update" parameterType="com.wugui.datax.admin.entity.JobGroup">
 		UPDATE job_group
-		SET `app_name` = #{appName},
-			`title` = #{title},
-			`order` = #{order},
-			`address_type` = #{addressType},
-			`address_list` = #{addressList}
+		SET app_name = #{appName},
+			title = #{title},
+            order_sn = #{orderSn},
+			address_type = #{addressType},
+			address_list = #{addressList}
 		WHERE id = #{id}
 	</update>
 
@@ -76,7 +71,7 @@
     <select id="load" parameterType="java.lang.Integer" resultMap="JobGroup">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM job_group AS t
+        FROM job_group t
         WHERE t.id = #{id}
     </select>
 

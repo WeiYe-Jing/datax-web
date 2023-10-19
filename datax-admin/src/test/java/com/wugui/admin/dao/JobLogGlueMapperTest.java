@@ -28,7 +28,7 @@ public class JobLogGlueMapperTest {
 
         logGlue.setAddTime(new Date());
         logGlue.setUpdateTime(new Date());
-        int ret = jobLogGlueMapper.save(logGlue);
+        int ret = jobLogGlueMapper.insert(logGlue);
 
         List<JobLogGlue> list = jobLogGlueMapper.findByJobId(1);
 

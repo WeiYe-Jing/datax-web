@@ -1,6 +1,9 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,9 +14,10 @@ import java.util.Date;
  *
  * @author jingwk  2019-11-17 14:25:49
  */
+@KeySequence(value = "SEQ_ID")
 @Data
 public class JobTemplate {
-
+	@TableId(type = IdType.INPUT)
 	@ApiModelProperty("主键ID")
 	private int id;
 

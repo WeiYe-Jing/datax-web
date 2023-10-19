@@ -72,7 +72,7 @@
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobTemplate">
 		SELECT <include refid="Base_Column_List" />,<include refid="Project_Column_List" />
-		FROM job_template AS t
+		FROM job_template t
 		INNER JOIN job_project p on t.project_id=p.id
 		INNER JOIN job_user u on t.user_id = u.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
@@ -96,12 +96,11 @@
 			</if>
 		</trim>
 		ORDER BY id DESC
-		LIMIT #{offset}, #{pagesize}
 	</select>
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
 		SELECT count(1)
-		FROM job_template AS t
+		FROM job_template t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -124,65 +123,9 @@
 		</trim>
 	</select>
 
-	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobTemplate" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO job_template (
-			job_group,
-			job_cron,
-			job_desc,
-			add_time,
-			update_time,
-			user_id,
-			alarm_email,
-            executor_route_strategy,
-			executor_handler,
-			executor_param,
-			executor_block_strategy,
-			executor_timeout,
-			executor_fail_retry_count,
-			glue_type,
-			glue_source,
-			glue_remark,
-			glue_updatetime,
-			child_jobid,
-			trigger_last_time,
-			trigger_next_time,
-			job_json,
-			jvm_param,
-			project_id
-		) VALUES (
-			#{jobGroup},
-			#{jobCron},
-			#{jobDesc},
-			#{addTime},
-			#{updateTime},
-			#{userId},
-			#{alarmEmail},
-			#{executorRouteStrategy},
-			#{executorHandler},
-			#{executorParam},
-			#{executorBlockStrategy},
-			#{executorTimeout},
-			#{executorFailRetryCount},
-			#{glueType},
-			#{glueSource},
-			#{glueRemark},
-			#{glueUpdatetime},
-			#{childJobId},
-			#{triggerLastTime},
-			#{triggerNextTime},
-			#{jobJson},
-			#{jvmParam},
-			#{projectId}
-		);
-		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID()
-			/*SELECT @@IDENTITY AS id*/
-		</selectKey>-->
-	</insert>
-
 	<select id="loadById" parameterType="java.util.HashMap" resultMap="JobTemplate">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_template AS t
+		FROM job_template t
 		WHERE t.id = #{id}
 	</select>
 

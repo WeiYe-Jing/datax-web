@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.core.thread;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.entity.JobLogReport;
 import org.slf4j.Logger;
@@ -83,7 +84,7 @@ public class JobLogReportHelper {
                             // do refresh
                             int ret = JobAdminConfig.getAdminConfig().getJobLogReportMapper().update(xxlJobLogReport);
                             if (ret < 1) {
-                                JobAdminConfig.getAdminConfig().getJobLogReportMapper().save(xxlJobLogReport);
+                                JobAdminConfig.getAdminConfig().getJobLogReportMapper().insert(xxlJobLogReport);
                             }
                         }
 
@@ -107,13 +108,13 @@ public class JobLogReportHelper {
                         Date clearBeforeTime = expiredDay.getTime();
 
                         // clean expired log
-                        List<Long> logIds = null;
+                        Page<Long> logIds = null;
                         do {
-                            logIds = JobAdminConfig.getAdminConfig().getJobLogMapper().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
-                            if (logIds!=null && logIds.size()>0) {
-                                JobAdminConfig.getAdminConfig().getJobLogMapper().clearLog(logIds);
+                            logIds = JobAdminConfig.getAdminConfig().getJobLogMapper().findClearLogIds(new Page(0, 1000), 0, 0, clearBeforeTime, 0);
+                            if (logIds!=null && logIds.getRecords().size()>0) {
+                                JobAdminConfig.getAdminConfig().getJobLogMapper().clearLog(logIds.getRecords());
                             }
-                        } while (logIds!=null && logIds.size()>0);
+                        } while (logIds!=null && logIds.getRecords().size()>0);
 
                         // update clean time
                         lastCleanLogTime = System.currentTimeMillis();

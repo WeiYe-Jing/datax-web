@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobLogMapper">
-	
+
 	<resultMap id="JobLog" type="com.wugui.datax.admin.entity.JobLog" >
 		<result column="id" property="id" />
 
@@ -16,11 +16,11 @@
 	    <result column="executor_param" property="executorParam" />
 		<result column="executor_sharding_param" property="executorShardingParam" />
 		<result column="executor_fail_retry_count" property="executorFailRetryCount" />
-	    
+
 	    <result column="trigger_time" property="triggerTime" />
 	    <result column="trigger_code" property="triggerCode" />
 	    <result column="trigger_msg" property="triggerMsg" />
-	    
+
 	    <result column="handle_time" property="handleTime" />
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
@@ -53,10 +53,10 @@
 		t.max_id,
 		t.job_desc
 	</sql>
-	
+
 	<select id="pageList" resultMap="JobLog">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_log AS t
+		FROM job_log t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobId==0 and jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -85,12 +85,11 @@
 			</if>
 		</trim>
 		ORDER BY t.trigger_time DESC
-		LIMIT #{offset}, #{pagesize}
 	</select>
-	
+
 	<select id="pageListCount" resultType="int">
 		SELECT count(1)
-		FROM job_log AS t
+		FROM job_log t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobId==0 and jobGroup gt 0">
 				AND t.job_group = #{jobGroup}
@@ -119,66 +118,44 @@
 			</if>
 		</trim>
 	</select>
-	
+
 	<select id="load" parameterType="java.lang.Long" resultMap="JobLog">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_log AS t
+		FROM job_log t
 		WHERE t.id = #{id}
 	</select>
-
-	
-	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobLog" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO job_log (
-			`job_group`,
-			`job_id`,
-			`job_desc`,
-			`trigger_time`,
-			`trigger_code`,
-			`handle_code`
-		) VALUES (
-			#{jobGroup},
-			#{jobId},
-			#{jobDesc},
-			#{triggerTime},
-			#{triggerCode},
-			#{handleCode}
-		);
-		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID() 
-		</selectKey>-->
-	</insert>
 
 	<update id="updateTriggerInfo" >
 		UPDATE job_log
 		SET
-			`trigger_time`= #{triggerTime},
-			`trigger_code`= #{triggerCode},
-			`trigger_msg`= #{triggerMsg},
-			`executor_address`= #{executorAddress},
-			`executor_handler`=#{executorHandler},
-			`executor_param`= #{executorParam},
-			`executor_sharding_param`= #{executorShardingParam},
-			`executor_fail_retry_count`= #{executorFailRetryCount},
-			`max_id` = #{maxId}
-		WHERE `id`= #{id}
+			trigger_time= #{triggerTime},
+			trigger_code= #{triggerCode},
+			trigger_msg= #{triggerMsg},
+			executor_address= #{executorAddress},
+			executor_handler=#{executorHandler},
+			executor_param= #{executorParam},
+			executor_sharding_param= #{executorShardingParam},
+			executor_fail_retry_count= #{executorFailRetryCount},
+			max_id = #{maxId}
+		WHERE id= #{id}
 	</update>
 
 	<update id="updateHandleInfo">
 		UPDATE job_log
-		SET 
-			`handle_time`= #{handleTime}, 
-			`handle_code`= #{handleCode},
-			`handle_msg`= #{handleMsg}
-		WHERE `id`= #{id}
+		SET
+			handle_time= #{handleTime},
+			handle_code= #{handleCode},
+			handle_msg= #{handleMsg}
+		WHERE id= #{id}
 	</update>
 
 	<update id="updateProcessId">
 		UPDATE job_log
 		SET
-			`process_id`= #{processId}
-		WHERE `id`= #{id}
+			process_id= #{processId}
+		WHERE id= #{id}
 	</update>
-	
+
 	<delete id="delete" >
 		delete from job_log
 		WHERE job_id = #{jobId}
@@ -220,7 +197,7 @@
 			<if test="clearBeforeNum gt 0">
 				AND id NOT in(
 				SELECT id FROM(
-				SELECT id FROM job_log AS t
+				SELECT id FROM job_log t
 				<trim prefix="WHERE" prefixOverrides="AND | OR" >
 					<if test="jobGroup gt 0">
 						AND t.job_group = #{jobGroup}
@@ -230,13 +207,11 @@
 					</if>
 				</trim>
 				ORDER BY t.trigger_time desc
-				LIMIT 0, #{clearBeforeNum}
-				) t1
+				) where ROWNUM &lt;= #{clearBeforeNum} t1
 				)
 			</if>
 		</trim>
 		order by id asc
-		LIMIT #{pagesize}
 	</select>
 
 	<delete id="clearLog" >
@@ -248,22 +223,21 @@
 	</delete>
 
 	<select id="findFailJobLogIds" resultType="long" >
-		SELECT id FROM `job_log`
-		WHERE !(
+		SELECT id FROM job_log
+		WHERE not (
 			(trigger_code in (0, 200) and handle_code = 0)
 			OR
 			(handle_code = 200)
 		)
-		AND `alarm_status` = 0
+		AND alarm_status = 0
 		ORDER BY id ASC
-		LIMIT #{pagesize}
 	</select>
 
 	<update id="updateAlarmStatus" >
 		UPDATE job_log
 		SET
-			`alarm_status` = #{newAlarmStatus}
-		WHERE `id`= #{logId} AND `alarm_status` = #{oldAlarmStatus}
+			alarm_status = #{newAlarmStatus}
+		WHERE id= #{logId} AND alarm_status = #{oldAlarmStatus}
 	</update>
-	
+
 </mapper>

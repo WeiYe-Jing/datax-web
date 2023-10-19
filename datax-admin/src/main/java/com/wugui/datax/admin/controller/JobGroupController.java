@@ -1,5 +1,8 @@
 package com.wugui.datax.admin.controller;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datax.admin.core.util.I18nUtil;
@@ -63,7 +66,7 @@ public class JobGroupController {
             }
         }
 
-        int ret = jobGroupMapper.save(jobGroup);
+        int ret = jobGroupMapper.insert(jobGroup);
         return (ret > 0) ? ReturnT.SUCCESS : ReturnT.FAIL;
     }
 
@@ -112,7 +115,8 @@ public class JobGroupController {
 
     private List<String> findRegistryByAppName(String appNameParam) {
         HashMap<String, List<String>> appAddressMap = new HashMap<>();
-        List<JobRegistry> list = jobRegistryMapper.findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
+        DateTime dateTime = DateUtil.offsetSecond(new Date(), 0 - RegistryConfig.DEAD_TIMEOUT);
+        List<JobRegistry> list = jobRegistryMapper.findAll(dateTime.toJdkDate());
         if (list != null) {
             for (JobRegistry item : list) {
                 if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {

@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wugui.datax.admin.entity.JobLogReport;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,9 +14,7 @@ import java.util.List;
  * @author xuxueli 2019-11-22
  */
 @Mapper
-public interface JobLogReportMapper {
-
-    int save(JobLogReport xxlJobLogReport);
+public interface JobLogReportMapper extends BaseMapper<JobLogReport> {
 
     int update(JobLogReport xxlJobLogReport);
 

@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.core.thread;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.cron.CronExpression;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
@@ -77,10 +78,10 @@ public class JobScheduleHelper {
 
                         // 1、pre read
                         long nowTime = System.currentTimeMillis();
-                        List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoMapper().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
-                        if (scheduleList != null && scheduleList.size() > 0) {
+                        Page<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoMapper().scheduleJobQuery(new Page(0, preReadCount), nowTime + PRE_READ_MS);
+                        if (scheduleList != null && scheduleList.getRecords().size() > 0) {
                             // 2、push time-ring
-                            for (JobInfo jobInfo : scheduleList) {
+                            for (JobInfo jobInfo : scheduleList.getRecords()) {
 
                                 // time-ring jump
                                 if (nowTime > jobInfo.getTriggerNextTime() + PRE_READ_MS) {
@@ -131,7 +132,7 @@ public class JobScheduleHelper {
                             }
 
                             // 3、update trigger info
-                            for (JobInfo jobInfo : scheduleList) {
+                            for (JobInfo jobInfo : scheduleList.getRecords()) {
                                 JobAdminConfig.getAdminConfig().getJobInfoMapper().scheduleUpdate(jobInfo);
                             }
 

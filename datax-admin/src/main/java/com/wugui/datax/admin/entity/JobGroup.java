@@ -1,5 +1,9 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
@@ -9,22 +13,25 @@ import java.util.List;
 /**
  * Created by jingwk on 2019/11/17
  */
+@KeySequence(value = "SEQ_ID")
 public class JobGroup {
 
+    @TableId(type = IdType.INPUT)
     @ApiModelProperty("执行器Id")
-    private int id;
+    private Integer id;
     @ApiModelProperty("执行器AppName")
     private String appName;
     @ApiModelProperty("执行器名称")
     private String title;
     @ApiModelProperty("排序")
-    private int order;
+    private int orderSn;
     @ApiModelProperty("执行器地址类型：0=自动注册、1=手动录入")
     private int addressType;
     @ApiModelProperty("执行器地址列表，多地址逗号分隔(手动录入)")
     private String addressList;
 
     // registry list
+    @TableField(exist = false)
     private List<String> registryList;  // 执行器地址列表(系统注册)
     public List<String> getRegistryList() {
         if (addressList!=null && addressList.trim().length()>0) {
@@ -33,11 +40,11 @@ public class JobGroup {
         return registryList;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -57,12 +64,12 @@ public class JobGroup {
         this.title = title;
     }
 
-    public int getOrder() {
-        return order;
+    public int getOrderSn() {
+        return orderSn;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setOrderSn(int orderSn) {
+        this.orderSn = orderSn;
     }
 
     public int getAddressType() {

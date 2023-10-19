@@ -27,8 +27,8 @@
 
     <select id="findDead" parameterType="java.util.HashMap" resultType="java.lang.Integer">
 		SELECT t.id
-		FROM job_registry AS t
-		WHERE t.update_time <![CDATA[ < ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
+		FROM job_registry t
+		WHERE t.update_time <![CDATA[ < ]]> #{time}
 	</select>
 
     <delete id="removeDead" parameterType="java.lang.Integer">
@@ -42,25 +42,20 @@
     <select id="findAll" parameterType="java.util.HashMap" resultMap="JobRegistry">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM job_registry AS t
-        WHERE t.update_time <![CDATA[ > ]]> DATE_ADD(#{nowTime},INTERVAL -#{timeout} SECOND)
+        FROM job_registry t
+        WHERE t.update_time <![CDATA[ > ]]> #{time}
     </select>
 
     <update id="registryUpdate">
         UPDATE job_registry
-        SET `update_time` = #{updateTime},
-        	`cpu_usage`=#{cpuUsage},
-        	`memory_usage`=#{memoryUsage},
-        	`load_average`=#{loadAverage}
-        WHERE `registry_group` = #{registryGroup}
-          AND `registry_key` = #{registryKey}
-          AND `registry_value` = #{registryValue}
+        SET update_time = #{updateTime},
+        	cpu_usage=#{cpuUsage},
+        	memory_usage=#{memoryUsage},
+        	load_average=#{loadAverage}
+        WHERE registry_group = #{registryGroup}
+          AND registry_key = #{registryKey}
+          AND registry_value = #{registryValue}
     </update>
-
-    <insert id="registrySave">
-        INSERT INTO job_registry( `registry_group` , `registry_key` , `registry_value`, `cpu_usage`,`memory_usage`,`load_average`,`update_time`)
-        VALUES( #{registryGroup}  , #{registryKey} , #{registryValue},#{cpuUsage}, #{memoryUsage},#{loadAverage},#{updateTime})
-    </insert>
 
     <delete id="registryDelete">
 		DELETE FROM job_registry

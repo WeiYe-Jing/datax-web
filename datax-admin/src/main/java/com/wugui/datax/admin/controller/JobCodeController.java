@@ -64,7 +64,7 @@ public class JobCodeController {
 
         jobLogGlue.setAddTime(new Date());
         jobLogGlue.setUpdateTime(new Date());
-        jobLogGlueMapper.save(jobLogGlue);
+        jobLogGlueMapper.insert(jobLogGlue);
 
         // remove code backup more than 30
         jobLogGlueMapper.removeOld(existsJobInfo.getId(), 30);

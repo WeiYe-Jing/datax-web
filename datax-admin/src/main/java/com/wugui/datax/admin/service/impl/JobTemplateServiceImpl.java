@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.enums.ExecutorBlockStrategyEnum;
 import com.wugui.datatx.core.glue.GlueTypeEnum;
@@ -44,14 +45,14 @@ public class JobTemplateServiceImpl implements JobTemplateService {
     public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, int userId, Integer[] projectIds) {
 
         // page list
-        List<JobTemplate> list = jobTemplateMapper.pageList(start, length, jobGroup, jobDesc, executorHandler, userId, projectIds);
-        int list_count = jobTemplateMapper.pageListCount(start, length, jobGroup, jobDesc, executorHandler, userId, projectIds);
+        Page<JobTemplate> list = jobTemplateMapper.pageList(new Page(start, length), jobGroup, jobDesc, executorHandler, userId, projectIds);
+        long list_count = list.getTotal();
 
         // package result
         Map<String, Object> maps = new HashMap<>();
         maps.put("recordsTotal", list_count);        // 总记录数
         maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
+        maps.put("data", list.getRecords());                    // 分页列表
         return maps;
     }
 
@@ -122,7 +123,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         jobTemplate.setAddTime(new Date());
         jobTemplate.setUpdateTime(new Date());
         jobTemplate.setGlueUpdatetime(new Date());
-        jobTemplateMapper.save(jobTemplate);
+        jobTemplateMapper.insert(jobTemplate);
         if (jobTemplate.getId() < 1) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
         }

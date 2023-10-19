@@ -1,5 +1,6 @@
 package com.wugui.admin.dao;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datax.admin.entity.JobInfo;
 import com.wugui.datax.admin.mapper.JobInfoMapper;
 import org.junit.Test;
@@ -14,21 +15,21 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class JobInfoMapperTest {
-	
+
 	@Resource
 	private JobInfoMapper jobInfoMapper;
-	
+
 	@Test
 	public void pageList(){
-		List<JobInfo> list = jobInfoMapper.pageList(0, 20, 0, -1, null, null, 0,null);
-		int list_count = jobInfoMapper.pageListCount(0, 20, 0, -1, null, null, 0,null);
-		
+		Page<JobInfo> list = jobInfoMapper.pageList(new Page(0,20), 0, -1, null, null, 0,null);
+		long list_count = list.getTotal();
+
 		System.out.println(list);
 		System.out.println(list_count);
 
 		List<JobInfo> list2 = jobInfoMapper.getJobsByGroup(1);
 	}
-	
+
 	@Test
 	public void save_load(){
 		JobInfo info = new JobInfo();
@@ -50,7 +51,7 @@ public class JobInfoMapperTest {
 		info.setUpdateTime(new Date());
 		info.setGlueUpdatetime(new Date());
 
-		int count = jobInfoMapper.save(info);
+		int count = jobInfoMapper.insert(info);
 
 		JobInfo info2 = jobInfoMapper.loadById(info.getId());
 		info2.setJobCron("jobCron2");

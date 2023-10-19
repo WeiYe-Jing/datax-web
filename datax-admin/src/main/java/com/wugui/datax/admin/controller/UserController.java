@@ -1,6 +1,7 @@
 package com.wugui.datax.admin.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.core.util.I18nUtil;
 import com.wugui.datax.admin.entity.JobUser;
@@ -40,14 +41,14 @@ public class UserController {
                                                  String username) {
 
         // page list
-        List<JobUser> list = jobUserMapper.pageList((current - 1) * size, size, username);
-        int recordsTotal = jobUserMapper.pageListCount((current - 1) * size, size, username);
+        Page<JobUser> list = jobUserMapper.pageList(new Page(current, size), username);
+        long recordsTotal = list.getTotal();
 
         // package result
         Map<String, Object> maps = new HashMap<>();
         maps.put("recordsTotal", recordsTotal);        // 总记录数
         maps.put("recordsFiltered", recordsTotal);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
+        maps.put("data", list.getRecords());                    // 分页列表
         return new ReturnT<>(maps);
     }
 
@@ -96,7 +97,7 @@ public class UserController {
         }
 
         // write
-        jobUserMapper.save(jobUser);
+        jobUserMapper.insert(jobUser);
         return ReturnT.SUCCESS;
     }
 

@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datax.admin.entity.JobLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,11 +16,10 @@ import java.util.Map;
  * @author xuxueli 2016-1-12 18:03:06
  */
 @Mapper
-public interface JobLogMapper {
+public interface JobLogMapper extends BaseMapper<JobLog> {
 
     // exist jobId not use jobGroup, not exist use jobGroup
-    List<JobLog> pageList(@Param("offset") int offset,
-                          @Param("pagesize") int pagesize,
+    Page<JobLog> pageList(Page page,
                           @Param("jobGroup") int jobGroup,
                           @Param("jobId") int jobId,
                           @Param("triggerTimeStart") Date triggerTimeStart,
@@ -35,8 +36,6 @@ public interface JobLogMapper {
 
     JobLog load(@Param("id") long id);
 
-    long save(JobLog jobLog);
-
     int updateTriggerInfo(JobLog jobLog);
 
     int updateHandleInfo(JobLog jobLog);
@@ -49,15 +48,15 @@ public interface JobLogMapper {
     Map<String, Object> findLogReport(@Param("from") Date from,
                                       @Param("to") Date to);
 
-    List<Long> findClearLogIds(@Param("jobGroup") int jobGroup,
+    Page<Long> findClearLogIds(Page page,
+                               @Param("jobGroup") int jobGroup,
                                @Param("jobId") int jobId,
                                @Param("clearBeforeTime") Date clearBeforeTime,
-                               @Param("clearBeforeNum") int clearBeforeNum,
-                               @Param("pagesize") int pagesize);
+                               @Param("clearBeforeNum") int clearBeforeNum);
 
     int clearLog(@Param("logIds") List<Long> logIds);
 
-    List<Long> findFailJobLogIds(@Param("pagesize") int pagesize);
+    Page<Long> findFailJobLogIds(Page page);
 
     int updateAlarmStatus(@Param("logId") long logId,
                           @Param("oldAlarmStatus") int oldAlarmStatus,

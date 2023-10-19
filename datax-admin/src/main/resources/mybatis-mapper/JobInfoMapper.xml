@@ -98,7 +98,7 @@
 	</sql>
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />,<include refid="Project_Column_List" />
-		FROM job_info AS t
+		FROM job_info t
 		INNER JOIN job_project p on t.project_id=p.id
 		INNER JOIN job_user u on t.user_id = u.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
@@ -125,18 +125,17 @@
             </if>
 		</trim>
 		ORDER BY id DESC
-		LIMIT #{offset}, #{pagesize}
 	</select>
 
 	<select id="findAll" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_info AS t
+		FROM job_info t
 		ORDER BY job_desc ASC
 	</select>
 
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
 		SELECT count(1)
-		FROM job_info AS t
+		FROM job_info t
 		INNER JOIN job_project p on t.project_id=p.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
@@ -163,87 +162,9 @@
 		</trim>
 	</select>
 
-	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobInfo" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO job_info (
-			job_group,
-			job_cron,
-			job_desc,
-			add_time,
-			update_time,
-			user_id,
-			alarm_email,
-            executor_route_strategy,
-			executor_handler,
-			executor_param,
-			executor_block_strategy,
-			executor_timeout,
-			executor_fail_retry_count,
-			glue_type,
-			glue_source,
-			glue_remark,
-			glue_updatetime,
-			child_jobid,
-			trigger_status,
-			trigger_last_time,
-			trigger_next_time,
-			job_json,
-			replace_param,
-			jvm_param,
-			inc_start_time,
-			partition_info,
-			last_handle_code,
-		    replace_param_type,
-		    project_id,
-			reader_table,
-			primary_key,
-			inc_start_id,
-			increment_type,
-			datasource_id
-		) VALUES (
-			#{jobGroup},
-			#{jobCron},
-			#{jobDesc},
-			#{addTime},
-			#{updateTime},
-			#{userId},
-			#{alarmEmail},
-			#{executorRouteStrategy},
-			#{executorHandler},
-			#{executorParam},
-			#{executorBlockStrategy},
-			#{executorTimeout},
-			#{executorFailRetryCount},
-			#{glueType},
-			#{glueSource},
-			#{glueRemark},
-			#{glueUpdatetime},
-			#{childJobId},
-			#{triggerStatus},
-			#{triggerLastTime},
-			#{triggerNextTime},
-			#{jobJson},
-			#{replaceParam},
-			#{jvmParam},
-			#{incStartTime},
-			#{partitionInfo},
-			#{lastHandleCode},
-			#{replaceParamType},
-			#{projectId},
-			#{readerTable},
-			#{primaryKey},
-			#{incStartId},
-			#{incrementType},
-			#{datasourceId}
-		);
-		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID()
-			/*SELECT @@IDENTITY AS id*/
-		</selectKey>-->
-	</insert>
-
 	<select id="loadById" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_info AS t
+		FROM job_info t
 		WHERE t.id = #{id}
 	</select>
 
@@ -294,7 +215,7 @@
 
 	<select id="getJobsByGroup" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_info AS t
+		FROM job_info t
 		WHERE t.job_group = #{jobGroup}
 	</select>
 
@@ -306,11 +227,10 @@
 
 	<select id="scheduleJobQuery" parameterType="java.util.HashMap" resultMap="JobInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_info AS t
+		FROM job_info t
 		WHERE t.trigger_status = 1
 			and t.trigger_next_time <![CDATA[ <= ]]> #{maxNextTime}
 		ORDER BY id ASC
-		LIMIT #{pagesize}
 	</select>
 
 	<update id="scheduleUpdate" parameterType="com.wugui.datax.admin.entity.JobInfo"  >

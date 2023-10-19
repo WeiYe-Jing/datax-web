@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wugui.datax.admin.entity.JobGroup;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by xuxueli on 16/9/30.
  */
 @Mapper
-public interface JobGroupMapper {
+public interface JobGroupMapper extends BaseMapper<JobGroup> {
 
     List<JobGroup> findAll();
 
@@ -18,7 +19,6 @@ public interface JobGroupMapper {
                         @Param("title") String title,
                         @Param("addressList") String addressList);
 
-    int save(JobGroup jobGroup);
     List<JobGroup> findByAddressType(@Param("addressType") int addressType);
 
     int update(JobGroup jobGroup);

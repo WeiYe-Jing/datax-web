@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.core.thread;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.core.trigger.TriggerTypeEnum;
@@ -46,9 +47,9 @@ public class JobFailMonitorHelper {
 				while (!toStop) {
 					try {
 
-						List<Long> failLogIds = JobAdminConfig.getAdminConfig().getJobLogMapper().findFailJobLogIds(1000);
-						if (failLogIds!=null && !failLogIds.isEmpty()) {
-							for (long failLogId: failLogIds) {
+						Page<Long> failLogIds = JobAdminConfig.getAdminConfig().getJobLogMapper().findFailJobLogIds(new Page(0, 1000));
+						if (failLogIds!=null && failLogIds.getRecords().size()>0) {
+							for (long failLogId: failLogIds.getRecords()) {
 
 								// lock log
 								int lockRet = JobAdminConfig.getAdminConfig().getJobLogMapper().updateAlarmStatus(failLogId, 0, -1);

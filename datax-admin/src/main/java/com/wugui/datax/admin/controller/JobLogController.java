@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.LogResult;
 import com.wugui.datatx.core.biz.model.ReturnT;
@@ -59,14 +60,14 @@ public class JobLogController {
         }
 
         // page query
-        List<JobLog> data = jobLogMapper.pageList((current - 1) * size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-        int cnt = jobLogMapper.pageListCount((current - 1) * size, size, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+        Page<JobLog> data = jobLogMapper.pageList(new Page(current,size), jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+        long cnt = data.getTotal();
 
         // package result
         Map<String, Object> maps = new HashMap<>();
         maps.put("recordsTotal", cnt);        // 总记录数
         maps.put("recordsFiltered", cnt);    // 过滤后的总记录数
-        maps.put("data", data);                    // 分页列表
+        maps.put("data", data.getRecords());                    // 分页列表
         return new ReturnT<>(maps);
     }
 
@@ -154,13 +155,13 @@ public class JobLogController {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_invalid"));
         }
 
-        List<Long> logIds;
+        Page<Long> logIds;
         do {
-            logIds = jobLogMapper.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
-            if (logIds != null && logIds.size() > 0) {
-                jobLogMapper.clearLog(logIds);
+            logIds = jobLogMapper.findClearLogIds(new Page(0, 1000), jobGroup, jobId, clearBeforeTime, clearBeforeNum);
+            if (logIds != null && logIds.getRecords().size() > 0) {
+                jobLogMapper.clearLog(logIds.getRecords());
             }
-        } while (logIds != null && logIds.size() > 0);
+        } while (logIds != null && logIds.getRecords().size() > 0);
 
         return ReturnT.SUCCESS;
     }

@@ -1,5 +1,7 @@
 package com.wugui.datax.admin.core.thread;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.wugui.datatx.core.enums.RegistryConfig;
 import com.wugui.datax.admin.core.conf.JobAdminConfig;
 import com.wugui.datax.admin.entity.JobGroup;
@@ -33,14 +35,15 @@ public class JobRegistryMonitorHelper {
 					if (groupList!=null && !groupList.isEmpty()) {
 
 						// remove dead address (admin/executor)
-						List<Integer> ids = JobAdminConfig.getAdminConfig().getJobRegistryMapper().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
+						DateTime dateTime = DateUtil.offsetSecond(new Date(), 0 - RegistryConfig.DEAD_TIMEOUT);
+						List<Integer> ids = JobAdminConfig.getAdminConfig().getJobRegistryMapper().findDead(dateTime.toJdkDate());
 						if (ids!=null && ids.size()>0) {
 							JobAdminConfig.getAdminConfig().getJobRegistryMapper().removeDead(ids);
 						}
 
 						// fresh online address (admin/executor)
 						HashMap<String, List<String>> appAddressMap = new HashMap<>();
-						List<JobRegistry> list = JobAdminConfig.getAdminConfig().getJobRegistryMapper().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
+						List<JobRegistry> list = JobAdminConfig.getAdminConfig().getJobRegistryMapper().findAll(dateTime.toJdkDate());
 						if (list != null) {
 							for (JobRegistry item: list) {
 								if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {

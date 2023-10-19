@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wugui.datax.admin.mapper.JobLogGlueMapper">
-	
+
 	<resultMap id="JobLogGlue" type="com.wugui.datax.admin.entity.JobLogGlue" >
 		<result column="id" property="id" />
 	    <result column="job_id" property="jobId" />
@@ -22,50 +22,28 @@
 		t.add_time,
 		t.update_time
 	</sql>
-	
-	<insert id="save" parameterType="com.wugui.datax.admin.entity.JobLogGlue" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO job_logglue (
-			`job_id`,
-			`glue_type`,
-			`glue_source`,
-			`glue_remark`,
-			`add_time`, 
-			`update_time`
-		) VALUES (
-			#{jobId},
-			#{glueType},
-			#{glueSource},
-			#{glueRemark},
-			#{addTime},
-			#{updateTime}
-		);
-		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID() 
-		</selectKey>-->
-	</insert>
-	
+
 	<select id="findByJobId" parameterType="java.lang.Integer" resultMap="JobLogGlue">
 		SELECT <include refid="Base_Column_List" />
-		FROM job_logglue AS t
+		FROM job_logglue t
 		WHERE t.job_id = #{jobId}
 		ORDER BY id DESC
 	</select>
-	
+
 	<delete id="removeOld" >
 		DELETE FROM job_logglue
-		WHERE id NOT in(
-			SELECT id FROM(
-				SELECT id FROM job_logglue
-				WHERE `job_id` = #{jobId}
-				ORDER BY update_time desc
-				LIMIT 0, #{limit}
-			) t1
-		) AND `job_id` = #{jobId}
+		WHERE id NOT IN (SELECT id
+		FROM (SELECT id
+		FROM job_logglue
+		WHERE job_id = #{jobId}
+		ORDER BY update_time DESC)
+		WHERE ROWNUM &lt;= #{limit})
+		AND job_id = #{jobId}
 	</delete>
-	
+
 	<delete id="deleteByJobId" parameterType="java.lang.Integer" >
 		DELETE FROM job_logglue
-		WHERE `job_id` = #{jobId}
+		WHERE job_id = #{jobId}
 	</delete>
-	
+
 </mapper>

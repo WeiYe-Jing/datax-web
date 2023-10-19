@@ -1,5 +1,8 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,9 +14,10 @@ import java.util.Date;
  *
  * @author jingwk  2019-11-17 22:08:11
  */
+@KeySequence(value = "SEQ_ID")
 @Data
 public class JobLog {
-
+    @TableId(type = IdType.INPUT)
     private long id;
 
     // job info

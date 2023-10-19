@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wugui.datax.admin.entity.JobLogGlue;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,9 +13,7 @@ import java.util.List;
  * @author xuxueli 2016-5-19 18:04:56
  */
 @Mapper
-public interface JobLogGlueMapper {
-
-    int save(JobLogGlue jobLogGlue);
+public interface JobLogGlueMapper extends BaseMapper<JobLogGlue> {
 
     List<JobLogGlue> findByJobId(@Param("jobId") int jobId);
 

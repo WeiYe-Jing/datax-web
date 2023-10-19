@@ -1,13 +1,18 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.util.StringUtils;
 
 /**
  * @author xuxueli 2019-05-04 16:43:12
  */
+@KeySequence(value = "SEQ_ID")
 public class JobUser {
 
+    @TableId(type = IdType.INPUT)
     private int id;
     @ApiModelProperty("账号")
     private String username;

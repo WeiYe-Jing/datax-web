@@ -22,12 +22,13 @@ import java.util.Date;
 @Data
 @ApiModel
 @TableName("job_jdbc_datasource")
+@KeySequence(value = "SEQ_ID")
 public class JobDatasource extends Model<JobDatasource> {
 
     /**
      * 自增主键
      */
-    @TableId
+    @TableId(type = IdType.INPUT)
     @ApiModelProperty(value = "自增主键")
     private Long id;
 

@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,8 +90,8 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         }
 
         // ChildJobId valid
-        if (jobTemplate.getChildJobId() != null && jobTemplate.getChildJobId().trim().length() > 0) {
-            String[] childJobIds = jobTemplate.getChildJobId().split(",");
+        if (jobTemplate.getChildJobid() != null && jobTemplate.getChildJobid().trim().length() > 0) {
+            String[] childJobIds = jobTemplate.getChildJobid().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (StringUtils.isNotBlank(childJobIdItem) && isNumeric(childJobIdItem) && Integer.parseInt(childJobIdItem) > 0) {
                     JobInfo jobInfo = jobInfoMapper.loadById(Integer.parseInt(childJobIdItem));
@@ -112,7 +111,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             }
             temp = temp.substring(0, temp.length() - 1);
 
-            jobTemplate.setChildJobId(temp);
+            jobTemplate.setChildJobid(temp);
         }
 
         if (jobTemplate.getProjectId() == 0) {
@@ -161,8 +160,8 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         }
 
         // ChildJobId valid
-        if (jobTemplate.getChildJobId() != null && jobTemplate.getChildJobId().trim().length() > 0) {
-            String[] childJobIds = jobTemplate.getChildJobId().split(",");
+        if (jobTemplate.getChildJobid() != null && jobTemplate.getChildJobid().trim().length() > 0) {
+            String[] childJobIds = jobTemplate.getChildJobid().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
                     JobTemplate childJobTemplate = jobTemplateMapper.loadById(Integer.parseInt(childJobIdItem));
@@ -183,7 +182,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
             }
             temp = temp.substring(0, temp.length() - 1);
 
-            jobTemplate.setChildJobId(temp);
+            jobTemplate.setChildJobid(temp);
         }
 
         // group valid
@@ -212,7 +211,7 @@ public class JobTemplateServiceImpl implements JobTemplateService {
         exists_jobTemplate.setExecutorBlockStrategy(jobTemplate.getExecutorBlockStrategy());
         exists_jobTemplate.setExecutorTimeout(jobTemplate.getExecutorTimeout());
         exists_jobTemplate.setExecutorFailRetryCount(jobTemplate.getExecutorFailRetryCount());
-        exists_jobTemplate.setChildJobId(jobTemplate.getChildJobId());
+        exists_jobTemplate.setChildJobid(jobTemplate.getChildJobid());
         exists_jobTemplate.setTriggerNextTime(nextTriggerTime);
         exists_jobTemplate.setJobJson(jobTemplate.getJobJson());
         exists_jobTemplate.setJvmParam(jobTemplate.getJvmParam());

@@ -1,6 +1,9 @@
 package com.wugui.datax.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,9 +16,11 @@ import java.util.List;
 /**
  * Created by jingwk on 2020/05/24
  */
+@KeySequence(value = "SEQ_ID")
 @Data
 public class JobProject {
 
+    @TableId(type = IdType.INPUT)
     @ApiModelProperty("项目Id")
     private int id;
 

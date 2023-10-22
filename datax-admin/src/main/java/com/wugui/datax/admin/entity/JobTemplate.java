@@ -61,9 +61,11 @@ public class JobTemplate {
 	@ApiModelProperty("GLUE类型\t#com.wugui.datatx.core.glue.GlueTypeEnum")
 	private String glueType;
 
+	@TableField(exist = false)
 	@ApiModelProperty("GLUE源代码")
 	private String glueSource;
 
+	@TableField(exist = false)
 	@ApiModelProperty("GLUE备注")
 	private String glueRemark;
 
@@ -71,7 +73,7 @@ public class JobTemplate {
 	private Date glueUpdatetime;
 
 	@ApiModelProperty("子任务ID")
-	private String childJobId;
+	private String childJobid;
 
 	@ApiModelProperty("上次调度时间")
 	private long triggerLastTime;

@@ -28,7 +28,7 @@
 	    <result column="glue_remark" property="glueRemark" />
 		<result column="glue_updatetime" property="glueUpdatetime" />
 
-		<result column="child_jobid" property="childJobId" />
+		<result column="child_jobid" property="childJobid" />
 
 		<result column="trigger_last_time" property="triggerLastTime" />
 		<result column="trigger_next_time" property="triggerNextTime" />
@@ -148,7 +148,7 @@
 			glue_source = #{glueSource},
 			glue_remark = #{glueRemark},
 			glue_updatetime = #{glueUpdatetime},
-			child_jobid = #{childJobId},
+			child_jobid = #{childJobid},
 			trigger_last_time = #{triggerLastTime},
 			trigger_next_time = #{triggerNextTime},
 			job_json=#{jobJson},

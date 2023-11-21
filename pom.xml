@@ -26,7 +26,7 @@
         <maven.test.skip>true</maven.test.skip>
 
         <commons-lang3.version>3.3.2</commons-lang3.version>
-        <fastjson.version>1.2.70</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <slf4j-api.version>1.7.28</slf4j-api.version>
         <logback-classic.version>1.2.2</logback-classic.version>
         <commons-io.version>2.4</commons-io.version>

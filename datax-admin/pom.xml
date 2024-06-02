@@ -195,6 +195,14 @@
             <version>${mysql-connector.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.dameng</groupId>
+            <artifactId>Dm8JdbcDriver18</artifactId>
+            <version>8.1.1.193</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/lib/DmJdbcDriver18-8.1.1.193.jar</systemPath>
+        </dependency>
+
         <!-- datax-core -->
         <dependency>
             <groupId>com.wugui</groupId>

@@ -4,6 +4,7 @@ package com.wugui.datax.admin.tool.query;
 import com.wugui.datatx.core.util.Constants;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
@@ -25,7 +26,7 @@ public class HBaseQueryTool {
     private Table table;
 
     public HBaseQueryTool(JobDatasource jobDatasource) throws IOException {
-        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null || BooleanUtils.isNotTrue(jobDatasource.getIsCache())) {
             getDataSource(jobDatasource);
         } else {
             connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());

@@ -7,6 +7,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.wugui.datax.admin.core.util.LocalCacheUtil;
 import com.wugui.datax.admin.entity.JobDatasource;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 
@@ -25,7 +26,7 @@ public class MongoDBQueryTool {
 
 
     public MongoDBQueryTool(JobDatasource jobDatasource) throws IOException {
-        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null || BooleanUtils.isNotTrue(jobDatasource.getIsCache())) {
             getDataSource(jobDatasource);
         } else {
             connection = (MongoClient) LocalCacheUtil.get(jobDatasource.getDatasourceName());

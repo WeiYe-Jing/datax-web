@@ -29,6 +29,8 @@ public class JobDatasourceServiceImpl extends ServiceImpl<JobDatasourceMapper, J
 
     @Override
     public Boolean  dataSourceTest(JobDatasource jobDatasource) throws IOException {
+        // 测试连接的时候不使用缓存， 否则名称相同时， 获取的是缓存中的连接
+        jobDatasource.setIsCache(Boolean.FALSE);
         if (JdbcConstants.HBASE.equals(jobDatasource.getDatasource())) {
             return new HBaseQueryTool(jobDatasource).dataSourceTest();
         }

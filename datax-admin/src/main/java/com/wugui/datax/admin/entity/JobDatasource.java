@@ -131,6 +131,9 @@ public class JobDatasource extends Model<JobDatasource> {
      */
     @ApiModelProperty(value = "数据库名", hidden = true)
     private String databaseName;
+
+    @TableField(exist = false)
+    private Boolean isCache = true;
     /**
      * 获取主键值
      *

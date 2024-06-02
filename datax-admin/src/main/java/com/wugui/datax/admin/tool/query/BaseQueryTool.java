@@ -16,6 +16,7 @@ import com.wugui.datax.admin.util.JdbcConstants;
 import com.wugui.datax.admin.util.JdbcUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +58,7 @@ public abstract class BaseQueryTool implements QueryToolInterface {
      * @param jobDatasource
      */
     BaseQueryTool(JobDatasource jobDatasource) throws SQLException {
-        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null) {
+        if (LocalCacheUtil.get(jobDatasource.getDatasourceName()) == null || BooleanUtils.isNotTrue(jobDatasource.getIsCache())) {
             getDataSource(jobDatasource);
         } else {
             this.connection = (Connection) LocalCacheUtil.get(jobDatasource.getDatasourceName());
